@@ -1,0 +1,26 @@
+<!-- 类型转换 -->
+
+<!-- MySQL -->
+<cast query="CAST(%s AS CHAR)"/>
+<!-- PostgreSQL -->
+<cast query="CAST(%s AS CHARACTER(10000))"/>
+<!-- Microsoft SQL Server -->
+<cast query="CAST(%s AS NVARCHAR(4000))"/>
+<!-- Microsoft Access -->
+<cast query="RTRIM(CVAR(%s))"/>
+<!-- Oracle -->
+<cast query="CAST(%s AS VARCHAR(4000))"/>
+<!-- SQLite -->
+<cast query="CAST(%s AS TEXT)" dbms_version="&gt;=3.0"/>
+<!-- Informix -->
+<cast query="RTRIM(TO_CHAR(%s))"/>
+<!-- IBM DB2 -->
+<cast query="RTRIM(CAST(%s AS CHAR(254)))"/>
+<!-- Hyper SQL Database -->
+<cast query="CAST(%s AS LONGVARCHAR)"/>
+<!-- Sybase -->
+<cast query="CONVERT(VARCHAR(4000),%s)"/>
+<!-- Firebird -->
+<cast query="TRIM(CAST(%s AS VARCHAR(10000)))"/>
+<!-- SAP MaxDB -->
+无

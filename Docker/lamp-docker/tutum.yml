@@ -1,0 +1,6 @@
+lamp:
+  image: hack3r/lamp
+  ports:
+    - 80:80
+    - 3306:3306
+    

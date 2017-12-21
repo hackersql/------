@@ -1,0 +1,64 @@
+<!-- 搜索指定表 -->
+
+<!-- MySQL -->
+<!-- 对应sqlmap选项--search搜索指定表，可添加2个条件指定数据库或者表名 -->
+<search_table>
+    <inband query="SELECT table_schema,table_name FROM INFORMATION_SCHEMA.TABLES WHERE %s" condition="table_name" condition2="table_schema"/>
+    <blind query="SELECT DISTINCT(table_schema) FROM INFORMATION_SCHEMA.TABLES WHERE %s" query2="SELECT DISTINCT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s'" count="SELECT COUNT(DISTINCT(table_schema)) FROM INFORMATION_SCHEMA.TABLES WHERE %s" count2="SELECT COUNT(DISTINCT(table_name)) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s'" condition="table_name" condition2="table_schema"/>
+</search_table>
+
+<!-- PostgreSQL -->
+<search_table>
+    <inband query="SELECT schemaname,tablename FROM pg_tables WHERE %s" condition="tablename" condition2="schemaname"/>
+    <blind query="SELECT DISTINCT(schemaname) FROM pg_tables WHERE %s" query2="SELECT tablename FROM pg_tables WHERE schemaname='%s'" count="SELECT COUNT(DISTINCT(schemaname)) FROM pg_tables WHERE %s" count2="SELECT COUNT(tablename) FROM pg_tables WHERE schemaname='%s'" condition="tablename" condition2="schemaname"/>
+</search_table>
+
+<!-- Microsoft SQL Server -->
+<search_table>
+    <inband query="SELECT name FROM %s..sysobjects WHERE %s..sysobjects.xtype IN ('u','v') AND " condition="name" condition2="name"/>
+    <blind query="SELECT name FROM %s..sysobjects WHERE %s..sysobjects.xtype IN ('u','v') " count="SELECT LTRIM(STR(COUNT(name))) FROM %s..sysobjects WHERE %s..sysobjects.xtype IN ('u','v')" condition="name" condition2="name"/>
+</search_table>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<search_table>
+    <inband query="SELECT OWNER,TABLE_NAME FROM SYS.ALL_TABLES WHERE %s" condition="TABLE_NAME" condition2="OWNER"/>
+    <blind query="SELECT OWNER FROM (SELECT DISTINCT(OWNER) FROM SYS.ALL_TABLES WHERE %s)" query2="SELECT TABLE_NAME FROM (SELECT DISTINCT(TABLE_NAME) FROM SYS.ALL_TABLES WHERE OWNER='%s')" count="SELECT COUNT(DISTINCT(OWNER)) FROM SYS.ALL_TABLES WHERE %s" count2="SELECT COUNT(DISTINCT(TABLE_NAME)) FROM SYS.ALL_TABLES WHERE OWNER='%s'" condition="TABLE_NAME" condition2="OWNER"/>
+</search_table>
+
+<!-- SQLite -->
+<search_table>
+    <inband query="SELECT tbl_name FROM sqlite_master WHERE type='table' AND %s" condition="tbl_name" condition2=""/>
+    <blind query="" query2="SELECT tbl_name FROM sqlite_master WHERE type='table'" count="" count2="SELECT COUNT(tbl_name) FROM sqlite_master WHERE type='table'" condition="tbl_name" condition2=""/>
+</search_table>
+
+<!-- Informix -->
+无
+
+<!-- IBM DB2 -->
+<search_table>
+    <inband query="SELECT tabschema,tabname FROM sysstat.tables WHERE %s" condition="tabname" condition2="tabschema"/>
+    <blind query="SELECT tabschema FROM (SELECT DISTINCT(tabschema) FROM sysstat.tables WHERE %s) AS qq" query2="SELECT DISTINCT(tabname) FROM sysstat.tables WHERE tabschema='%s'" count="SELECT COUNT(DISTINCT(tabschema)) FROM sysstat.tables WHERE %s" count2="SELECT COUNT(tabname) FROM sysstat.tables WHERE tabschema='%s'" condition="tabname" condition2="tabschema"/>
+</search_table>
+<!-- Hyper SQL Database -->
+<search_table>
+    <blind query="SELECT DISTINCT(table_schem) FROM INFORMATION_SCHEMA.SYSTEM_TABLES WHERE %s" count="SELECT COUNT(DISTINCT(table_schem)) FROM INFORMATION_SCHEMA.SYSTEM_TABLES WHERE %s" condition="table_name" condition2="table_schem"/>
+    <inband query="SELECT table_schem,table_name FROM INFORMATION_SCHEMA.SYSTEM_TABLES WHERE %s" condition="table_name" condition2="table_schem"/>
+</search_table>
+
+<!-- Sybase -->
+<search_table>
+    <inband query="SELECT name FROM %s..sysobjects WHERE type IN ('U') AND " condition="name" condition2="name"/>
+    <blind/>
+</search_table>
+
+<!-- Firebird -->
+<search_table>
+    <inband query="SELECT RDB$RELATION_NAME FROM RDB$RELATIONS WHERE RDB$VIEW_BLR IS NULL AND (RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0) AND %s" condition="RDB$RELATION_NAME" condition2=""/>
+    <blind query="" query2="SELECT FIRST 1 SKIP %d RDB$RELATION_NAME FROM RDB$RELATIONS WHERE RDB$VIEW_BLR IS NULL AND (RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0)" count="" count2="SELECT COUNT(RDB$RELATION_NAME) FROM RDB$RELATIONS WHERE RDB$VIEW_BLR IS NULL AND (RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0)" condition="RDB$RELATION_NAME" condition2=""/>
+</search_table>
+
+<!-- SAP MaxDB -->
+无

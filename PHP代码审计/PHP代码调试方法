@@ -1,0 +1,11 @@
+PHP代码调试
+
+1.在php.ini里面将display_errors配置为On，然后重启php-fpm
+
+2.只需要再需要测试的项目里面加上
+
+ini_set('display_errors','On'); 
+
+error_reporting(E_ALL);
+
+即可。

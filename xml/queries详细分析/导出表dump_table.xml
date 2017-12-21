@@ -1,0 +1,70 @@
+<!-- 导出表dump_table -->
+
+<!-- MySQL -->
+<!-- order by desc/asc limit M -->
+<!-- 利用索引的有序性，优化器沿着索引的顺序扫描，在扫描到符合条件的M行数据后，停止扫描；-->
+<dump_table>
+    <inband query="SELECT %s FROM %s.%s ORDER BY %s"/>
+    <blind query="SELECT %s FROM %s.%s ORDER BY %s LIMIT %d,1" count="SELECT COUNT(*) FROM %s.%s"/>
+</dump_table>
+
+<!-- PostgreSQL -->
+<dump_table>
+    <inband query="SELECT %s FROM %s.%s ORDER BY %s"/>
+    <blind query="SELECT %s FROM %s.%s ORDER BY %s OFFSET %d LIMIT 1" count="SELECT COUNT(*) FROM %s.%s"/>
+</dump_table>
+
+<!-- Microsoft SQL Server -->
+<dump_table>
+    <inband query="SELECT %s FROM %s.%s"/>
+    <blind query="SELECT MIN(%s) FROM %s WHERE CONVERT(NVARCHAR(4000),%s)>'%s'" query2="SELECT MAX(%s) FROM %s WHERE CONVERT(NVARCHAR(4000),%s) LIKE '%s'" query3="SELECT %s FROM (SELECT %s, ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS LIMIT FROM %s)x WHERE LIMIT=%d" count="SELECT LTRIM(STR(COUNT(*))) FROM %s" count2="SELECT LTRIM(STR(COUNT(DISTINCT(%s)))) FROM %s"/>
+</dump_table>
+
+<!-- Microsoft Access -->
+<dump_table>
+    <inband query="SELECT %s FROM %s"/>
+    <blind query="SELECT MIN(%s) FROM %s WHERE CVAR(%s)>'%s'" query2="SELECT TOP 1 %s FROM %s WHERE CVAR(%s) LIKE '%s'" count="SELECT COUNT(*) FROM %s" count2="SELECT COUNT(*) FROM (SELECT DISTINCT %s FROM %s)"/>
+</dump_table>
+
+<!-- Oracle -->
+<dump_table>
+    <inband query="SELECT %s FROM %s"/>
+    <blind query="SELECT %s FROM (SELECT qq.*,ROWNUM AS LIMIT FROM %s qq) WHERE LIMIT=%d" count="SELECT COUNT(*) FROM %s"/>
+</dump_table>
+
+<!-- SQLite -->
+<dump_table>
+    <inband query="SELECT %s FROM %s"/>
+    <blind query="SELECT %s FROM %s LIMIT %d,1" count="SELECT COUNT(*) FROM %s"/>
+</dump_table>
+
+<!-- Informix -->
+ <dump_table>
+    <inband query="SELECT %s FROM %s:%s"/>
+    <blind query="SELECT SKIP %d LIMIT 1 %s FROM %s:%s ORDER BY %s" count="SELECT COUNT(*) FROM %s:%s"/>
+</dump_table>
+<!-- IBM DB2 -->
+<dump_table>
+    <inband query="SELECT %s FROM %s"/>
+    <blind query="SELECT ENTRY_VALUE FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,%s AS ENTRY_VALUE FROM %s) AS qq WHERE LIMIT=%d" count="SELECT COUNT(*) FROM %s"/>
+</dump_table>
+<!-- Hyper SQL Database -->
+<dump_table>
+    <blind query="SELECT %s FROM %s.%s ORDER BY %s LIMIT 1 OFFSET %d" count="SELECT COUNT(*) FROM %s.%s"/>
+    <inband query="SELECT %s FROM %s.%s ORDER BY %s"/>
+</dump_table>
+<!-- Sybase -->
+<dump_table>
+    <inband query="SELECT %s FROM %s.%s"/>
+    <blind query="SELECT MIN(%s) FROM %s WHERE CONVERT(VARCHAR(4000),%s)>'%s'" query2="SELECT MAX(%s) FROM %s WHERE CONVERT(VARCHAR(4000),%s) LIKE '%s'" count="SELECT COUNT(*) FROM %s" count2="SELECT COUNT(*) FROM (SELECT DISTINCT %s FROM %s) AS qq"/>
+</dump_table>
+<!-- Firebird -->
+<dump_table>
+    <inband query="SELECT %s FROM %s"/>
+    <blind query="SELECT FIRST 1 SKIP %d %s FROM %s" count="SELECT COUNT(*) FROM %s"/>
+</dump_table>
+<!-- SAP MaxDB -->
+<dump_table>
+    <inband query="SELECT %s FROM %%s"/>
+    <blind query="SELECT MIN(%s) FROM %s WHERE CHR(%s)>'%s'" query2="SELECT MAX(%s) FROM %s WHERE CHR(%s) LIKE '%s'" count="SELECT COUNT(*) FROM %s" count2="SELECT COUNT(*) FROM (SELECT DISTINCT %s FROM %s) AS qq"/>
+</dump_table>

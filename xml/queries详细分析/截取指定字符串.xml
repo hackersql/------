@@ -1,0 +1,46 @@
+<!-- 截取指定字符串 -->
+
+<!-- MySQL -->
+<!-- MID(s,n,len)同SUBSTRING(s,n,len) -->
+ <!-- 获取从字符串s中的第n个位置开始长度为len的字符串 -->
+<!-- Length是可选项，如果没有提供，MID()函数将返回余下的字符串 -->        
+<substring query="MID((%s),%d,%d)"/>
+
+<!-- PostgreSQL -->
+<!-- substring(string from pattern) -->
+<!-- substring('topmars' from 'p.*$'); = "pmars" -->
+<!-- substring(string from pattern for escape) -->
+<!-- 缺省的转义字符是反斜杠，但是你可以用ESCAPE子句指定一个 -->
+<!-- substring('Thomas' from '%#"o_a#"_' for '#'); = "oma" -->
+<!-- 这里#是转义符，双引号内的模式是返回部分 -->
+<substring query="SUBSTRING((%s)::text FROM %d FOR %d)"/>
+
+<!-- Microsoft SQL Server -->
+<substring query="SUBSTRING((%s),%d,%d)"/>
+
+<!-- Microsoft Access -->
+<substring query="MID((%s),%d,%d)"/>
+
+<!-- Oracle -->
+<substring query="SUBSTRC((%s),%d,%d)"/>
+
+<!-- SQLite -->
+<substring query="SUBSTR((%s),%d,%d)"/>
+
+<!-- Informix -->
+<substring query="SUBSTR((%s),%d,%d)"/>
+
+<!-- IBM DB2 -->
+<substring query="SUBSTR((%s),%d,%d)"/>
+
+<!-- Hyper SQL Database -->
+<substring query="SUBSTR((%s),%d,%d)"/>
+
+<!-- Sybase -->
+<substring query="SUBSTRING((%s),%d,%d)"/>
+
+<!-- Firebird -->
+<substring query="SUBSTRING((%s) FROM %d FOR %d)"/>
+
+<!-- SAP MaxDB -->
+<substring query="SUBSTR((%s),%d,%d)"/>

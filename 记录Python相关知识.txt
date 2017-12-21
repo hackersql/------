@@ -1,0 +1,57 @@
+一. hasattr（object，name）
+
+返回bool值
+
+判断object中是否具有name属性，例如：
+
+hasattr(foo,’setName’) #判断setName是否存在，存在则返回True。
+
+二. getattr(object,name,default)
+
+getattr可以取出来某个属性，这个属性如果是一个字段，就得到字段的值了，如果是一个方法，就得到这个方法的指针了，然后可以根据方法的指针来调用方法。
+
+如果存在name属性（方法）则返回name的值（方法地址）否则返回default值。
+
+getattr(foo,’name’,’NA’) #存在name属性，所以返回其value
+
+‘fengyun’
+
+getattr(foo,’age’,’NA’)#不存在则返回第三个参数
+
+‘NA’
+
+一会发现，他其实跟直接object.name 用法一样。 
+
+三. setattr(object,name,default)
+
+setattr(foo,’age’,’18’) 
+
+#字符串可能会列出一个现有的属性(或一个新的属性)。这个函数将值赋给属性
+
+类似foo.age = 18
+
+getattr(foo,’age’,’not find’)
+
+’18’ 
+
+setattr(foo,’work’,’student’) #
+
+可以用setattr方法，把foo的work变量，设置为student
+
+getattr(foo,’work’,’not find’)
+
+‘student’
+
+四. delattr(object,’name’)
+
+delattr(foo,’name’)#删除属性name，原值为‘fengyun’
+
+getattr(foo,’name’,’not find’)
+
+‘not find’
+
+
+all函数测试迭代对象中是否所有条件都成立
+all([True,False,True])  结果为False
+any测试是否至少有一个条件成立
+any([True,False,False]) 结果为True

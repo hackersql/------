@@ -1,0 +1,37 @@
+<!-- 索引优化排序 -->
+
+<!-- MySQL -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- PostgreSQL -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- Microsoft SQL Server -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- Microsoft Access -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- Oracle -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- SQLite -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- Informix -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- IBM DB2 -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- Hyper SQL Database -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- Sybase -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- Firebird -->
+<order query="ORDER BY %s ASC"/>
+
+<!-- SAP MaxDB -->
+<order query="ORDER BY %s ASC"/>

@@ -1,0 +1,5 @@
+FROM gerritforge/gerrit-ubuntu16.04
+
+MAINTTAINER hack3r
+
+RUN apt-get update 

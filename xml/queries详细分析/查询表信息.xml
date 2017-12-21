@@ -1,0 +1,43 @@
+<!-- 查询表信息 -->
+
+<!-- MySQL -->
+<!-- INFORMATION_SCHEMA.TABLES表给出了关于数据库中的表的信息 -->
+<!-- table_comment表的注释、备注 -->
+<!-- table_schema表所属的数据库名 -->
+<!-- table_name表名 -->
+<!-- 查询table_schema数据库中关于table_name表的注释 -->
+<table_comment query="SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s' AND table_name='%s'"/>
+
+<!-- PostgreSQL -->
+<!--<table_comment query="SELECT pg_catalog.obj_description(c.oid) FROM pg_catalog.pg_class c WHERE c.relname='%s'"/>-->
+<table_comment query="SELECT description FROM pg_description JOIN pg_class ON pg_description.objoid=pg_class.oid JOIN pg_namespace ON pg_class.relnamespace=pg_namespace.oid WHERE nspname='%s' AND relname='%s'"/>
+
+<!-- Microsoft SQL Server -->
+<table_comment query="SELECT value FROM fn_listextendedproperty(NULL,'schema','%s','table','%s',NULL,NULL)"/>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<table_comment query="SELECT COMMENTS FROM ALL_TAB_COMMENTS WHERE OWNER='%s' AND TABLE_NAME='%s'"/>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+无
+
+<!-- IBM DB2 -->
+无
+
+<!-- Hyper SQL Database -->
+无
+
+<!-- Sybase -->
+无
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+无

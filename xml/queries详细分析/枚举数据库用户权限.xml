@@ -1,0 +1,57 @@
+<!-- 枚举数据库用户权限 -->
+
+<!-- MySQL -->
+<!-- 对应sqlmap选项--privileges枚举数据库用户的权限或者指定用户的权限 -->
+<privileges>
+    <inband query="SELECT grantee,privilege_type FROM INFORMATION_SCHEMA.USER_PRIVILEGES" condition="grantee" query2="SELECT user,select_priv,insert_priv,update_priv,delete_priv,create_priv,drop_priv,reload_priv,shutdown_priv,process_priv,file_priv,grant_priv,references_priv,index_priv,alter_priv,show_db_priv,super_priv,create_tmp_table_priv,lock_tables_priv,execute_priv,repl_slave_priv,repl_client_priv,create_view_priv,show_view_priv,create_routine_priv,alter_routine_priv,create_user_priv FROM mysql.user" condition2="user"/>
+    <blind query="SELECT DISTINCT(privilege_type) FROM INFORMATION_SCHEMA.USER_PRIVILEGES WHERE grantee %s '%s' LIMIT %d,1" query2="SELECT select_priv,insert_priv,update_priv,delete_priv,create_priv,drop_priv,reload_priv,shutdown_priv,process_priv,file_priv,grant_priv,references_priv,index_priv,alter_priv,show_db_priv,super_priv,create_tmp_table_priv,lock_tables_priv,execute_priv,repl_slave_priv,repl_client_priv,create_view_priv,show_view_priv,create_routine_priv,alter_routine_priv,create_user_priv FROM mysql.user WHERE user='%s' LIMIT %d,1" count="SELECT COUNT(DISTINCT(privilege_type)) FROM INFORMATION_SCHEMA.USER_PRIVILEGES WHERE grantee %s '%s'" count2="SELECT COUNT(*) FROM mysql.user WHERE user='%s'"/>
+</privileges>
+
+<!-- PostgreSQL -->
+<privileges>
+    <inband query="SELECT usename,(CASE WHEN usecreatedb THEN 1 ELSE 0 END),(CASE WHEN usesuper THEN 1 ELSE 0 END),(CASE WHEN usecatupd THEN 1 ELSE 0 END) FROM pg_user" condition="usename"/>
+    <blind query="SELECT (CASE WHEN usecreatedb THEN 1 ELSE 0 END),(CASE WHEN usesuper THEN 1 ELSE 0 END),(CASE WHEN usecatupd THEN 1 ELSE 0 END) FROM pg_user WHERE usename='%s' OFFSET %d LIMIT 1" count="SELECT COUNT(DISTINCT(usename)) FROM pg_user WHERE usename='%s'"/>
+</privileges>
+
+<!-- Microsoft SQL Server -->
+无
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+注意：在Oracle中可以枚举使用会话的用户的权限：SELECT * FROM SESSION_PRIVS
+<privileges>
+    <inband query="SELECT GRANTEE,PRIVILEGE FROM DBA_SYS_PRIVS" query2="SELECT USERNAME,PRIVILEGE FROM USER_SYS_PRIVS" condition="GRANTEE" condition2="USERNAME"/>
+    <blind query="SELECT PRIVILEGE FROM (SELECT PRIVILEGE,ROWNUM AS LIMIT FROM DBA_SYS_PRIVS WHERE GRANTEE='%s') WHERE LIMIT=%d" query2="SELECT PRIVILEGE FROM (SELECT PRIVILEGE,ROWNUM AS LIMIT FROM USER_SYS_PRIVS WHERE USERNAME='%s') WHERE LIMIT=%d" count="SELECT COUNT(PRIVILEGE) FROM DBA_SYS_PRIVS WHERE GRANTEE='%s'" count2="SELECT COUNT(PRIVILEGE) FROM USER_SYS_PRIVS WHERE USERNAME='%s'"/>
+</privileges>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+<privileges>
+    <inband query="SELECT USERNAME,USERTYPE FROM SYSUSERS" condition="USERNAME"/>
+    <blind query="SELECT USERTYPE FROM SYSUSERS WHERE USERNAME='%s'"/>
+</privileges>
+
+<!-- IBM DB2 -->
+<privileges>
+    <inband query="SELECT grantee,RTRIM(tabschema)||'.'||tabname||','||controlauth||alterauth||deleteauth||indexauth||insertauth||refauth||selectauth||updateauth FROM syscat.tabauth" condition="grantee"/>
+    <blind query="SELECT tabschema||'.'||tabname||','||controlauth||alterauth||deleteauth||indexauth||insertauth||refauth||selectauth||updateauth FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,syscat.tabauth.* FROM syscat.tabauth WHERE grantee='%s') AS qq WHERE LIMIT=%d" count="SELECT COUNT(*) FROM syscat.tabauth WHERE grantee='%s'"/>
+</privileges>
+
+<!-- Hyper SQL Database -->
+无
+
+<!-- Sybase -->
+无
+
+<!-- Firebird -->
+<privileges>
+    <inband query="SELECT RDB$USER,RDB$PRIVILEGE FROM RDB$USER_PRIVILEGES" condition="RDB$USER"/>
+    <blind query="SELECT FIRST 1 SKIP %d DISTINCT(RDB$PRIVILEGE) FROM RDB$USER_PRIVILEGES WHERE RDB$USER='%s'" count="SELECT COUNT(DISTINCT(RDB$PRIVILEGE)) FROM RDB$USER_PRIVILEGES WHERE RDB$USER='%s'"/>
+</privileges>
+
+<!-- SAP MaxDB -->
+无

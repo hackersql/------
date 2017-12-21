@@ -1,0 +1,40 @@
+<!-- CASE语句 -->
+
+<!-- MySQL -->
+<!-- 首先测试WHEN后的条件表达式的值，如果其值为真，则返回THEN后面的表达式的值， -->
+<!-- 否则测试下一个WHEN子句中的表达式的值，如果所有WHEN子句后的表达式的值都为假， -->
+<!-- 则返回ELSE后的表达式的值，如果在CASE语句中没有ELSE子句，则CASE表达式返回NULL。 -->
+<case query="SELECT (CASE WHEN (%s) THEN 1 ELSE 0 END)"/>
+
+<!-- PostgreSQL -->
+<case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END)"/>
+
+<!-- Microsoft SQL Server -->
+<case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END)"/>
+
+<!-- Microsoft Access -->
+<case query="SELECT (IIF(%s,1,0))"/>
+
+<!-- Oracle -->
+<case query="SELECT (CASE WHEN (%s) THEN 1 ELSE 0 END)"/>
+
+<!-- SQLite -->
+<case query="SELECT (CASE WHEN (%s) THEN 1 ELSE 0 END)"/>
+
+<!-- Informix -->
+<case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END) FROM SYSMASTER:SYSDUAL"/>
+
+<!-- IBM DB2 -->
+<case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END) FROM SYSIBM.SYSDUMMY1"/>
+
+<!-- Hyper SQL Database -->
+<case query="SELECT (CASE WHEN (%s) THEN 1 ELSE 0 END)"/>
+
+<!-- Sybase -->
+<case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END)"/>
+
+<!-- Firebird -->
+<case query="SELECT IIF(%s,1,0)"/>
+
+<!-- SAP MaxDB -->
+<case query="SELECT (CASE WHEN (%s) THEN 1 ELSE 0 END)"/>

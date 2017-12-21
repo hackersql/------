@@ -1,0 +1,34 @@
+递归查找某个目录下包含关键字的文件
+grep -r 关键字
+grep -r -G "^\$sql="正则递归匹配以$sql=开头的行
+-------------------------perl-------------------------
+root@Kodachi:~# perl -MCPAN -e shell
+cpan[1]> o conf
+查看配置文件路径
+$CPAN::Config options from /root/.cpan/CPAN/MyConfig.pm:
+root@Kodachi:~# vi .cpan/CPAN/MyConfig.pm
+使用说明
+修改Config.pm文件中的urllist值
+'urllist' => [q[http://mirrors.163.com/cpan/]],
+------------------------------------------------------
+查询域名的DNS TXT记录的命令
+nslookup -q=TXT yourdomain.com
+
+sudo mv /var/lib/dpkg/info /var/lib/dpkg/info_old;sudo mkdir /var/lib/dpkg/info;sudo apt-get update;sudo apt-get -f install;sudo mv /var/lib/dpkg/info/* /var/lib/dpkg/info_old;sudo rm -rf /var/lib/dpkg/info;sudo mv /var/lib/dpkg/info_old /var/lib/dpkg/info 
+
+find /usr/ -name "*php*"
+find /etc -name "*php*"
+find /lib -name "*php*" |xargs rm -rf
+find /usr -name “*apache*” -exec rm -rf {} \;
+find /etc -name “*apache*” -exec rm -rf {} \;
+find /var -name “*apache*” -exec rm -rf {} \;
+
+sudo docker run --rm -it -p 443:443 -v ~/.msf4:/root/.msf4 -v /tmp/msf:/tmp/data linuxkonsult/kali-metasploit
+--rm完成操作后停止容器并从文件系统移除
+“-it”让你能够通过shell与容器进行交互。
+为了保存容器的相关数据，我使用“-v”参数来将容器目录映射到我主机的目录上。
+我将使用”~/.msf4”目录来存放Metasploit Framework的配置文件。
+主机上的“/tmp/msf”目录将会存储其他数据，比如你可能从目标系统获取的数据。
+参数“-p”对容器内部的端口进行映射。上面的例子用443端口来接收反弹shell的https连接。
+
+usr/local/bin/hydra -s 3306 -V -d -l root -P /pentest/passwords/wordlists/darkc0de.lst -e ns -t 10 -w 60 -M /root/Desktop/ip.txt mysql

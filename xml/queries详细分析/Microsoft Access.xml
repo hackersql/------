@@ -1,0 +1,43 @@
+    <!-- Microsoft Access -->
+    <dbms value="Microsoft Access">
+        <cast query="RTRIM(CVAR(%s))"/>
+        <length query="LEN(RTRIM(CVAR(%s)))"/>
+        <isnull query="IIF(LEN(%s)=0,' ',%s)"/>
+        <delimiter query="&amp;"/>
+        <limit query="TOP %d"/>
+        <limitregexp query="\s+TOP\s+([\d]+)"/>
+        <limitgroupstart query="1"/>
+        <limitgroupstop query="1"/>
+        <limitstring query=" TOP "/>
+        <order query="ORDER BY %s ASC"/>
+        <count query="COUNT(%s)"/>
+        <comment query="%16" query2="%00"/>
+        <substring query="MID((%s),%d,%d)"/>
+        <concatenate query="%s&amp;%s"/>
+        <case query="SELECT (IIF(%s,1,0))"/>
+        <inference query="ASCW(MID((%s),%d,1))>%d"/>
+        <banner/>
+        <!--CURRENTUSER() is not available outside the MS Access query tool itself-->
+        <current_user/>
+        <current_db/>
+        <hostname/>
+        <table_comment/>
+        <column_comment/>
+        <is_dba/>
+        <dbs/>
+        <!--MSysObjects have no read permission by default-->
+        <tables>
+            <inband query="SELECT Name FROM MSysObjects WHERE Type=1"/>
+            <blind query="SELECT MIN(Name) FROM MSysObjects WHERE Type=1 AND Name>'%s'" count="SELECT COUNT(Name) FROM MSysObjects WHERE Type=1"/>
+        </tables>
+        <dump_table>
+            <inband query="SELECT %s FROM %s"/>
+            <blind query="SELECT MIN(%s) FROM %s WHERE CVAR(%s)>'%s'" query2="SELECT TOP 1 %s FROM %s WHERE CVAR(%s) LIKE '%s'" count="SELECT COUNT(*) FROM %s" count2="SELECT COUNT(*) FROM (SELECT DISTINCT %s FROM %s)"/>
+        </dump_table>
+        <users/>
+        <privileges/>
+        <roles/>
+        <search_db/>
+        <search_table/>
+        <search_column/>
+   </dbms>

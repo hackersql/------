@@ -1,0 +1,37 @@
+<!-- 返回当前用户 -->
+
+<!-- MySQL -->
+<current_user query="CURRENT_USER()"/>
+
+<!-- PostgreSQL -->
+<current_user query="CURRENT_USER"/>
+
+<!-- Microsoft SQL Server -->
+<current_user query="SELECT SYSTEM_USER"/>
+
+<!-- Microsoft Access -->
+CURRENTUSER()函数在MS Access查询工具本身以外不可用
+
+<!-- Oracle -->
+<current_user query="SELECT USER FROM DUAL"/>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+<current_user query="SELECT USER FROM SYSMASTER:SYSDUAL"/>
+
+<!-- IBM DB2 -->
+<current_user query="SELECT user FROM SYSIBM.SYSDUMMY1"/>
+
+<!-- Hyper SQL Database -->
+<current_user query="CURRENT_USER"/>
+
+<!-- Sybase -->
+<current_user query="SELECT SUSER_NAME()"/>
+
+<!-- Firebird -->
+<current_user query="SELECT CURRENT_USER FROM RDB$DATABASE"/>
+
+<!-- SAP MaxDB -->
+<current_user query="SELECT USER() FROM DUAL"/>

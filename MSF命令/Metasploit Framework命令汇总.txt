@@ -1,0 +1,136 @@
+一、msfconsole
+
+?   帮助菜单
+back 从当前环境返回
+banner   显示一个MSF banner
+cd   切换目录
+color   颜色转换
+connect   连接一个主机
+exit   退出MSF
+help   帮助菜单
+info   显示一个或多个模块的信息
+irb   进入irb脚本模式
+jobs   显示和管理作业
+kill   杀死一个作业
+load   加载一个插件
+loadpath 在一个路径搜索并加载模块
+quit   退出MSF
+resource 运行存储在一个文件中的命令
+route   查看一个会话的路由信息
+save   保存动作
+search   搜索模块名和描述
+set   给一个变量赋值
+setg   把一个值赋给全局变量
+show   显示所给类型的模块，或所有模块
+sleep   在限定的秒数内什么也不做
+unload   卸载一个模块
+unset   解除一个或多个变量
+unsetg   解除一个或多个全局变量
+use   通过名称选择一个模块
+version   显示MSF和控制台库版本号
+ 
+二、database
+db_add_host 添加一个或多个主机到数据库
+db_add_note 添加一个注释到主机
+db_add_port 添加一个端口到主机
+db_connect 连接一个存在的数据库
+db_create 创建一个新的数据库实例
+db_del_host 从数据库删除一个或多个主机
+db_del_port 从数据库删除一个端口
+db_destroy 删除一个存在的数据库
+db_disconnect 断开与当前数据库实例的连接
+db_driver 指定一个数据库驱动
+db_hosts 列出数据库中的所有主机
+db_nmap   执行Nmap并记录输出
+db_notes 列出数据库中的所有注释
+db_services 列出数据库中的所有服务
+db_vulns 列出数据库中的所有漏洞
+db_workspace 转换数据库工作区
+db_import_ip_list 引入一个IP列表文件
+db_import_amap_mlog 引入一个THC-Amap扫描结果文件(-o -m)
+db_import_nessus_nbe 引入一个Nessus扫描结果文件(NBE)
+db_import_nessus_xml 引入一个Nessus扫描结果文件
+db_import_nmap_xml 引入一个Nmap扫描结果文件(-oX)
+db_autopwn 自动利用
+ 
+三、db_autopwn
+-h 显示帮助
+-t 显示所有匹配的利用模块
+-x 选择基于漏洞的模块
+-p 选择基于开放端口的模块
+-e 运行所有匹配目标的利用程序
+-r 用一个反向连接的shell(reverse)
+-b 用一个随机端口的绑定shell(bind)
+-q 禁用利用程序输出
+-l [范围] 只对此范围内的主机进行利用
+-X [范围] 永远排除此范围内的主机
+-PI [范围] 只对开放这些的端口的主机进行利用
+-PX [范围] 永远排除对开放这些端口的主机
+-m [范围] 只运行名字与正则表达式匹配的模块
+ 
+四、Meterpreter
+核心命令：
+?   帮助菜单
+channel   显示动态频道的信息
+close   关闭一个频道
+exit   终止meterpreter会话
+help   帮助菜单
+interact 频道交互
+irb   IRB脚本模式
+migrate   转移meterpreter到其他进程
+quit   终止meterpreter
+read   从频道读数据
+run   执行一个meterpreter脚本
+use   加载一个或多个扩展
+write   向频道写数据
+ 
+文件系统命令：
+cat   读取一个文件内容到屏幕
+cd   切换目录
+del   删除指定文件
+download 下载一个文件或目录
+edit   编辑一个文件
+getlwd   获取本地工作目录
+getwd   切换工作目录
+lcd   切换本地工作目录
+lpwd   打印本地工作目录
+ls   文件列表
+mkdir   创建目录
+pwd   打印当前工作目录
+rm   删除指定文件
+rmdir   远程目录
+upload   上传一个文件或目录
+ 
+网络命令：
+ipconfig 显示网络接口
+portfwd   发送一个本地端口到一个远程服务
+route   查看和修改路由表
+ 
+系统命令：
+clearev   清除事件日志
+execute   执行一个命令
+getpid   取得当前进程ID
+getuid   取得服务器运行用户
+kill   杀死一个进程
+ps   列出进程列表
+reboot   重启远程计算机
+reg   修改远程注册表
+rev2self 在远程机器调用RevertToSelf()
+shell   返回一个cmdshell
+shutdown 关闭远程系统
+sysinfo   取得远程系统的信息
+ 
+用户接口命令：
+enumdesktops 列出所有访问桌面和windows工作站
+idletime 远程用户闲置时间
+keyscan_dump 转存击键缓存
+keyscan_start 开始捕捉击键
+keyscan_stop 停止捕捉击键
+setdesktop 转移另一个工作站桌面
+uictl   用户接口控制
+ 
+密码数据库命令：
+hashdump SAM转储
+ 
+时间戳命令：
+timestomp 修改文件时间戳

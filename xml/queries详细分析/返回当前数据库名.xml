@@ -1,0 +1,38 @@
+<!-- 返回当前数据库名 -->
+
+<!-- MySQL -->
+<current_db query="DATABASE()"/>
+
+<!-- PostgreSQL -->
+<current_db query="CURRENT_SCHEMA()"/>
+
+<!-- Microsoft SQL Server -->
+<current_db query="SELECT DB_NAME()"/>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<current_db query="SELECT SYS.DATABASE_NAME FROM DUAL"/>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+<current_db query="SELECT DBINFO('DBNAME') FROM SYSMASTER:SYSDUAL"/>
+
+<!-- IBM DB2 -->
+注意：在DB2上，我们使用当前用户作为默认schema(数据库)
+<current_db query="SELECT current server FROM SYSIBM.SYSDUMMY1"/>
+
+<!-- Hyper SQL Database -->
+<current_db query="DATABASE()"/>.
+
+<!-- Sybase -->
+<current_db query="SELECT DB_NAME()"/>
+
+<!-- Firebird -->
+<current_db query="SELECT RDB$GET_CONTEXT('SYSTEM','DB_NAME') FROM RDB$DATABASE"/>
+
+<!-- SAP MaxDB -->
+<current_db query="SELECT DATABASE() FROM DUAL"/>

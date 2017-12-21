@@ -1,0 +1,79 @@
+    <!-- PostgreSQL -->
+    <dbms value="PostgreSQL">
+        <!-- 将某个类型转换为CHARACTER，存储最多10000个字符长的字串 -->
+        <cast query="CAST(%s AS CHARACTER(10000))"/>
+        <!-- 返回字符串的长度 -->
+        <length query="LENGTH(%s)"/>
+        <!-- 返回第一个非空的值，参数里面必须最少有一个非空的值，否则会报错 -->
+        <isnull query="COALESCE(%s,' ')"/>
+        <!-- string || string 字串连接 -->
+        <!-- 'Post' || 'greSQL' 返回PostgreSQL -->
+        <delimiter query="||"/>
+        <!-- select * from persons limit 5 offset 0;意思是，起点0开始查询，返回5条数据 -->
+        <!-- OFFSET偏移量，从第几条记录开始查询 -->
+        <!-- LIMIT限制、范围，可以查询多少条数据 -->
+        <limit query="OFFSET %d LIMIT %d"/>
+        <!-- 正则匹配OFFSET LIMIT参数 -->
+        <limitregexp query="\s+OFFSET\s+([\d]+)\s+LIMIT\s+([\d]+)" query2="\s+LIMIT\s+([\d]+)"/>
+        <limitgroupstart query="1"/>
+        <limitgroupstop query="2"/>
+        <limitstring query=" OFFSET "/>
+        <order query="ORDER BY %s ASC"/>
+        <count query="COUNT(%s)"/>
+        <comment query="--" query2="/*"/>
+        <substring query="SUBSTRING((%s)::text FROM %d FOR %d)"/>
+        <concatenate query="%s||%s"/>
+        <case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END)"/>
+        <hex query="ENCODE(CONVERT_TO((%s),'UTF8'),'HEX')"/>
+        <inference query="ASCII(SUBSTRING((%s)::text FROM %d FOR 1))>%d"/>
+        <banner query="VERSION()"/>
+        <current_user query="CURRENT_USER"/>
+        <current_db query="CURRENT_SCHEMA()"/>
+        <hostname/>
+        <!--<table_comment query="SELECT pg_catalog.obj_description(c.oid) FROM pg_catalog.pg_class c WHERE c.relname='%s'"/>-->
+        <table_comment query="SELECT description FROM pg_description JOIN pg_class ON pg_description.objoid=pg_class.oid JOIN pg_namespace ON pg_class.relnamespace=pg_namespace.oid WHERE nspname='%s' AND relname='%s'"/>
+        <column_comment query="SELECT col_description(pg_class.oid,pg_attribute.attnum) FROM pg_class JOIN pg_namespace ON pg_class.relnamespace=pg_namespace.oid JOIN pg_attribute ON pg_class.oid=pg_attribute.attrelid WHERE nspname='%s' AND relname='%s' AND attname='%s'"/>
+        <is_dba query="(SELECT usesuper=true FROM pg_user WHERE usename=CURRENT_USER OFFSET 0 LIMIT 1)"/>
+        <check_udf query="(SELECT proname='%s' FROM pg_proc WHERE proname='%s' OFFSET 0 LIMIT 1)"/>
+        <users>
+            <inband query="SELECT usename FROM pg_user"/>
+            <blind query="SELECT DISTINCT(usename) FROM pg_user OFFSET %d LIMIT 1" count="SELECT COUNT(DISTINCT(usename)) FROM pg_user"/>
+        </users>
+        <passwords>
+            <inband query="SELECT usename,passwd FROM pg_shadow" condition="usename"/>
+            <blind query="SELECT DISTINCT(passwd) FROM pg_shadow WHERE usename='%s' OFFSET %d LIMIT 1" count="SELECT COUNT(DISTINCT(passwd)) FROM pg_shadow WHERE usename='%s'"/>
+        </passwords>
+        <privileges>
+            <inband query="SELECT usename,(CASE WHEN usecreatedb THEN 1 ELSE 0 END),(CASE WHEN usesuper THEN 1 ELSE 0 END),(CASE WHEN usecatupd THEN 1 ELSE 0 END) FROM pg_user" condition="usename"/>
+            <blind query="SELECT (CASE WHEN usecreatedb THEN 1 ELSE 0 END),(CASE WHEN usesuper THEN 1 ELSE 0 END),(CASE WHEN usecatupd THEN 1 ELSE 0 END) FROM pg_user WHERE usename='%s' OFFSET %d LIMIT 1" count="SELECT COUNT(DISTINCT(usename)) FROM pg_user WHERE usename='%s'"/>
+        </privileges>
+        <roles/>
+        <dbs>
+            <inband query="SELECT schemaname FROM pg_tables"/>
+            <blind query="SELECT DISTINCT(schemaname) FROM pg_tables OFFSET %d LIMIT 1" count="SELECT COUNT(DISTINCT(schemaname)) FROM pg_tables"/>
+        </dbs>
+        <tables>
+            <inband query="SELECT schemaname,tablename FROM pg_tables" condition="schemaname"/>
+            <blind query="SELECT tablename FROM pg_tables WHERE schemaname='%s' OFFSET %d LIMIT 1" count="SELECT COUNT(tablename) FROM pg_tables WHERE schemaname='%s'"/>
+        </tables>
+        <columns>
+            <inband query="SELECT attname,typname FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND a.relname='%s' AND nspname='%s'" condition="attname"/>
+            <blind query="SELECT attname FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND a.relname='%s' AND nspname='%s'" query2="SELECT typname FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relname='%s' AND a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND attname='%s' AND nspname='%s'" count="SELECT COUNT(attname) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND a.relname='%s' AND nspname='%s'" condition="attname"/>
+        </columns>
+        <dump_table>
+            <inband query="SELECT %s FROM %s.%s ORDER BY %s"/>
+            <blind query="SELECT %s FROM %s.%s ORDER BY %s OFFSET %d LIMIT 1" count="SELECT COUNT(*) FROM %s.%s"/>
+        </dump_table>
+        <search_db>
+            <inband query="SELECT datname FROM pg_database WHERE %s" condition="datname"/>
+            <blind query="SELECT DISTINCT(datname) FROM pg_database WHERE %s" count="SELECT COUNT(DISTINCT(datname)) FROM pg_database WHERE %s" condition="datname"/>
+        </search_db>
+        <search_table>
+            <inband query="SELECT schemaname,tablename FROM pg_tables WHERE %s" condition="tablename" condition2="schemaname"/>
+            <blind query="SELECT DISTINCT(schemaname) FROM pg_tables WHERE %s" query2="SELECT tablename FROM pg_tables WHERE schemaname='%s'" count="SELECT COUNT(DISTINCT(schemaname)) FROM pg_tables WHERE %s" count2="SELECT COUNT(tablename) FROM pg_tables WHERE schemaname='%s'" condition="tablename" condition2="schemaname"/>
+        </search_table>
+        <search_column>
+            <inband query="SELECT nspname,relname FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND %s" condition="attname" condition2="nspname" condition3="relname"/>
+            <blind query="SELECT DISTINCT(nspname) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND %s" query2="SELECT DISTINCT(relname) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND nspname='%s'" count="SELECT COUNT(DISTINCT(nspname)) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND %s" count2="SELECT COUNT(DISTINCT(relname)) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND nspname='%s'" condition="attname" condition2="nspname" condition3="relname"/>
+        </search_column>
+    </dbms>

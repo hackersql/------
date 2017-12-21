@@ -1,0 +1,40 @@
+<!-- 判断是否为空 -->
+
+<!-- MySQL -->
+<!-- IFNULL(expr1,expr2)的用法：-->
+<!-- 假如expr1 不为 NULL，则 IFNULL() 的返回值为 expr1;否则其返回值为expr2。-->
+<isnull query="IFNULL(%s,' ')"/>
+
+<!-- PostgreSQL -->
+<!-- 返回第一个非空的值，参数里面必须最少有一个非空的值，否则会报错 -->
+<isnull query="COALESCE(%s,' ')"/>
+
+<!-- Microsoft SQL Server -->
+<isnull query="ISNULL(%s,' ')"/>
+
+<!-- Microsoft Access -->
+<isnull query="IIF(LEN(%s)=0,' ',%s)"/>
+
+<!-- Oracle -->
+<isnull query="NVL(%s,' ')"/>
+
+<!-- SQLite -->
+<isnull query="COALESCE(%s,' ')"/>
+
+<!-- Informix -->
+<isnull query="NVL(%s,' ')"/>
+
+<!-- IBM DB2 -->
+<isnull query="COALESCE(%s,' ')"/>
+
+<!-- Hyper SQL Database -->
+<isnull query="IFNULL(%s,' ')"/>
+
+<!-- Sybase -->
+<isnull query="ISNULL(%s,' ')"/>
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+<isnull query="VALUE(%s,' ')" query2="IFNULL(%s,' ')"/>

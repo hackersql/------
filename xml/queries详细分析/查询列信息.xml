@@ -1,0 +1,41 @@
+<!-- 查询列信息 -->
+
+<!-- MySQL -->
+<!-- INFORMATION_SCHEMA.COLUMNS表给出了表中的列信息 -->
+<!-- column_name列名 -->
+<!-- column_comment列注释 -->
+<!-- 查询table_schema数据库中table_name表中关于column_name的注释 -->
+<column_comment query="SELECT column_comment FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema='%s' AND table_name='%s' AND column_name='%s'"/>
+
+<!-- PostgreSQL -->
+<column_comment query="SELECT col_description(pg_class.oid,pg_attribute.attnum) FROM pg_class JOIN pg_namespace ON pg_class.relnamespace=pg_namespace.oid JOIN pg_attribute ON pg_class.oid=pg_attribute.attrelid WHERE nspname='%s' AND relname='%s' AND attname='%s'"/>
+
+<!-- Microsoft SQL Server -->
+<column_comment query="SELECT value FROM fn_listextendedproperty(NULL,'schema','%s','table','%s','column','%s')"/>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<column_comment query="SELECT COMMENTS FROM ALL_COL_COMMENTS WHERE OWNER='%s' AND TABLE_NAME='%s' AND COLUMN_NAME='%s'"/>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+无
+
+<!-- IBM DB2 -->
+无
+
+<!-- Hyper SQL Database -->
+无
+
+<!-- Sybase -->
+无
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+无

@@ -1,0 +1,28 @@
+msfvenom
+
+作用：生成木马文件，替代早期版本的msfpayload和msfencoder。
+
+Options
+
+msfvenom命令行选项如下：
+
+-p, --payload    <payload>       指定需要使用的payload(攻击荷载)
+-l, --list       [module_type]   列出指定模块的所有可用资源,模块类型包括: payloads, encoders, nops, all
+-n, --nopsled    <length>        为payload预先指定一个NOP滑动长度
+-f, --format     <format>        指定输出格式
+						 (使用 --help-formats 来获取msf支持的输出格式列表)
+-e, --encoder    [encoder]       指定需要使用的encoder（编码器）
+-a, --arch       <architecture>  指定payload的目标架构
+    --platform   <platform>      指定payload的目标平台
+-s, --space      <length>        设定有效攻击荷载的最大长度
+-b, --bad-chars  <list>          设定规避字符集，比如: &#039;\x00\xff&#039;
+-i, --iterations <count>         指定payload的编码次数
+-c, --add-code   <path>          指定一个附加的win32 shellcode文件
+-x, --template   <path>          指定一个自定义的可执行文件作为模板
+-k, --keep                       保护模板程序的动作，注入的payload作为一个新的进程运行
+    --payload-options            列举payload的标准选项
+-o, --out   <path>               保存payload
+-v, --var-name <name>            指定一个自定义的变量，以确定输出格式
+    --shellest                   最小化生成payload
+-h, --help                       查看帮助选项
+    --help-formats               查看msf支持的输出格式列表

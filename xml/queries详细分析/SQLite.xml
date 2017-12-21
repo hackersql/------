@@ -1,0 +1,52 @@
+<!-- SQLite -->
+    <dbms value="SQLite">
+        <cast query="CAST(%s AS TEXT)" dbms_version="&gt;=3.0"/>
+        <!-- NOTE: On SQLite version 2 everything is stored as a string (Reference: http://www.mono-project.com/SQLite) -->
+        <length query="LENGTH(%s)"/>
+        <isnull query="COALESCE(%s,' ')"/>
+        <delimiter query="||"/>
+        <limit query="LIMIT %d,%d"/>
+        <limitregexp query="\s+LIMIT\s+([\d]+)\s*\,\s*([\d]+)" query2="\s+LIMIT\s+([\d]+)"/>
+        <limitgroupstart query="1"/>
+        <limitgroupstop query="2"/>
+        <limitstring query=" LIMIT "/>
+        <order query="ORDER BY %s ASC"/>
+        <count query="COUNT(%s)"/>
+        <comment query="--" query2="/*"/>
+        <substring query="SUBSTR((%s),%d,%d)"/>
+        <concatenate query="%s||%s"/>
+        <case query="SELECT (CASE WHEN (%s) THEN 1 ELSE 0 END)"/>
+        <hex query="HEX(%s)"/>
+        <inference query="SUBSTR((%s),%d,1)>'%c'"/>
+        <banner query="SELECT SQLITE_VERSION()"/>
+        <current_user/>
+        <current_db/>
+        <hostname/>
+        <table_comment/>
+        <column_comment/>
+        <is_dba/>
+        <check_udf/>
+        <users/>
+        <passwords/>
+        <privileges/>
+        <roles/>
+        <dbs/>
+        <tables>
+            <inband query="SELECT tbl_name FROM sqlite_master WHERE type='table'"/>
+            <blind query="SELECT tbl_name FROM sqlite_master WHERE type='table' LIMIT %d,1" count="SELECT COUNT(tbl_name) FROM sqlite_master WHERE type='table'"/>
+        </tables>
+        <columns>
+            <inband query="SELECT MIN(sql) FROM sqlite_master WHERE tbl_name='%s'"/>
+            <blind query="SELECT sql FROM sqlite_master WHERE tbl_name='%s' LIMIT 1" condition=""/>
+        </columns>
+        <dump_table>
+            <inband query="SELECT %s FROM %s"/>
+            <blind query="SELECT %s FROM %s LIMIT %d,1" count="SELECT COUNT(*) FROM %s"/>
+        </dump_table>
+        <search_db/>
+        <search_table>
+            <inband query="SELECT tbl_name FROM sqlite_master WHERE type='table' AND %s" condition="tbl_name" condition2=""/>
+            <blind query="" query2="SELECT tbl_name FROM sqlite_master WHERE type='table'" count="" count2="SELECT COUNT(tbl_name) FROM sqlite_master WHERE type='table'" condition="tbl_name" condition2=""/>
+        </search_table>
+        <search_column/>
+    </dbms>

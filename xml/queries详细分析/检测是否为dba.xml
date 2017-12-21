@@ -1,0 +1,39 @@
+<!-- 检测是否为dba  -->
+
+<!-- MySQL -->
+<!-- 对应sqlmap选项--is-dba判断当前用户是否为dba -->
+<!-- 从mysql.user表中查询指定用户user='你要查的用户名'是否拥有super_priv权限 -->
+<!-- super_priv数据库管理员权限 -->
+<is_dba query="(SELECT super_priv FROM mysql.user WHERE user='%s' LIMIT 0,1)='Y'"/>
+
+<!-- PostgreSQL -->
+<is_dba query="(SELECT usesuper=true FROM pg_user WHERE usename=CURRENT_USER OFFSET 0 LIMIT 1)"/>
+
+<!-- Microsoft SQL Server -->
+<is_dba query="IS_SRVROLEMEMBER('sysadmin')=1" query2="IS_SRVROLEMEMBER('sysadmin','%s')=1"/>
+
+<!-- Microsoft Access -->
+
+<!-- Oracle -->
+<is_dba query="(SELECT GRANTED_ROLE FROM DBA_ROLE_PRIVS WHERE GRANTEE=USER AND GRANTED_ROLE='DBA')='DBA'"/>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+<is_dba query="(SELECT USERTYPE FROM SYSUSERS WHERE USERNAME=USER)='D'"/>
+
+<!-- IBM DB2 -->
+<is_dba query="(SELECT dbadmauth FROM syscat.dbauth WHERE grantee=current user)='Y'"/>
+
+<!-- Hyper SQL Database -->
+<is_dba query="SELECT ADMIN FROM INFORMATION_SCHEMA.SYSTEM_USERS WHERE USER=CURRENT_USER"/>
+
+<!-- Sybase -->
+<is_dba query="PATINDEX('%sa_role%',SHOW_ROLE())>0" query2="EXISTS(SELECT * FROM master..syslogins,master..sysloginroles WHERE srid=0 and name='%s')"/>
+
+<!-- Firebird -->
+<is_dba query="CURRENT_USER='SYSDBA'"/>
+
+<!-- SAP MaxDB -->
+<is_dba query="EXISTS(SELECT USER_ID FROM domain.users WHERE username=USER() AND usermode='SYSDBA')"/>

@@ -1,0 +1,44 @@
+<!-- 字符串转为十六进制 -->
+
+<!-- MySQL -->
+<!-- 将一个字符串或数字转换为十六进制格式的字符串 -->
+<hex query="HEX(%s)"/>
+
+<!-- PostgreSQL -->
+<!-- CONVERT_TO转换字符串编码为指定的UTF8类型 -->
+<!-- ENCODE对字符串按指定类型进行编码为HEX十六进制 -->
+<hex query="ENCODE(CONVERT_TO((%s),'UTF8'),'HEX')"/>
+
+<!-- Microsoft SQL Server -->
+fn_varbintohexstr函数
+接收一个字符串作为参数并返回这个字符串的16进制
+比如:select master.dbo.fn_varbintohexstr(cast(SYSTEM_USER as VARBINARY))。
+这句sql语句执行的结果是0x73006100,也就是sa的unicode编码后的样子。
+<hex query="master.dbo.fn_varbintohexstr(CAST(%s AS VARBINARY(8000)))"/>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<hex query="RAWTOHEX(%s)"/>
+
+<!-- SQLite -->
+<hex query="HEX(%s)"/>
+
+<!-- Informix -->
+<hex query="HEX(%s)"/>
+
+<!-- IBM DB2 -->
+<hex query="HEX(%s)"/>
+
+<!-- Hyper SQL Database -->
+<hex query="RAWTOHEX(%s)"/>
+
+<!-- Sybase -->
+<hex query="BINTOSTR(CONVERT(VARBINARY,%s))"/>
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+<hex query="HEX(%s)"/>

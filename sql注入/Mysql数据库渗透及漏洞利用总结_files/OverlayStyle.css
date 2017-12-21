@@ -1,0 +1,357 @@
+
+a:hover {
+    text-decoration: none
+}
+
+.hh_bronzemember {
+    margin: -1px 0 0 7px;
+}
+
+.hh_hone {
+    display: block;
+    margin: 10px 0;
+    float: left;
+}
+
+.hh_htow {
+    display: block;
+    margin-top: 10px;
+}
+
+.hh_merge {
+    float: right;
+    margin-bottom: 10px;
+    width: 300px
+}
+
+.hh_mt {
+    /*width: 1450px;*/
+    margin: 20px auto 0;
+}
+
+.hh_mart {
+    margin-top: -2px;
+}
+
+.hh_fl {
+    float: left;
+}
+
+#includeList .topic-title {
+    display: block;
+    width: 58%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.markdown-body {
+    color: #666666;
+    font-size: 13px;
+}
+
+
+.o-medium-bar {
+    margin-top: 30px;
+    float: right;
+    width: 78%;
+}
+
+.cont-box .text {
+    padding: 9px 3px;
+}
+
+.hh_mf {
+    padding: 8px 0;
+    font-size: 16px;
+}
+
+.uk-navbar-flip {
+    background-color: #eee;
+}
+
+.hh_submission a {
+    color: #fff;
+}
+
+.hh_submission {
+    width: 40px;
+    float: right;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #FF4200;
+    color: #ffffff;
+}
+
+.basic-info ul li {
+    width: 30%;
+    float: left;
+    list-style-type: none;
+}
+
+.basic-info ul li:nth-child(7) {
+    width: 100%;
+    float: left;
+    list-style-type: none;
+}
+
+.hh_pt {
+    margin-top: 30px
+}
+
+.post-title {
+    background-color: rgb(238, 238, 238);
+}
+
+.navbar .brand {
+    padding: 0;
+    /*width: 60px;*/
+    height: 60px;
+}
+/* .brand{
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 207px 60px;
+    background-image: url("/forum/static/icon/xianzhi_icon.svg") ;
+    width: 207px;
+}*/
+.brand object{
+    display: inline-block!important;
+    background-repeat: no-repeat;
+    height: 60px;
+    width: 207px;
+}
+
+.hh_navbar {
+    width: 100%;
+    height: 60px;
+    background-color: #EEEEEE;
+    position: fixed;
+    margin-top: -20px;
+    z-index: 99;
+}
+
+@media screen and (min-width: 1950px) {
+    .upaper tr th {
+        min-width: 300px;
+    }
+}
+
+@media screen and (min-width: 1660px) and (max-width: 1945px) {
+    .upaper tr th {
+        min-width: 250px;
+    }
+}
+
+@media screen and (min-width: 1350px) and (max-width: 1659px) {
+    .upaper tr th {
+        min-width: 200px;
+    }
+}
+
+@media screen and (min-width: 1100px) and (max-width: 1349px) {
+
+    .upaper tr th {
+        min-width: 150px;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .upaper tr th {
+        min-width: auto;
+    }
+
+}
+
+@media only screen and (min-width: 768px) {
+    .hh_container-fluid {
+        width: 767px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1219px) {
+    .hh_container-fluid {
+        width: 1219px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 1220px) {
+    .hh_container-fluid {
+        width: 72%;
+        margin: 0 auto;
+    }
+}
+
+.hh_userstatus {
+    position: absolute;
+    right: 47px;
+    top: 16px;
+}
+
+.hh_nav > li {
+    float: left;
+    /*width: 15%;*/
+    line-height: 60px;
+    font-size: 14px;
+}
+
+.hh_nav > li > a {
+    padding: 10px 34px;
+    color: #333;
+}
+
+.hh_nav > li:nth-child(3):hover .hh_ul {
+    display: block;
+}
+
+.hh_nav > li:hover, .hh_ul > li:hover, .hh_sideNavigation > ul > li:hover, .hh_sideNavigation .active {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.hh_mts {
+    margin-top: 36px;
+}
+
+.hh_nav > li:hover > a, .hh_ul > li:hover > a, .hh_sideNavigation > ul > li:hover > a, .hh_sideNavigation .active a {
+    color: #ffffff;
+}
+
+.hh_nav .uk-navbar-flip {
+    float: right;
+    margin-top: 8px;
+    margin-right: 226px;
+}
+
+.hh_ul {
+    background-color: #eee;
+    display: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.hh_ul > li {
+    height: 50px;
+}
+
+.hh_ul > li > a {
+    padding: 10px 0 0 29px;
+    color: #333;
+    font-size: 14px;
+}
+
+.hh_sideNavigation {
+    float: right;
+    max-width: 15%;
+    background-color: #EEEEEE;
+    margin-top: 160px;
+}
+
+.hh_sideNavigation > ul > li {
+    border-bottom: 1px dashed #fff;
+}
+
+.hh_sideNavigation > ul > li > a {
+    padding: 0 15px;
+    display: block;
+    font-size: 16px;
+    color: #999;
+    padding: 12px 20px;
+}
+
+.home-list h3 {
+    margin-bottom: 0px;
+    color: #777;
+    margin-left: -30px;
+}
+
+.home-list .box {
+    margin-top: 5px;
+}
+
+.article-list {
+    margin-top: 35px;
+}
+
+.home-list .pagination {
+    margin-right: 15px;
+}
+
+.reply {
+    margin-top: 40px;
+
+}
+
+.hh_mf {
+    font-size: 18px;
+}
+
+.hh_mf li {
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+.editable-field {
+    cursor: pointer;
+    padding-right: 30px;
+    background-image: url("../images/glyphicons-halflings.png");
+    background-repeat: no-repeat;
+    /*background-size:55px 50px;*/
+    background-position: 65px;
+}
+
+.container .offset {
+    margin-top: 35px;
+}
+
+.uk-article-title {
+    font-size: 24px;
+}
+
+.content-pre {
+    font-size: 1em;
+}
+
+.content-corner span {
+    padding: 0px 5px;
+}
+
+.paper-submit {
+    margin-left: 26px;
+}
+
+.reply {
+    margin-top: 0;
+}
+
+.hh_commenttop {
+    margin-top: 60px;
+}
+
+.cont-box .text {
+    padding: 8px 3px;
+}
+
+#editormd > label:first-child {
+    display: none;
+}
+
+/*@media (min-width: 576px) {*/
+/*.upaper tr th {*/
+/*min-width:auto;*/
+/*}*/
+/*}*/
+
+/*@media (min-width: 768px) {*/
+/*.upaper tr th {*/
+/*min-width: 150px;*/
+/*}*/
+/*}*/
+
+/*@media (min-width: 992px) {*/
+/*.upaper tr th {*/
+/*min-width: 300px;*/
+/*}*/
+/*}*/

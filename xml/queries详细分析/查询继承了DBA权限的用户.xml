@@ -1,0 +1,46 @@
+<!-- 查询拥有DBA权限的用户 -->
+
+<!-- MySQL -->
+无
+
+<!-- PostgreSQL -->
+无
+
+<!-- Microsoft SQL Server -->
+无
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<roles>
+    <inband query="SELECT GRANTEE,GRANTED_ROLE FROM DBA_ROLE_PRIVS" query2="SELECT USERNAME,GRANTED_ROLE FROM USER_ROLE_PRIVS" condition="GRANTEE" condition2="USERNAME"/>
+    <blind query="SELECT GRANTED_ROLE FROM (SELECT GRANTED_ROLE,ROWNUM AS LIMIT FROM DBA_ROLE_PRIVS WHERE GRANTEE='%s') WHERE LIMIT=%d" query2="SELECT GRANTED_ROLE FROM (SELECT GRANTED_ROLE,ROWNUM AS LIMIT FROM USER_ROLE_PRIVS WHERE USERNAME='%s') WHERE LIMIT=%d" count="SELECT COUNT(GRANTED_ROLE) FROM DBA_ROLE_PRIVS WHERE GRANTEE='%s'" count2="SELECT COUNT(GRANTED_ROLE) FROM USER_ROLE_PRIVS WHERE USERNAME='%s'"/>
+</roles>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+无
+
+<!-- IBM DB2 -->
+无
+
+<!-- Hyper SQL Database -->
+无
+
+<!-- Sybase -->
+<roles>
+    <inband query="SELECT name,srid FROM master..syslogins,master..sysloginroles" condition="name"/>
+    <blind/>
+</roles>
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+<roles>
+    <inband query="SELECT owner,role FROM domain.roles" condition="owner"/>
+    <blind/>
+</roles>

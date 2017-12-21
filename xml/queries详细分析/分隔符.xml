@@ -1,0 +1,37 @@
+<!-- 分隔符 -->
+
+<!-- MySQL -->
+<delimiter query=","/>
+
+<!-- PostgreSQL -->
+<delimiter query="||"/>
+
+<!-- Microsoft SQL Server -->
+<delimiter query="+"/>
+
+<!-- Microsoft Access -->
+<delimiter query="&amp;"/>
+
+<!-- Oracle -->
+<delimiter query="||"/>
+
+<!-- SQLite -->
+<delimiter query="||"/>
+
+<!-- Informix -->
+<delimiter query="||"/>
+
+<!-- IBM DB2 -->
+<delimiter query="||"/>
+
+<!-- Hyper SQL Database -->
+<delimiter query="||"/>
+
+<!-- Sybase -->
+<delimiter query="+"/>
+
+<!-- Firebird -->
+<delimiter query="||"/>
+
+<!-- SAP MaxDB -->
+<delimiter query=","/>

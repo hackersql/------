@@ -1,0 +1,72 @@
+<!-- 返回数据库中的用户和数量 -->
+
+<!-- MySQL -->
+<!-- 对应sqlmap选项--users返回数据库中的用户和数量 -->
+<!-- DISTINCT(grantee)、DISTINCT(user)去除重复字段 -->
+<!-- 一般distinct用来查询不重复的记录，其原因是distinct只能返回他的目标字段 -->
+<!-- 而无法返回其他字段，如果要查询不重复的记录，有时候可以用group by， -->
+<!-- COUNT(DISTINCT(grantee)COUNT返回不重复记录的条数 -->
+<users>
+    <inband query="SELECT grantee FROM INFORMATION_SCHEMA.USER_PRIVILEGES" query2="SELECT user FROM mysql.user"/>
+    <blind query="SELECT DISTINCT(grantee) FROM INFORMATION_SCHEMA.USER_PRIVILEGES LIMIT %d,1" query2="SELECT DISTINCT(user) FROM mysql.user LIMIT %d,1" count="SELECT COUNT(DISTINCT(grantee)) FROM INFORMATION_SCHEMA.USER_PRIVILEGES" count2="SELECT COUNT(DISTINCT(user)) FROM mysql.user"/>
+</users>
+
+<!-- PostgreSQL -->
+<users>
+    <inband query="SELECT usename FROM pg_user"/>
+    <blind query="SELECT DISTINCT(usename) FROM pg_user OFFSET %d LIMIT 1" count="SELECT COUNT(DISTINCT(usename)) FROM pg_user"/>
+</users>
+
+<!-- Microsoft SQL Server -->
+<users>
+    <inband query="SELECT name FROM master..syslogins" query2="SELECT name FROM sys.sql_logins"/>
+    <!-- 注意：在NOT IN类型的查询中ORDER BY是必须的 -->
+    <blind query="SELECT TOP 1 name FROM master..syslogins WHERE name NOT IN (SELECT TOP %d name FROM master..syslogins ORDER BY name) ORDER BY name" query2="SELECT TOP 1 name FROM sys.sql_logins WHERE name NOT IN (SELECT TOP %d name FROM sys.sql_logins ORDER BY name) ORDER BY name" count="SELECT LTRIM(STR(COUNT(name))) FROM master..syslogins" count2="SELECT LTRIM(STR(COUNT(name))) FROM sys.sql_logins"/>
+</users>
+
+<!-- Microsoft Access -->
+
+<!-- Oracle -->
+<users>
+    <inband query="SELECT USERNAME FROM SYS.ALL_USERS"/>
+    <blind query="SELECT USERNAME FROM (SELECT USERNAME,ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=%d" count="SELECT COUNT(USERNAME) FROM SYS.ALL_USERS"/>
+</users>
+
+<!-- SQLite -->
+
+<!-- Informix -->
+<users>
+    <inband query="SELECT USERNAME FROM SYSUSERS"/>
+    <blind query="SELECT SKIP %d LIMIT 1 USERNAME FROM SYSUSERS ORDER BY USERNAME" count="SELECT COUNT(USERNAME) FROM SYSUSERS"/>
+</users>
+
+<!-- IBM DB2 -->
+<users>
+    <inband query="SELECT grantee FROM sysibm.sysdbauth WHERE grantee!='SYSTEM' AND grantee!='PUBLIC'"/>
+    <blind query="SELECT grantee FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,grantee FROM sysibm.sysdbauth WHERE grantee!='SYSTEM' AND grantee!='PUBLIC') AS qq WHERE LIMIT=%d" count="SELECT COUNT(DISTINCT(grantee)) FROM sysibm.sysdbauth WHERE grantee!='SYSTEM' AND grantee!='PUBLIC'"/>
+</users>
+
+<!-- Hyper SQL Database -->
+<users>
+    <!-- LIMIT is needed at start for v1.7 this gets mangled unless no-cast is used -->
+    <blind query="SELECT LIMIT %d 1 DISTINCT(user) FROM INFORMATION_SCHEMA.SYSTEM_USERS ORDER BY user" count="SELECT COUNT(DISTINCT(user)) FROM INFORMATION_SCHEMA.SYSTEM_USERS"/>
+    <inband query="SELECT user FROM INFORMATION_SCHEMA.SYSTEM_USERS ORDER BY user"/>
+</users>
+
+<!-- Sybase -->
+<users>
+    <inband query="SELECT name FROM master..syslogins"/>
+    <blind/>
+</users>
+
+<!-- Firebird -->
+<users>
+    <inband query="SELECT RDB$USER FROM RDB$USER_PRIVILEGES"/>
+    <blind query="SELECT FIRST 1 SKIP %d DISTINCT(RDB$USER) FROM RDB$USER_PRIVILEGES" count="SELECT COUNT(DISTINCT(RDB$USER)) FROM RDB$USER_PRIVILEGES"/>
+</users>
+
+<!-- SAP MaxDB -->
+<users>
+    <inband query="SELECT username FROM domain.users"/>
+    <blind query="SELECT MIN(username) FROM domain.users WHERE username>'%s'" count="SELECT CHR(COUNT(*)) FROM domain.users"/>
+</users>

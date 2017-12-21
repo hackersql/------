@@ -1,0 +1,58 @@
+<!-- 搜索指定列 -->
+
+<!-- MySQL -->
+<!-- 对应sqlmap选项--search搜索指定列，可添加3个条件指定数据库、表名、列名 -->
+<search_column>
+    <inband query="SELECT table_schema,table_name FROM INFORMATION_SCHEMA.COLUMNS WHERE %s" condition="column_name" condition2="table_schema" condition3="table_name"/>
+    <blind query="SELECT DISTINCT(table_schema) FROM INFORMATION_SCHEMA.COLUMNS WHERE %s" query2="SELECT DISTINCT(table_name) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema='%s'" count="SELECT COUNT(DISTINCT(table_schema)) FROM INFORMATION_SCHEMA.COLUMNS WHERE %s" count2="SELECT COUNT(DISTINCT(table_name)) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema='%s'" condition="column_name" condition2="table_schema" condition3="table_name"/>
+</search_column>
+<!-- PostgreSQL -->
+<search_column>
+    <inband query="SELECT nspname,relname FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND %s" condition="attname" condition2="nspname" condition3="relname"/>
+    <blind query="SELECT DISTINCT(nspname) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND %s" query2="SELECT DISTINCT(relname) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND nspname='%s'" count="SELECT COUNT(DISTINCT(nspname)) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND %s" count2="SELECT COUNT(DISTINCT(relname)) FROM pg_namespace,pg_type,pg_attribute b JOIN pg_class a ON a.oid=b.attrelid WHERE a.relnamespace=pg_namespace.oid AND pg_type.oid=b.atttypid AND attnum>0 AND nspname='%s'" condition="attname" condition2="nspname" condition3="relname"/>
+</search_column>
+
+<!-- Microsoft SQL Server -->
+<search_column>
+    <inband query="SELECT %s..sysobjects.name FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.xtype IN ('u','v')" condition="[DB]..syscolumns.name" condition2="[DB]..sysobjects.name"/>
+    <blind query="SELECT %s..sysobjects.name FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.xtype IN ('u','v')" count="SELECT COUNT(%s..sysobjects.name) FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id AND %s..sysobjects.xtype IN ('u','v')" condition="[DB]..syscolumns.name" condition2="[DB]..sysobjects.name"/>
+</search_column>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<search_column>
+    <inband query="SELECT OWNER,TABLE_NAME FROM SYS.ALL_TAB_COLUMNS WHERE %s" condition="COLUMN_NAME" condition2="OWNER" condition3="TABLE_NAME"/>
+    <blind query="SELECT OWNER FROM (SELECT DISTINCT(OWNER) FROM SYS.ALL_TAB_COLUMNS WHERE %s)" query2="SELECT TABLE_NAME FROM (SELECT DISTINCT(TABLE_NAME) FROM SYS.ALL_TAB_COLUMNS WHERE OWNER='%s')" count="SELECT COUNT(DISTINCT(OWNER)) FROM SYS.ALL_TAB_COLUMNS WHERE %s" count2="SELECT COUNT(DISTINCT(TABLE_NAME)) FROM SYS.ALL_TAB_COLUMNS WHERE OWNER='%s'" condition="COLUMN_NAME" condition2="OWNER" condition3="TABLE_NAME"/>
+</search_column>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+无
+
+<!-- IBM DB2 -->
+<search_column>
+    <inband query="SELECT tabschema,tabname FROM sysstat.columns WHERE %s" condition="colname" condition2="tabschema" condition3="tabname"/>
+    <blind query="SELECT tabschema FROM (SELECT DISTINCT(tabschema) FROM sysstat.columns WHERE %s) AS qq" query2="SELECT DISTINCT(tabname) FROM sysstat.columns WHERE tabschema='%s'" count="SELECT COUNT(DISTINCT(tabschema)) FROM sysstat.columns WHERE %s" count2="SELECT COUNT(DISTINCT(tabname)) FROM sysstat.columns WHERE tabschema='%s'" condition="colname" condition2="tabschema" condition3="tabname"/>
+</search_column>
+
+<!-- Hyper SQL Database -->
+<search_column>
+    <blind query="SELECT DISTINCT(table_schem) FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE %s"  count="SELECT COUNT(DISTINCT(table_schem)) FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE %s" condition="column_name" condition2="table_schem" condition3="table_name"/>
+    <inband query="SELECT table_schem,table_name FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE %s" condition="column_name" condition2="table_schem" condition3="table_name"/>
+</search_column>
+
+<!-- Sybase -->
+<search_column>
+    <inband query="SELECT %s..sysobjects.name FROM %s..syscolumns,%s..sysobjects WHERE %s..syscolumns.id=%s..sysobjects.id" condition="[DB]..syscolumns.name" condition2="[DB]..sysobjects.name"/>
+    <blind/>
+</search_column>
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+无

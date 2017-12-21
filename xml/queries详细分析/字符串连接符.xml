@@ -1,0 +1,40 @@
+<!-- 字符串连接符 -->
+
+<!-- MySQL -->
+<!-- 将多个字符串合并为一个字符串 -->
+<!-- SELECT CONCAT('12','34') // 返回1234 -->
+<concatenate query="CONCAT(%s,%s)"/>
+
+<!-- PostgreSQL -->
+<!-- 连接两个字符串'Post' || 'greSQL' 返回PostgreSQL -->
+<concatenate query="%s||%s"/>
+
+<!-- Microsoft SQL Server -->
+<concatenate query="%s+%s"/>
+
+<!-- Microsoft Access -->
+<concatenate query="%s&amp;%s"/>
+
+<!-- Oracle -->
+<concatenate query="%s||%s"/>
+
+<!-- SQLite -->
+<concatenate query="%s||%s"/>
+
+<!-- Informix -->
+<concatenate query="%s||%s"/>
+
+<!-- IBM DB2 -->
+<concatenate query="%s||%s"/>
+
+<!-- Hyper SQL Database -->
+<concatenate query="CONCAT(%s,%s)"/>
+
+<!-- Sybase -->
+<concatenate query="%s+%s"/>
+
+<!-- Firebird -->
+<concatenate query="%s||%s"/>
+
+<!-- SAP MaxDB -->
+<concatenate query="CONCAT(%s,%s)"/>

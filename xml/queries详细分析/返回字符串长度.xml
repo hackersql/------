@@ -1,0 +1,39 @@
+<!-- 返回字符串长度 -->
+
+<!-- MySQL -->
+<!-- length:是计算字段的长度一个汉字是算三个字符,一个数字或字母算一个字符 -->
+<!-- char_length:不管汉字还是数字或者是字母都算是一个字符 -->
+<length query="CHAR_LENGTH(%s)"/>
+
+<!-- PostgreSQL -->
+<length query="LENGTH(%s)"/>
+
+<!-- Microsoft SQL Server -->
+<length query="LTRIM(STR(LEN(%s)))"/>
+
+<!-- Microsoft Access -->
+<length query="LEN(RTRIM(CVAR(%s)))"/>
+
+<!-- Oracle -->
+<length query="LENGTH(%s)"/>
+
+<!-- SQLite -->
+<length query="LENGTH(%s)"/>
+
+<!-- Informix -->
+<length query="CHAR_LENGTH(RTRIM(%s))"/>
+
+<!-- IBM DB2 -->
+<length query="LENGTH(RTRIM(CAST(%s AS CHAR(254))))"/>
+
+<!-- Hyper SQL Database -->
+<length query="CHAR_LENGTH(%s)"/>
+
+<!-- Sybase -->
+<length query="LTRIM(STR(LEN(%s)))"/>
+
+<!-- Firebird -->
+<length query="CHAR_LENGTH(TRIM(%s))"/>
+
+<!-- SAP MaxDB -->
+<length query="LENGTH(%s)"/>

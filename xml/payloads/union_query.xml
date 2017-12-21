@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+    <!-- UNION查询测试 -->
+    <test>
+        <title>通用UNION查询 ([CHAR]) - [COLSTART] to [COLSTOP] columns (custom)</title>
+        <stype>6</stype>
+        <level>1</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[CHAR]</char>
+            <columns>[COLSTART]-[COLSTOP]</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 (NULL) - [COLSTART] to [COLSTOP] columns (custom)</title>
+        <stype>6</stype>
+        <level>1</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>NULL</char>
+            <columns>[COLSTART]-[COLSTOP]</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([RANDNUM]) - [COLSTART] to [COLSTOP] columns (custom)</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[RANDNUM]</char>
+            <columns>[COLSTART]-[COLSTOP]</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([CHAR]) - 1到10列</title>
+        <stype>6</stype>
+        <level>1</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[CHAR]</char>
+            <columns>1-10</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 (NULL) - 1到10列</title>
+        <stype>6</stype>
+        <level>1</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>NULL</char>
+            <columns>1-10</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([RANDNUM]) - 1到10列</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[RANDNUM]</char>
+            <columns>1-10</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([CHAR]) - 11至20列</title>
+        <stype>6</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[CHAR]</char>
+            <columns>11-20</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 (NULL) - 11至20列</title>
+        <stype>6</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>NULL</char>
+            <columns>11-20</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([RANDNUM]) - 11至20列</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[RANDNUM]</char>
+            <columns>11-20</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([CHAR]) - 21至30列</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[CHAR]</char>
+            <columns>21-30</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 (NULL) - 21至30列</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>NULL</char>
+            <columns>21-30</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([RANDNUM]) - 21至30列</title>
+        <stype>6</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[RANDNUM]</char>
+            <columns>21-30</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([CHAR]) - 31至40列</title>
+        <stype>6</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[CHAR]</char>
+            <columns>31-40</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 (NULL) - 31至40列</title>
+        <stype>6</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>NULL</char>
+            <columns>31-40</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([RANDNUM]) - 31至40列</title>
+        <stype>6</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[RANDNUM]</char>
+            <columns>31-40</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([CHAR]) - 41到50列</title>
+        <stype>6</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[CHAR]</char>
+            <columns>41-50</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+    <test>
+        <title>通用UNION查询 (NULL) - 41到50列</title>
+        <stype>6</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>NULL</char>
+            <columns>41-50</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>通用UNION查询 ([RANDNUM]) - 41到50列</title>
+        <stype>6</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>[GENERIC_SQL_COMMENT]</comment>
+            <char>[RANDNUM]</char>
+            <columns>41-50</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([CHAR]) - [COLSTART] to [COLSTOP] columns (custom)</title>
+        <stype>6</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[CHAR]</char>
+            <columns>[COLSTART]-[COLSTOP]</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 (NULL) - [COLSTART] to [COLSTOP] columns (custom)</title>
+        <stype>6</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>NULL</char>
+            <columns>[COLSTART]-[COLSTOP]</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([RANDNUM]) - [COLSTART] to [COLSTOP] columns (custom)</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[RANDNUM]</char>
+            <columns>[COLSTART]-[COLSTOP]</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([CHAR]) - 1到10列</title>
+        <stype>6</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[CHAR]</char>
+            <columns>1-10</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 (NULL) - 1到10列</title>
+        <stype>6</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>NULL</char>
+            <columns>1-10</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([RANDNUM]) - 1到10列</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[RANDNUM]</char>
+            <columns>1-10</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([CHAR]) - 11至20列</title>
+        <stype>6</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[CHAR]</char>
+            <columns>11-20</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 (NULL) - 11至20列</title>
+        <stype>6</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>NULL</char>
+            <columns>11-20</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([RANDNUM]) - 11至20列</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[RANDNUM]</char>
+            <columns>11-20</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([CHAR]) - 21至30列</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[CHAR]</char>
+            <columns>21-30</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 (NULL) - 21至30列</title>
+        <stype>6</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>NULL</char>
+            <columns>21-30</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([RANDNUM]) - 21至30列</title>
+        <stype>6</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[RANDNUM]</char>
+            <columns>21-30</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([CHAR]) - 31至40列</title>
+        <stype>6</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[CHAR]</char>
+            <columns>31-40</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 (NULL) - 31至40列</title>
+        <stype>6</stype>
+        <level>4</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>NULL</char>
+            <columns>31-40</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([RANDNUM]) - 31至40列</title>
+        <stype>6</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[RANDNUM]</char>
+            <columns>31-40</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([CHAR]) - 41到50列</title>
+        <stype>6</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[CHAR]</char>
+            <columns>41-50</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 (NULL) - 41到50列</title>
+        <stype>6</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>NULL</char>
+            <columns>41-50</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>MySQL UNION查询 ([RANDNUM]) - 41到50列</title>
+        <stype>6</stype>
+        <level>5</level>
+        <risk>1</risk>
+        <clause>1,2,3,4,5</clause>
+        <where>1</where>
+        <vector>[UNION]</vector>
+        <request>
+            <payload/>
+            <comment>#</comment>
+            <char>[RANDNUM]</char>
+            <columns>41-50</columns>
+        </request>
+        <response>
+            <union/>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+    <!-- 结束UNION查询测试 -->
+</root>

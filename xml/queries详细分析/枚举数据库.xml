@@ -1,0 +1,66 @@
+<!-- 枚举数据库 -->
+
+<!-- MySQL -->
+<!-- 对应sqlmap选项--dbs列出所有的数据库 -->
+<dbs>
+    <inband query="SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA" query2="SELECT db FROM mysql.db"/>
+    <blind query="SELECT DISTINCT(schema_name) FROM INFORMATION_SCHEMA.SCHEMATA LIMIT %d,1" query2="SELECT DISTINCT(db) FROM mysql.db LIMIT %d,1" count="SELECT COUNT(DISTINCT(schema_name)) FROM INFORMATION_SCHEMA.SCHEMATA" count2="SELECT COUNT(DISTINCT(db)) FROM mysql.db"/>
+</dbs>
+
+<!-- PostgreSQL -->
+<dbs>
+    <inband query="SELECT schemaname FROM pg_tables"/>
+    <blind query="SELECT DISTINCT(schemaname) FROM pg_tables OFFSET %d LIMIT 1" count="SELECT COUNT(DISTINCT(schemaname)) FROM pg_tables"/>
+</dbs>
+
+<!-- Microsoft SQL Server -->
+<dbs>
+    <inband query="SELECT name FROM master..sysdatabases" query2="SELECT DB_NAME(%d)"/>
+    <blind query="SELECT TOP 1 name FROM master..sysdatabases WHERE name NOT IN (SELECT TOP %d name FROM master..sysdatabases ORDER BY name) ORDER BY name" count="SELECT LTRIM(STR(COUNT(name))) FROM master..sysdatabases"/>
+</dbs>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<dbs>
+    <inband query="SELECT OWNER FROM (SELECT DISTINCT(OWNER) FROM SYS.ALL_TABLES)"/>
+    <blind query="SELECT OWNER FROM (SELECT OWNER,ROWNUM AS LIMIT FROM (SELECT DISTINCT(OWNER) FROM SYS.ALL_TABLES)) WHERE LIMIT=%d" count="SELECT COUNT(DISTINCT(OWNER)) FROM SYS.ALL_TABLES"/>
+</dbs>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+<dbs>
+    <inband query="SELECT NAME FROM SYSMASTER:SYSDATABASES"/>
+    <blind query="SELECT SKIP %d LIMIT 1 NAME FROM SYSMASTER:SYSDATABASES ORDER BY NAME" count="SELECT COUNT(NAME) FROM SYSMASTER:SYSDATABASES"/>
+</dbs>
+
+<!-- IBM DB2 -->
+<!-- NOTE: in DB2 schema names are the counterpart to database names on other DBMSes -->
+<dbs>
+    <inband query="SELECT schemaname FROM syscat.schemata"/>
+    <blind query="SELECT schemaname FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,schemaname FROM syscat.schemata) AS qq WHERE LIMIT=%d" count="SELECT COUNT(schemaname) FROM syscat.schemata"/>
+</dbs>
+
+<!-- Hyper SQL Database -->
+<dbs>
+    <blind query="SELECT LIMIT %d 1 DISTINCT(table_schem) FROM INFORMATION_SCHEMA.SYSTEM_SCHEMAS ORDER BY table_schem" count="SELECT COUNT(table_schem) FROM INFORMATION_SCHEMA.SYSTEM_SCHEMAS"/>
+    <inband query="SELECT table_schem FROM INFORMATION_SCHEMA.SYSTEM_SCHEMAS ORDER BY table_schem" />
+</dbs>
+
+<!-- Sybase -->
+<dbs>
+    <inband query="SELECT name FROM master..sysdatabases"/>
+    <blind/>
+</dbs>
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+<dbs>
+    <inband query="SELECT DISTINCT(schemaname) FROM domain.tables"/>
+    <blind/>
+</dbs>

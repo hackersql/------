@@ -1,0 +1,60 @@
+<!-- 搜索指定数据库 -->
+
+<!-- MySQL -->
+<!-- 对应sqlmap选项--search搜索指定数据库 -->
+<search_db>
+    <inband query="SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA WHERE %s" query2="SELECT db FROM mysql.db WHERE %s" condition="schema_name" condition2="db"/>
+    <blind query="SELECT DISTINCT(schema_name) FROM INFORMATION_SCHEMA.SCHEMATA WHERE %s" query2="SELECT DISTINCT(db) FROM mysql.db WHERE %s" count="SELECT COUNT(DISTINCT(schema_name)) FROM INFORMATION_SCHEMA.SCHEMATA WHERE %s" count2="SELECT COUNT(DISTINCT(db)) FROM mysql.db WHERE %s" condition="schema_name" condition2="db"/>
+</search_db>
+
+<!-- PostgreSQL -->
+<search_db>
+    <inband query="SELECT datname FROM pg_database WHERE %s" condition="datname"/>
+    <blind query="SELECT DISTINCT(datname) FROM pg_database WHERE %s" count="SELECT COUNT(DISTINCT(datname)) FROM pg_database WHERE %s" condition="datname"/>
+</search_db>
+
+<!-- Microsoft SQL Server -->
+<search_db>
+    <inband query="SELECT name FROM master..sysdatabases WHERE %s" condition="name"/>
+    <blind query="SELECT name FROM master..sysdatabases WHERE %s" count="SELECT LTRIM(STR(COUNT(name))) FROM master..sysdatabases WHERE %s" condition="name"/>
+</search_db>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<!-- 注意：在Oracle中模式scheama名称与其他DBMS上的数据库名称相对应 -->
+<search_db>
+    <inband query="SELECT OWNER FROM (SELECT DISTINCT(OWNER) FROM SYS.ALL_TABLES) WHERE %s" condition="OWNER"/>
+    <blind query="SELECT OWNER FROM (SELECT DISTINCT(OWNER) FROM SYS.ALL_TABLES) WHERE %s" count="SELECT COUNT(DISTINCT(OWNER)) FROM SYS.ALL_TABLES WHERE %s" condition="OWNER"/>
+</search_db>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+无
+
+<!-- IBM DB2 -->
+<search_db>
+    <inband query="SELECT schemaname FROM syscat.schemata WHERE %s" condition="schemaname"/>
+    <blind query="SELECT schemaname FROM (SELECT DISTINCT(schemaname) FROM syscat.schemata WHERE %s) AS qq" count="SELECT COUNT(DISTINCT(schemaname)) FROM syscat.schemata WHERE %s" condition="schemaname"/>
+</search_db>
+
+<!-- Hyper SQL Database -->
+<search_db>
+    <blind query="SELECT DISTINCT(table_schem) FROM INFORMATION_SCHEMA.SYSTEM_SCHEMAS WHERE %s" count="SELECT COUNT(DISTINCT(table_schem)) FROM INFORMATION_SCHEMA.SYSTEM_SCHEMAS WHERE %s" condition="table_schem"/>
+    <inband query="SELECT table_schem FROM INFORMATION_SCHEMA.SYSTEM_SCHEMAS WHERE %s" condition="table_schem"/>
+</search_db>
+
+<!-- Sybase -->
+<search_db>
+    <inband query="SELECT name FROM master..sysdatabases WHERE %s" condition="name"/>
+    <blind/>
+</search_db>
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+无

@@ -1,0 +1,71 @@
+    <!-- IBM DB2 -->
+    <dbms value="IBM DB2">
+        <!-- Casting to varchar does not work with version < v9, so we had to use char(254) instead -->
+        <cast query="RTRIM(CAST(%s AS CHAR(254)))"/>
+        <length query="LENGTH(RTRIM(CAST(%s AS CHAR(254))))"/>
+        <isnull query="COALESCE(%s,' ')"/>
+        <delimiter query="||"/>
+        <limit query="ROW_NUMBER() OVER () AS LIMIT %s) AS qq WHERE LIMIT"/>
+        <limitregexp query="ROW_NUMBER\(\)\s+OVER\s+\(\)\s+AS\s+.+?\s+FROM\s+.+?\)\s+WHERE\s+.+?\s*=\s*[\d]+"/>
+        <limitgroupstart/>
+        <limitgroupstop/>
+        <limitstring/>
+        <order query="ORDER BY %s ASC"/>
+        <count query="COUNT(%s)"/>
+        <comment query="--"/>
+        <!-- TODO -->
+        <substring query="SUBSTR((%s),%d,%d)"/>
+        <concatenate query="%s||%s"/>
+        <case query="SELECT (CASE WHEN (%s) THEN '1' ELSE '0' END) FROM SYSIBM.SYSDUMMY1"/>
+        <hex query="HEX(%s)"/>
+        <inference query="SUBSTR((%s),%d,1)>'%c'"/>
+        <!-- NOTE: We have to use the complicated UDB OLAP functions in query2 because sqlmap injects isnull query inside MAX function, else we would use: SELECT MAX(versionnumber) FROM sysibm.sysversions -->
+        <banner query="SELECT service_level FROM TABLE(sysproc.env_get_inst_info())" query2="SELECT versionnumber FROM (SELECT ROW_NUMBER() OVER (ORDER BY versionnumber DESC) AS LIMIT,versionnumber FROM sysibm.sysversions) AS qq WHERE LIMIT=1"/>
+        <current_user query="SELECT user FROM SYSIBM.SYSDUMMY1"/>
+        <!-- NOTE: On DB2 we use the current user as default schema (database) -->
+        <current_db query="SELECT current server FROM SYSIBM.SYSDUMMY1"/>
+        <hostname query="SELECT host_name FROM TABLE(sysproc.env_get_sys_info())"/>
+        <table_comment/>
+        <column_comment/>
+        <is_dba query="(SELECT dbadmauth FROM syscat.dbauth WHERE grantee=current user)='Y'"/>
+        <users>
+            <inband query="SELECT grantee FROM sysibm.sysdbauth WHERE grantee!='SYSTEM' AND grantee!='PUBLIC'"/>
+            <blind query="SELECT grantee FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,grantee FROM sysibm.sysdbauth WHERE grantee!='SYSTEM' AND grantee!='PUBLIC') AS qq WHERE LIMIT=%d" count="SELECT COUNT(DISTINCT(grantee)) FROM sysibm.sysdbauth WHERE grantee!='SYSTEM' AND grantee!='PUBLIC'"/>
+        </users>
+        <!-- NOTE: On DB2 it is not possible to list password hashes, since they are handled by the OS -->        
+        <passwords/>
+        <privileges>
+            <inband query="SELECT grantee,RTRIM(tabschema)||'.'||tabname||','||controlauth||alterauth||deleteauth||indexauth||insertauth||refauth||selectauth||updateauth FROM syscat.tabauth" condition="grantee"/>
+            <blind query="SELECT tabschema||'.'||tabname||','||controlauth||alterauth||deleteauth||indexauth||insertauth||refauth||selectauth||updateauth FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,syscat.tabauth.* FROM syscat.tabauth WHERE grantee='%s') AS qq WHERE LIMIT=%d" count="SELECT COUNT(*) FROM syscat.tabauth WHERE grantee='%s'"/>
+        </privileges>
+        <roles/>
+        <!-- NOTE: in DB2 schema names are the counterpart to database names on other DBMSes -->
+        <dbs>
+            <inband query="SELECT schemaname FROM syscat.schemata"/>
+            <blind query="SELECT schemaname FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,schemaname FROM syscat.schemata) AS qq WHERE LIMIT=%d" count="SELECT COUNT(schemaname) FROM syscat.schemata"/>
+        </dbs>
+        <tables>
+            <inband query="SELECT tabschema,tabname FROM sysstat.tables" condition="tabschema"/>
+            <blind query="SELECT tabname FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,tabname FROM sysstat.tables WHERE tabschema='%s') AS qq WHERE LIMIT=INT('%d')" count="SELECT COUNT(*) FROM sysstat.tables WHERE tabschema='%s'"/>
+        </tables>
+        <columns>
+            <inband query="SELECT name,RTRIM(coltype)||'('||RTRIM(CAST(length AS CHAR(254)))||')' FROM sysibm.syscolumns WHERE tbname='%s' AND tbcreator='%s'" condition="name"/>
+            <blind query="SELECT name FROM sysibm.syscolumns WHERE tbname='%s' AND tbcreator='%s'" query2="SELECT RTRIM(coltype)||'('||RTRIM(CAST(length AS CHAR(254)))||')' FROM sysibm.syscolumns WHERE tbname='%s' AND name='%s' AND tbcreator='%s'" count="SELECT COUNT(name) FROM sysibm.syscolumns WHERE tbname='%s' AND tbcreator='%s'" condition="name"/>
+        </columns>
+        <dump_table>
+            <inband query="SELECT %s FROM %s"/>
+            <blind query="SELECT ENTRY_VALUE FROM (SELECT ROW_NUMBER() OVER () AS LIMIT,%s AS ENTRY_VALUE FROM %s) AS qq WHERE LIMIT=%d" count="SELECT COUNT(*) FROM %s"/>
+        </dump_table>
+        <search_db>
+            <inband query="SELECT schemaname FROM syscat.schemata WHERE %s" condition="schemaname"/>
+            <blind query="SELECT schemaname FROM (SELECT DISTINCT(schemaname) FROM syscat.schemata WHERE %s) AS qq" count="SELECT COUNT(DISTINCT(schemaname)) FROM syscat.schemata WHERE %s" condition="schemaname"/>
+        </search_db>
+        <search_table>
+            <inband query="SELECT tabschema,tabname FROM sysstat.tables WHERE %s" condition="tabname" condition2="tabschema"/>
+            <blind query="SELECT tabschema FROM (SELECT DISTINCT(tabschema) FROM sysstat.tables WHERE %s) AS qq" query2="SELECT DISTINCT(tabname) FROM sysstat.tables WHERE tabschema='%s'" count="SELECT COUNT(DISTINCT(tabschema)) FROM sysstat.tables WHERE %s" count2="SELECT COUNT(tabname) FROM sysstat.tables WHERE tabschema='%s'" condition="tabname" condition2="tabschema"/>
+        </search_table>
+        <search_column>
+            <inband query="SELECT tabschema,tabname FROM sysstat.columns WHERE %s" condition="colname" condition2="tabschema" condition3="tabname"/>
+            <blind query="SELECT tabschema FROM (SELECT DISTINCT(tabschema) FROM sysstat.columns WHERE %s) AS qq" query2="SELECT DISTINCT(tabname) FROM sysstat.columns WHERE tabschema='%s'" count="SELECT COUNT(DISTINCT(tabschema)) FROM sysstat.columns WHERE %s" count2="SELECT COUNT(DISTINCT(tabname)) FROM sysstat.columns WHERE tabschema='%s'" condition="colname" condition2="tabschema" condition3="tabname"/>
+        </search_column>
+    </dbms>

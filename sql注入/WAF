@@ -1,0 +1,15 @@
+[渗透测试]WAF攻防研究之四个层次Bypass WAF
+https://xianzhi.aliyun.com/forum/read/2251.html
+
+
+1.请求源站的ip
+
+2.协议未覆盖绕过WAF
+
+​POST 请求常用有2种参数提交方式：
+
+​Content-Type: application/x-www-form-urlencoded;
+更改为
+​Content-Type: multipart/form-data;
+
+Waf未能覆盖Content-Type: multipart/form-data从而导致被绕过。或者WAF会认为它是文件上传请求，从而只检测文件上传，导致被绕过。如图，加速乐的WAF就存在被绕过的情况，是典型的协议未覆盖。

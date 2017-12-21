@@ -1,0 +1,37 @@
+<!-- 返回主机名 -->
+
+<!-- MySQL -->
+<hostname query="@@HOSTNAME"/>
+
+<!-- PostgreSQL -->
+无
+
+<!-- Microsoft SQL Server -->
+<hostname query="@@SERVERNAME"/>
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+<hostname query="SELECT UTL_INADDR.GET_HOST_NAME FROM DUAL"/>
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+<hostname query="SELECT DBINFO('DBHOSTNAME') FROM SYSMASTER:SYSDUAL"/>
+
+<!-- IBM DB2 -->
+<hostname query="SELECT host_name FROM TABLE(sysproc.env_get_sys_info())"/>
+
+<!-- Hyper SQL Database -->
+无
+
+<!-- Sybase -->
+无
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+无

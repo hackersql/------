@@ -1,0 +1,55 @@
+#sqlmap/xml/queries.xml#
+<!-- 计数 -->
+
+<!-- MySQL -->
+<!-- count(*)对行的数目进行计算，包含NULL -->
+<!-- count(column)对特定的列的值具有的行数进行计算，不包含NULL值。-->
+<!-- count()还有一种使用方式，count(1)这个用法和count(*)的结果是一样的 -->
+<count query="COUNT(%s)"/>
+
+<!-- PostgreSQL -->
+<count query="COUNT(%s)"/>
+
+<!-- Microsoft SQL Server -->
+<count query="COUNT(%s)"/>
+
+<!-- Microsoft Access -->
+<count query="COUNT(%s)"/>
+
+<!-- Oracle -->
+count(1)与count(*)比较： 
+
+如果你的数据表没有主键，那么count(1)比count(*)快   
+如果有主键的话，那主键（联合主键）作为count的条件也比count(*)要快   
+如果你的表只有一个字段的话那count(*)就是最快的啦   
+count(*) count(1) 两者比较。主要还是要count(1)所相对应的数据字段。   
+如果count(1)是聚索引,id,那肯定是count(1)快。但是差的很小的。   
+因为count(*),自动会优化指定到那一个字段。所以没必要去count(?)，用count(*),sql会帮你完成优化的  
+  
+count详解：  
+
+count(*)将返回表格中所有存在的行的总数包括值为null的行，然而count(列名)将返回表格中除去null以外的所有行的总数(有默认值的列也会被计入）.  
+distinct 列名,得到的结果将是除去值为null和重复数据后的结果  
+
+<count query="COUNT(%s)"/>
+
+<!-- SQLite -->
+<count query="COUNT(%s)"/>
+
+<!-- Informix -->
+<count query="COUNT(%s)"/>
+
+<!-- IBM DB2 -->
+<count query="COUNT(%s)"/>
+
+<!-- Hyper SQL Database -->
+<count query="COUNT(%s)"/>
+
+<!-- Sybase -->
+<count query="COUNT(%s)"/>
+
+<!-- Firebird -->
+<count query="COUNT(%s)"/>
+
+<!-- SAP MaxDB -->
+<count query="COUNT(%s)"/>

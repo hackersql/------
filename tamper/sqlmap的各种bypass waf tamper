@@ -1,0 +1,43 @@
+sqlmap的各种bypass waf tamper：
+
+apostrophemask.py 用UTF-8全角字符替换单引号字符
+apostrophenullencode.py 用非法双字节unicode字符替换单引号字符
+appendnullbyte.py 在payload末尾添加空字符编码
+base64encode.py 对给定的payload全部字符使用Base64编码
+between.py 分别用“NOT BETWEEN 0 AND #”替换大于号“>”，“BETWEEN # AND #”替换等于号“=”
+bluecoat.py 在SQL语句之后用有效的随机空白符替换空格符，随后用“LIKE”替换等于号“=”
+chardoubleencode.py 对给定的payload全部字符使用双重URL编码（不处理已经编码的字符）
+charencode.py 对给定的payload全部字符使用URL编码（不处理已经编码的字符）
+charunicodeencode.py 对给定的payload的非编码字符使用Unicode URL编码（不处理已经编码的字符）
+concat2concatws.py 用“CONCAT_WS(MID(CHAR(0), 0, 0), A, B)”替换像“CONCAT(A, B)”的实例
+equaltolike.py 用“LIKE”运算符替换全部等于号“=”
+greatest.py 用“GREATEST”函数替换大于号“>”
+halfversionedmorekeywords.py 在每个关键字之前添加MySQL注释
+ifnull2ifisnull.py 用“IF(ISNULL(A), B, A)”替换像“IFNULL(A, B)”的实例
+lowercase.py 用小写值替换每个关键字字符
+modsecurityversioned.py 用注释包围完整的查询
+modsecurityzeroversioned.py 用当中带有数字零的注释包围完整的查询
+multiplespaces.py 在SQL关键字周围添加多个空格
+nonrecursivereplacement.py 用representations替换预定义SQL关键字，适用于过滤器
+overlongutf8.py 转换给定的payload当中的所有字符
+percentage.py 在每个字符之前添加一个百分号
+randomcase.py 随机转换每个关键字字符的大小写
+randomcomments.py 向SQL关键字中插入随机注释
+securesphere.py 添加经过特殊构造的字符串
+sp_password.py 向payload末尾添加“sp_password” for automatic obfuscation from DBMS logs
+space2comment.py 用“/**/”替换空格符
+space2dash.py 用破折号注释符“–”其次是一个随机字符串和一个换行符替换空格符
+space2hash.py 用磅注释符“#”其次是一个随机字符串和一个换行符替换空格符
+space2morehash.py 用磅注释符“#”其次是一个随机字符串和一个换行符替换空格符
+space2mssqlblank.py 用一组有效的备选字符集当中的随机空白符替换空格符
+space2mssqlhash.py 用胖注释符“#”其次是一个换行符替换空格符
+space2mysqlblank.py 用一组有效的备选字符集当中的随机空白符替换空格符
+space2mysqldash.py 用破折号注释符“–”其次是一个换行符替换空格符
+space2plus.py 用加号“+”替换空格符
+space2randomblank.py 用一组有效的备选字符集当中的随机空白符替换空格符
+unionalltounion.py 用“UNION SELECT”替换“UNION ALL SELECT”
+unmagicquotes.py 用一个多字节组合%bf%27和末尾通用注释一起替换空格符
+varnish.py 添加一个HTTP头“X-originating-IP”来绕过WAF
+versionedkeywords.py 用MySQL注释包围每个非函数关键字
+versionedmorekeywords.py 用MySQL注释包围每个关键字
+xforwardedfor.py 添加一个伪造的HTTP头“X-Forwarded-For”来绕过WAF

@@ -1,0 +1,97 @@
+<!-- 限制查询范围 -->
+
+<!-- MySQL -->
+<!-- LIMIT 子句可以被用于强制 SELECT 语句返回指定的记录数。LIMIT 接受一个或两个数字参数。 -->
+<!-- 参数必须是一个整数常量。如果给定两个参数，第一个参数指定第一个返回记录行的偏移量， -->
+<!-- 第二个参数指定返回记录行的最大数目。初始记录行的偏移量是 0(而不是 1) -->
+<!-- LIMIT 5,10;  // 检索记录行 6-15 -->
+<!-- 为了检索从某一个偏移量到记录集的结束所有的记录行，可以指定第二个参数为 -1 -->
+<!-- LIMIT 95,-1; // 检索记录行 96-last；96行到最后一行 -->
+<!-- LIMIT 5;     // 检索前 5 个记录行 -->
+<!-- 如果只给定一个参数，LIMIT n 等价于 LIMIT 0,n -->
+<limit query="LIMIT %d,%d"/>
+<limitregexp query="\s+LIMIT\s+([\d]+)\s*\,\s*([\d]+)" query2="\s+LIMIT\s+([\d]+)"/>
+<limitgroupstart query="1"/>
+<limitgroupstop query="2"/>
+<limitstring query=" LIMIT "/>
+
+<!-- PostgreSQL -->
+<!-- select * from persons limit 5 offset 0;意思是，起点0开始查询，返回5条数据 -->
+<!-- OFFSET偏移量，从第几条记录开始查询 -->
+<!-- LIMIT限制、范围，可以查询多少条数据 -->
+<limit query="OFFSET %d LIMIT %d"/>
+<limitregexp query="\s+OFFSET\s+([\d]+)\s+LIMIT\s+([\d]+)" query2="\s+LIMIT\s+([\d]+)"/>
+<limitgroupstart query="1"/>
+<limitgroupstop query="2"/>
+<limitstring query=" OFFSET "/>
+
+<!-- Microsoft SQL Server -->
+<limit query="SELECT TOP %d "/>
+<limitregexp query=
+	"TOP\s+([\d]+)\s+.+?\s+FROM\s+.+?\s+WHERE\s+.+?\s+NOT\s+IN\s+\(SELECT\s+TOP\s+([\d]+)\s+"/>
+<limitgroupstart query="2"/>
+<limitgroupstop query="1"/>
+<limitstring/>
+
+<!-- Microsoft Access -->
+<limit query="TOP %d"/>
+<limitregexp query="\s+TOP\s+([\d]+)"/>
+<limitgroupstart query="1"/>
+<limitgroupstop query="1"/>
+<limitstring query=" TOP "/>
+
+<!-- Oracle -->
+<limit query="ROWNUM AS LIMIT %s) WHERE LIMIT"/>
+<limitregexp query="ROWNUM\s+AS\s+.+?\s+FROM\s+.+?\)\s+WHERE\s+.+?\s*=\s*[\d]+|ROWNUM\s*=\s*[\d]+"/>
+<limitgroupstart/>
+<limitgroupstop/>
+<limitstring/>
+
+<!-- SQLite -->
+<limit query="LIMIT %d,%d"/>
+<limitregexp query="\s+LIMIT\s+([\d]+)\s*\,\s*([\d]+)" query2="\s+LIMIT\s+([\d]+)"/>
+<limitgroupstart query="1"/>
+<limitgroupstop query="2"/>
+<limitstring query=" LIMIT "/>
+
+<!-- Informix -->
+<limit query="SELECT SKIP %d LIMIT 1"/>
+<limitregexp query="\s+SKIP\s+([\d]+)\s*LIMIT\s*([\d]+)"/>
+<limitgroupstart query="1"/>
+<limitgroupstop query="2"/>
+<limitstring query=" LIMIT "/>
+
+<!-- IBM DB2 -->
+<limit query="ROW_NUMBER() OVER () AS LIMIT %s) AS qq WHERE LIMIT"/>
+<limitregexp query="ROW_NUMBER\(\)\s+OVER\s+\(\)\s+AS\s+.+?\s+FROM\s+.+?\)\s+WHERE\s+.+?\s*=\s*[\d]+"/>
+<limitgroupstart/>
+<limitgroupstop/>
+<limitstring/>
+
+<!-- Hyper SQL Database -->
+<limit query="LIMIT %d %d" query2="LIMIT %d OFFSET %d"/>
+<limitregexp query="\s+LIMIT\s+([\d]+)\s*\,\s*([\d]+)" query2="\s+LIMIT\s+([\d]+)"/>
+<limitgroupstart query="1"/>
+<limitgroupstop query="2"/>
+<limitstring query=" LIMIT "/>
+
+<!-- Sybase -->
+<limit query="SELECT TOP %d "/>
+<limitregexp query=
+	"TOP\s+([\d]+)\s+.+?\s+FROM\s+.+?\s+WHERE\s+.+?\s+NOT\s+IN\s+\(SELECT\s+TOP\s+([\d]+)\s+"/>
+<limitgroupstart query="2"/>
+<limitgroupstop query="1"/>
+<limitstring/>
+
+<!-- Firebird -->
+<limit query="ROWS %d TO %d"/>
+<limitregexp query="\s+ROWS\s+([\d]+)(\s+\TO\s+([\d]+))?"/>
+<limitgroupstart query="1"/>
+<limitgroupstop query="2"/>
+<limitstring query=" ROWS "/>
+
+<!-- SAP MaxDB -->
+<limit query="LIMIT %d,%d"/>
+<limitregexp query="\s+LIMIT\s+([\d]+)\s*\,\s*([\d]+)"/>
+<limitgroupstart query="1"/>
+<limitgroupstop query="2"/>

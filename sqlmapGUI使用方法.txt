@@ -1,0 +1,27 @@
+只限py2.x版本
+
+1.进入pyttk-0.3-py3k目录，执行如下语句安装ttk模块：
+linux: sudo python setup.py install
+windows: python setup.py install
+
+2.将sqm.pyw和cfg_dir一起复制到sqlmap同一目录下，执行命令
+linux: sudo python sqm.pyw
+windows: python sqm.pyw
+
+（windows的也可以双击打开sqm.pyw运行）
+
+----------------
+使用方法：
+输入目标url后，然后勾选你所要的各种参数，点击“构造命令语句”即会生成相对应的sqlmap命令语句，再点击“开始”就会打开sqlmap命令窗口来运行。
+
+ps. sqlmap发起的请求会带着sqlmap默认的user-agent，而“构造命令语句”中自动生成的--random-agent参数会随机生成user-agent
+
+----------------
+修改版 by pcat
+http://pcat.cnblogs.com/
+
+修改如下：
+1.增加sqlmap命令语句输入框自动换行和滚动条，方便输入、观察
+2.修复以往“枚举”标签下3个输入框的遮挡bug
+3.增加“代理”标签
+4.其他零散的

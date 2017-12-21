@@ -1,0 +1,38 @@
+<!-- 检测是否有用户自定义的函数 -->
+<!-- UDF：user defined function -->
+
+<!-- MySQL -->
+<check_udf query="(SELECT name FROM mysql.func WHERE name='%s' LIMIT 0,1)='%s'"/>
+
+<!-- PostgreSQL -->
+<check_udf query="(SELECT proname='%s' FROM pg_proc WHERE proname='%s' OFFSET 0 LIMIT 1)"/>
+
+<!-- Microsoft SQL Server -->
+无
+
+<!-- Microsoft Access -->
+无
+
+<!-- Oracle -->
+无
+
+<!-- SQLite -->
+无
+
+<!-- Informix -->
+无
+
+<!-- IBM DB2 -->
+无
+
+<!-- Hyper SQL Database -->
+无
+
+<!-- Sybase -->
+无
+
+<!-- Firebird -->
+无
+
+<!-- SAP MaxDB -->
+无

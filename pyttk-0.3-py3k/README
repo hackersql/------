@@ -1,0 +1,74 @@
+Ttk Python wrapper
+==================
+
+About
+-----
+
+This module provides classes to allow using the Tk themed widget set.
+
+Ttk is based on a revised and enhanced version of
+TIP #48 (http://tip.tcl.tk/48) specified style engine.
+
+Its basic idea is to separate, to the extent possible, the code
+implementing a widget's behavior from the code implementing its
+appearance. Widget class bindings are primarily responsible for
+maintaining the widget state and invoking callbacks, all aspects of
+the widgets appearance lies at Themes.
+
+
+Installing
+----------
+
+Just run:
+
+# python setup.py install
+
+
+Running Tests
+-------------
+
+After installing:
+
+$ python test/runtests.py
+
+or without installing:
+
+$ PYTHONPATH=. python test/runtests.py
+
+
+Requirements
+------------
+
+You will need Python with a _tkinter compiled against Tcl/Tk 8.5[1]
+otherwise Tile[2] has to be installed. I have used this under Linux
+with the py3k repo both with Tile and Tcl/Tk 8.5.
+
+
+Samples
+-------
+
+Given that your system meet the requirements, you should be able to
+run the samples (included in the pyttk-samples[3]) passing a proper
+PYTHONPATH or placing the ttk module somewhere in sys.path (typically
+by installing it).
+
+If you are not sure if you have Tile installed correctly or if your
+tkinter is compiled against Tk 8.5, see `Running Tests` above.
+
+
+References
+----------
+
+[1] I've shortly used it with Tcl/Tk 8.6a1 too.
+[2] I've tested it with Tile 0.8.2 and it works, but I would recommend
+    upgrading to Tcl/Tk 8.5 so you get antialiased fonts and other
+    nice features. If you are testing this wrapper with Tile, it will
+    look for the environment variable TILE_LIBRARY, which you can set
+    to your tile library path if you installed it in a custom place.
+[3] This can be found at http://code.google.com/p/python-ttk/downloads/list
+
+
+Other resources
+---------------
+
+http://gpolo.ath.cx:81/projects/pyttk/
