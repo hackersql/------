@@ -186,7 +186,8 @@ O(256^n) -> O(n*log(256))
 
 PHP 5.3.0 起废弃并将自 PHP 5.4.0 起移除
 
-Bypass
+mysql中的一些替代函数和字符
+
 MID 代替 SUBSTRING
 LIKE 代替 =
 /**/ 代替 空格
