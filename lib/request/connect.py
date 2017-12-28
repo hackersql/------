@@ -796,8 +796,8 @@ class Connect(object):
                         raise SqlmapGenericException(errMsg)
 
                     if not isinstance(payload, basestring):
-                        errMsg = "tamper function '%s' 返回 " % function.func_name
-                        errMsg += "无效的payload类型('%s')" % type(payload)
+                        errMsg = u"tamper function '%s' 返回 " % function.func_name
+                        errMsg += u"无效的payload类型('%s')" % type(payload)
                         raise SqlmapValueException(errMsg)
 
                 value = agent.replacePayload(value, payload)
@@ -806,8 +806,7 @@ class Connect(object):
 
             if place == PLACE.CUSTOM_POST and kb.postHint:
                 if kb.postHint in (POST_HINT.SOAP, POST_HINT.XML):
-                    # payloads in SOAP/XML should have chars > and < replaced
-                    # with their HTML encoded counterparts
+                    # SOAP/XML中的payloads应该用字符>和<替换为其HTML编码的对应字符
                     payload = payload.replace('>', "&gt;").replace('<', "&lt;")
                 elif kb.postHint == POST_HINT.JSON:
                     if payload.startswith('"') and payload.endswith('"'):
@@ -823,13 +822,13 @@ class Connect(object):
                     payload = payload.replace("'", REPLACEMENT_MARKER).replace('"', "'").replace(REPLACEMENT_MARKER, '"')
                 value = agent.replacePayload(value, payload)
             else:
-                # GET, POST, URI and Cookie payload needs to be thoroughly URL encoded
+                # GET, POST, URI 和 Cookie payload 需要彻底的 URL 编码
                 if (place in (PLACE.GET, PLACE.URI, PLACE.COOKIE) or place == PLACE.CUSTOM_HEADER and value.split(',')[0] == HTTP_HEADER.COOKIE) and not conf.skipUrlEncode or place in (PLACE.POST, PLACE.CUSTOM_POST) and kb.postUrlEncode:
                     skip = False
 
                     if place == PLACE.COOKIE or place == PLACE.CUSTOM_HEADER and value.split(',')[0] == HTTP_HEADER.COOKIE:
                         if kb.cookieEncodeChoice is None:
-                            msg = "do you want to URL encode cookie values (implementation specific)? %s" % ("[Y/n]" if not conf.url.endswith(".aspx") else "[y/N]")  # Reference: https://support.microsoft.com/en-us/kb/313282
+                            msg = u"是否要对 cookie 值进行 URL 编码 (具体实现)? %s" % ("[Y/n]" if not conf.url.endswith(".aspx") else "[y/N]")  # Reference: https://support.microsoft.com/en-us/kb/313282
                             choice = readInput(msg, default='Y' if not conf.url.endswith(".aspx") else 'N')
                             kb.cookieEncodeChoice = choice.upper().strip() == 'Y'
                         if not kb.cookieEncodeChoice:
@@ -841,7 +840,7 @@ class Connect(object):
 
             if conf.hpp:
                 if not any(conf.url.lower().endswith(_.lower()) for _ in (WEB_API.ASP, WEB_API.ASPX)):
-                    warnMsg = "HTTP参数污染只能针对ASP(.NET)目标"
+                    warnMsg = u"HTTP参数污染只能针对ASP(.NET)目标"
                     singleTimeWarnMessage(warnMsg)
                 if place in (PLACE.GET, PLACE.POST):
                     _ = re.escape(PAYLOAD_DELIMITER)
@@ -864,8 +863,7 @@ class Connect(object):
 
                         value = agent.replacePayload(value, payload)
                 else:
-                    warnMsg = "HTTP parameter pollution works only with regular "
-                    warnMsg += "GET and POST parameters"
+                    warnMsg = u"HTTP参数污染只适用于常规的GET和POST参数"
                     singleTimeWarnMessage(warnMsg)
 
         if place:
@@ -949,8 +947,7 @@ class Connect(object):
                 if not token:
                     errMsg = "anti-CSRF token '%s' can't be found at '%s'" % (conf.csrfToken, conf.csrfUrl or conf.url)
                     if not conf.csrfUrl:
-                        errMsg += ". You can try to rerun by providing "
-                        errMsg += "a valid value for option '--csrf-url'"
+                        errMsg += u". 您可以尝试通过为选项 -csrf-url 提供一个有效值来重新运行"
                     raise SqlmapTokenException, errMsg
 
             if token:
@@ -1126,7 +1123,7 @@ class Connect(object):
                 dataToStdout(u" (完成)\n")
 
             elif not kb.testMode:
-                warnMsg = "在使用基于时间的payloads时, 不应强调网络连接是非常重要的, 以防潜在的中断"
+                warnMsg = u"在使用基于时间的payloads时, 不应强调网络连接是非常重要的, 以防潜在的中断"
                 singleTimeWarnMessage(warnMsg)
 
             if not kb.laggingChecked:
@@ -1178,10 +1175,9 @@ class Connect(object):
                 page, headers, code = Connect.getPage(url=uri, get=get, post=post, method=method, cookie=cookie, ua=ua, referer=referer, host=host, silent=silent, auxHeaders=auxHeaders, response=response, raise404=raise404, ignoreTimeout=timeBasedCompare)
             except MemoryError:
                 page, headers, code = None, None, None
-                warnMsg = "site returned insanely large response"
+                warnMsg = u"站点在测试阶段返回了异常巨大的响应,"
                 if kb.testMode:
-                    warnMsg += " in testing phase. This is a common "
-                    warnMsg += "behavior in custom WAF/IPS/IDS solutions"
+                    warnMsg += u"这是自定义WAF/IPS/IDS解决方案中的常见行为"
                 singleTimeWarnMessage(warnMsg)
 
         if conf.secondOrder:
