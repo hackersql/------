@@ -1,3 +1,9 @@
+site: 
+inurl:
+intitle:
+intext:
+filetype:
+
 递归查找某个目录下包含关键字的文件
 grep -r 关键字
 grep -r -G "^\$sql="正则递归匹配以$sql=开头的行
