@@ -1,0 +1,347 @@
+
+/*@-moz-document url-prefix("https://xianzhi.aliyun.com/forum")*/
+/*{*/
+/* i really want this to be global */
+
+  body > a
+  {
+    display: none;
+  }
+
+  body > div.navbar.navbar-default > div > div > a > span
+  {
+    display: none;
+  }
+
+  body > div.navbar.navbar-default > div > div > a > img
+  {
+    height: 0 !important;
+    width: 0 !important;
+    /* these numbers match the new image's dimensions */
+    
+    margin-top: 5px;
+    padding-left: 300px !important;
+    padding-top: 300px !important;
+}
+/*#Wrapper > div:nth-child(2) > div > div > div.pull-right {*/
+    /*display: none;*/
+/*}*/
+#Wrapper > div:nth-child(1) > div.to-top > span > img {
+    border-radius: 200px;
+}
+#Wrapper > div:nth-child(1) > div.to-bottom > span > img {
+    border-radius: 200px;
+}
+.navbar-inner {
+    min-height: 40px;
+    padding-right: 20px;
+    padding-left: 20px;
+    outline: none;
+    margin-bottom: 0;
+    list-style: none;
+    z-index: 1050;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    line-height: 46px;
+    -webkit-transition: background .3s, width .2s;
+    -o-transition: background .3s, width .2s;
+    transition: background .3s, width .2s;
+}
+.topic-title {
+    color: #108ee9;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 130%;
+    text-shadow: 0 1px 0 #fff;
+    font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
+}
+body {
+    background-color: #f0f2f5;
+}
+.box-container .user-info {
+    margin-bottom: 10px;
+    background-color: #d2eafb;
+    background: #fff;
+    padding: 15px 32px 0 32px;
+}
+.node_menu .active {
+    display: inline !important;
+    background-color: #FA5555;
+    color: #fff !important;
+    font-size: 15px;
+    -webkit-box-shadow: 0 8px 20px rgba(143, 168, 191, .35);
+    box-shadow: 0 8px 20px rgba(143, 168, 191, .35);
+}
+.node_menu a {
+    margin-right: 5px;
+    line-height: 15px;
+    padding: 5px;
+    color: #777 !important;
+    font-size: 10px;
+    background-color: #d2eafb;
+    border-radius: 2px;
+    text-decoration: none;
+}
+.nodes {
+    background-color: #d2eafb !important;
+    margin-top: 5px;
+}
+.box ul,
+ol {
+    margin-bottom: 5px !important;
+}
+.box-container {
+    padding: 15px 20px 20px 8px;
+    margin-top: 10px;
+}
+.container .offset {
+    margin-top: 0 !important;
+}
+.breadcrumb {
+    padding: 10px 10px 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 0;
+    color: #fff;
+    background-color: #409EFF;
+}
+.breadcrumb>li {
+    color: #fff;
+    display: inline-block;
+    text-shadow: none !important;
+}
+.breadcrumb a,
+.active {
+    color: #fff;
+    display: block;
+    text-shadow: none !important;
+}
+.breadcrumb .active {
+    color: #fff;
+    display: inline-block;
+    text-shadow: none !important;
+}
+.brand-title {
+    font-family: "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    color: #1890ff;
+    outline: none;
+    font-size: 14px;
+    line-height: 28px;
+}
+/* i really want this to be global */
+
+.topic-info .label,
+.post-info .label {
+    color: #108ee9 !important
+}
+#Wrapper > div:nth-child(1) > div.span10 > div:nth-child(1) > div > div.clearfix.user-info.topic-list > p.topic-info > span {
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.45) !important;
+}
+.topic-summary .label-warning {
+    background-color: #FA5555 !important;
+    color: #fff;
+}
+#includeList > table > tbody > tr:nth-child(1) > td > p.topic-info {
+    color: #000 !important;
+    font-size: 15px !important;
+}
+.topic-list .label-warning {
+    background-color: #FA5555 !important;
+    color: #fff;
+}
+.label,
+.badge {
+    color: #108ee9;
+    background: #d2eafb;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0.25);
+    border-color: #d2eafb;
+}
+.pull-right .badge {
+    color: #108ee9 !important;
+    background: #d2eafb !important;
+    padding-right: 5px;
+    padding-left: 5px !important;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+.user-info .post-info span,
+.topic-info span,
+.topic-info .topic-content {
+    padding-left: 0 !important;
+    margin-left: 5px;
+    font-size: 10px;
+    font-weight: bold
+}
+.topic-info a {
+    padding: 3px;
+}
+.user-info {
+    margin-bottom: 10px;
+}
+.markdown-body img {
+    max-width: 90%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 2.4em 1em;
+    -webkit-box-shadow: 0 8px 20px rgba(143, 168, 191, .35);
+    box-shadow: 0 8px 20px rgba(143, 168, 191, .35);
+}
+.user-info .post-info span,
+.topic-info span,
+.topic-info .topic-content {
+    padding-left: 5px;
+    margin-left: 15px;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.45);
+}
+.avatar {
+    font-family: "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.65);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0 15px 0 2px;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+    text-align: center;
+    background: #ccc;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+    border-radius: 26px;
+    max-width: 100%;
+    vertical-align: middle;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+/* i really want this to be global */
+
+.home-list h3 {
+    display: none
+}
+/* i really want this to be global */
+
+.btn {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+    background-color: #1890ff;
+    border-color: #1890ff;
+    font-family: "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    list-style: none;
+    font-weight: 400;
+    text-align: center;
+    cursor: pointer;
+    background-image: none;
+    white-space: nowrap;
+    border-radius: 2px;
+    height: 32px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    -o-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    position: relative;
+    text-shadow: none !important;
+    ;
+}
+.to-top,
+.to-bottom {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    background-color: rgba(64, 64, 64, .4);
+    color: #fff;
+    text-align: center;
+}
+/* i really want this to be global */
+
+.box {
+    font-family: "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.65);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-top: 0 !important;
+    margin-bottom: 20px;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border-radius: 2px;
+    position: relative;
+    -webkit-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); */
+    
+    -webkit-box-shadow: 0 8px 20px rgba(143, 168, 191, .35);
+    box-shadow: 0 8px 20px rgba(143, 168, 191, .35);
+    border-bottom: 1px solid #e2e2e9;
+    padding-bottom: 10px !important;
+}
+.box .info-panel {
+    margin-top: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 5px !important;
+}
+.box .info-panel hr {
+    margin: 10px 0;
+    border: 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #fff;
+}
+.span10 {
+    float: left;
+    min-height: 1px;
+    margin-left: 0;
+    width: 990px;
+}
+.span3 {
+    float: right;
+    min-height: 1px;
+    margin-left: 0 !important;
+    width: 300px;
+}
+body > div.navbar.navbar-default > div > div > div > ul > li > form > input[type="text"] {
+    color: #5A5E66 !important;
+    background-color: #f0f2f5 !important;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+#Wrapper > div:nth-child(1) > div.span10 > div {
+    margin-bottom: 10px !important;
+}
+#Wrapper > div:nth-child(1) > div.span10 > div > div > ol {
+    margin: -8px
+}
+.hh_mf li {
+    padding-bottom: 0;
+    border-bottom: none
+}
+/*#Wrapper > div:nth-child(2) > div > div > div.pull-left {*/
+    /*display: none*/
+/*}*/
+.pagination {
+    margin-right: 20px;
+}
+/*}*/

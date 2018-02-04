@@ -1,0 +1,1208 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML lang=en xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>AppScan Fix Recommendations</TITLE><!--
+					saved from url=(0028)http://ibm.rational.appscan/
+				-->
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<META content=IE=edge http-equiv=X-UA-Compatible><LINK rel=stylesheet 
+type=text/css href="AppScanSQL注入命令执行.css">
+<SCRIPT>
+					function fixSize() {
+						document.getElementById("mainContent").style.height = document.body.clientHeight - 41 + "px";
+					}
+					window.onresize = fixSize;
+					window.onload = fixSize;
+				</SCRIPT>
+
+<STYLE type=text/css media="all, print, screen">.mainContent {
+	BOTTOM: 100px
+}
+.headerTop {
+	POSITION: relative; WIDTH: 100%; TOP: -20px; LEFT: -20px
+}
+.headerBottom {
+	POSITION: relative; PADDING-BOTTOM: 0px; PADDING-LEFT: 20px; WIDTH: 100%; PADDING-RIGHT: 20px; TOP: -20px; PADDING-TOP: 0px; LEFT: -20px
+}
+</STYLE>
+
+<META name=GENERATOR content="MSHTML 8.00.7601.17514"></HEAD>
+<BODY>
+<DIV class=container>
+<DIV id=mainContent class=mainContent>
+<DIV id=headerTop class=headerTop>
+<H1>SQL 注入命令执行</H1>
+<DIV class=risk>可能会在 Web 服务器上运行远程命令。这通常意味着完全破坏服务器及其内容 &nbsp; </DIV></DIV>
+<DIV class=headerBottom>&nbsp;</DIV>
+<H2>一般</H2>
+<P 
+xmlns="">若干问题的补救方法在于对用户输入进行清理。通过验证用户输入未包含危险字符，便可能防止恶意的用户导致应用程序执行计划外的任务，例如：启动任意 
+SQL 查询、嵌入将在客户端执行的 Javascript 代码、运行各种操作系统命令，等等。</P><BR xmlns="">
+<P xmlns="">建议过滤出所有以下字符：</P>
+<P class=indent xmlns="">[1] |（竖线符号）</P>
+<P class=indent xmlns="">[2] &amp; （&amp; 符号）</P>
+<P class=indent xmlns="">[3];（分号）</P>
+<P class=indent xmlns="">[4] $（美元符号）</P>
+<P class=indent xmlns="">[5] %（百分比符号）</P>
+<P class=indent xmlns="">[6] @（at 符号）</P>
+<P class=indent xmlns="">[7] '（单引号）</P>
+<P class=indent xmlns="">[8] "（引号）</P>
+<P class=indent xmlns="">[9] \'（反斜杠转义单引号）</P>
+<P class=indent xmlns="">[10] \"（反斜杠转义引号）</P>
+<P class=indent xmlns="">[11] &lt;&gt;（尖括号）</P>
+<P class=indent xmlns="">[12] ()（括号）</P>
+<P class=indent xmlns="">[13] +（加号）</P>
+<P class=indent xmlns="">[14] CR（回车符，ASCII 0x0d）</P>
+<P class=indent xmlns="">[15] LF（换行，ASCII 0x0a）</P>
+<P class=indent xmlns="">[16] ,（逗号）</P>
+<P class=indent xmlns="">[17] \（反斜杠）</P>
+<P xmlns="">以下部分描述各种问题、问题的修订建议以及可能触发这些问题的危险字符：</P>
+<P xmlns="">SQL 注入和 SQL 盲注：</P>
+<P xmlns="">B. 利用存储过程，将数据访问抽象化，让用户不直接访问表或视图。B. 
+利用存储过程，将数据访问抽象化，让用户不直接访问表或视图。当使用存储过程时，请利用 ADO 命令对象来实施它们，以强化变量类型。</P>
+<P xmlns="">C. 清理输入以排除上下文更改符号，例如：</P>
+<P class=indent xmlns="">[1] '（单引号）</P>
+<P class=indent xmlns="">[2] "（引号）</P>
+<P class=indent xmlns="">[3] \'（反斜线转义单引号）</P>
+<P class=indent xmlns="">[4] \"（反斜杠转义引号）</P>
+<P class=indent xmlns="">[5] )（结束括号）</P>
+<P class=indent xmlns="">[6] ;（分号）</P>
+<P xmlns="">跨站点脚本编制：</P>
+<P xmlns="">A. 清理用户输入，并过滤出 JavaScript 代码。我们建议您过滤下列字符：</P>
+<P class=indent xmlns="">[1] &lt;&gt;（尖括号）</P>
+<P class=indent xmlns="">[2] "（引号）</P>
+<P class=indent xmlns="">[3] '（单引号）</P>
+<P class=indent xmlns="">[4] %（百分比符号）</P>
+<P class=indent xmlns="">[5] ;（分号）</P>
+<P class=indent xmlns="">[6] ()（括号）</P>
+<P class=indent xmlns="">[7] &amp;（&amp; 符号）</P>
+<P class=indent xmlns="">[8] +（加号）</P>
+<P xmlns="">B. 如果要修订 &lt;%00script&gt; 变体，请参阅 MS 文章 821349</P>
+<P xmlns="">C. 对于 UTF-7 攻击： [-] 可能的话，建议您施行特定字符集编码（使用 'Content-Type' 头或 
+&lt;meta&gt; 标记）。</P>
+<P xmlns="">HTTP 响应分割：清理用户输入（至少是稍后嵌入在 HTTP 响应中的输入）。</P>
+<P xmlns="">请确保输入未包含恶意的字符，例如：</P>
+<P class=indent xmlns="">[1] CR（回车符，ASCII 0x0d）</P>
+<P class=indent xmlns="">[2] LF（换行，ASCII 0x0a）</P><BR xmlns="">
+<P xmlns="">远程命令执行：清理输入以排除对执行操作系统命令有意义的符号，例如：</P>
+<P class=indent xmlns="">[1] |（竖线符号）</P>
+<P class=indent xmlns="">[2] &amp; （&amp; 符号）</P>
+<P class=indent xmlns="">[3];（分号）</P>
+<P xmlns="">执行 shell 命令：</P>
+<P xmlns="">A. 绝不将未检查的用户输入传递给 eval()、open()、sysopen()、system() 之类的 Perl 命令。</P>
+<P xmlns="">B. 确保输入未包含恶意的字符，例如：</P>
+<P class=indent xmlns="">[1] $（美元符号）</P>
+<P class=indent xmlns="">[2] %（百分比符号）</P>
+<P class=indent xmlns="">[3] @（at 符号）</P>
+<P xmlns="">XPath 注入：清理输入以排除上下文更改符号，例如：</P>
+<P class=indent xmlns="">[1] '（单引号）</P>
+<P class=indent xmlns="">[2] "（引号） 等</P>
+<P xmlns="">LDAP 注入：</P>
+<P xmlns="">A. 使用正面验证。字母数字过滤 (A..Z,a..z,0..9) 适合大部分 LDAP 查询。</P>
+<P xmlns="">B. 应该过滤出或进行转义的特殊 LDAP 字符：</P>
+<P class=indent xmlns="">[1] 在字符串开头的空格或“#”字符</P>
+<P class=indent xmlns="">[2] 在字符串结尾的空格字符</P>
+<P class=indent xmlns="">[3] ,（逗号）</P>
+<P class=indent xmlns="">[4] +（加号）</P>
+<P class=indent xmlns="">[5] "（引号）</P>
+<P class=indent xmlns="">[6] \（反斜杠）</P>
+<P class=indent xmlns="">[7] &lt;&gt;（尖括号）</P>
+<P class=indent xmlns="">[8] ;（分号）</P>
+<P class=indent xmlns="">[9] ()（括号）</P>
+<P xmlns="">MX 注入：</P>
+<P xmlns="">应该过滤出特殊 MX 字符：</P>
+<P class=indent xmlns="">[1] CR（回车符，ASCII 0x0d）</P>
+<P class=indent xmlns="">[2] LF（换行，ASCII 0x0a）</P>
+<P xmlns="">记录伪造：</P>
+<P xmlns="">应该过滤出特殊记录字符：</P>
+<P class=indent xmlns="">[1] CR（回车符，ASCII 0x0d）</P>
+<P class=indent xmlns="">[2] LF（换行，ASCII 0x0a）</P>
+<P class=indent xmlns="">[3] BS（退格，ASCII 0x08）</P>
+<P xmlns="">ORM 注入：</P>
+<P xmlns="">B. 确保用户输入的值和类型（如 Integer、Date 等）有效，并且与应用程序预期相符。B. 
+利用存储过程，将数据访问抽象化，让用户不直接访问表或视图。C. 使用参数化查询 API</P>
+<P xmlns="">D. 清理输入以排除上下文更改符号，例如： (*)：</P>
+<P class=indent xmlns="">[1] '（单引号）</P>
+<P class=indent xmlns="">[2] "（引号）</P>
+<P class=indent xmlns="">[3] \'（反斜线转义单引号）</P>
+<P class=indent xmlns="">[4] \"（反斜杠转义引号）</P>
+<P class=indent xmlns="">[5] )（结束括号）</P>
+<P class=indent xmlns="">[6] ;（分号）(*) 这适用于 SQL。高级查询语言可能需要不同的清理机制。</P>
+<H2>Asp.Net</H2>
+<P xmlns="">以下是保护 Web 应用程序免遭 SQL 注入攻击的两种可行方法：</P>
+<P xmlns="">[1] 使用存储过程，而不用动态构建的 SQL 查询字符串。 将参数传递给 SQL Server 
+存储过程的方式，可防止使用单引号和连字符。</P><BR xmlns="">
+<P xmlns="">以下是如何在 ASP.NET 中使用存储过程的简单示例：</P><BR xmlns=""><PRE class=httpMessage xmlns="">  ' Visual Basic example
+  Dim DS As DataSet
+  Dim MyConnection As SqlConnection
+  Dim MyCommand As SqlDataAdapter
+  
+  Dim SelectCommand As String = "select * from users where username = @username"
+  ...
+  MyCommand.SelectCommand.Parameters.Add(New SqlParameter("@username", SqlDbType.NVarChar, 20))
+  MyCommand.SelectCommand.Parameters("@username").Value = UserNameField.Value
+  
+  
+  // C# example
+  String selectCmd = "select * from Authors where state = @username";
+  SqlConnection myConnection = new SqlConnection("server=...");
+  SqlDataAdapter myCommand = new SqlDataAdapter(selectCmd, myConnection);
+  
+  myCommand.SelectCommand.Parameters.Add(new SqlParameter("@username", SqlDbType.NVarChar, 20));
+  myCommand.SelectCommand.Parameters["@username"].Value = UserNameField.Value;
+</PRE><BR xmlns="">
+<P xmlns="">[2] 您可以使用验证控件，将输入验证添加到“Web 表单”页面。 验证控件提供适用于所有常见类型的标准验证的易用机制 － 
+例如，测试验证日期是否有效，或验证值是否在范围内 － 
+以及进行定制编写验证的方法。此外，验证控件还使您能够完整定制向用户显示错误信息的方式。验证控件可搭配“Web 表单”页面的类文件中处理的任何控件使用，其中包括 
+HTML 和 Web 服务器控件。</P>
+<P xmlns="">为了确保用户输入仅包含有效值，您可以使用以下其中一种验证控件：</P>
+<P class=indent xmlns="">a. “RangeValidator”：检查用户条目（值）是否在指定的上下界限之间。 
+您可以检查配对数字、字母字符和日期内的范围。</P>
+<P class=indent xmlns="">b. “RegularExpressionValidator”：检查条目是否与正则表达式定义的模式相匹配。 
+此类型的验证使您能够检查可预见的字符序列，如社会保险号码、电子邮件地址、电话号码、邮政编码等中的字符序列。</P>
+<P 
+xmlns="">重要注意事项：验证控件不会阻止用户输入或更改页面处理流程；它们只会设置错误状态，并产生错误消息。程序员的职责是，在执行进一步的应用程序特定操作前，测试代码中控件的状态。</P>
+<P xmlns="">有两种方法可检查用户输入的有效性：</P>
+<P xmlns="">1. 测试常规错误状态：</P>
+<P xmlns="">在您的代码中，测试页面的 IsValid 属性。该属性会将页面上所有验证控件的 IsValid 属性值汇总（使用逻辑 
+AND）。如果将其中一个验证控件设置为无效，那么页面属性将会返回 false。</P>
+<P xmlns="">2. 测试个别控件的错误状态：</P>
+<P xmlns="">在页面的“验证器”集合中循环，该集合包含对所有验证控件的引用。然后，您就可以检查每个验证控件的 IsValid 属性。</P>
+<H2>J2EE</H2>
+<P xmlns="">** 预编译语句：</P>
+<P xmlns="">以下是保护应用程序免遭 SQL 注入（即恶意篡改 SQL 参数）的三种可行方法。 使用以下方法，而非动态构建 SQL 语句：</P>
+<P xmlns="">[1] PreparedStatement，通过预编译并且存储在 PreparedStatement 对象池中。 
+PreparedStatement 定义 setter 方法，以注册与受支持的 JDBC SQL 数据类型兼容的输入参数。 例如，setString 应该用于 
+VARCHAR 或 LONGVARCHAR 类型的输入参数（请参阅 Java API，以获取进一步的详细信息）。 
+通过这种方法来设置输入参数，可防止攻击者通过注入不当字符（如单引号）来操纵 SQL 语句。</P><BR xmlns="">
+<P xmlns="">如何在 J2EE 中使用 PreparedStatement 的示例：</P><PRE class=httpMessage xmlns="">  // J2EE PreparedStatemenet Example
+  // Get a connection to the database
+  Connection myConnection;
+  if (isDataSourceEnabled()) {
+      // using the DataSource to get a managed connection
+      Context ctx = new InitialContext();
+      myConnection = ((DataSource)ctx.lookup(datasourceName)).getConnection(dbUserName, dbPassword);
+  } else {
+      try {
+          // using the DriverManager to get a JDBC connection
+          Class.forName(jdbcDriverClassPath);
+          myConnection = DriverManager.getConnection(jdbcURL, dbUserName, dbPassword);
+      } catch (ClassNotFoundException e) {
+          ...
+      }
+  }
+  ...
+  try {
+      PreparedStatement myStatement = myConnection.prepareStatement("select * from users where username = ?");
+      myStatement.setString(1, userNameField);
+      ResultSet rs = myStatement.executeQuery();
+      ...
+      rs.close();
+  } catch (SQLException sqlException) {
+      ...
+  } finally {
+      myStatement.close();
+      myConnection.close();
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[2] CallableStatement，扩展 PreparedStatement 以执行数据库 SQL 存储过程。 该类继承 
+PreparedStatement 的输入 setter 方法（请参阅上面的 [1]）。</P>
+<P xmlns="">以下示例假定已创建该数据库存储过程：</P>
+<P xmlns="">CREATE PROCEDURE select_user (@username varchar(20))AS SELECT * FROM 
+USERS WHERE USERNAME = @username;如何在 J2EE 中使用 CallableStatement 
+以执行以上存储过程的示例：</P><PRE class=httpMessage xmlns="">  // J2EE PreparedStatemenet Example
+  // Get a connection to the database
+  Connection myConnection;
+  if (isDataSourceEnabled()) {
+      // using the DataSource to get a managed connection
+      Context ctx = new InitialContext();
+      myConnection = ((DataSource)ctx.lookup(datasourceName)).getConnection(dbUserName, dbPassword);
+  } else {
+      try {
+          // using the DriverManager to get a JDBC connection
+          Class.forName(jdbcDriverClassPath);
+          myConnection = DriverManager.getConnection(jdbcURL, dbUserName, dbPassword);
+      } catch (ClassNotFoundException e) {
+          ...
+      }
+  }
+  ...
+  try {
+      PreparedStatement myStatement = myConnection.prepareCall("{?= call select_user ?,?}");
+      myStatement.setString(1, userNameField);
+      myStatement.registerOutParameter(1, Types.VARCHAR);
+      ResultSet rs = myStatement.executeQuery();
+      ...
+      rs.close();
+  } catch (SQLException sqlException) {
+      ...
+  } finally {
+      myStatement.close();
+      myConnection.close();
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[3] 实体 Bean，代表持久存储机制中的 EJB 业务对象。 实体 Bean 有两种类型：bean 管理和容器管理。 当使用 
+bean 管理的持久性时，开发者负责撰写访问数据库的 SQL 代码（请参阅以上的 [1] 和 [2] 部分）。 当使用容器管理的持久性时，EJB 容器会自动生成 
+SQL 代码。 因此，容器要负责防止恶意尝试篡改生成的 SQL 代码。</P><BR xmlns="">
+<P xmlns="">如何在 J2EE 中使用实体 Bean 的示例：</P><PRE class=httpMessage xmlns="">  // J2EE EJB Example
+  try {
+      // lookup the User home interface
+      UserHome userHome = (UserHome)context.lookup(User.class);    
+      // find the User remote interface
+      User = userHome.findByPrimaryKey(new UserKey(userNameField));    
+      ...    
+  } catch (Exception e) {
+      ...
+  }
+</PRE><BR xmlns="">
+<P xmlns="">推荐使用的 JAVA 工具</P>
+<P xmlns="">不适用</P><BR xmlns="">
+<P xmlns="">参考资料</P><A 
+href="http://java.sun.com/j2se/1.4.1/docs/api/java/sql/PreparedStatement.html" 
+target=_new 
+xmlns="">http://java.sun.com/j2se/1.4.1/docs/api/java/sql/PreparedStatement.html</A> 
+<A 
+href="http://java.sun.com/j2se/1.4.1/docs/api/java/sql/CallableStatement.html" 
+target=_new 
+xmlns="">http://java.sun.com/j2se/1.4.1/docs/api/java/sql/CallableStatement.html</A> 
+<BR xmlns=""><BR xmlns="">
+<P xmlns="">** 输入数据验证：** 输入数据验证：虽然为方便用户而在客户端层上提供数据验证，但仍必须使用 Servlet 
+在服务器层上执行数据验证。客户端验证本身就不安全，因为这些验证可轻易绕过，例如，通过禁用 Javascript。</P>
+<P xmlns="">一份好的设计通常需要 Web 应用程序框架，以提供服务器端实用程序例程，从而验证以下内容：</P>
+<P xmlns="">[1] 必需字段</P>
+<P xmlns="">[2] 字段数据类型（缺省情况下，所有 HTTP 请求参数都是“字符串”）</P>
+<P xmlns="">[3] 字段长度</P>
+<P xmlns="">[4] 字段范围</P>
+<P xmlns="">[5] 字段选项</P>
+<P xmlns="">[6] 字段模式</P>
+<P xmlns="">[7] cookie 值</P>
+<P xmlns="">[8] HTTP 响应好的做法是将以上例程作为“验证器”实用程序类中的静态方法实现。以下部分描述验证器类的一个示例。</P>[1] 
+必需字段“始终”检查字段不为空，并且其长度要大于零，不包括行距和后面的空格。如何验证必需字段的示例： <PRE class=httpMessage xmlns="">  // Java example to validate required fields
+  public Class Validator {
+      ...
+      public static boolean validateRequired(String value) {
+          boolean isFieldValid = false;
+          if (value != null &amp;&amp; value.trim().length() &gt; 0) {
+              isFieldValid = true;
+          }
+          return isFieldValid;
+      }
+      ...
+  }
+  ...
+  String fieldValue = request.getParameter("fieldName");
+  if (Validator.validateRequired(fieldValue)) {
+      // fieldValue is valid, continue processing request
+      ...
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[2] 输入的 Web 应用程序中的字段数据类型和输入参数欠佳。例如，所有 HTTP 请求参数或 cookie 
+值的类型都是“字符串”。开发者负责验证输入的数据类型是否正确。使用 Java 基本包装程序类，来检查是否可将字段值安全地转换为所需的基本数据类型。</P>
+<P xmlns="">验证数字字段（int 类型）的方式的示例：</P><PRE class=httpMessage xmlns="">  // Java example to validate that a field is an int number
+  public Class Validator {
+      ...
+      public static boolean validateInt(String value) {
+          boolean isFieldValid = false;
+          try {
+              Integer.parseInt(value);
+              isFieldValid = true;
+          } catch (Exception e) {
+              isFieldValid = false;
+          }
+          return isFieldValid;
+      }
+      ...
+  }
+  ...
+  // check if the HTTP request parameter is of type int
+  String fieldValue = request.getParameter("fieldName");
+  if (Validator.validateInt(fieldValue)) {
+      // fieldValue is valid, continue processing request
+      ...
+  }
+</PRE><BR xmlns="">
+<P xmlns="">好的做法是将所有 HTTP 
+请求参数转换为其各自的数据类型。例如，开发者应将请求参数的“integerValue”存储在请求属性中，并按以下示例所示来使用：</P><PRE class=httpMessage xmlns="">  // Example to convert the HTTP request parameter to a primitive wrapper data type
+  // and store this value in a request attribute for further processing
+  String fieldValue = request.getParameter("fieldName");
+  if (Validator.validateInt(fieldValue)) {
+      // convert fieldValue to an Integer
+      Integer integerValue = Integer.getInteger(fieldValue);
+      // store integerValue in a request attribute
+      request.setAttribute("fieldName", integerValue);
+  }
+  ...
+  // Use the request attribute for further processing
+  Integer integerValue = (Integer)request.getAttribute("fieldName");
+  ...
+</PRE><BR xmlns="">
+<P xmlns="">应用程序应处理的主要 Java 数据类型：</P>
+<P xmlns="">- Byte</P>
+<P xmlns="">- Short</P>
+<P xmlns="">- Integer</P>
+<P xmlns="">- Long</P>
+<P xmlns="">- Float</P>
+<P xmlns="">- Double</P>
+<P xmlns="">- Date</P><BR xmlns="">
+<P xmlns="">[3] 字段长度“始终”确保输入参数（HTTP 请求参数或 cookie 值）有最小长度和/或最大长度的限制。以下示例验证 
+userName 字段的长度是否在 8 至 20 个字符之间：</P><PRE class=httpMessage xmlns="">  // Example to validate the field length
+  public Class Validator {
+      ...
+      public static boolean validateLength(String value, int minLength, int maxLength) {
+          String validatedValue = value;
+          if (!validateRequired(value)) {
+              validatedValue = "";
+          }
+          return (validatedValue.length() &gt;= minLength &amp;&amp;
+                      validatedValue.length() &lt;= maxLength);
+      }
+      ...
+  }
+  ...
+  String userName = request.getParameter("userName");
+  if (Validator.validateRequired(userName)) {
+      if (Validator.validateLength(userName, 8, 20)) {
+          // userName is valid, continue further processing
+          ...
+      }
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[4] 字段范围</P>
+<P xmlns="">始终确保输入参数是在由功能需求定义的范围内。</P>
+<P xmlns="">以下示例验证输入 numberOfChoices 是否在 10 至 20 之间：</P><PRE class=httpMessage xmlns="">  // Example to validate the field range
+  public Class Validator {
+      ...
+      public static boolean validateRange(int value, int min, int max) {
+          return (value &gt;= min &amp;&amp; value &lt;= max);
+      }
+      ...
+  }
+  ...
+  String fieldValue = request.getParameter("numberOfChoices");
+  if (Validator.validateRequired(fieldValue)) {
+      if (Validator.validateInt(fieldValue)) {
+          int numberOfChoices = Integer.parseInt(fieldValue);
+          if (Validator.validateRange(numberOfChoices, 10, 20)) {
+              // numberOfChoices is valid, continue processing request
+              ...
+          }
+      }
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[5] 字段选项 Web 应用程序通常会为用户显示一组可供选择的选项（例如，使用 SELECT HTML 
+标记），但不能执行服务器端验证以确保选定的值是其中一个允许的选项。请记住，恶意用户能够轻易修改任何选项值。始终针对由功能需求定义的受允许的选项来验证选定的用户值。以下示例验证用户针对允许的选项列表进行的选择：</P><PRE class=httpMessage xmlns="">  // Example to validate user selection against a list of options
+  public Class Validator {
+      ...
+      public static boolean validateOption(Object[] options, Object value) {
+          boolean isValidValue = false;
+          try {
+              List list = Arrays.asList(options);
+              if (list != null) {
+                  isValidValue = list.contains(value);
+              }
+          } catch (Exception e) {
+          }
+          return isValidValue;
+      }
+      ...
+  }
+  ...
+  // Allowed options
+  String[] options = {"option1", "option2", "option3");
+  // Verify that the user selection is one of the allowed options
+  String userSelection = request.getParameter("userSelection");
+  if (Validator.validateOption(options, userSelection)) {
+      // valid user selection, continue processing request
+      ...
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[6] 字段模式</P>
+<P xmlns="">始终检查用户输入与由功能需求定义的模式是否匹配。例如，如果 userName 
+字段应仅允许字母数字字符，且不区分大小写，那么请使用以下正则表达式：^[a-zA-Z0-9]*$</P><BR xmlns="">
+<P xmlns="">Java 1.3 或更早的版本不包含任何正则表达式包。建议将“Apache 正则表达式包”（请参阅以下“资源”）与 Java 1.3 
+一起使用，以解决该缺乏支持的问题。执行正则表达式验证的示例：</P><PRE class=httpMessage xmlns="">  // Example to validate that a given value matches a specified pattern
+  // using the Apache regular expression package
+  import org.apache.regexp.RE;
+  import org.apache.regexp.RESyntaxException;
+  public Class Validator {
+      ...
+      public static boolean matchPattern(String value, String expression) {
+          boolean match = false;
+          if (validateRequired(expression)) {
+               RE r = new RE(expression);
+               match = r.match(value);             
+          }
+          return match;
+      }
+      ...
+  }
+  ...
+  // Verify that the userName request parameter is alpha-numeric
+  String userName = request.getParameter("userName");
+  if (Validator.matchPattern(userName, "^[a-zA-Z0-9]*$")) {
+      // userName is valid, continue processing request
+      ...
+  }
+</PRE><BR xmlns="">
+<P xmlns="">Java 1.4 引进了一种新的正则表达式包 (java.util.regex)。以下是使用新的 Java 1.4 正则表达式包的 
+Validator.matchPattern 修订版：</P><PRE class=httpMessage xmlns="">  // Example to validate that a given value matches a specified pattern
+  // using the Java 1.4 regular expression package
+  import java.util.regex.Pattern;
+  import java.util.regexe.Matcher;
+  public Class Validator {
+      ...
+      public static boolean matchPattern(String value, String expression) {
+          boolean match = false;
+          if (validateRequired(expression)) {
+              match = Pattern.matches(expression, value);
+          }
+          return match;
+      }
+      ...
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[7] cookie 值使用 javax.servlet.http.Cookie 对象来验证 cookie 值。适用于 cookie 
+值的相同的验证规则（如上所述）取决于应用程序需求（如验证必需值、验证长度等）。验证必需 cookie 值的示例：</P><PRE class=httpMessage xmlns="">  // Example to validate a required cookie value
+  // First retrieve all available cookies submitted in the HTTP request
+  Cookie[] cookies = request.getCookies();
+  if (cookies != null) {
+      // find the "user" cookie
+      for (int i=0; i&lt;cookies.length; ++i) {
+          if (cookies[i].getName().equals("user")) {
+              // validate the cookie value
+              if (Validator.validateRequired(cookies[i].getValue()) {
+                  // valid cookie value, continue processing request
+                  ...
+              }
+          }    
+      }
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[8] HTTP 响应</P>
+<P xmlns="">[8-1] 过滤用户输入要保护应用程序免遭跨站点脚本编制的攻击，请通过将敏感字符转换为其对应的字符实体来清理 HTML。这些是 HTML 
+敏感字符：&lt; &gt; " ' % ; ) ( &amp; +</P><BR xmlns="">
+<P xmlns="">以下示例通过将敏感字符转换为其对应的字符实体来过滤指定字符串：</P><PRE class=httpMessage xmlns="">  // Example to filter sensitive data to prevent cross-site scripting
+  public Class Validator {
+      ...
+      public static String filter(String value) {
+          if (value == null) {
+              return null;
+          }        
+          StringBuffer result = new StringBuffer(value.length());
+          for (int i=0; i&lt;value.length(); ++i) {
+              switch (value.charAt(i)) {
+              case '&lt;':
+                  result.append("&amp;lt;");
+                  break;
+              case '&gt;': 
+                  result.append("&amp;gt;");
+                  break;
+              case '"': 
+                  result.append("&amp;quot;");
+                  break;
+              case '\'': 
+                  result.append("&amp;#39;");
+                  break;
+              case '%': 
+                  result.append("&amp;#37;");
+                  break;
+              case ';': 
+                  result.append("&amp;#59;");
+                  break;
+              case '(': 
+                  result.append("&amp;#40;");
+                  break;
+              case ')': 
+                  result.append("&amp;#41;");
+                  break;
+              case '&amp;': 
+                  result.append("&amp;amp;");
+                  break;
+              case '+':
+                  result.append("&amp;#43;");
+                  break;
+              default:
+                  result.append(value.charAt(i));
+                  break;
+          }        
+          return result;
+      }
+      ...
+  }
+  ...
+  // Filter the HTTP response using Validator.filter
+  PrintWriter out = response.getWriter();
+  // set output response
+  out.write(Validator.filter(response));
+  out.close();
+</PRE><BR xmlns="">
+<P xmlns="">Java Servlet API 2.3 引进了“过滤器”，它支持拦截和转换 HTTP 请求或响应。</P>
+<P xmlns="">以下示例使用 Validator.filter 来用“Servlet 过滤器”清理响应：</P><PRE class=httpMessage xmlns="">  // Example to filter all sensitive characters in the HTTP response using a Java Filter.
+  // This example is for illustration purposes since it will filter all content in the response, including HTML tags!
+  public class SensitiveCharsFilter implements Filter {
+      ...
+      public void doFilter(ServletRequest request,
+                      ServletResponse response,
+                      FilterChain chain)
+              throws IOException, ServletException {
+  
+          PrintWriter out = response.getWriter();
+          ResponseWrapper wrapper = new ResponseWrapper((HttpServletResponse)response);
+          chain.doFilter(request, wrapper);
+  
+          CharArrayWriter caw = new CharArrayWriter();
+          caw.write(Validator.filter(wrapper.toString()));
+          
+          response.setContentType("text/html");
+          response.setContentLength(caw.toString().length());
+          out.write(caw.toString());
+          out.close();
+      }
+      ...
+      public class CharResponseWrapper extends HttpServletResponseWrapper {
+          private CharArrayWriter output;
+  
+          public String toString() {
+              return output.toString();
+          }
+      
+          public CharResponseWrapper(HttpServletResponse response){
+              super(response);
+              output = new CharArrayWriter();
+          }
+          
+          public PrintWriter getWriter(){
+              return new PrintWriter(output);
+          }
+      }
+  } 
+  
+  }
+</PRE><BR xmlns="">
+<P xmlns="">[8-2] 保护 cookie</P>
+<P xmlns="">在 cookie 中存储敏感数据时，确保使用 Cookie.setSecure（布尔标志）在 HTTP 响应中设置 cookie 
+的安全标志，以指导浏览器使用安全协议（如 HTTPS 或 SSL）发送 cookie。</P>
+<P xmlns="">保护“用户”cookie 的示例：</P><PRE class=httpMessage xmlns="">  // Example to secure a cookie, i.e. instruct the browser to
+  // send the cookie using a secure protocol
+  Cookie cookie = new Cookie("user", "sensitive");
+  cookie.setSecure(true);
+  response.addCookie(cookie);
+</PRE><BR xmlns="">
+<P xmlns="">推荐使用的 JAVA 工具用于服务器端验证的两个主要 Java 框架是：</P>
+<P xmlns="">[1] Jakarta Commons Validator（与 Struts 1.1 集成）Jakarta Commons 
+Validator 是 Java 框架，定义如上所述的错误处理机制。Jakarta Commons Validator 
+是一种强大的框架，用来实现所有以上数据验证需求。这些规则配置在定义表单字段的输入验证规则的 XML 文件中。在缺省情况下，Struts 支持在使用 
+Struts“bean:write”标记撰写的所有数据上，过滤 [8] HTTP 
+响应中输出的危险字符。可通过设置“filter=false”标志来禁用该过滤。</P>
+<P xmlns="">Struts 定义以下基本输入验证器，但也可定义定制的验证器：</P>
+<P xmlns="">required：如果字段包含空格以外的任何字符，便告成功。</P>
+<P xmlns="">mask：如果值与掩码属性给定的正则表达式相匹配，便告成功。</P>
+<P xmlns="">range：如果值在 min 和 max 属性给定的值的范围内（(value &gt;= min) &amp; (value &lt;= 
+max)），便告成功。</P>
+<P xmlns="">maxLength：如果字段长度小于或等于 max 属性，便告成功。</P>
+<P xmlns="">minLength：如果字段长度大于或等于 min 属性，便告成功。</P>
+<P xmlns="">byte、short、integer、long、float、double：如果可将值转换为对应的基本类型，便告成功。</P>
+<P xmlns="">date：如果值代表有效日期，便告成功。可能会提供日期模式。</P>
+<P xmlns="">creditCard：如果值可以是有效的信用卡号码，便告成功。</P>
+<P xmlns="">e-mail：如果值可以是有效的电子邮件地址，便告成功。</P>使用“Struts 验证器”来验证 loginForm 的 
+userName 字段的示例： <PRE class=httpMessage xmlns="">  &lt;form-validation&gt;
+      &lt;global&gt;
+          ...
+          &lt;validator name="required"
+              classname="org.apache.struts.validator.FieldChecks"
+              method="validateRequired"
+              msg="errors.required"&gt;
+          &lt;/validator&gt;
+          &lt;validator name="mask"
+              classname="org.apache.struts.validator.FieldChecks"
+              method="validateMask"
+              msg="errors.invalid"&gt;
+          &lt;/validator&gt;
+          ...
+      &lt;/global&gt;
+      &lt;formset&gt;
+          &lt;form name="loginForm"&gt;
+              &lt;!-- userName is required and is alpha-numeric case insensitive --&gt;
+              &lt;field property="userName" depends="required,mask"&gt;
+                  &lt;!-- message resource key to display if validation fails --&gt;
+                  &lt;msg name="mask" key="login.userName.maskmsg"/&gt;
+                  &lt;arg0 key="login.userName.displayname"/&gt;
+                  &lt;var&gt;
+                      &lt;var-name&gt;mask&lt;/var-name&gt;
+                      &lt;var-value&gt;^[a-zA-Z0-9]*$&lt;/var-value&gt;
+                  &lt;/var&gt;
+              &lt;/field&gt;
+          ...
+          &lt;/form&gt;
+          ...
+      &lt;/formset&gt;
+  &lt;/form-validation&gt;
+</PRE><BR xmlns="">
+<P xmlns="">[2] JavaServer Faces 技术</P>
+<P xmlns="">“JavaServer Faces 技术”是一组代表 UI 组件、管理组件状态、处理事件和输入验证的 Java API (JSR 
+127)。</P>
+<P xmlns="">JavaServer Faces API 实现以下基本验证器，但可定义定制的验证器： 
+validate_doublerange：在组件上注册 DoubleRangeValidator</P>
+<P xmlns="">validate_length：在组件上注册 LengthValidator</P>
+<P xmlns="">validate_longrange：在组件上注册 LongRangeValidator</P>
+<P xmlns="">validate_required：在组件上注册 RequiredValidator</P>
+<P xmlns="">validate_stringrange：在组件上注册 StringRangeValidator</P>
+<P xmlns="">validator：在组件上注册定制的 Validator</P><BR xmlns="">
+<P xmlns="">JavaServer Faces API 定义以下 UIInput 和 UIOutput 处理器（标记）：</P>
+<P xmlns="">input_date：接受以 java.text.Date 实例格式化的 java.util.Date</P>
+<P xmlns="">output_date：显示以 java.text.Date 实例格式化的 java.util.Date</P>
+<P xmlns="">input_datetime：接受以 java.text.DateTime 实例格式化的 java.util.Date</P>
+<P xmlns="">output_datetime：显示以 java.text.DateTime 实例格式化的 java.util.Date</P>
+<P xmlns="">input_number：显示以 java.text.NumberFormat 格式化的数字数据类型（java.lang.Number 
+或基本类型）</P>
+<P xmlns="">output_number：显示以 java.text.NumberFormat 格式化的数字数据类型（java.lang.Number 
+或基本类型）</P>
+<P xmlns="">input_text：接受单行文本字符串。</P>
+<P xmlns="">output_text：显示单行文本字符串。</P>
+<P xmlns="">input_time：接受以 java.text.DateFormat 时间实例格式化的 java.util.Date</P>
+<P xmlns="">output_time：显示以 java.text.DateFormat 时间实例格式化的 java.util.Date</P>
+<P xmlns="">input_hidden：允许页面作者在页面中包括隐藏变量</P>
+<P xmlns="">input_secret：接受不含空格的单行文本，并在输入时，将其显示为一组星号</P>
+<P xmlns="">input_textarea：接受多行文本</P>
+<P xmlns="">output_errors：显示整个页面的错误消息，或与指定的客户端标识相关联的错误消息</P>
+<P xmlns="">output_label：将嵌套的组件显示为指定输入字段的标签</P>
+<P xmlns="">output_message：显示本地化消息</P><BR xmlns="">使用 JavaServer Faces 来验证 
+loginForm 的 userName 字段的示例： <PRE class=httpMessage xmlns="">  &lt;%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %&gt;
+  &lt;%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %&gt;
+  ...
+  &lt;jsp:useBean id="UserBean"
+      class="myApplication.UserBean" scope="session" /&gt;
+  &lt;f:use_faces&gt;
+    &lt;h:form formName="loginForm" &gt;
+      &lt;h:input_text id="userName" size="20" modelReference="UserBean.userName"&gt;
+          &lt;f:validate_required/&gt;
+          &lt;f:validate_length minimum="8" maximum="20"/&gt;    
+      &lt;/h:input_text&gt;
+      &lt;!-- display errors if present --&gt;
+      &lt;h:output_errors id="loginErrors" clientId="userName"/&gt;
+      &lt;h:command_button id="submit" label="Submit" commandName="submit" /&gt;&lt;p&gt;
+    &lt;/h:form&gt;
+  &lt;/f:use_faces&gt;
+</PRE><BR xmlns=""><BR xmlns="">
+<P xmlns="">引用</P>
+<P xmlns="">Java API 1.3 - </P><A href="http://java.sun.com/j2se/1.3/docs/api/" 
+target=_new xmlns="">http://java.sun.com/j2se/1.3/docs/api/</A>
+<P xmlns="">Java API 1.4 - </P><A href="http://java.sun.com/j2se/1.4/docs/api/" 
+target=_new xmlns="">http://java.sun.com/j2se/1.4/docs/api/</A>
+<P xmlns="">Java Servlet API 2.3 - </P><A 
+href="http://java.sun.com/products/servlet/2.3/javadoc/" target=_new 
+xmlns="">http://java.sun.com/products/servlet/2.3/javadoc/</A>
+<P xmlns="">Java 正则表达式包 － </P><A href="http://jakarta.apache.org/regexp/" 
+target=_new xmlns="">http://jakarta.apache.org/regexp/</A>
+<P xmlns="">Jakarta 验证器 － </P><A 
+href="http://jakarta.apache.org/commons/validator/" target=_new 
+xmlns="">http://jakarta.apache.org/commons/validator/</A>
+<P xmlns="">JavaServer Faces 技术 － </P><A 
+href="http://java.sun.com/j2ee/javaserverfaces/" target=_new 
+xmlns="">http://java.sun.com/j2ee/javaserverfaces/</A>
+<P xmlns="">** 错误处理：</P>
+<P xmlns="">许多 J2EE Web 应用程序体系结构都遵循“模型视图控制器（MVC）”模式。在该模式中，Servlet 
+扮演“控制器”的角色。Servlet 将应用程序处理委派给 EJB 会话 Bean（模型）之类的 JavaBean。然后，Servlet 再将请求转发给 
+JSP（视图），以呈现处理结果。Servlet 应检查所有的输入、输出、返回码、错误代码和已知的异常，以确保实际处理按预期进行。</P>
+<P 
+xmlns="">数据验证可保护应用程序免遭恶意数据篡改，而有效的错误处理策略则是防止应用程序意外泄露内部错误消息（如异常堆栈跟踪）所不可或缺的。好的错误处理策略会处理以下项：</P>
+<P xmlns="">[1] 定义错误</P>
+<P xmlns="">[2] 报告错误</P>
+<P xmlns="">[3] 呈现错误</P>
+<P xmlns="">[4] 错误映射</P>
+<P xmlns="">[1] 定义错误</P>
+<P xmlns="">应避免在应用程序层（如 Servlet）中硬编码错误消息。 
+相反地，应用程序应该使用映射到已知应用程序故障的错误密钥。好的做法是定义错误密钥，且该错误密钥映射到 HTML 表单字段或其他 Bean 
+属性的验证规则。例如，如果需要 "user_name"字段，其内容为字母数字，并且必须在数据库中是唯一的，那么就应定义以下错误密钥：</P><BR 
+xmlns="">
+<P xmlns="">(a) ERROR_USERNAME_REQUIRED：该错误密钥用于显示消息，以通知用户需要 "user_name" 字段；</P>
+<P xmlns="">(b) ERROR_USERNAME_ALPHANUMERIC：该错误密钥用于显示消息，以通知用户 "user_name" 
+字段应该是字母数字；</P>
+<P xmlns="">(c) ERROR_USERNAME_DUPLICATE：该错误密钥用于显示消息，以通知用户 "user_name" 
+值在数据库中重复；</P>
+<P xmlns="">(d) ERROR_USERNAME_INVALID：该错误密钥用于显示一般消息，以通知用户 "user_name" 
+值无效；</P><BR xmlns="">
+<P xmlns="">好的做法是定义用于存储和报告应用程序错误的以下框架 Java 类：</P>
+<P xmlns="">- ErrorKeys：定义所有错误密钥</P><PRE class=httpMessage xmlns="">      // Example: ErrorKeys defining the following error keys:    
+      //    - ERROR_USERNAME_REQUIRED
+      //    - ERROR_USERNAME_ALPHANUMERIC
+      //    - ERROR_USERNAME_DUPLICATE
+      //    - ERROR_USERNAME_INVALID
+      //    ...
+      public Class ErrorKeys {
+          public static final String ERROR_USERNAME_REQUIRED = "error.username.required";
+          public static final String ERROR_USERNAME_ALPHANUMERIC = "error.username.alphanumeric";
+          public static final String ERROR_USERNAME_DUPLICATE = "error.username.duplicate";
+          public static final String ERROR_USERNAME_INVALID = "error.username.invalid";
+          ...
+      }
+</PRE>
+<P class=indent xmlns=""></P>
+<P xmlns="">- Error：封装个别错误</P><BR xmlns=""><PRE class=httpMessage xmlns="">      // Example: Error encapsulates an error key.
+      // Error is serializable to support code executing in multiple JVMs.
+      public Class Error implements Serializable {
+          
+          // Constructor given a specified error key
+          public Error(String key) {
+              this(key, null);
+          }
+          
+          // Constructor given a specified error key and array of placeholder objects
+          public Error(String key, Object[] values) {
+              this.key = key;
+              this.values = values;
+          }
+          
+          // Returns the error key
+          public String getKey() {
+              return this.key;
+          }
+          
+          // Returns the placeholder values
+          public Object[] getValues() {
+              return this.values;
+          }
+          
+          private String key = null;
+          private Object[] values = null;
+      }    
+</PRE><BR xmlns="">
+<P xmlns="">- Errors：封装错误的集合</P><BR xmlns=""><PRE class=httpMessage xmlns="">      // Example: Errors encapsulates the Error objects being reported to the presentation layer.
+      // Errors are stored in a HashMap where the key is the bean property name and value is an
+      // ArrayList of Error objects.
+      public Class Errors implements Serializable {
+      
+          // Adds an Error object to the Collection of errors for the specified bean property.
+          public void addError(String property, Error error) {
+              ArrayList propertyErrors = (ArrayList)errors.get(property);
+              if (propertyErrors == null) {
+                  propertyErrors = new ArrayList();
+                  errors.put(property, propertyErrors);
+              }
+              propertyErrors.put(error);            
+          }
+          
+          // Returns true if there are any errors
+          public boolean hasErrors() {
+              return (errors.size &gt; 0);
+          }
+          
+          // Returns the Errors for the specified property
+          public ArrayList getErrors(String property) {
+              return (ArrayList)errors.get(property);
+          }
+  
+          private HashMap errors = new HashMap();
+      }
+</PRE><BR xmlns="">
+<P xmlns="">以下是使用上述框架类来处理“user_name”字段验证错误的示例：</P><PRE class=httpMessage xmlns="">  // Example to process validation errors of the "user_name" field.
+  Errors errors = new Errors();
+  String userName = request.getParameter("user_name");
+  // (a) Required validation rule
+  if (!Validator.validateRequired(userName)) {
+      errors.addError("user_name", new Error(ErrorKeys.ERROR_USERNAME_REQUIRED));
+  } // (b) Alpha-numeric validation rule
+  else if (!Validator.matchPattern(userName, "^[a-zA-Z0-9]*$")) {
+      errors.addError("user_name", new Error(ErrorKeys.ERROR_USERNAME_ALPHANUMERIC));
+  }
+  else
+  {
+      // (c) Duplicate check validation rule
+      // We assume that there is an existing UserValidationEJB session bean that implements
+      // a checkIfDuplicate() method to verify if the user already exists in the database.
+      try {
+          ...        
+          if (UserValidationEJB.checkIfDuplicate(userName)) {
+              errors.addError("user_name", new Error(ErrorKeys.ERROR_USERNAME_DUPLICATE));
+          }
+      } catch (RemoteException e) {
+          // log the error
+          logger.error("Could not validate user for specified userName: " + userName);
+          errors.addError("user_name", new Error(ErrorKeys.ERROR_USERNAME_DUPLICATE);
+      }
+  }
+  // set the errors object in a request attribute called "errors"
+  request.setAttribute("errors", errors);
+  ...
+</PRE><BR xmlns="">
+<P xmlns="">[2] 报告错误</P>
+<P xmlns="">有两种方法可报告 web 层应用程序错误：</P>
+<P xmlns="">(a) Servlet 错误机制</P>
+<P xmlns="">(b) JSP 错误机制</P><BR xmlns="">
+<P xmlns="">[2-a] Servlet 错误机制</P>
+<P xmlns="">Servlet 可通过以下方式报告错误：</P>
+<P xmlns="">- 转发给输入 JSP（已将错误存储在请求属性中），或</P>
+<P xmlns="">- 使用 HTTP 错误代码参数来调用 response.sendError，或</P>
+<P xmlns="">- 抛出异常</P><BR xmlns="">
+<P xmlns="">好的做法是处理所有已知应用程序错误（如 [1] 部分所述），将这些错误存储在请求属性中，然后转发给输入 JSP。输入 JSP 
+应显示错误消息，并提示用户重新输入数据。以下示例阐明转发给输入 JSP（userInput.jsp）的方式：</P><PRE class=httpMessage xmlns="">  // Example to forward to the userInput.jsp following user validation errors
+  RequestDispatcher rd = getServletContext().getRequestDispatcher("/user/userInput.jsp");
+  if (rd != null) {
+      rd.forward(request, response);
+  }
+</PRE><BR xmlns="">
+<P xmlns="">如果 Servlet 无法转发给已知的 JSP 页面，那么第二个选项是使用 response.sendError 方法，将 
+HttpServletResponse.SC_INTERNAL_SERVER_ERROR（状态码 500）作为参数，来报告错误。请参阅 
+javax.servlet.http.HttpServletResponse 的 Javadoc，以获取有关各种 HTTP 状态码的更多详细信息。返回 HTTP 
+错误的示例：</P><PRE class=httpMessage xmlns="">  // Example to return a HTTP error code
+  RequestDispatcher rd = getServletContext().getRequestDispatcher("/user/userInput.jsp");
+  if (rd == null) {
+      // messages is a resource bundle with all message keys and values
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                              messages.getMessage(ErrorKeys.ERROR_USERNAME_INVALID));
+  }
+</PRE><BR xmlns="">
+<P xmlns="">作为最后的手段，Servlet 可以抛出异常，且该异常必须是以下其中一类的子类：</P>
+<P xmlns="">- RuntimeException</P>
+<P xmlns="">- ServletException</P>
+<P xmlns="">- IOException</P><BR xmlns="">
+<P xmlns="">[2-b] JSP 错误机制</P>
+<P xmlns="">JSP 页面通过定义 errorPage 伪指令来提供机制，以处理运行时异常，如以下示例所示：</P><PRE class=httpMessage xmlns="">      &lt;%@ page errorPage="/errors/userValidation.jsp" %&gt;
+</PRE><BR xmlns="">
+<P xmlns="">未捕获的 JSP 异常被转发给指定的 errorPage，并且原始异常设置在名称为 
+javax.servlet.jsp.jspException 的请求参数中。错误页面必须包括 isErrorPage 伪指令，如下所示：</P><PRE class=httpMessage xmlns="">      &lt;%@ page isErrorPage="true" %&gt;
+</PRE><BR xmlns="">
+<P xmlns="">isErrorPage 伪指令导致“exception”变量初始化为所抛出的异常对象。</P>
+<P xmlns="">[3] 呈现错误</P>
+<P xmlns="">J2SE Internationalization API 
+提供使应用程序资源外部化以及将消息格式化的实用程序类，其中包括：</P><BR xmlns="">
+<P xmlns="">(a) 资源束</P>
+<P xmlns="">(b) 消息格式化</P><BR xmlns="">
+<P xmlns="">[3-a] 资源束</P>
+<P class=indent 
+xmlns="">资源束通过将本地化数据从使用该数据的源代码中分离来支持国际化。资源束通过将本地化数据从使用该数据的源代码中分离来支持国际化。每一资源束都会为特定的语言环境存储键/值对的映射。</P>
+<P xmlns="">java.util.PropertyResourceBundle 
+将内容存储在外部属性文件中，对其进行使用或扩展都很常见，如以下示例所示：</P><PRE class=httpMessage xmlns="">  ################################################
+  # ErrorMessages.properties
+  ################################################
+  # required user name error message
+  error.username.required=User name field is required
+  
+  # invalid user name format
+  error.username.alphanumeric=User name must be alphanumeric
+  
+  # duplicate user name error message
+  error.username.duplicate=User name {0} already exists, please choose another one
+  
+  ...
+</PRE><BR xmlns="">
+<P xmlns="">可定义多种资源，以支持不同的语言环境（因此名为资源束）。例如，可定义 ErrorMessages_fr.properties 
+以支持该束系列的法语成员。如果请求的语言环境的资源成员不存在，那么会使用缺省成员。在以上示例中，缺省资源是 
+ErrorMessages.properties。应用程序（JSP 或 Servlet）会根据用户的语言环境从适当的资源检索内容。</P>
+<P xmlns="">[3-b] 消息格式化</P>
+<P xmlns="">J2SE 标准类 java.util.MessageFormat 提供使用替换占位符来创建消息的常规方法。MessageFormat 
+对象包含嵌入了格式说明符的模式字符串，如下所示：</P><PRE class=httpMessage xmlns="">  // Example to show how to format a message using placeholder parameters
+  String pattern = "User name {0} already exists, please choose another one";
+  String userName = request.getParameter("user_name");
+  Object[] args = new Object[1];
+  args[0] = userName;
+  String message = MessageFormat.format(pattern, args);
+</PRE><BR xmlns="">
+<P xmlns="">以下是使用 ResourceBundle 和 MessageFormat 来呈现错误消息的更加全面的示例：</P><PRE class=httpMessage xmlns="">  // Example to render an error message from a localized ErrorMessages resource (properties file)
+  // Utility class to retrieve locale-specific error messages
+  public Class ErrorMessageResource {
+      
+      // Returns the error message for the specified error key in the environment locale
+      public String getErrorMessage(String errorKey) {
+          return getErrorMessage(errorKey, defaultLocale);
+      }
+      
+      // Returns the error message for the specified error key in the specified locale
+      public String getErrorMessage(String errorKey, Locale locale) {
+          return getErrorMessage(errorKey, null, locale);
+      }
+      
+      // Returns a formatted error message for the specified error key in the specified locale
+      public String getErrorMessage(String errorKey, Object[] args, Locale locale) {    
+          // Get localized ErrorMessageResource
+          ResourceBundle errorMessageResource = ResourceBundle.getBundle("ErrorMessages", locale);
+          // Get localized error message
+          String errorMessage = errorMessageResource.getString(errorKey);
+          if (args != null) {
+              // Format the message using the specified placeholders args
+              return MessageFormat.format(errorMessage, args);
+          } else {
+              return errorMessage;
+          }
+      }
+      
+      // default environment locale
+      private Locale defaultLocale = Locale.getDefaultLocale();
+  }
+  ...
+  // Get the user's locale
+  Locale userLocale = request.getLocale();
+  // Check if there were any validation errors
+  Errors errors = (Errors)request.getAttribute("errors");
+  if (errors != null &amp;&amp; errors.hasErrors()) {
+      // iterate through errors and output error messages corresponding to the "user_name" property
+      ArrayList userNameErrors = errors.getErrors("user_name");
+      ListIterator iterator = userNameErrors.iterator();
+      while (iterator.hasNext()) {
+          // Get the next error object
+          Error error = (Error)iterator.next();
+          String errorMessage = ErrorMessageResource.getErrorMessage(error.getKey(), userLocale);
+          output.write(errorMessage + "\r\n");
+      }
+  }
+</PRE><BR xmlns="">
+<P xmlns="">建议定义定制 JSP 标记（如 displayErrors），以迭代处理并呈现错误消息，如以上示例所示。</P>
+<P xmlns="">[4] 错误映射</P>
+<P xmlns="">通常情况下，“Servlet 容器”会返回与响应状态码或异常相对应的缺省错误页面。可以使用定制错误页面来指定状态码或异常与 Web 
+资源之间的映射。好的做法是开发不会泄露内部错误状态的静态错误页面（缺省情况下，大部分 Servlet 容器都会报告内部错误消息）。该映射配置在“Web 
+部署描述符（web.xml）”中，如以下示例所指定：</P><PRE class=httpMessage xmlns="">  &lt;!-- Mapping of HTTP error codes and application exceptions to error pages --&gt;
+  &lt;error-page&gt;
+    &lt;exception-type&gt;UserValidationException&lt;/exception-type&gt;
+    &lt;location&gt;/errors/validationError.html&lt;/error-page&gt;
+  &lt;/error-page&gt;
+  &lt;error-page&gt;
+    &lt;error-code&gt;500&lt;/exception-type&gt;
+    &lt;location&gt;/errors/internalError.html&lt;/error-page&gt;
+  &lt;/error-page&gt;
+  &lt;error-page&gt;
+  ...
+  &lt;/error-page&gt;
+  ...
+</PRE><BR xmlns=""><BR xmlns="">
+<P xmlns="">推荐使用的 JAVA 工具用于服务器端验证的两个主要 Java 框架是：</P>
+<P xmlns="">[1] Jakarta Commons Validator（与 Struts 1.1 集成）Jakarta Commons 
+Validator 是 Java 框架，定义如上所述的错误处理机制。Jakarta Commons Validator 是 Java 
+框架，定义如上所述的错误处理机制。验证规则配置在 XML 文件中，该文件定义了表单字段的输入验证规则以及对应的验证错误密钥。Struts 
+提供国际化支持以使用资源束和消息格式化来构建本地化应用程序。</P>使用“Struts 验证器”来验证 loginForm 的 userName 字段的示例： <PRE class=httpMessage xmlns="">  &lt;form-validation&gt;
+      &lt;global&gt;
+          ...
+          &lt;validator name="required"
+              classname="org.apache.struts.validator.FieldChecks"
+              method="validateRequired"
+              msg="errors.required"&gt;
+          &lt;/validator&gt;
+          &lt;validator name="mask"
+              classname="org.apache.struts.validator.FieldChecks"
+              method="validateMask"
+              msg="errors.invalid"&gt;
+          &lt;/validator&gt;
+          ...
+      &lt;/global&gt;
+      &lt;formset&gt;
+          &lt;form name="loginForm"&gt;
+              &lt;!-- userName is required and is alpha-numeric case insensitive --&gt;
+              &lt;field property="userName" depends="required,mask"&gt;
+                  &lt;!-- message resource key to display if validation fails --&gt;
+                  &lt;msg name="mask" key="login.userName.maskmsg"/&gt;
+                  &lt;arg0 key="login.userName.displayname"/&gt;
+                  &lt;var&gt;
+                      &lt;var-name&gt;mask&lt;/var-name&gt;
+                      &lt;var-value&gt;^[a-zA-Z0-9]*$&lt;/var-value&gt;
+                  &lt;/var&gt;
+              &lt;/field&gt;
+          ...
+          &lt;/form&gt;
+          ...
+      &lt;/formset&gt;
+  &lt;/form-validation&gt;
+</PRE><BR xmlns="">
+<P xmlns="">Struts JSP 标记库定义了有条件地显示一组累计错误消息的“errors”标记，如以下示例所示：</P><PRE class=httpMessage xmlns="">  &lt;%@ page language="java" %&gt;
+  &lt;%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %&gt;
+  &lt;%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %&gt;
+  &lt;html:html&gt;
+  &lt;head&gt;
+  &lt;body&gt;
+      &lt;html:form action="/logon.do"&gt;    
+      &lt;table border="0" width="100%"&gt;
+      &lt;tr&gt;
+          &lt;th align="right"&gt;
+              &lt;html:errors property="username"/&gt;
+              &lt;bean:message key="prompt.username"/&gt;
+          &lt;/th&gt;
+          &lt;td align="left"&gt;
+              &lt;html:text property="username" size="16"/&gt;
+          &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+      &lt;td align="right"&gt;
+          &lt;html:submit&gt;&lt;bean:message key="button.submit"/&gt;&lt;/html:submit&gt;
+      &lt;/td&gt;
+      &lt;td align="right"&gt;
+          &lt;html:reset&gt;&lt;bean:message key="button.reset"/&gt;&lt;/html:reset&gt;
+      &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;/table&gt;
+      &lt;/html:form&gt;
+  &lt;/body&gt;
+  &lt;/html:html&gt;
+</PRE><BR xmlns="">
+<P xmlns="">[2] JavaServer Faces 技术</P>
+<P xmlns="">“JavaServer Faces 技术”是一组代表 UI 组件、管理组件状态、处理事件、验证输入和支持国际化的 Java 
+API（JSR 127）。</P><BR xmlns="">
+<P xmlns="">JavaServer Faces API 定义“output_errors”UIOutput 
+处理器，该处理器显示整个页面的错误消息，或与指定的客户端标识相关联的错误消息。</P>使用 JavaServer Faces 来验证 loginForm 的 
+userName 字段的示例： <PRE class=httpMessage xmlns="">  &lt;%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %&gt;
+  &lt;%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %&gt;
+  ...
+  &lt;jsp:useBean id="UserBean"
+      class="myApplication.UserBean" scope="session" /&gt;
+  &lt;f:use_faces&gt;
+    &lt;h:form formName="loginForm" &gt;
+      &lt;h:input_text id="userName" size="20" modelReference="UserBean.userName"&gt;
+          &lt;f:validate_required/&gt;
+          &lt;f:validate_length minimum="8" maximum="20"/&gt;    
+      &lt;/h:input_text&gt;
+      &lt;!-- display errors if present --&gt;
+      &lt;h:output_errors id="loginErrors" clientId="userName"/&gt;
+      &lt;h:command_button id="submit" label="Submit" commandName="submit" /&gt;&lt;p&gt;
+    &lt;/h:form&gt;
+  &lt;/f:use_faces&gt;
+</PRE><BR xmlns="">
+<P xmlns="">引用</P>
+<P xmlns="">Java API 1.3 - </P><A href="http://java.sun.com/j2se/1.3/docs/api/" 
+target=_new xmlns="">http://java.sun.com/j2se/1.3/docs/api/</A>
+<P xmlns="">Java API 1.4 - </P><A href="http://java.sun.com/j2se/1.4/docs/api/" 
+target=_new xmlns="">http://java.sun.com/j2se/1.4/docs/api/</A>
+<P xmlns="">Java Servlet API 2.3 - </P><A 
+href="http://java.sun.com/products/servlet/2.3/javadoc/" target=_new 
+xmlns="">http://java.sun.com/products/servlet/2.3/javadoc/</A>
+<P xmlns="">Java 正则表达式包 － </P><A href="http://jakarta.apache.org/regexp/" 
+target=_new xmlns="">http://jakarta.apache.org/regexp/</A>
+<P xmlns="">Jakarta 验证器 － </P><A 
+href="http://jakarta.apache.org/commons/validator/" target=_new 
+xmlns="">http://jakarta.apache.org/commons/validator/</A>
+<P xmlns="">JavaServer Faces 技术 － </P><A 
+href="http://java.sun.com/j2ee/javaserverfaces/" target=_new 
+xmlns="">http://java.sun.com/j2ee/javaserverfaces/</A>
+<H2>PHP</H2>
+<P xmlns="">** 过滤用户输入</P><BR xmlns="">
+<P xmlns="">将任何数据传给 SQL 查询之前，应始终先使用筛选技术来适当过滤。 这无论如何强调都不为过。 
+过滤用户输入可让许多注入缺陷在到达数据库之前便得到更正。</P><BR xmlns="">
+<P xmlns="">** 对用户输入加引号</P><BR xmlns="">
+<P xmlns="">不论任何数据类型，只要数据库允许，便用单引号括住所有用户数据，始终是好的观念。 MySQL 允许此格式化技术。</P><BR 
+xmlns="">
+<P xmlns="">** 转义数据值</P><BR xmlns="">
+<P xmlns="">如果使用 MySQL 4.3.0 或更新的版本，您应该用 mysql_real_escape_string() 来转义所有字符串。 
+如果使用旧版的 MySQL，便应该使用 mysql_escape_string() 函数。 如果未使用 MySQL，您可以选择使用特定数据库的特定换码功能。 
+如果不知道换码功能，您可以选择使用较一般的换码功能，例如，addslashes()。</P><BR xmlns="">
+<P xmlns="">如果使用 PEAR DB 数据库抽象层，您可以使用 DB::quote() 方法或使用 ? 
+之类的查询占位符，它会自动转义替换占位符的值。</P><BR xmlns="">
+<P xmlns="">引用</P><A href="http://ca3.php.net/mysql_real_escape_string" 
+target=_new xmlns="">http://ca3.php.net/mysql_real_escape_string</A> <A 
+href="http://ca.php.net/mysql_escape_string" target=_new 
+xmlns="">http://ca.php.net/mysql_escape_string</A> <A 
+href="http://ca.php.net/addslashes" target=_new 
+xmlns="">http://ca.php.net/addslashes</A> <A 
+href="http://pear.php.net/package-info.php?package=DB" target=_new 
+xmlns="">http://pear.php.net/package-info.php?package=DB</A> 
+<P xmlns="">** 文件路径验证：</P><BR xmlns="">
+<P xmlns="">PHP 提供多种方法来在打开文件之前对文件名进行验证。例如：例如：[1] file_exists() 
+方法：该方法检查是否存在文件或目录。如果文件或目录存在，那么该方法将会返回 True，否则将返回 false。</P><PRE class=httpMessage xmlns="">  &lt;?php
+      $filename = '/path/to/foo.txt';
+      if (file_exists($filename)) 
+      {
+          echo "The file $filename exists";
+      } 
+      else 
+      {
+          echo "The file $filename does not exist";
+      }
+  ?&gt;
+</PRE><BR xmlns="">
+<P xmlns="">[2] is_file() 方法：该方法告知文件名是否是常规文件，如果是，便会返回 True。</P><PRE class=httpMessage xmlns="">  &lt;?php
+      $filename = '/path/to/foo.txt';
+      if (is_file($filename)) 
+      {
+          echo "The file $filename is a regular file";
+      } 
+      else 
+      {
+          echo "There is a problem with the file: $filename";
+      }
+  ?&gt;
+</PRE><BR xmlns="">
+<P xmlns="">[3] 
+在执行涉及用户输入的文件操作时，您应该始终检查指定的文件名和路径是否符合特定限制。具体地说，您应确保仅允许在预定义的目录树内执行文件操作。具体地说，您应确保仅允许在预定义的目录树内执行文件操作。只检查给定路径名是否以所需的目录名称开头是不够的，因为攻击者可使用路径遍历攻击来欺骗应用程序，使其提供所需目录之外的文件，例如 
+－“../../../../”（注意：该字符串还能以多种其他格式编码，以绕过字符串匹配算法）。</P>
+<P xmlns="">以下是两个 PHP 函数，在尝试验证用户提供的文件名时可能有用：</P>
+<P xmlns="">realpath() － 返回标准化绝对路径名</P>
+<P xmlns="">basename() － 返回路径的文件名部分</P><BR xmlns="">
+<P xmlns="">引用[1] PHP 手册 － realpath()：</P><A href="http://www.php.net/realpath" 
+target=_new xmlns="">http://www.php.net/realpath</A> 
+<P xmlns="">[2] PHP 手册 － basename()：</P><A href="http://www.php.net/basename" 
+target=_new xmlns="">http://www.php.net/basename</A> 
+<P xmlns="">[3] PHP 手册 － file_exists()：</P><A 
+href="http://www.php.net/file_exists" target=_new 
+xmlns="">http://www.php.net/file_exists</A> 
+<P xmlns="">[4] PHP 手册 － is_file()：</P><A href="http://www.php.net/is_file" 
+target=_new xmlns="">http://www.php.net/is_file</A> <BR xmlns=""><BR xmlns="">
+<P xmlns="">** 输入数据验证：** 
+输入数据验证：虽然为方便用户而在客户端层上提供数据验证，但仍必须始终在服务器层上执行数据验证。客户端验证本身就不安全，因为这些验证可轻易绕过，例如，通过禁用 
+Javascript。</P>
+<P xmlns="">一份好的设计通常需要 Web 应用程序框架，以提供服务器端实用程序例程，从而验证以下内容：</P>
+<P xmlns="">[1] 必需字段</P>
+<P xmlns="">[2] 字段数据类型（缺省情况下，所有 HTTP 请求参数都是“字符串”）</P>
+<P xmlns="">[3] 字段长度</P>
+<P xmlns="">[4] 字段范围</P>
+<P xmlns="">[5] 字段选项</P>
+<P xmlns="">[6] 字段模式</P>
+<P xmlns="">[7] cookie 值</P>
+<P xmlns="">[8] HTTP 响应好的做法是实现一个或多个验证每个应用程序参数的函数。以下部分描述一些检查的示例。</P>[1] 
+必需字段“始终”检查字段不为空，并且其长度要大于零，不包括行距和后面的空格。如何验证必需字段的示例： <PRE class=httpMessage xmlns="">  // PHP example to validate required fields
+  function validateRequired($input) {
+      ...
+      $pass = false;
+      if (strlen(trim($input))&gt;0){
+          $pass = true;
+      }
+      return $pass;
+      ...
+  }
+  ...
+  if (validateRequired($fieldName)) {
+      // fieldName is valid, continue processing request
+      ...
+  }
+</PRE><BR xmlns=""><BR xmlns="">
+<P xmlns="">[2] 输入的 Web 应用程序中的字段数据类型和输入参数欠佳。例如，所有 HTTP 请求参数或 cookie 
+值的类型都是“字符串”。开发者负责验证输入的数据类型是否正确。[3] 字段长度“始终”确保输入参数（HTTP 请求参数或 cookie 
+值）有最小长度和/或最大长度的限制。[4] 字段范围</P>
+<P xmlns="">始终确保输入参数是在由功能需求定义的范围内。</P>
+<P xmlns="">[5] 字段选项 Web 应用程序通常会为用户显示一组可供选择的选项（例如，使用 SELECT HTML 
+标记），但不能执行服务器端验证以确保选定的值是其中一个允许的选项。请记住，恶意用户能够轻易修改任何选项值。始终针对由功能需求定义的受允许的选项来验证选定的用户值。[6] 
+字段模式</P>
+<P xmlns="">始终检查用户输入与由功能需求定义的模式是否匹配。例如，如果 userName 
+字段应仅允许字母数字字符，且不区分大小写，那么请使用以下正则表达式：^[a-zA-Z0-9]+$</P><BR xmlns="">
+<P xmlns="">[7] cookie 值</P>
+<P xmlns="">适用于 cookie 值的相同的验证规则（如上所述）取决于应用程序需求（如验证必需值、验证长度等）。</P>
+<P xmlns="">[8] HTTP 响应[8-1] 过滤用户输入要保护应用程序免遭跨站点脚本编制的攻击，开发者应通过将敏感字符转换为其对应的字符实体来清理 
+HTML。这些是 HTML 敏感字符：&lt; &gt; " ' % ; ) ( &amp; +</P><BR xmlns="">
+<P xmlns="">PHP 包含一些自动化清理实用程序函数，如 htmlentities()：</P><PRE class=httpMessage xmlns="">  $input = htmlentities($input, ENT_QUOTES, 'UTF-8');
+</PRE><BR xmlns="">
+<P xmlns="">此外，为了避免“跨站点脚本编制”的 UTF-7 变体，您应该显式定义响应的 Content-Type 头，例如：</P><BR 
+xmlns=""><PRE class=httpMessage xmlns="">  &lt;?php
+  
+  header('Content-Type: text/html; charset=UTF-8');
+  
+  ?&gt;
+</PRE><BR xmlns="">
+<P xmlns="">[8-2] 保护 cookie</P>
+<P xmlns="">在 cookie 中存储敏感数据且通过 SSL 来传输时，请确保先在 HTTP 响应中设置 cookie 
+的安全标志。这将会指示浏览器仅通过 SSL 连接来使用该 cookie。</P>
+<P xmlns="">为了保护 cookie，您可以使用以下代码示例：</P><PRE class=httpMessage xmlns="">  &lt;$php
+  
+      $value = "some_value";
+      $time = time()+3600;
+      $path = "/application/";
+      $domain = ".example.com";
+      $secure = 1;
+  
+      setcookie("CookieName", $value, $time, $path, $domain, $secure, TRUE);
+  ?&gt;
+  
+</PRE><BR xmlns="">
+<P xmlns="">此外，我们建议您使用 HttpOnly 标志。当 HttpOnly 标志设置为 TRUE 时，将只能通过 HTTP 协议来访问 
+cookie。这意味着无法用脚本语言（如 JavaScript）来访问 cookie。该设置可有效地帮助减少通过 XSS 
+攻击盗用身份的情况（虽然并非所有浏览器都支持该设置）。</P>
+<P xmlns="">在 PHP 5.2.0 中添加了 HttpOnly 标志。</P>
+<P xmlns="">引用[1] 使用 HTTP 专用 cookie 来减轻“跨站点脚本编制”的影响：</P><A 
+href="http://msdn2.microsoft.com/en-us/library/ms533046.aspx" target=_new 
+xmlns="">http://msdn2.microsoft.com/en-us/library/ms533046.aspx</A>
+<P xmlns="">[2] PHP 安全协会：</P><A href="http://phpsec.org/" target=_new 
+xmlns="">http://phpsec.org/</A>
+<P xmlns="">[3] PHP 和 Web 应用程序安全博客 (Chris Shiflett)：</P><A 
+href="http://shiflett.org/" target=_new 
+xmlns="">http://shiflett.org/</A><BR><BR></DIV></DIV></BODY></HTML>

