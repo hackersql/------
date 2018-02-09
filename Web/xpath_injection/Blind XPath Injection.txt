@@ -1,0 +1,104 @@
+Blind XPath Injection
+这是一种攻击。
+描述
+XPath是一种查询语言，它描述了如何在XML文档中定位特定元素（包括属性，处理指令等）。因为它是一个查询语言，XPath是有点类似于结构化查询语言（SQL），然而，XPath是不同的，因为它可以用来表示一个XML文档的几乎任何部分，而不受访问控制限制。在SQL中，“用户”（这是在XPath / XML环境不确定的术语）可以被限制在特定的数据库，表，列或查询。使用XPath注入攻击中，攻击者可以修改XPath查询来执行他选择的动作。
+
+盲XPath注入攻击可以用于从在不安全的方式嵌入用户提供的数据的应用程序提取数据。当输入不正确过滤，攻击者可以提供被执行的有效的XPath代码。这种类型的攻击是在攻击者不知道XML文档结构的情况下使用的，并且只能通过询问真/假的问题，一次获取一个信息（booleanized查询），就像盲SQL注入。
+
+风险因素
+TBD
+
+例子
+攻击者可能利用两种方法攻击成功：Boolenization和XML爬行。通过向XPath语法，攻击者使用附加表达式（在确定位置替换输入注入攻击）。
+
+Boolenization
+使用“Boolenization”的方法，攻击者可以假设给定的XPath表达式是“True”还是“False”。假设攻击者的目标是登录到帐户中的Web应用程序。成功登录将返回“True”和失败的登录尝试将返回“False”。攻击者首先只是分析一小部分字符或数字或许还得不到结论。但是当攻击者在字符串中通过专注的分析每一个字符，那么他们有可能就知道应该在那一部分注入内容。
+
+
+使用函数stringlength(s)，s表示字符串。通过这个函数攻击者可以计算出字符串的长度，然后通过substring(S,N,1)函数进行适当的迭代，这里S是前面所提到的字符串，N是一个起始字符，“1”是一个下一个字符选自N字符计数，这样攻击者能够轻易的枚举整个字符串。
+
+Code:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+   <user>
+   <login>admin</login>
+   <password>test</password>
+   <realname>SuperUser</realname>
+   </user>
+   <user>
+   <login>rezos</login>
+   <password>rezos123</password>
+   <realname>Simple User</realname>
+   </user>
+</data>
+
+Function:
+
+string-length(//user[position()=1]/child::node()[position()=2]) 返回第一个用户的第二个字符串（password）的长度(8),
+substring((//user[position()=1]/child::node()[position()=2),1,1) 返回这个用户的第一个字符('r').
+
+XML Crawling要了解XML文档结构中的攻击者可以利用：
+count(expression)
+ 
+count(//user/child::node()
+执行这个函数将会返回两个节点数。
+
+string-length(string)返回指定字符串的长度
+string-length(//user[position()=1]/child::node()[position()=2])=6
+
+假设上面这个表达式成立，攻击者查询的结果就是第一个用户节点的第二个子节点是由6个字符组成的密码。
+
+substring(string, number, number)
+substring((//user[position()=1]/child::node()[position()=2]),1,1)="a"
+
+以上的这个查询假设它是成立的，那么攻击者就可以确定第一个用户节点的第二个子节点（即：密码）内容的第一个字符是“a”这个字符。
+
+如果登录形式如下所示：
+
+C＃：
+
+String FindUser;
+FindUser = "//user[login/text()='" + Request("Username") + "' And
+      password/text()='" + Request("Password") + "']";
+
+那么攻击者应该注入下面的代码：
+
+Username: ' or substring((//user[position()=1]/child::node()[position()=2]),1,1)="a" or ''='
+
+fn:substring(string,start,len)
+fn:substring(string,start)
+返回从 start 位置开始的指定长度的子字符串。第一个字符的下标是 1。如果省略 len 参数，则返回从位置 start 到字符串末尾的子字符串。
+例子：substring('Beatles',1,4)
+结果：'Beat'
+例子：substring('Beatles',2)
+结果：'eatles'
+
+fn:position()  
+返回当前正在被处理的节点的 index 位置。
+例子：//book[position()<=3]
+结果：选择前三个 book 元素
+
+//user[position()=1]选取所有user元素，且索引位置为1的user元素。
+
+child::node()选取当前节点的所有字节点
+
+child::node()[position()=2返回字节点中的第二个节点
+
+XPath语法可能会提醒你常见的SQL注入攻击，但攻击者必须考虑到这种语言不允许注释掉表达式的其余部分。要绕过此限制攻击者应该完全使用表达式或作废所有表达式，这才有可能成功的搞破坏而达到进攻的目的。
+
+由于Boolenization查询一个小的XML或者是成千上万个数量文档，都是非常高效的。这就是为什么这种攻击是不手动进行。了解一些基本的XPath功能，攻击者能够在很短的时间，将写出重建文档的结构并会自行填充数据的应用程序。
+
+ //user/username[contains(., '')]
+
+ //Employee[UserName='{USERNAME}' and Password='{PASSWORD}']
+
+accounts.xml
+ <Employees>
+   <Employee ID="1">
+      <UserName>admin</UserName>
+      <Password>adminpass</Password>
+      <Signature>g0t r00t?</Signature>
+      <Type>Admin</Type>
+   </Employee>
+</Employees>

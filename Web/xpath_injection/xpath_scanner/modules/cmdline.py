@@ -1,3 +1,4 @@
+#coding=utf-8
 import argparse
 from global_object import GLOBJ
 #-------------------------------------------------------------------------
@@ -10,7 +11,7 @@ def methods_check(first_object, second_object):  # methods_check
     if (first_object.boolean_based == None and
             first_object.time_based == None and
             first_object.request_based == None):
-        print '[\033[91mERROR\033[92m]: No one XPI method was chosen'
+        print u'[\033[91mERROR\033[92m]: 没有选择任何一个 XPI 方法'
         second_object.print_help()
         exit()
 #-------------------------------------------------------------------------
@@ -18,8 +19,7 @@ def methods_check(first_object, second_object):  # methods_check
 
 def port_check(first_object, second_object):  # port_check
     if first_object.isdigit() == False or int(first_object) < 1:
-        print('[\033[91mERROR\033[92m]: The last argument for request-based'
-              + ' method must be positive integer')
+        print(u'[\033[91mERROR\033[92m]: 基于请求的方法的最后一个参数必须是正整数(端口)')
         second_object.print_help()
         exit()
 #-------------------------------------------------------------------------
@@ -28,8 +28,7 @@ def port_check(first_object, second_object):  # port_check
 def boolean_based_check(first_object, second_object):  # boolean_based_check
     if first_object != None:
         if first_object[0] != 'true' and first_object[0] != 'false':
-            print('[\033[91mERROR\033[92m]: The firs argument for boolean-based'
-                  + ' method must be "true" or "false"')
+            print(u'[\033[91mERROR\033[92m]: 基于布尔的方法的第一个参数必须是"true"或"false"')
             second_object.print_help()
             exit()
 #-------------------------------------------------------------------------
@@ -38,8 +37,7 @@ def boolean_based_check(first_object, second_object):  # boolean_based_check
 def request_based_check(first_object, second_object):  # request_based_check
     if first_object != None:
         if first_object[0] != 'doc' and first_object[0] != 'unparsed-text':
-            print('[\033[91mERROR\033[92m]: The firs argument for request-based'
-                  + ' method must be "doc" or "unparsed-text"')
+            print(u'[\033[91mERROR\033[92m]: 基于请求的方法的第一个参数必须是"doc"或"unparsed-text"')
             second_object.print_help()
             exit()
         port_check(first_object[2], second_object)
@@ -82,30 +80,30 @@ def cmdLineParser():  # cmdLineParser
     XXE = argparse.ArgumentParser(add_help=False)
     XXE.add_argument('file_path',
                      type=str,
-                     help='local path to the file on the target machine')
+                     help='目标机器上的文件的本地路径')
     XXE.add_argument('public_ip',
                      type=str,
-                     help='your public ip')
+                     help='你的公共IP')
     XXE.add_argument('port',
                      type=str,
-                     help='port')
+                     help='端口')
 #-------------------------------------------------------------------------
 #   RLF arguments parser
     RLF = argparse.ArgumentParser(add_help=False)
     RLF.add_argument('file_path',
                      type=str,
-                     help='local path to the file on the target machine')
+                     help='目标机器上的文件的本地路径')
 #-------------------------------------------------------------------------
 #   extended functionality arguments parser
     ext = argparse.ArgumentParser(add_help=False)
-    parse_mode = ext.add_subparsers(title='Extended functionality',
+    parse_mode = ext.add_subparsers(title='扩展功能',
                                     dest='EXT_FUNC',
                                     metavar=('EXT_FUNC'),
-                                    help='choose extended functionality')
+                                    help='选择扩展功能')
     mode_XXE = parse_mode.add_parser('XXE',
                                      prog=programm_name,
                                      parents=[XXE],
-                                     help='XXE read local file')
+                                     help='XXE读取本地文件')
     mode_unparsed_text = parse_mode.add_parser('RLF',
                                                prog=programm_name,
                                                # boolean_based,time_based],
@@ -113,17 +111,16 @@ def cmdLineParser():  # cmdLineParser
                                                usage='''\
 %(prog)s  -r public-ip port
                             file_path''',
-                                               help='read local file using unparsed-text function')
+                                               help='使用unparsed-text函数读取本地文件')
 #-------------------------------------------------------------------------
 #   modes arguments parser
     modes = argparse.ArgumentParser(prog=programm_name,
                                     add_help=False)
-    parse_mode = modes.add_subparsers(title=programm_name + ' functionality',
-                                      description='Available functionality',
+    parse_mode = modes.add_subparsers(title=programm_name + ' 功能',
+                                      description='可用的功能',
                                       dest='mode',
                                       metavar=('MODE'),
-                                      help='Choose XPI methods, extended functionality or'
-                                      ' use simple tests for checking')
+                                      help='选择XPI方法，扩展功能或使用简单的测试进行检查')
     mode_XPI = parse_mode.add_parser('XPI',
                                      prog=programm_name,
                                      parents=[boolean_based,
@@ -132,11 +129,11 @@ def cmdLineParser():  # cmdLineParser
 %(prog)s  -b [ true | false ] string
                             -t seconds
                             -r public-ip port''',
-                                     help='XPI methods')
+                                     help='XPI ')
     mode_ext = parse_mode.add_parser('ext',
                                      prog=programm_name,
                                      parents=[ext],
-                                     help='Extended functionality')
+                                     help='扩展功能')
     mode_test = parse_mode.add_parser('test',
                                       prog=programm_name,
                                       parents=[boolean_based,
@@ -145,18 +142,17 @@ def cmdLineParser():  # cmdLineParser
 %(prog)s  -b [ true | false ] string
                             -t seconds
                             -r public-ip port''',
-                                      help='Test XPath injection for parameter,'
-                                      ' which was chosen')
+                                      help='测试选择的XPath注入参数')
 #-------------------------------------------------------------------------
 #   base arguments parser
     base = argparse.ArgumentParser(add_help=False)
     base.add_argument("--method",
-                      help="using HTTP method",
+                      help="使用HTTP方法",
                       type=str,
                       default="GET",
                       choices=("GET", "POST"))
     base.add_argument("--add_header",
-                      help="add custom HTTP header",
+                      help="添加自定义HTTP标头",
                       action='append',
                       type=str)
     base.add_argument('--add_template',
@@ -164,23 +160,21 @@ def cmdLineParser():  # cmdLineParser
                       metavar=(
                           'begining_of_template', 'ending_of_template'),
                       type=str,
-                      help='use custom template')
+                      help='使用自定义模板')
     base.add_argument("target_url",
-                      help="site to scan. ex: http://127.0.0.1/WEB_APP/index.php",
+                      help="网站扫描.例如: http://127.0.0.1/WEB_APP/index.php",
                       type=str)
     base.add_argument("parameters",
-                      help="parameters. ex: param_1=value_1&param_2=value_2",
+                      help="参数. 例如: param_1=value_1&param_2=value_2",
                       type=str)
     base.add_argument("vulnerable_parameter",
-                      help="vulnerable parameter. ex: value_1",
+                      help="易受攻击的参数. 例如: value_1",
                       type=str)
 #-------------------------------------------------------------------------
 #   main arguments parser
     parser = argparse.ArgumentParser(prog=programm_name,
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                     description='Scan your site for XPath vulnerability',
-                                     epilog='For the support and suggestions please'
-                                     ' write to e-mail obriain@yandex.ru',
+                                     description='扫描站点中的 XPath 漏洞',
                                      parents=[base, modes])
 #-------------------------------------------------------------------------
     args = parser.parse_args()
@@ -229,5 +223,5 @@ def cmdLineParser():  # cmdLineParser
             port_check(args.request_based[1],  mode_test)
             settings.init('r',                    args.request_based)
 #-------------------------------------------------------------------------
-#    settings.show() #   used for debug
+    settings.show() #   used for debug
     return settings

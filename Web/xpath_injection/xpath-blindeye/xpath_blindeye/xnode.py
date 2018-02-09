@@ -18,7 +18,8 @@ class XNode(object):
         self.path = path
         self.parent = parent
         self.xml_root = xml_root
-        self.saved_root = saved_root
+    self.saved_root = saved_root
+
 
     def _get_known_attribute_counts(self) -> Set[int]:
         nodes = self._get_similar_known_nodes()

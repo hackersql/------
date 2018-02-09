@@ -46,7 +46,9 @@ def retrieve():
         et.write(save_location)
 
 
-def visit_node(node_name: str, path: str, parent: Union[Element, None], xml_root: Element, saved_root: Element):
+def visit_node(
+        node_name: str, path: str, parent: Union[Element, None],
+        xml_root: Element, saved_root: Element):
     if parent is None:
         node = xml_root
     else:
@@ -60,4 +62,5 @@ def visit_node(node_name: str, path: str, parent: Union[Element, None], xml_root
     child_names = xnode.get_child_node_names()
     # Do last
     for child_name, child_path in child_names:
-        visit_node(node_name=child_name, path=child_path, parent=node, xml_root=xml_root, saved_root=saved_root)
+        visit_node(node_name=child_name, path=child_path,
+                   parent=node, xml_root=xml_root, saved_root=saved_root)

