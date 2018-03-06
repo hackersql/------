@@ -671,7 +671,7 @@ class Agent(object):
                 concatenatedQuery = "'%s'&%s&'%s'" % (kb.chars.start, concatenatedQuery, kb.chars.stop)
 
         else:
-            warnMsg = "applying generic concatenation (CONCAT)"
+            warnMsg = u"应用通用的concat()字符串连接函数"
             singleTimeWarnMessage(warnMsg)
 
             if fieldsExists:
