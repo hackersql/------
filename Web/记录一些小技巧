@@ -4,6 +4,9 @@ intitle:
 intext:
 filetype:
 
+grep+sed查找并替换指定字符串
+sed -i s/"Results:"/"结果:"/g `grep -rl "Results:"`
+
 递归查找某个目录下包含关键字的文件
 grep -r 关键字
 grep -r -G "^\$sql="正则递归匹配以$sql=开头的行
