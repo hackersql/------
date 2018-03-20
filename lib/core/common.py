@@ -3861,7 +3861,7 @@ def findPageForms(content, url, raise_=False, addToTargets=False):
             return self._url
 
     if not content:
-        errMsg = "无法解析表单，因为当页面内容看起来是空的，"
+        errMsg = u"无法解析表单，因为当页面内容看起来是空的，"
         if raise_:
             raise SqlmapGenericException(errMsg)
         else:
@@ -3877,13 +3877,13 @@ def findPageForms(content, url, raise_=False, addToTargets=False):
         pass
     except ParseError:
         if "<html" in (content or ""):
-            warnMsg = "在给定的URL('%s)中的HTML格式书写不规范，要过滤它" % url
+            warnMsg = u"在给定的URL('%s)中的HTML格式书写不规范，要过滤它" % url
             logger.warning(warnMsg)
             filtered = _("".join(re.findall(FORM_SEARCH_REGEX, content)), url)
             try:
                 forms = ParseResponse(filtered, backwards_compat=False)
             except ParseError:
-                errMsg = "没有成功"
+                errMsg = u"没有成功"
                 if raise_:
                     raise SqlmapGenericException(errMsg)
                 else:
@@ -3902,13 +3902,13 @@ def findPageForms(content, url, raise_=False, addToTargets=False):
                                 break
 
                 if conf.crawlExclude and re.search(conf.crawlExclude, form.action or ""):
-                    dbgMsg = "跳过'%s'" % form.action
+                    dbgMsg = u"跳过'%s'" % form.action
                     logger.debug(dbgMsg)
                     continue
 
                 request = form.click()
             except (ValueError, TypeError), ex:
-                errMsg = "处理页面表单时出现问题('%s')" % getSafeExString(ex)
+                errMsg = u"处理页面表单时出现问题('%s')" % getSafeExString(ex)
                 if raise_:
                     raise SqlmapGenericException(errMsg)
                 else:
@@ -3920,7 +3920,7 @@ def findPageForms(content, url, raise_=False, addToTargets=False):
                 data = urldecode(data, kb.pageEncoding, plusspace=False)
 
                 if not data and method and method.upper() == HTTPMETHOD.POST:
-                    debugMsg = "检测到空白数据的无效POST表单"
+                    debugMsg = u"检测到空白数据的无效POST表单"
                     logger.debug(debugMsg)
                     continue
 
@@ -3936,7 +3936,7 @@ def findPageForms(content, url, raise_=False, addToTargets=False):
                     target = (url, method, data, conf.cookie, None)
                     retVal.add(target)
     else:
-        errMsg = "在给定的目标网址中找不到任何表单"
+        errMsg = u"在给定的目标网址中找不到任何表单"
         if raise_:
             raise SqlmapGenericException(errMsg)
         else:
@@ -3992,7 +3992,7 @@ def checkDeprecatedOptions(args):
 
     for _ in args:
         if _ in DEPRECATED_OPTIONS:
-            errMsg = "开关/选项'%s'已被弃用" % _
+            errMsg = u"开关/选项'%s'已被弃用" % _
             if DEPRECATED_OPTIONS[_]:
                 errMsg += " (hint: %s)" % DEPRECATED_OPTIONS[_]
             raise SqlmapSyntaxException(errMsg)
@@ -4006,12 +4006,12 @@ def checkSystemEncoding():
         try:
             codecs.lookup("cp720")
         except LookupError:
-            errMsg = "有一个已知的Python问题(#1616979)与支持字符集'cp720'相关。请访问"
-            errMsg += "'http://blog.oneortheother.info/tip/python-fix-cp720-encoding/index.html' "
-            errMsg += "，并按照说明进行修复。"
+            errMsg = u"有一个已知的Python问题(#1616979)与支持字符集'cp720'相关。请访问"
+            errMsg += u"'http://blog.oneortheother.info/tip/python-fix-cp720-encoding/index.html' "
+            errMsg += u"，并按照说明进行修复。"
             logger.critical(errMsg)
 
-            warnMsg = "临时切换到字符集'cp1256'"
+            warnMsg = u"临时切换到字符集'cp1256'"
             logger.warn(warnMsg)
 
             reload(sys)
@@ -4027,7 +4027,7 @@ def evaluateCode(code, variables=None):
     except KeyboardInterrupt:
         raise
     except Exception, ex:
-        errMsg = "在评估提供的代码时出现错误('%s') " % getSafeExString(ex)
+        errMsg = u"在执行提供的代码时出现错误('%s') " % getSafeExString(ex)
         raise SqlmapGenericException(errMsg)
 
 def serializeObject(object_):
@@ -4109,7 +4109,7 @@ def decodeHexValue(value, raw=False):
         if value and isinstance(value, basestring):
             if len(value) % 2 != 0:
                 retVal = "%s?" % hexdecode(value[:-1]) if len(value) > 1 else value
-                singleTimeWarnMessage("从预期的十六进制表单中解码'%s'时出现问题" % value)
+                singleTimeWarnMessage(u"从预期的十六进制表单中解码'%s'时出现问题" % value)
             else:
                 retVal = hexdecode(value)
 
@@ -4132,7 +4132,7 @@ def decodeHexValue(value, raw=False):
     try:
         retVal = applyFunctionRecursively(value, _)
     except:
-        singleTimeWarnMessage("从预期的十六进制形式解码'%s'出现问题" % value)
+        singleTimeWarnMessage(u"从预期的十六进制形式解码'%s'出现问题" % value)
 
     return retVal
 
