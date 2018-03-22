@@ -1,12 +1,6 @@
-site: 
-inurl:
-intitle:
-intext:
-filetype:
-
 grep+sed查找并替换指定字符串
-sed -i s/"Results:"/"结果:"/g `grep -rl "Results:"`
-
+sed -i s/"verbose errors"/"详细错误信息"/g `grep -rl "verbose errors"`
+https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000
 递归查找某个目录下包含关键字的文件
 grep -r 关键字
 grep -r -G "^\$sql="正则递归匹配以$sql=开头的行
@@ -39,7 +33,5 @@ sudo docker run --rm -it -p 443:443 -v ~/.msf4:/root/.msf4 -v /tmp/msf:/tmp/data
 我将使用”~/.msf4”目录来存放Metasploit Framework的配置文件。
 主机上的“/tmp/msf”目录将会存储其他数据，比如你可能从目标系统获取的数据。
 参数“-p”对容器内部的端口进行映射。上面的例子用443端口来接收反弹shell的https连接。
-
-usr/local/bin/hydra -s 3306 -V -d -l root -P /pentest/passwords/wordlists/darkc0de.lst -e ns -t 10 -w 60 -M /root/Desktop/ip.txt mysql
 
 "/><iframe/src=//www.163.com//>
