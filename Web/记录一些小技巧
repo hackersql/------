@@ -1,5 +1,8 @@
+用grep查找关键字（错误输出重定向到标准输出）
+sudo ./beef 2>&1|grep not
+
 grep+sed查找并替换指定字符串
-sed -i s/"verbose errors"/"详细错误信息"/g `grep -rl "verbose errors"`
+sed -i s/"<allow_inactive>auth_admin<\/allow_inactive>"/"<allow_inactive>yes<\/allow_inactive>"/g `grep -rl "<allow_inactive>auth_admin</allow_inactive>"`
 ----------------------------------------------------------
 https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000
 ---------------------------------------------------

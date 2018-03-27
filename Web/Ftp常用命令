@@ -1,0 +1,355 @@
+Ftp常用命令
+
+
+1.FTP> ! 从 ftp子系统退出到外壳。
+
+2.FTP> ? 显示 ftp命令说明。? 与 help相同。
+
+格式：? [command]
+
+说明：[command]指定需要帮助的命令名称。如果没有指定 command，ftp将显示全部命令的列表。
+
+
+
+3.FTP> append 使用当前文件类型设置将本地文件附加到远程计算机上的文件。
+
+格式：append local-file [remote-file]
+
+说明：local-file 指定要添加的本地文件。
+
+remote-file 指定要添加 local-file的远程计算机上的文件。如果省略了 remote-file，本地文件名将被用作远程文件名。
+
+
+
+4.FTP> ascii 将文件传送类型设置为默认的 ASCII。
+
+说明：FTP 支持两种文件传送类型，ASCII码和二进制图像。在传送文本文件时应该使用ASCII。
+
+
+
+5.FTP> bell 切换响铃以在每个文件传送命令完成后响铃。默认情况下，铃声是关闭的。
+
+
+
+6.FTP> binary（或bi）将文件传送类型设置为二进制。
+
+
+
+7.FTP> bye（或by）结束与远程计算机的 FTP会话并退出 ftp。
+
+
+
+8.FTP> cd 更改远程计算机上的工作目录。
+
+格式：cd remote-directory
+
+说明：remote-directory 指定要更改的远程计算机上的目录。
+
+
+
+9.FTP> close 结束与远程服务器的 FTP会话并返回命令解释程序。
+
+FTP> debug 切换调试。当调试打开时，发送到远程计算机的每个命令都打印，前面是字符串“>”。默认情况下，调试是关闭的。
+
+
+
+10.FTP> delete 删除远程计算机上的文件。
+
+格式：delete remote-file
+
+说明：remote-file 指定要删除的文件。
+
+
+
+11.FTP> dir 显示远程目录文件和子目录列表。
+
+格式：dir [remote-directory] [local-file]
+
+说明：remote-directory 指定要查看其列表的目录。如果没有指定目录，将使用远程计算机中的当前工作目录。Local-file指定要存储列表的本地文件。如果没有指定，输出将显示在屏幕上。
+
+
+
+12.FTP> disconnect从远程计算机断开，保留 ftp 提示。
+
+
+
+13.FTP> get 使用当前文件转换类型将远程文件复制到本地计算机。
+
+格式：get remote-file [local-file]
+
+说明：remote-file 指定要复制的远程文件。
+
+Local-file 指定要在本地计算机上使用的名称。如果没有指定，文件将命名为 remote-file。
+
+
+
+14.FTP >glob 切换文件名组合。组合允许在内部文件或路径名中使用通配符（*和?）。默认情况下，组合是打开的。
+
+
+
+15.FTP >hash切换已传输的每个数据块的数字签名 (#) 打印。数据块的大小是2048字节。默认情况下，散列符号打印是关闭的。
+
+
+
+16.FTP >help显示 ftp 命令说明。
+
+格式：help [command]
+
+说明：command 指定需要有关说明的命令的名称。如果没有指定 command，ftp将显示全部命令的列表。
+
+
+
+17.FTP >lcd 更改本地计算机上的工作目录。默认情况下，工作目录是启动 ftp的目录。
+
+格式：lcd [directory]
+
+说明：directory 指定要更改的本地计算机上的目录。如果没有指定directory，将显示本地计算机中当前的工作目录。
+
+
+
+18.FTP >literal 将参数逐字发送到远程 FTP服务器。将返回单个的 FTP 回复代码。
+
+格式：literal argument [ ...]
+
+说明：argument 指定要发送到 FTP服务器的参数。
+
+
+
+19.FTP >ls 显示远程目录文件和子目录的缩写列表。
+
+格式：ls [remote-directory] [local-file]
+
+说明：remote-directory 指定要查看其列表的目录。如果没有指定目录，将使用远程计算机中的当前工作目录。 local-file指定要存储列表的本地文件。如果没有指定，输出将显示在屏幕上。
+
+
+
+20.FTP >mdelete 删除远程计算机上的文件。
+
+格式：mdelete remote-files [ ...]
+
+说明：remote-files 指定要删除的远程文件。
+
+
+
+21.FTP >mdir显示远程目录文件和子目录列表。可以使用 mdir 指定多个文件。
+
+格式：mdir remote-files [ ...] local-file
+
+说明：remote-files 指定要查看列表的目录。必须指定 remote-files。请键入 -使用远程计算机上的当前工作目录。
+
+local-file 指定要还原列表的本地文件。请键入-在屏幕上显示列表。
+
+
+
+22.FTP >mget 使用当前文件传送类型将远程文件复制到本地计算机。
+
+格式：mget remote-files [ ...]
+
+说明：remote-files 指定要复制到本地计算机的远程文件。
+
+
+
+23.FTP >mkdir 创建远程目录。
+
+格式：mkdir directory
+
+说明：directory 指定新的远程目录的名称。
+
+
+
+24.FTP >mls 显示远程目录文件和子目录的缩写列表。
+
+格式：mls remote-files [ ...] local-file
+
+说明：remote-files 指定要查看列表的文件。必须指定 remote-files；
+
+请键入- 使用远程计算机上的当前工作目录。
+
+local-file 指定要存储列表的本地文件。请键入 -以在屏幕上显示列表。
+
+
+
+25.FTP >mput 使用当前文件传送类型将本地文件复制到远程计算机上。
+
+格式：mput local-files [ ...]
+
+说明：local-files 指定要复制到远程计算机的本地文件
+
+
+
+26.FTP >open 与指定的 FTP服务器连接。
+
+格式：open computer [port]
+
+说明：computer 指定要连接的远程计算机。可以通过 IP地址或计算机名称指定计算机（DNS 或主机文件必须可用）。如果自动登录打开（默认），ftp还将尝试自动将用户登录到 FTP 服务器port指定用来联系 FTP 服务器的端口号。
+
+
+
+27.FTP >prompt 切换提示。如果关闭提示时 mget及 mput 传送所有文件，Ftp在多文件传送过程中将提示允许您有选择地检索或存储文件。默认情况下，提示是
+
+打开的。
+
+
+
+28.FTP >put 使用当前文件传送类型将本地文件复制到远程计算机上。
+
+格式：put local-file [remote-file]
+
+说明：local-file 指定要复制的本地文件。
+
+remote-file 指定要在远程计算机上使用的名称。如果没有指定，文件将命名为 local-file。
+
+
+
+29.FTP >pwd 显示远程计算机上的当前目录。
+
+
+
+30.FTP >quit 结束与远程计算机的 FTP 会话并退出 ftp。
+
+
+
+31.FTP >quote 将参数逐字发送到远程 FTP服务器。将返回单个的 FTP 回复代码。
+
+Quote 与 literal相同。
+
+格式：quote argument [ ...]
+
+说明：argument 指定要发送到 FTP服务器的参数。
+
+
+
+32.FTP >recv使用当前文件传送类型将远程文件复制到本地计算机。Recv 与 get相同。
+
+格式：recv remote-file [local-file]
+
+说明：remote-file 指定要复制的远程文件。
+
+local-file 指定要在本地计算机上使用的名称。如果没有指定，文件将命名为 remote-file。
+
+
+
+33.FTP >remotehelp显示远程命令帮助。
+
+格式：remotehelp [command]
+
+说明：command 指定需要帮助的命令的名称。如果没有指定 command，ftp将显示全部远程命令的列表。
+
+
+
+34.FTP >rename重命名远程文件。
+
+格式：rename filename newfilename
+
+说明：filename 指定要重命名的文件。 newfilename指定新的文件名。
+
+
+
+35.FTP >rmdir 删除远程目录。
+
+格式：rmdir directory
+
+说明：directory 指定要删除的远程目录的名称。
+
+
+
+36.FTP >send 使用当前文件传送类型将本地文件复制到远程计算机上。Send与put 相同。
+
+格式：send local-file [remote-file]
+
+说明：local-file 指定要复制的本地文件。 remote-file指定要在远程计算机上使用的名称。如果没有指定，文件将命名为 local-file。
+
+
+
+37.FTP >status 显示 FTP 连接和切换的当前状态。
+
+
+
+38.FTP >trace 切换数据包跟踪。Trace在运行 ftp 命令时显示每个数据包的路由。
+
+
+
+39.FTP >type 设置或显示文件传送类型。
+
+格式：type [type-name]
+
+说明：type-name 指定文件传送类型。默认设置为 ascii。如果没有指定type-name，将显示当前的类型。
+
+
+
+40.FTP >user 指定远程计算机的用户。
+
+格式：user username [password] [account]
+
+说明：user-name 指定登录到远程计算机所使用的用户名。password指定 user-name 的密码。如果没有指定，但必须指定，ftp会提示输入密码。
+
+account 指定登录到远程计算机所使用的帐户。如果没有指定account，但是需要指定，ftp会提示您输入帐户。
+
+
+
+41.FTP >verbose 切换 verbose模式。如果打开，将显示所有 ftp 响应。在文件传送完成后，将同时显示与传送效率有关的统计信息。默认情况下，verbose是打开的。
+
+ 
+
+附表：
+
+ascii
+为文本文件设置传输方式为ascii
+bell
+命令完成时响铃
+binary 
+设置传输方式为二进制，这是缺省设置
+bye 
+终止ftp会话，并退出
+cd dir_name
+切换远程主机上目录
+cdup
+切换远程主机上目录至上一级目录
+close
+终止到远程主机的ftp会话
+delete file_name
+删除远程主机中的文件
+dir 
+显示远程主机上目录列表
+get file_name
+下载一个文件
+hash 
+每传输一定数量数据打印`#'
+lcd dir_name
+切换本地工作目录
+ls 
+列表远程主机目录中的信息
+mdelete file_names
+删除多个文件
+mget file_names
+下载多个文件
+mkdir dir_name
+在远程主机上创建目录
+mput file_names
+上传多个文件
+open site_name
+连接到远程tftp
+prompt
+设置多个文件传输时的交互提示
+put file_name
+上传一个文件
+pwd
+显示远程主机当前工作目录
+quit 
+终止ftp会话并退出
+rename old_name new_name
+重命名文件
+rmdir dir_name
+删除远程主机上的某个目录
+size file_name
+显示远程主机上某个文件的大小
+status 
+显示当前状态
+system
+显示远程主机操作系统类型
+tenex 
+将文件传输类型设置为tenex机所需的类型
+user
+向远程主机发送用户信息(登录信息)
+verbose 
+开关verbose方式，远程主机所有响应都显示给客户
