@@ -612,7 +612,7 @@ Usage: python F-Scrack.py -h 192.168.1 [-p 21,80,3306] [-m 50] [-t 10] [-d pass.
             t_join(m_count)
     except Exception, e:
         print msg
-t msg
+
     try:
         options, args = getopt.getopt(sys.argv[1:], "h:p:m:t:d:n")
         ip = ''

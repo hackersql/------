@@ -1,0 +1,6 @@
+AutoSizeMode属性
+指定控件是否自动调整自身的大少以适应其内容的大小。
+它有两个值，一个是TRUE，另一个是FALSE；
+它也有两个值：GrowOnly 和GrowAndShrik
+1.如果设为GrowOnly，那么生成的窗体可以用鼠标调节大少
+2.而设为GrowAndShrik，则生成的窗体不可以用鼠标调节大少
