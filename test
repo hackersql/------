@@ -1,25 +1,14 @@
-POST /web-serveur/ch33/ HTTP/1.1
-Host: challenge01.root-me.org
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0
+POST /xaybqk/ybqkVacationStatisticsAction.do HTTP/1.1
+Host: 120.42.37.93:9089
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-Accept-Language: zh,en-US;q=0.7,en;q=0.3
-Referer: http://challenge01.root-me.org/web-serveur/ch33/
+Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate
+Referer: http://120.42.37.93:9089/xaybqk/ybqkVacationStatisticsAction.do?act=forCountJb
+Cookie: SUV=1523869465062756; SMAPUVID=1523869465062756; JSESSIONID=508A8E1E654E7CE41E012AFB79D136D7
 Connection: close
 Upgrade-Insecure-Requests: 1
 Content-Type: application/x-www-form-urlencoded
-Content-Length: 27
+Content-Length: 329
 
-username=&password=
-
-POST /web-serveur/ch33/ HTTP/1.1
-Host: challenge01.root-me.org
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-Accept-Language: zh,en-US;q=0.7,en;q=0.3
-Referer: http://challenge01.root-me.org/web-serveur/ch33/
-Connection: close
-Upgrade-Insecure-Requests: 1
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 27
-
-username=root&password=toor
+act=countJb&qvo.levelss=1&qvo.makeOutName=%E7%AE%A1%E7%90%86%E5%91%98&qvo.userId=40288a94298b7a1101298bd3ec249876&qvo.rank=1&qvo.sectionAddrCode=&qvo.schoolId=&tx=&qvo.gradName=&vo.ybqkCdClassDept.id=&qvo.strDate=&qvo.strDateto=&qvo.strFbDate=&qvo.endFbDate=&qvo.sex=&qvo.isBoard=&qvo.admissionTime=&qvo.admissionTime=&qvo.icdss=

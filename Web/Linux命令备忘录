@@ -3,6 +3,9 @@ Linux 命令备忘录
 Linux网络命令
 
 命令	  描述
+du -sh 查看文件夹大小
+ls --full-time 列出完整的日期与时间
+
 netstat -tulpn
 Show Linux network ports with process ID's (PIDs)
 watch ss -stplu

