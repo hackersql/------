@@ -1,3 +1,6 @@
+指定安装源
+pip install scrapy -i https://pypi.tuna.tsinghua.edu.cn/simple
+
 用grep查找关键字（错误输出重定向到标准输出）
 sudo ./beef 2>&1|grep not
 

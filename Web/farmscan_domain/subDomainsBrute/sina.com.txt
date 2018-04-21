@@ -1,0 +1,54 @@
+members.sina.com              	66.102.251.33
+home.sina.com                 	10.10.10.10
+www.sina.com                  	66.102.251.33
+u.sina.com                    	202.108.3.151
+news.sina.com                 	115.127.249.170, 115.127.249.34
+bip.sina.com                  	10.19.0.93
+games.sina.com                	115.182.85.166
+corp.sina.com                 	123.126.53.69
+my.sina.com                   	71.5.7.171
+search.sina.com               	71.5.7.11
+support.sina.com              	66.102.251.33
+pay.sina.com                  	123.125.29.138
+forum.sina.com                	66.102.251.33
+club.sina.com                 	71.5.7.191
+pp.sina.com                   	71.5.7.99
+people.sina.com               	71.5.7.171
+us.cdn.sina.com               	115.127.249.162, 115.127.249.66
+resume.sina.com               	71.5.7.159
+spit.sina.com                 	71.5.7.171
+cn.sina.com                   	209.66.98.24
+music.sina.com                	123.126.56.253
+bizkit-vip.sina.com           	71.5.7.159
+forums.sina.com               	66.102.251.33
+game.sina.com                 	115.182.85.166
+us.sina.com                   	66.102.251.33
+ww7.sina.com                  	71.5.7.191
+mail.sina.com                 	123.125.105.138
+content.sina.com              	71.5.7.194
+blog.sina.com                 	202.108.33.48
+ww3.sina.com                  	71.5.7.171
+v.sina.com                    	218.213.85.197
+ns1.sina.com                  	114.134.80.144
+calendar.sina.com             	71.5.7.99
+cs.sina.com                   	71.5.7.171
+radio.sina.com                	202.108.37.148, 202.108.37.149, 202.108.37.150
+bbs.sina.com                  	10.10.10.10
+woman.sina.com                	71.5.7.171
+vip.sina.com                  	123.125.105.113
+auto.sina.com                 	115.238.190.238, 27.221.16.252
+sc.sina.com                   	123.126.157.222
+go.sina.com                   	71.5.7.191
+wap.sina.com                  	218.206.86.237
+ww8.sina.com                  	71.5.7.191
+video.sina.com                	10.10.10.10
+deals.sina.com                	54.215.9.31
+m.sina.com                    	218.104.80.165
+stats.sina.com                	71.5.7.51
+med.sina.com                  	121.29.8.175
+monitor.sina.com              	10.1.1.50
+mustang.sina.com              	71.5.7.164
+darklighter.sina.com          	71.5.7.51
+realty.sina.com               	71.5.7.133
+sf.sina.com                   	71.5.7.102
+ui.sina.com                   	115.127.226.30, 115.127.226.94

@@ -1,0 +1,7 @@
+www.bankofnx.com.cn           	119.60.7.70
+www.sdns.bankofnx.com.cn      	119.60.7.70
+e.bankofnx.com.cn             	119.60.7.69
+e.sdns.bankofnx.com.cn        	119.60.7.69
+ns1.bankofnx.com.cn           	218.203.108.181
+m.bankofnx.com.cn             	119.60.7.68
+m.sdns.bankofnx.com.cn        	119.60.7.68
