@@ -1,0 +1,18 @@
+﻿  crypt.cpp
+  ntdsparser.cpp
+  QuarksPwDump.cpp
+  samparser.cpp
+e:\kodachi\------\web\windows_security\windows密码抓取方式总结\quarkspwdump-master\src\samparser.cpp(414): warning C4996: 'GetVersionExA': 被声明为已否决
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\um\sysinfoapi.h(436): note: 参见“GetVersionExA”的声明
+  utils.cpp
+  正在生成代码...
+libeay32MT.lib(rsa_sign.obj) : error LNK2019: 无法解析的外部符号 ___iob_func，该符号在函数 _int_rsa_verify 中被引用
+libeay32MT.lib(cryptlib.obj) : error LNK2001: 无法解析的外部符号 ___iob_func
+libeay32MT.lib(pem_lib.obj) : error LNK2001: 无法解析的外部符号 ___iob_func
+libeay32MT.lib(ui_openssl.obj) : error LNK2001: 无法解析的外部符号 ___iob_func
+libeay32MT.lib(cryptlib.obj) : error LNK2019: 无法解析的外部符号 _sscanf，该符号在函数 _OPENSSL_cpuid_setup 中被引用
+libeay32MT.lib(v3_utl.obj) : error LNK2001: 无法解析的外部符号 _sscanf
+libeay32MT.lib(cryptlib.obj) : error LNK2019: 无法解析的外部符号 __vsnprintf，该符号在函数 _OPENSSL_showfatal 中被引用
+libeay32MT.lib(cryptlib.obj) : error LNK2019: 无法解析的外部符号 _vfprintf，该符号在函数 _OPENSSL_showfatal 中被引用
+libeay32MT.lib(dso_win32.obj) : error LNK2019: 无法解析的外部符号 _sprintf，该符号在函数 _win32_name_converter 中被引用
+E:\kodachi\------\Web\Windows_security\Windows密码抓取方式总结\quarkspwdump-master\Debug\QuarksPwDump.exe : fatal error LNK1120: 5 个无法解析的外部命令

@@ -5,9 +5,9 @@ rm -rf domain
 rm -rf *.txt
 echo "pls input domain name,like:sina.com"
 read domain
-cd ./subDomainsBrute&&python subDomainsBrute.py $domain -o ../1$domain.txt 
-cd ../Sublist3r&&python sublist3r.py -d $domain -o ../2$domain.txt
-cd ../teemo&&python teemo.py -d $domain -o ../../3$domain.txt
+cd ./subDomainsBrute&&python2 subDomainsBrute.py $domain -o ../1$domain.txt 
+cd ../Sublist3r&&python2 sublist3r.py -d $domain -o ../2$domain.txt
+cd ../teemo&&python2 teemo.py -d $domain -o ../../3$domain.txt
 cd ..
 cat 3*.txt |grep @ >>mail
 cat 1*.txt |awk '{print($1)}'>>a.txt
