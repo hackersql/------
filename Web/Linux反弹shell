@@ -10,3 +10,6 @@ nc -lvvp 6666
 
 浅析重定向与反弹Shell命令
 http://www.freebuf.com/articles/system/153986.html
+
+ngrok一款内网穿透+记录HTTP请求的神器(支持HTTPS)
+http://www.freebuf.com/sectool/111956.html

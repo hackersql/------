@@ -1,0 +1,23 @@
+目标：查看http://challenge01.root-me.org/web-serveur/ch51/目录下的index.php文件中的源码
+
+我们上传文件的路径：
+http://challenge01.root-me.org/web-serveur/ch51/tmp/upload/5ae2c5af4c3ba0.86002820/test.txt
+
+方法：利用符号链接方法将test.txt链接到父目录下的index.php，这样我们上传的test.txt文件中就会包含index.php中的内容。
+
+首先在本地创建好带相对路径的符号链接
+ln -snf ../../../index.php test.txt
+
+-d或-F或——directory：建立目录的硬连接；
+-f或——force：强行建立文件或目录的连接，不论文件或目录是否存在；
+-n或--no-dereference：把符号连接的目的目录视为一般文件；
+-s或——symbolic：对源文件建立符号连接，而非硬连接；
+指定连接的源文件。如果使用-s选项创建符号连接，则“源文件”可以是文件或者目录。创建硬连接时，则“源文件”参数只能是文件；
+
+$ ls -l test.txt
+lrwxrwxrwx 1 Administrator None 18 四月 27 14:38 
+test.txt -> ../../../index.php
+然后我们通过-symlinks参数保留符号链接来对其进行压缩（doc man zip的第28页）
+zip --symlinks test.zip test.txt
+
+--symlinks对于UNIX和VMS (V8.3和以后)，将符号链接存储在zip归档文件中，而不是压缩和存储链接所引用的文件。这可以避免在归档中包含文件的多个副本，因为zip递归目录树并通过链接直接访问文件。

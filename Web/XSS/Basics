@@ -1,0 +1,108 @@
+Basics
+
+字符实体(character entities)
+字符实体是一个转义序列，它定义了一般无法在文本内容中输入的单个字符或符号。一个字符实体以一个&符号开始，后面跟着一个预定义的实体的名称，或是一个#符号以及字符的十进制数字。
+
+HTML字符实体(HTML character entities)
+在HTML中，某些字符是预留的。例如在HTML中不能使用“<”或“>”，这是因为浏览器可能误认为它们是标签的开始或结束。如果希望正确地显示预留字符，就需要在HTML中使用对应的字符实体。一个HTML字符实体描述如下：
+
+字符显示  描述    实体名称    实体编号
+   <	 小于号	   &lt		  &#60;
+
+需要注意的是，某些字符没有实体名称，但可以有实体编号。
+
+字符引用（character references）
+字符引用包括“字符值引用”和“字符实体引用”。在上述HTML例子中，'<'对应的字符值引用为'&#60;'，对应的字符实体引用为‘&lt;’。字符实体引用也被叫做“实体引用”或“实体”。）
+
+1. <a href="%6a%61%76%61%73%63%72%69%70%74:%61%6c%65%72%74%28%31%29"></a>
+URL encoded "javascript:alert(1)"
+
+答案：JavaScript不会执行。
+
+
+2. <a
+href="&#x6a;&#x61;&#x76;&#x61;&#x73;&#x63;&#x72;&#x69;&#x70;&#x74;:%61
+%6c%65%72%74%28%32%29">
+Character entity encoded "javascript" and URL encoded "alert(2)"
+
+答案：JavaScript将执行。
+
+
+3. <a href="javascript%3aalert(3)"></a>
+URL encoded ":"
+
+答案：JavaScript不会执行。
+
+
+4. <div>&#60;img src=x onerror=alert(4)&#62;</div>
+Character entity encoded < and >
+
+答案：JavaScript不会执行。
+
+
+5. <textarea>&#60;script&#62;alert(5)&#60;/script&#62;</textarea>
+Character entity encoded < and >
+
+答案：JavaScript不会执行。AND the character entities will NOT
+be decoded either
+
+
+6. <textarea><script>alert(6)</script></textarea>
+
+答案：JavaScript不会执行。
+
+
+Advanced
+7. <button onclick="confirm('7&#39;);">Button</button>
+Character entity encoded '
+
+答案：JavaScript将执行。
+
+
+8. <button onclick="confirm('8\u0027);">Button</button>
+Unicode escape sequence encoded '
+
+答案：JavaScript不会执行。
+
+
+9. <script>&#97;&#108;&#101;&#114;&#116&#40;&#57;&#41;&#59</script>
+Character entity encoded alert(9);
+
+答案：JavaScript不会执行。
+
+
+10. <script>\u0061\u006c\u0065\u0072\u0074(10);</script>
+Unicode Escape sequence encoded alert
+
+答案：JavaScript将执行。
+
+
+11. <script>\u0061\u006c\u0065\u0072\u0074\u0028\u0031\u0031\u0029</script>
+Unicode Escape sequence encoded alert(11)
+
+答案：JavaScript不会执行。
+
+
+12. <script>\u0061\u006c\u0065\u0072\u0074(\u0031\u0032)</script>
+Unicode Escape sequence encoded alert and 12 
+
+答案：JavaScript不会执行。
+
+
+13. <script>alert('13\u0027)</script>
+Unicode escape sequence encoded '
+
+答案：JavaScript不会执行。
+
+
+14. <script>alert('14\u000a')</script>
+Unicode escape sequence encoded line feed.
+
+答案：JavaScript将执行。
+
+
+Bonus
+16. <a
+	  href="&#x6a;&#x61;&#x76;&#x61;&#x73;&#x63;&#x72;&#x69;&#x70;&#x74;&#x3a;&#x25;&#x35;&#x63;&#x25;&#x37;&#x35;&#x25;&#x33;&#x30;&#x25;&#x33;&#x30;&#x25;&#x33;&#x36;&#x25;&#x33;&#x31;&#x25;&#x35;&#x63;&#x25;&#x37;&#x35;&#x25;&#x33;&#x30;&#x25;&#x33;&#x30;&#x25;&#x33;&#x36;&#x25;&#x36;&#x33;&#x25;&#x35;&#x63;&#x25;&#x37;&#x35;&#x25;&#x33;&#x30;&#x25;&#x33;&#x30;&#x25;&#x33;&#x36;&#x25;&#x33;&#x35;&#x25;&#x35;&#x63;&#x25;&#x37;&#x35;&#x25;&#x33;&#x30;&#x25;&#x33;&#x30;&#x25;&#x33;&#x37;&#x25;&#x33;&#x32;&#x25;&#x35;&#x63;&#x25;&#x37;&#x35;&#x25;&#x33;&#x30;&#x25;&#x33;&#x30;&#x25;&#x33;&#x37;&#x25;&#x33;&#x34;&#x28;&#x31;&#x35;&#x29;"></a>
+
+答案：JavaScript将执行。

