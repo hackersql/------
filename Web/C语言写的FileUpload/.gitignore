@@ -1,9 +1,0 @@
-*.DS_Store
-*.swp
-server/server
-client/upload
-client/sample/
-client/upload.dSYM/
-server/cache/
-server/uploading
-server/finish/

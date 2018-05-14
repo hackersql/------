@@ -1,0 +1,62 @@
+MSF Console 中连接数据库
+如果数据库正常，那么连接数据库只需要找到数据库用户和口令，方法如下： 打开：properties.ini 文件查看用户名密码
+db_connect msf3:b9b471af@localhost:7337/msf3
+
+数据库配置信息
+E:\Windows_Tools\metasploit\properties.ini
+-------------------------------------------
+[General]
+installdir=E:\Windows_Tools\metasploit
+base_stack_name=Metasploit
+base_stack_version=4.14.2
+[Postgres]
+postgres_port=7337
+postgres_root_directory=E:\Windows_Tools\metasploit/postgresql
+postgres_binary_directory=E:\Windows_Tools\metasploit/postgresql/bin
+postgres_unique_service_name=metasploitPostgreSQL
+postgres_root_password=8155f0d2
+rapid7_database_user=msf3
+rapid7_database_password=b9b471af
+[Ruby]
+ruby_root_directory=E:\Windows_Tools\metasploit/ruby
+[NginX]
+nginx_listen_address=0.0.0.0
+nginx_ssl_port=3790
+nginx_ssl_name=localhost
+nginx_ssl_days=3650
+trust_ssl=1
+[ProSvc]
+prosvc_unique_service_name=metasploitProSvc
+[Thin]
+thin_port=3001
+thin_unique_service_name=metasploitThin
+[Worker]
+worker_unique_service_name=metasploitWorker
+-------------------------------------------
+复制
+E:\Windows_Tools\metasploit\apps\pro\ui\config\database.yml
+中的内容到
+C:\Users\Administrator\.msf4\database.yml
+-------------------------------------------
+development:
+  adapter: "postgresql"
+  database: "msf3"
+  username: "msf3"
+  password: "b9b471af"
+  port: 7337
+  host: "localhost"
+  pool: 256
+  timeout: 5
+
+production:
+  adapter: "postgresql"
+  database: "msf3"
+  username: "msf3"
+  password: "b9b471af"
+  port: 7337
+  host: "localhost"
+  pool: 256
+  timeout: 5
+-------------------------------------------
+
+

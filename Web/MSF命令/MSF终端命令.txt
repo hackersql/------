@@ -147,7 +147,6 @@ db_connect name
 
 创建并连接一个数据库驱动攻击所要使用的数据库（EG：db_connect user:passwd@ip/sqlname）。
 
-
 db_namp
 
 利用nmap并把扫描数据存储到数据库中（支持普通的nmap语句，EG：-sT -v -P0）。

