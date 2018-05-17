@@ -1,0 +1,14 @@
+https://www.root-me.org/en/Challenges/Cryptanalysis/Hash-Message-Digest-5
+Hash - Message Digest 5
+5 Points  
+Bob found that Ronald Rivest is a terrific cryptanalyst
+
+[SOAL]
+7ecc19e1a0be36ba2c6f05d06b5d3058
+
+[POC]
+https://hashkiller.co.uk/md5-decrypter.aspx
+
+7ecc19e1a0be36ba2c6f05d06b5d3058 MD5 : weak
+
+#Flag = weak

@@ -1,0 +1,23 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch4/
+
+	Challenge's Name : HTTP directory indexing
+	
+	Solusi : view Source 
+	
+	Result : <!-- include("admin/pass.html") -->
+  
+	akses url : http://challenge01.root-me.org/web-serveur/ch4/admin/pass.html
+	
+	J'ai bien l'impression que tu t'es fait avoir / Got rick rolled ? ;)
+	T'inquiète tu n'es pas le dernier / You're not the last :p
+	Cherche BIEN / Just search
+	
+	Yang artinya disuruh mencari lagi Flag / passwordnya
+	
+	akses kembali http://challenge01.root-me.org/web-serveur/ch4/admin/
+	
+	akan menemukan file backup/admin.txt
+	
+	http://challenge01.root-me.org/web-serveur/ch4/admin/backup/admin.txt
+	
+	Flag : LINUX

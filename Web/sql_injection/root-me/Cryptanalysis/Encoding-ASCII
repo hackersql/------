@@ -1,0 +1,20 @@
+https://www.root-me.org/en/Challenges/Cryptanalysis/Encoding-ASCII
+Encoding - ASCII
+5 Points
+
+[SOAL]
+http://challenge01.root-me.org/cryptanalyse/ch8/ch8.txt
+
+4C6520666C6167206465206365206368616C6C656E6765206573743A203261633337363438316165353436636436383964356239313237356433323465
+
+[POC]
+root@kali:~# python
+Python 2.7.12+ (default, Sep  1 2016, 20:27:38)
+[GCC 6.2.0 20160927] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+
+>>> "4C6520666C6167206465206365206368616C6C656E6765206573743A203261633337363438316165353436636436383964356239313237356433323465".decode("hex")
+'Le flag de ce challenge est: 2ac376481ae546cd689d5b91275d324e'
+>>>
+
+#Flag = 2ac376481ae546cd689d5b91275d324e

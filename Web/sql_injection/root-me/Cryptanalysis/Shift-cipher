@@ -1,0 +1,24 @@
+https://www.root-me.org/en/Challenges/Cryptanalysis/Shift-cipher
+
+10 Points  
+Recover the password
+
+[SOAL]
+http://challenge01.root-me.org/cryptanalyse/ch7/ch7.bin
+
+[POC]
+
+Python
+
+[..]
+text = open('ch7.bin','rb').read()
+
+i = -100
+while i < 100:
+    print(''.join([chr(ord(c) - i) for c in text]))
+    i += 1
+[..]
+
+Bravo! Tu peux valider avec le pass Yolaihu
+
+# Flag = Yolaihu

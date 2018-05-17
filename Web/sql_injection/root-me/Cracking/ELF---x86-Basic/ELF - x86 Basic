@@ -1,0 +1,124 @@
+soal:
+https://www.root-me.org/en/Challenges/Cracking/ELF-Basic
+http://challenge01.root-me.org/cracking/ch2/ch2.zip
+
+root@kali:~/ctf# gdb ./ch2.bin
+
+gdb-peda$ disass main
+Dump of assembler code for function main:
+   0x08048309 <+0>: lea    ecx,[esp+0x4]
+   0x0804830d <+4>: and    esp,0xfffffff0
+   0x08048310 <+7>: push   DWORD PTR [ecx-0x4]
+   0x08048313 <+10>: push   ebp
+   0x08048314 <+11>: mov    ebp,esp
+   0x08048316 <+13>: push   ecx
+   0x08048317 <+14>: sub    esp,0x24
+   0x0804831a <+17>: mov    DWORD PTR [ebp-0xc],0x80a6b19
+   0x08048321 <+24>: mov    DWORD PTR [ebp-0x10],0x80a6b1e
+   0x08048328 <+31>: mov    DWORD PTR [esp],0x80a6b2c
+   0x0804832f <+38>: call   0x8048de0 <puts>
+   0x08048334 <+43>: mov    DWORD PTR [esp],0x80a6b6c
+   0x0804833b <+50>: call   0x8048de0 <puts>
+   0x08048340 <+55>: mov    DWORD PTR [esp],0x80a6bac
+   0x08048347 <+62>: call   0x8048de0 <puts>
+   0x0804834c <+67>: mov    DWORD PTR [esp],0x80a6bea
+   0x08048353 <+74>: call   0x8048db0 <printf>
+   0x08048358 <+79>: mov    eax,DWORD PTR [ebp-0x8]
+   0x0804835b <+82>: mov    DWORD PTR [esp],eax
+   0x0804835e <+85>: call   0x804826a <getString>
+   0x08048363 <+90>: mov    DWORD PTR [ebp-0x8],eax
+   0x08048366 <+93>: mov    eax,DWORD PTR [ebp-0xc]
+   0x08048369 <+96>: mov    DWORD PTR [esp+0x4],eax
+   0x0804836d <+100>: mov    eax,DWORD PTR [ebp-0x8]
+   0x08048370 <+103>: mov    DWORD PTR [esp],eax
+   0x08048373 <+106>: call   0x80502f0 <strcmp>
+   0x08048378 <+111>: test   eax,eax
+   0x0804837a <+113>: jne    0x80483d0 <main+199>
+   0x0804837c <+115>: mov    DWORD PTR [esp],0x80a6bf5
+   0x08048383 <+122>: call   0x8048db0 <printf>
+   0x08048388 <+127>: mov    eax,DWORD PTR [ebp-0x8]
+   0x0804838b <+130>: mov    DWORD PTR [esp],eax
+   0x0804838e <+133>: call   0x804826a <getString>
+   0x08048393 <+138>: mov    DWORD PTR [ebp-0x8],eax
+   0x08048396 <+141>: mov    eax,DWORD PTR [ebp-0x10]
+   0x08048399 <+144>: mov    DWORD PTR [esp+0x4],eax
+   0x0804839d <+148>: mov    eax,DWORD PTR [ebp-0x8]
+   0x080483a0 <+151>: mov    DWORD PTR [esp],eax
+   0x080483a3 <+154>: call   0x80502f0 <strcmp>
+   0x080483a8 <+159>: test   eax,eax
+   0x080483aa <+161>: jne    0x80483c2 <main+185>
+   0x080483ac <+163>: mov    DWORD PTR [esp+0x4],0x80a6c00
+   0x080483b4 <+171>: mov    DWORD PTR [esp],0x80a6c0c
+   0x080483bb <+178>: call   0x8048db0 <printf>
+   0x080483c0 <+183>: jmp    0x80483dc <main+211>
+   0x080483c2 <+185>: mov    DWORD PTR [esp],0x80a6c52
+   0x080483c9 <+192>: call   0x8048de0 <puts>
+   0x080483ce <+197>: jmp    0x80483dc <main+211>
+   0x080483d0 <+199>: mov    DWORD PTR [esp],0x80a6c5f
+   0x080483d7 <+206>: call   0x8048de0 <puts>
+   0x080483dc <+211>: mov    eax,0x0
+   0x080483e1 <+216>: add    esp,0x24
+   0x080483e4 <+219>: pop    ecx
+   0x080483e5 <+220>: pop    ebp
+   0x080483e6 <+221>: lea    esp,[ecx-0x4]
+   0x080483e9 <+224>: ret
+End of assembler dump.
+
+-----------------------------------------------------------------
+   0x08048373 <+106>: call   0x80502f0 <strcmp>
+   0x08048378 <+111>: test   eax,eax 			<<=== breakpoin 1
+   
+   0x080483a3 <+154>: call   0x80502f0 <strcmp>
+   0x080483a8 <+159>: test   eax,eax			<<=== breakpoin 2
+-----------------------------------------------------------------
+   
+gdb-peda$ break *0x08048378
+Breakpoint 1 at 0x8048378
+gdb-peda$ break *0x080483a8
+Breakpoint 2 at 0x80483a8
+
+gdb-peda$ run
+Starting program: /root/ctf/ch2.bin
+############################################################
+##        Bienvennue dans ce challenge de cracking        ##
+############################################################
+
+username: kampret
+
+[-------------------------------------code-------------------------------------]
+   0x804836d <main+100>: mov    eax,DWORD PTR [ebp-0x8]
+   0x8048370 <main+103>: mov    DWORD PTR [esp],eax
+   0x8048373 <main+106>: call   0x80502f0 <strcmp>
+=> 0x8048378 <main+111>: test   eax,eax
+   0x804837a <main+113>: jne    0x80483d0 <main+199>
+   0x804837c <main+115>: mov    DWORD PTR [esp],0x80a6bf5
+   0x8048383 <main+122>: call   0x8048db0 <printf>
+   0x8048388 <main+127>: mov    eax,DWORD PTR [ebp-0x8]
+[------------------------------------stack-------------------------------------]
+Breakpoint 1, 0x08048378 in main ()
+
+gdb-peda$ set $eax=0
+gdb-peda$ c
+Continuing.
+password: kampret
+
+[-------------------------------------code-------------------------------------]
+   0x804839d <main+148>: mov    eax,DWORD PTR [ebp-0x8]
+   0x80483a0 <main+151>: mov    DWORD PTR [esp],eax
+   0x80483a3 <main+154>: call   0x80502f0 <strcmp>
+=> 0x80483a8 <main+159>: test   eax,eax
+   0x80483aa <main+161>: jne    0x80483c2 <main+185>
+   0x80483ac <main+163>: mov    DWORD PTR [esp+0x4],0x80a6c00
+   0x80483b4 <main+171>: mov    DWORD PTR [esp],0x80a6c0c
+   0x80483bb <main+178>: call   0x8048db0 <printf>
+[------------------------------------stack-------------------------------------]
+Breakpoint 2, 0x080483a8 in main ()
+
+gdb-peda$ set $eax=0
+gdb-peda$ c
+Continuing.
+Bien joue, vous pouvez valider l'epreuve avec le mot de passe : 987654321 !
+[Inferior 1 (process 7503) exited normally]
+Warning: not running or target is remote
+
+#Flag = 987654321

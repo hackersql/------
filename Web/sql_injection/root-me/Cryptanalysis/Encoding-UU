@@ -1,0 +1,24 @@
+https://www.root-me.org/en/Challenges/Cryptanalysis/Encoding-UU
+Encoding - UU
+5 Points
+
+[SOAL]
+http://challenge01.root-me.org/cryptanalyse/ch1/ch1.txt
+
+
+_=_ 
+_=_ Part 001 of 001 of file root-me_challenge_uudeview
+_=_ 
+
+begin 644 root-me_challenge_uudeview
+B5F5R>2!S:6UP;&4@.RD*4$%34R`](%5,5%)!4TE-4$Q%"@``
+`
+end
+
+
+[POC]
+root@kali:~/ctf# uudecode -o result ch1.txt;cat result
+Very simple ;)
+PASS = ULTRASIMPLE
+
+#Flag = ULTRASIMPLE

