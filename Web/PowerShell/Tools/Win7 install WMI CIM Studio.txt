@@ -1,0 +1,11 @@
+Since it took me a bit to learn these nuances of getting WMI CIM Studio to run under Windows 7 or Windows 8 and IE11 (IE9 or later), I thought I'd share it here...
+
+Install CIM Studio (WMI Administrative Tools, as indicated in @knb's answer)
+
+Add <meta http-equiv="X-UA-Compatible" content="IE=8" /> into the <HEAD> section ahead of SCRIPT LANGUAGE="VBS" in the C:\Program Files (x86)\WMI Tools\studio.htm file. This override is necessary because CIM Studio uses VBScript code and IE11+ has dropped support for that.
+
+Create a shortcut to "C:\Program Files (x86)\Internet Explorer\iexplore.exe" "C:\Program Files (x86)\WMI Tools\studio.htm"
+
+Configure the shortcut to run as Admin (Properties -> Advanced...)
+
+Another option is to use Microsoft WMI Code Creator instead.

@@ -1,0 +1,2 @@
+The input object cannot be bound to any parameters for the command either because the command does not take pipeline input or the input and its properties do not match any of the parameters that take pipeline input.
+输入对象不能绑定到该命令的任何参数，因为该命令不接受管道输入，或者输入及其属性不匹配任何采用管道输入的参数。

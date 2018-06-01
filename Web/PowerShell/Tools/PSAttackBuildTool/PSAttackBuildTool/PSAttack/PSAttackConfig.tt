@@ -1,0 +1,42 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#@ parameter name="encryptionKey" type="System.String" #>
+<#@ parameter name="keyStoreFileName" type="System.String" #>
+<#@ parameter name="encFileExtension" type="System.String" #>
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <sectionGroup name="applicationSettings" type="System.Configuration.ApplicationSettingsGroup, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+      <section name="PSAttack.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+    </sectionGroup>
+  </configSections>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0.3,Profile=Client" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0.2" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0.2,Profile=Client" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0.1" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0.1,Profile=Client" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0,Profile=Client" />
+    <supportedRuntime version="v2.0.50727"/>
+  </startup>
+  <applicationSettings>
+    <PSAttack.Properties.Settings>
+      <setting name="encryptionKey" serializeAs="String">
+	  	<#
+		WriteLine("<value>{0}</value>", this.encryptionKey);
+		#>
+      </setting>
+      <setting name="valueStore" serializeAs="String">
+        <#
+		WriteLine("<value>{0}</value>", this.keyStoreFileName);
+		#>
+      </setting>
+    </PSAttack.Properties.Settings>
+  </applicationSettings>
+</configuration>
