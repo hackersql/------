@@ -1,0 +1,26 @@
+<html>
+
+<body>
+</body>
+<script>
+function xss_js_to8or16(x, txt) {
+    var _a = "";
+    for (i = 0; i < txt.length; i++) {
+        // charCodeAt() 方法可返回指定位置的字符的 Unicode 编码。
+        s = txt.charCodeAt(i).toString(x == 8 ? 8 : 16);
+        // '\\' 转义后变为 '\'   
+        _a += (x == 8 ? "\\" : "\\x") + s;
+    }
+    return _a;
+}
+var str = "<img src='' onerror='alert(/xss/)'/>";
+var Octal = xss_js_to8or16(8, str);
+var Hex = xss_js_to8or16(16, str);
+//document.write("八进制：" + Octal + "<br />");
+//document.write("十六进制：" + Hex);
+
+</script>
+
+<img src = https://www.baidu.com/img/bd_logo1.png>
+<A HREF="http://jsfiddle.net/yesL2k8k/">X</A>
+</html>

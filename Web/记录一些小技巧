@@ -1,3 +1,23 @@
+文件夹中，按住shift，点击鼠标右键，可以快速打开命令窗口（CMD）
+!!!用了这么多年才知道这个技巧
+----------------------------------------------------------
+Win7创建软连接
+C:\Windows\System32>mklink /j "C:\ProgramData\Package Cache" "E:\Windows_Tools\Package Cache"
+为 C:\ProgramData\Package Cache <<===>> E:\Windows_Tools\Package Cache 创建的联接
+
+C:\Windows\System32>mklink
+创建符号链接。
+
+MKLINK [[/D] | [/H] | [/J]] Link Target
+
+        /D      创建目录符号链接。默认为文件
+                符号链接。
+        /H      创建硬链接，而不是符号链接。
+        /J      创建目录联接。
+        Link    指定新的符号链接名称。
+        Target  指定新链接引用的路径
+                (相对或绝对)。
+----------------------------------------------------------
 打印第一列
 awk -F ' ' '{print $1;}' service >1.txt
 ----------------------------------------------------------
