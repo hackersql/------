@@ -1,0 +1,30 @@
+Version 1.3
+-----------
+* Protocol autodetection (thanks Matthew Haigh)
+* Security: fix for path traversal vulnerability (thanks Cody Pierce and Antony Saba)
+* Randomized banner generation (thanks Michael Bailey!)
+* Listener: BITS protocol support
+* Various bug fixes
+
+
+Version 1.2
+-----------
+* Linux support (thanks Michael Bailey!)
+* Bug fixes
+
+Version 1.1
+-----------
+
+* POP Listener (Basic mode only)
+* TFTP Listener
+* IRC Listener
+* FTP Listener (with SSL support, Passive and Active modes).
+* Specify port ranges for listeners (e.g. 80, 8080-8085, 8888).
+* VMWare Host-Only mode autoconfiguration.
+* Support for Pydivert 2.x branch.
+* Many bug and stability fixes.
+
+Version 1.0
+-----------
+
+* Initial release
