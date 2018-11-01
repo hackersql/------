@@ -1,0 +1,37 @@
+import angr
+
+def writefile_hook(state):
+    print('writefile hook')
+
+def readfile_hook(state):
+    print('readfile hook')
+
+def buffer_hook(state):
+    print('buffer hook')
+
+def malloc_hook(state):
+    print('malloc_hook')
+
+p = angr.Project('challenge1.exe', load_options={'auto_load_libs': False})
+
+p.hook(0x401457, writefile_hook, length=6)
+
+p.hook(0x401473, readfile_hook, length=6)
+
+p.hook(0x401480, buffer_hook, length=6)
+
+p.hook(0x401283, malloc_hook, length=5)
+
+initial_state = p.factory.blank_state(addr=0x40143C)
+
+user_input = initial_state.se.BVS("user_input", 8 * 0x80)
+
+initial_path = p.factory.path(initial_state)
+
+path_group = p.factory.path_group(initial_state)
+
+path_group.explore(find=(0x4014AE,), avoid=(0x4014C7,))
+
+found = path_group.found[0]
+
+print('FLAG: {0}'.format(found.state.se.any_str(user_input)))

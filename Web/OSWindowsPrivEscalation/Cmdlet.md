@@ -1,3 +1,4 @@
+New-PSSession：新建一个PSSession会话
 Connect-PSSession：将PSSession连接到当前会话
 Disconnect-PSSession：断开PSSession与当前会话的连接
 Enter-PSSession：启动交互式会话
